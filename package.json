@@ -16,8 +16,7 @@
   "scripts": {
     "build": "npm run generate && npm run compile",
     "compile": "rm -rf ./dist && tsc --project tsconfig.json",
-    "fix:confd": "sed -i -e 's#\"\"Firstname Lastname\" < number >#\"\\\\\\\"Firstname Lastname\\\\\\\" < number >#g' ./src/schemas/confd.ts",
-    "generate": "rm -rf ./src/schemas && node --experimental-strip-types ./src/build.ts && npm run fix:confd",
+    "generate": "rm -rf ./src/schemas && node --experimental-strip-types ./src/build.ts",
     "test": "jest"
   },
   "devDependencies": {

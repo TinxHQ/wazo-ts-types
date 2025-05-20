@@ -1,6 +1,7 @@
 import * as path from "node:path";
 import * as process from "node:process";
-import { generateApi } from "swagger-typescript-api";
+import { execFile } from 'node:child_process';
+import { generateApi } from 'swagger-typescript-api';
 
 const schemas = {
   agentd: 'https://openapi.wazo.community/wazo-platform/wazo-agentd.yml',
@@ -32,5 +33,16 @@ Promise.all(
       console.error(`Error generating types for ${schemaName}:`, error);
     }
   }),
-);
-
+).then(() => {
+  execFile(path.resolve(process.cwd(), 'scripts', 'fix-types.sh'), (error, _stdout, stderr) => {
+    if (error) {
+      console.error(`❌ Error while running 'fix-types.sh': ${error.message}`);
+      return;
+    }
+    if (stderr) {
+      console.error(`❌ Standard error output from fix-types.sh script: ${stderr}`);
+      return;
+    }
+    console.log('✅ Successfully fixed broken types');
+  });
+});
