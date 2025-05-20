@@ -1,0 +1,32 @@
+{
+  "name": "wazo-ts-types",
+  "version": "1.0.0",
+  "description": "TS types for Wazo APIs",
+  "main": "index.js",
+  "author": "Wazo (http://wazo.io)",
+  "license": "GPL-3.0-only",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "engines": {
+    "node": "22.x"
+  },
+  "scripts": {
+    "build": "npm run generate && npm run compile",
+    "compile": "rm -rf ./dist && tsc --project tsconfig.json",
+    "fix:confd": "sed -i -e 's#\"\"Firstname Lastname\" < number >#\"\\\\\\\"Firstname Lastname\\\\\\\" < number >#g' ./src/schemas/confd.ts",
+    "generate": "rm -rf ./src/schemas && node --experimental-strip-types ./src/build.ts && npm run fix:confd",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.15.1",
+    "jest": "^29.7.0",
+    "node": "^22.15.1",
+    "swagger-typescript-api": "^13.1.3",
+    "ts-jest": "^29.3.4",
+    "typescript": "^5.8.3"
+  }
+}
