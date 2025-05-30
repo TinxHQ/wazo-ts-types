@@ -2,24 +2,24 @@ import * as wazoTypes from '../index';
 
 describe('wazo-types exports', () => {
     test('should export Wazo Platform API schemas', () => {
-        expect(wazoTypes.AgentdSchema).toBeDefined();
-        expect(wazoTypes.AmidSchema).toBeDefined();
-        expect(wazoTypes.AuthSchema).toBeDefined();
-        expect(wazoTypes.CalldSchema).toBeDefined();
-        expect(wazoTypes.CallLogdSchema).toBeDefined();
-        expect(wazoTypes.ChatdSchema).toBeDefined();
-        expect(wazoTypes.ConfdSchema).toBeDefined();
-        expect(wazoTypes.DirdSchema).toBeDefined();
-        expect(wazoTypes.PlugindSchema).toBeDefined();
-        expect(wazoTypes.ProvdSchema).toBeDefined();
-        expect(wazoTypes.SetupdSchema).toBeDefined();
-        expect(wazoTypes.WebhookdSchema).toBeDefined();
+      expect(wazoTypes.Agentd).toBeDefined();
+      expect(wazoTypes.Amid).toBeDefined();
+      expect(wazoTypes.Auth).toBeDefined();
+      expect(wazoTypes.Calld).toBeDefined();
+      expect(wazoTypes.CallLogd).toBeDefined();
+      expect(wazoTypes.Chatd).toBeDefined();
+      expect(wazoTypes.Confd).toBeDefined();
+      expect(wazoTypes.Dird).toBeDefined();
+      expect(wazoTypes.Plugind).toBeDefined();
+      expect(wazoTypes.Provd).toBeDefined();
+      expect(wazoTypes.Setupd).toBeDefined();
+      expect(wazoTypes.Webhookd).toBeDefined();
     });
 
     test('should export Portal API schemas', () => {
-      expect(wazoTypes.ConfdPortalSchema).toBeDefined();
-      expect(wazoTypes.AuthPortalSchema).toBeDefined();
-      expect(wazoTypes.DeploydPortalSchema).toBeDefined();
-      expect(wazoTypes.AccessdPortalSchema).toBeDefined();
+      expect(wazoTypes.ConfdPortal).toBeDefined();
+      expect(wazoTypes.AuthPortal).toBeDefined();
+      expect(wazoTypes.DeploydPortal).toBeDefined();
+      expect(wazoTypes.AccessdPortal).toBeDefined();
     });
 });
