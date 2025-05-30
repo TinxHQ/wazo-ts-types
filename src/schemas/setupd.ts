@@ -14,6 +14,8 @@ export interface ComponentWithStatus {
   status?: StatusValue;
 }
 
+export type CreateData = any;
+
 /**
  * Error
  * Error message for the client
@@ -31,6 +33,8 @@ export interface Error {
    */
   timestamp?: number;
 }
+
+export type GetConfigData = any;
 
 export interface SetupRequest {
   /**
@@ -86,6 +90,8 @@ export interface SetupRequest {
   nestbox_verify_certificate?: boolean;
 }
 
+export type StatusListData = StatusSummary;
+
 export interface StatusSummary {
   master_tenant?: ComponentWithStatus;
   rest_api?: ComponentWithStatus;
@@ -110,7 +116,7 @@ export namespace Config {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = GetConfigData;
   }
 }
 
@@ -128,7 +134,7 @@ export namespace Setup {
     export type RequestQuery = {};
     export type RequestBody = SetupRequest;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = CreateData;
   }
 }
 
@@ -146,6 +152,6 @@ export namespace Status {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = StatusSummary;
+    export type ResponseBody = StatusListData;
   }
 }

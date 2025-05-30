@@ -28,6 +28,7 @@ const portalSchemas = {
 Promise.all(
   Object.entries({ ...schemas, ...portalSchemas }).map(async ([schemaName, url]) => {
     try {
+      // https://github.com/acacode/swagger-typescript-api/blob/main/types/index.ts
       await generateApi({
         url,
         output: path.resolve(process.cwd(), 'src', 'schemas'),
@@ -35,6 +36,9 @@ Promise.all(
         generateClient: false,
         generateRouteTypes: true,
         extractRequestParams: true,
+        extractRequestBody: true,
+        extractResponseBody: true,
+        extractResponseError: true,
         sortTypes: true,
       });
     } catch (error) {

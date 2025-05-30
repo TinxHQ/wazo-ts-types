@@ -13,9 +13,17 @@
 /** @example {"Async":"True","Channel":"SIP/abcdef","Context":"default","Exten":"1234","Priority":"1","Variable":["Var1=one","Var2=two"]} */
 export type ActionArguments = any;
 
+export type ActionCreateData = Response;
+
+export type ActionCreateError = Error;
+
 export interface Command {
   command: string;
 }
+
+export type CommandCreateData = CommandResponse;
+
+export type CommandCreateError = Error;
 
 export interface CommandResponse {
   response?: string[];
@@ -42,10 +50,18 @@ export interface Error {
   timestamp?: number;
 }
 
+export type GetConfigData = any;
+
+export type PatchConfigData = any;
+
+export type PatchConfigPayload = ConfigPatchItem[];
+
 export interface Response {
   /** Name of the action response */
   response?: string;
 }
+
+export type StatusListData = StatusSummary;
 
 export interface StatusSummary {
   ami_socket?: ComponentWithStatus;
@@ -73,7 +89,7 @@ export namespace Action {
     export type RequestQuery = {};
     export type RequestBody = Command;
     export type RequestHeaders = {};
-    export type ResponseBody = CommandResponse;
+    export type ResponseBody = CommandCreateData;
   }
 
   /**
@@ -92,7 +108,7 @@ export namespace Action {
     export type RequestQuery = {};
     export type RequestBody = ActionArguments;
     export type RequestHeaders = {};
-    export type ResponseBody = Response;
+    export type ResponseBody = ActionCreateData;
   }
 }
 
@@ -110,7 +126,7 @@ export namespace Config {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = GetConfigData;
   }
 
   /**
@@ -124,9 +140,9 @@ export namespace Config {
   export namespace PatchConfig {
     export type RequestParams = {};
     export type RequestQuery = {};
-    export type RequestBody = ConfigPatchItem[];
+    export type RequestBody = PatchConfigPayload;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = PatchConfigData;
   }
 }
 
@@ -144,6 +160,6 @@ export namespace Status {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = StatusSummary;
+    export type ResponseBody = StatusListData;
   }
 }

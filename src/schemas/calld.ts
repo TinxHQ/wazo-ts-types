@@ -22,6 +22,10 @@ export interface AdhocConferenceCreation {
   participant_call_ids?: string[];
 }
 
+export type AnswerUpdateData = any;
+
+export type AnswerUpdateError = Error;
+
 export interface Application {
   destination_node_uuid?: string;
 }
@@ -112,6 +116,10 @@ export interface ApplicationSnoops {
   items?: ApplicationSnoop[];
 }
 
+export type ApplicationsDetailData = Application;
+
+export type ApplicationsDetailError = Error;
+
 export interface Call {
   /** @format date-time */
   answer_time?: string;
@@ -180,6 +188,34 @@ export interface CallRequestSource {
   user: string;
 }
 
+export type CallsAnswerUpdateData = any;
+
+export type CallsAnswerUpdateError = Error;
+
+export type CallsCreateData = ApplicationCall;
+
+export type CallsCreateError = Error;
+
+export type CallsCreateFail = Error;
+
+export type CallsCreateResult = Call;
+
+export type CallsDeleteData = any;
+
+export type CallsDeleteError = Error;
+
+export type CallsDeleteFail = Error;
+
+export type CallsDeleteResult = any;
+
+export type CallsDetailData = Call;
+
+export type CallsDetailError = Error;
+
+export type CallsDtmfUpdateData = any;
+
+export type CallsDtmfUpdateError = Error;
+
 export interface CallsDtmfUpdateParams {
   /** UUID of the application */
   applicationUuid: string;
@@ -189,6 +225,8 @@ export interface CallsDtmfUpdateParams {
   digits: string;
 }
 
+export type CallsHeldAnswerUpdateData = CallID;
+
 export interface CallsHeldAnswerUpdateParams {
   /** Call ID */
   callId: string;
@@ -197,6 +235,22 @@ export interface CallsHeldAnswerUpdateParams {
   /** Unique identifier of the switchboard */
   switchboardUuid: string;
 }
+
+export type CallsHeldListData = SwitchboardHeldCalls;
+
+export type CallsHeldUpdateData = any;
+
+export type CallsHoldStartUpdateData = any;
+
+export type CallsHoldStartUpdateError = Error;
+
+export type CallsHoldStopUpdateData = any;
+
+export type CallsHoldStopUpdateError = Error;
+
+export type CallsListData = ApplicationCalls;
+
+export type CallsListError = Error;
 
 export interface CallsListParams1 {
   /** Filter calls by Stasis application, e.g. switchboard. */
@@ -210,6 +264,40 @@ export interface CallsListParams1 {
   recurse?: boolean;
 }
 
+export interface CallsListResult {
+  items?: Call[];
+}
+
+export type CallsMohStartUpdateData = any;
+
+export type CallsMohStartUpdateError = Error;
+
+export type CallsMohStopUpdateData = any;
+
+export type CallsMohStopUpdateError = Error;
+
+export type CallsMuteStartUpdateData = any;
+
+export type CallsMuteStartUpdateError = Error;
+
+export type CallsMuteStopUpdateData = any;
+
+export type CallsMuteStopUpdateError = Error;
+
+export type CallsPlaybacksCreateData = ApplicationPlayback;
+
+export type CallsPlaybacksCreateError = Error;
+
+export type CallsProgressStartUpdateData = any;
+
+export type CallsProgressStartUpdateError = Error;
+
+export type CallsProgressStopUpdateData = any;
+
+export type CallsProgressStopUpdateError = Error;
+
+export type CallsQueuedAnswerUpdateData = CallID;
+
 export interface CallsQueuedAnswerUpdateParams {
   /** Call ID */
   callId: string;
@@ -218,6 +306,14 @@ export interface CallsQueuedAnswerUpdateParams {
   /** Unique identifier of the switchboard */
   switchboardUuid: string;
 }
+
+export type CallsQueuedListData = SwitchboardQueuedCalls;
+
+export type CallsSnoopsCreateData = ApplicationSnoop;
+
+export type CallsSnoopsCreateError = Error;
+
+export type CompleteUpdateData = any;
 
 export interface ComponentWithStatus {
   status?: StatusValue;
@@ -240,6 +336,10 @@ export interface ConnectCallToUserRequest {
    */
   timeout?: number;
 }
+
+export type DtmfUpdateData = any;
+
+export type DtmfUpdateError = Error;
 
 export interface DtmfUpdateParams {
   /** Call ID */
@@ -329,6 +429,8 @@ export interface Fax {
   wait_time?: string;
 }
 
+export type FaxesCreateData = Fax;
+
 export interface FaxesCreateParams {
   /**
    * Caller ID that will be presented to the recipient of the fax. Example: "my-name <+15551112222>"
@@ -345,10 +447,47 @@ export interface FaxesCreateParams {
   wait_time?: number;
 }
 
+/** @format binary */
+export type FaxesCreatePayload = File;
+
+export type FoldersDetailData = VoicemailFolder;
+
+export type GetConfigData = any;
+
 export interface GreetingCopy {
   /** The destination name of the greeting */
   dest_greeting: string;
 }
+
+export type GreetingsCopyCreateData = any;
+
+export type GreetingsCreateData = any;
+
+/** @format binary */
+export type GreetingsCreatePayload = any;
+
+export type GreetingsDeleteData = any;
+
+export type GreetingsDetailData = any;
+
+export type GreetingsUpdateData = any;
+
+/** @format binary */
+export type GreetingsUpdatePayload = any;
+
+export type HeadUsersData = any;
+
+export type HeadVoicemailsData = any;
+
+export type HoldStartUpdateData = any;
+
+export type HoldStartUpdateError = Error;
+
+export type HoldStopUpdateData = any;
+
+export type HoldStopUpdateError = Error;
+
+export type LinesListData = EndpointLines;
 
 export interface LocationLine {
   /** the SIP contact to use when multiple registers are used */
@@ -357,11 +496,39 @@ export interface LocationLine {
   line_id: number;
 }
 
+export type MeCallsAnswerUpdateData = any;
+
+export type MeCallsAnswerUpdateError = Error;
+
+export type MeCallsCreateData = Call;
+
+export type MeCallsCreateError = Error;
+
+export type MeCallsDeleteData = any;
+
+export type MeCallsDeleteError = Error;
+
+export type MeCallsDtmfUpdateData = any;
+
+export type MeCallsDtmfUpdateError = Error;
+
 export interface MeCallsDtmfUpdateParams {
   /** Call ID */
   callId: string;
   /** Digits to send via DTMF. Must contain only `0-9*#`. */
   digits: string;
+}
+
+export type MeCallsHoldStartUpdateData = any;
+
+export type MeCallsHoldStartUpdateError = Error;
+
+export type MeCallsHoldStopUpdateData = any;
+
+export type MeCallsHoldStopUpdateError = Error;
+
+export interface MeCallsListData {
+  items?: Call[];
 }
 
 export interface MeCallsListParams {
@@ -370,6 +537,44 @@ export interface MeCallsListParams {
   /** Filter calls by Stasis application instance, e.g. switchboard-sales,green. Args must be separated by commas (,). */
   application_instance?: string;
 }
+
+export type MeCallsMuteStartUpdateData = any;
+
+export type MeCallsMuteStartUpdateError = Error;
+
+export type MeCallsMuteStopUpdateData = any;
+
+export type MeCallsMuteStopUpdateError = Error;
+
+export type MeCallsParkUpdateData = ParkedCallInfo;
+
+export type MeCallsRecordPauseUpdateData = any;
+
+export type MeCallsRecordPauseUpdateError = Error;
+
+export type MeCallsRecordResumeUpdateData = any;
+
+export type MeCallsRecordResumeUpdateError = Error;
+
+export type MeCallsRecordStartUpdateData = any;
+
+export type MeCallsRecordStartUpdateError = Error;
+
+export type MeCallsRecordStopUpdateData = any;
+
+export type MeCallsRecordStopUpdateError = Error;
+
+export type MeConferencesAdhocCreateData = AdhocConference;
+
+export type MeConferencesAdhocDeleteData = AdhocConference;
+
+export type MeConferencesAdhocParticipantsDeleteData = any;
+
+export type MeConferencesAdhocParticipantsUpdateData = any;
+
+export type MeConferencesParticipantsListData = ParticipantList;
+
+export type MeFaxesCreateData = Fax;
 
 export interface MeFaxesCreateParams {
   /**
@@ -385,6 +590,67 @@ export interface MeFaxesCreateParams {
   wait_time?: number;
 }
 
+/** @format binary */
+export type MeFaxesCreatePayload = File;
+
+export type MeMeetingsParticipantsDeleteData = any;
+
+export type MeMeetingsParticipantsListData = ParticipantList;
+
+export type MeMeetingsStatusListData = MeetingStatus;
+
+export type MeRelocatesCancelUpdateData = any;
+
+export type MeRelocatesCompleteUpdateData = any;
+
+export type MeRelocatesCreateData = Relocate;
+
+export type MeRelocatesCreateError = Error;
+
+export type MeRelocatesDetailData = Relocate;
+
+export type MeRelocatesListData = RelocateList;
+
+export type MeTransfersCompleteUpdateData = any;
+
+export type MeTransfersCompleteUpdateError = Error;
+
+export type MeTransfersCreateData = Transfer;
+
+export type MeTransfersCreateError = Error;
+
+export type MeTransfersDeleteData = any;
+
+export type MeTransfersDeleteError = Error;
+
+export type MeTransfersListData = TransferList;
+
+export type MeVoicemailsFoldersDetailData = VoicemailFolder;
+
+export type MeVoicemailsGreetingsCopyCreateData = any;
+
+export type MeVoicemailsGreetingsCreateData = any;
+
+/** @format binary */
+export type MeVoicemailsGreetingsCreatePayload = any;
+
+export type MeVoicemailsGreetingsDeleteData = any;
+
+export type MeVoicemailsGreetingsDetailData = any;
+
+export type MeVoicemailsGreetingsUpdateData = any;
+
+/** @format binary */
+export type MeVoicemailsGreetingsUpdatePayload = any;
+
+export type MeVoicemailsListData = Voicemail;
+
+export type MeVoicemailsMessagesDeleteData = any;
+
+export type MeVoicemailsMessagesDetailData = VoicemailMessage;
+
+export type MeVoicemailsMessagesRecordingListData = any;
+
 export interface MeVoicemailsMessagesRecordingListParams {
   /** Set to 1 to force download by browser */
   download?: string;
@@ -394,10 +660,18 @@ export interface MeVoicemailsMessagesRecordingListParams {
   token?: string;
 }
 
+export type MeVoicemailsMessagesUpdateData = any;
+
 export interface MeetingStatus {
   /** Wether the meeting is full of not */
   full?: boolean;
 }
+
+export type MessagesDeleteData = any;
+
+export type MessagesDetailData = VoicemailMessage;
+
+export type MessagesRecordingListData = any;
 
 export interface MessagesRecordingListParams {
   /** Set to 1 to force download by browser */
@@ -409,6 +683,48 @@ export interface MessagesRecordingListParams {
   /** The voicemail's ID */
   voicemailId: number;
 }
+
+export type MessagesUpdateData = any;
+
+export type MuteStartUpdateData = any;
+
+export type MuteStartUpdateError = Error;
+
+export type MuteStopUpdateData = any;
+
+export type MuteStopUpdateError = Error;
+
+export type NodesCallsCreateData = ApplicationCall;
+
+export type NodesCallsCreateError = Error;
+
+export type NodesCallsDeleteData = any;
+
+export type NodesCallsDeleteError = Error;
+
+export type NodesCallsUpdateData = any;
+
+export type NodesCallsUpdateError = Error;
+
+export type NodesCallsUserCreateData = ApplicationCall;
+
+export type NodesCallsUserCreateError = Error;
+
+export type NodesCreateData = ApplicationNode;
+
+export type NodesCreateError = Error;
+
+export type NodesDeleteData = any;
+
+export type NodesDeleteError = Error;
+
+export type NodesDetailData = ApplicationNode;
+
+export type NodesDetailError = Error;
+
+export type NodesListData = ApplicationNodes;
+
+export type NodesListError = Error;
 
 /** Information needed to park the call */
 export interface ParkCallBody {
@@ -433,6 +749,8 @@ export interface ParkCallBody {
    */
   timeout?: number;
 }
+
+export type ParkUpdateData = ParkedCallInfo;
 
 /** Information returned when a call has been parked */
 export interface ParkedCallInfo {
@@ -519,6 +837,12 @@ export interface ParkingLot {
   slots_total?: number;
 }
 
+export type ParkinglotsDetailData = ParkingLot;
+
+export interface ParkinglotsListData {
+  items?: ParkingLot[];
+}
+
 export interface Participant {
   /** Is the participant an admin of the conference? */
   admin?: boolean;
@@ -544,10 +868,54 @@ export interface ParticipantList {
   items?: Participant[];
 }
 
+export type ParticipantsDeleteData = any;
+
+export type ParticipantsDeleteResult = any;
+
+export type ParticipantsListData = ParticipantList;
+
+export type ParticipantsListResult = ParticipantList;
+
+export type ParticipantsMuteUpdateData = any;
+
+export type ParticipantsUnmuteUpdateData = any;
+
+export type PatchConfigData = any;
+
+export type PatchConfigPayload = ConfigPatchItem[];
+
+export type PlaybacksDeleteData = any;
+
+export type PlaybacksDeleteError = Error;
+
 export interface PluginsStatus {
   endpoints?: ComponentWithStatus;
   voicemails?: VoicemailsStatus;
 }
+
+export type RecordCreateData = any;
+
+export type RecordCreateError = Error;
+
+export type RecordDeleteData = any;
+
+export type RecordDeleteError = Error;
+
+export type RecordPauseUpdateData = any;
+
+export type RecordPauseUpdateError = Error;
+
+export type RecordResumeUpdateData = any;
+
+export type RecordResumeUpdateError = Error;
+
+export type RecordStartUpdateData = any;
+
+export type RecordStartUpdateError = Error;
+
+export type RecordStopUpdateData = any;
+
+export type RecordStopUpdateError = Error;
 
 export interface Relocate {
   /** How the relocate will behave. "answer" will complete the relocate as soon as the destination answers. "api" will wait for a call to API `/complete`. "answer" overrides all other values. */
@@ -575,6 +943,24 @@ export type RelocateCompletions = RelocateCompletion[];
 export interface RelocateList {
   items?: Relocate;
 }
+
+export type SnoopsDeleteData = any;
+
+export type SnoopsDeleteError = Error;
+
+export type SnoopsDetailData = ApplicationSnoop;
+
+export type SnoopsDetailError = Error;
+
+export type SnoopsListData = ApplicationSnoops;
+
+export type SnoopsListError = Error;
+
+export type SnoopsUpdateData = any;
+
+export type SnoopsUpdateError = Error;
+
+export type StatusListData = StatusSummary;
 
 export interface StatusSummary {
   ari?: ComponentWithStatus;
@@ -670,6 +1056,16 @@ export interface TransferRequest {
 /** Maximum ringing time before cancelling the transfer (in seconds). Default (or null) is an unlimited ring time. */
 export type TransferTimeout = number;
 
+export type TransfersCreateData = Transfer;
+
+export type TransfersCreateError = Error;
+
+export type TransfersDeleteData = any;
+
+export type TransfersDetailData = Transfer;
+
+export type TrunksListData = EndpointTrunks;
+
 export interface UserCallRequest {
   /** Use all of the lines of the user to make the call (ignored when `line_id` is specified). */
   all_lines?: boolean;
@@ -724,6 +1120,8 @@ export interface UserTransferRequest {
   timeout?: TransferTimeout;
 }
 
+export type UserUpdateData = Call;
+
 export interface Voicemail {
   /** The voicemail's folders */
   folders?: VoicemailFolder[];
@@ -771,6 +1169,8 @@ export interface VoicemailMessageUpdate {
   folder_id: number;
 }
 
+export type VoicemailsDetailData = Voicemail;
+
 export type VoicemailsStatus = ComponentWithStatus & {
   cache_items?: number;
 };
@@ -792,7 +1192,7 @@ export namespace Applications {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = Application;
+    export type ResponseBody = ApplicationsDetailData;
   }
 
   /**
@@ -811,7 +1211,7 @@ export namespace Applications {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = ApplicationCalls;
+    export type ResponseBody = CallsListData;
   }
 
   /**
@@ -830,7 +1230,7 @@ export namespace Applications {
     export type RequestQuery = {};
     export type RequestBody = ApplicationCallRequestToExten;
     export type RequestHeaders = {};
-    export type ResponseBody = ApplicationCall;
+    export type ResponseBody = CallsCreateData;
   }
 
   /**
@@ -851,7 +1251,7 @@ export namespace Applications {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = CallsDeleteData;
   }
 
   /**
@@ -872,7 +1272,7 @@ export namespace Applications {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = CallsAnswerUpdateData;
   }
 
   /**
@@ -896,7 +1296,7 @@ export namespace Applications {
     };
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = CallsDtmfUpdateData;
   }
 
   /**
@@ -917,7 +1317,7 @@ export namespace Applications {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = CallsHoldStartUpdateData;
   }
 
   /**
@@ -938,7 +1338,7 @@ export namespace Applications {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = CallsHoldStopUpdateData;
   }
 
   /**
@@ -959,7 +1359,7 @@ export namespace Applications {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = CallsMohStopUpdateData;
   }
 
   /**
@@ -982,7 +1382,7 @@ export namespace Applications {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = CallsMohStartUpdateData;
   }
 
   /**
@@ -1003,7 +1403,7 @@ export namespace Applications {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = CallsMuteStartUpdateData;
   }
 
   /**
@@ -1024,7 +1424,7 @@ export namespace Applications {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = CallsMuteStopUpdateData;
   }
 
   /**
@@ -1045,7 +1445,7 @@ export namespace Applications {
     export type RequestQuery = {};
     export type RequestBody = ApplicationPlayback;
     export type RequestHeaders = {};
-    export type ResponseBody = ApplicationPlayback;
+    export type ResponseBody = CallsPlaybacksCreateData;
   }
 
   /**
@@ -1066,7 +1466,7 @@ export namespace Applications {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = CallsProgressStartUpdateData;
   }
 
   /**
@@ -1087,7 +1487,7 @@ export namespace Applications {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = CallsProgressStopUpdateData;
   }
 
   /**
@@ -1108,7 +1508,7 @@ export namespace Applications {
     export type RequestQuery = {};
     export type RequestBody = ApplicationSnoop;
     export type RequestHeaders = {};
-    export type ResponseBody = ApplicationSnoop;
+    export type ResponseBody = CallsSnoopsCreateData;
   }
 
   /**
@@ -1127,7 +1527,7 @@ export namespace Applications {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = ApplicationNodes;
+    export type ResponseBody = NodesListData;
   }
 
   /**
@@ -1146,7 +1546,7 @@ export namespace Applications {
     export type RequestQuery = {};
     export type RequestBody = ApplicationNodeRequest;
     export type RequestHeaders = {};
-    export type ResponseBody = ApplicationNode;
+    export type ResponseBody = NodesCreateData;
   }
 
   /**
@@ -1167,7 +1567,7 @@ export namespace Applications {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = NodesDeleteData;
   }
 
   /**
@@ -1188,7 +1588,7 @@ export namespace Applications {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = ApplicationNode;
+    export type ResponseBody = NodesDetailData;
   }
 
   /**
@@ -1209,7 +1609,7 @@ export namespace Applications {
     export type RequestQuery = {};
     export type RequestBody = ApplicationCallRequestToExten;
     export type RequestHeaders = {};
-    export type ResponseBody = ApplicationCall;
+    export type ResponseBody = NodesCallsCreateData;
   }
 
   /**
@@ -1230,7 +1630,7 @@ export namespace Applications {
     export type RequestQuery = {};
     export type RequestBody = ApplicationCallRequestToUser;
     export type RequestHeaders = {};
-    export type ResponseBody = ApplicationCall;
+    export type ResponseBody = NodesCallsUserCreateData;
   }
 
   /**
@@ -1253,7 +1653,7 @@ export namespace Applications {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = NodesCallsDeleteData;
   }
 
   /**
@@ -1276,7 +1676,7 @@ export namespace Applications {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = NodesCallsUpdateData;
   }
 
   /**
@@ -1297,7 +1697,7 @@ export namespace Applications {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = PlaybacksDeleteData;
   }
 
   /**
@@ -1316,7 +1716,7 @@ export namespace Applications {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = ApplicationSnoops;
+    export type ResponseBody = SnoopsListData;
   }
 
   /**
@@ -1337,7 +1737,7 @@ export namespace Applications {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = SnoopsDeleteData;
   }
 
   /**
@@ -1358,7 +1758,7 @@ export namespace Applications {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = ApplicationSnoop;
+    export type ResponseBody = SnoopsDetailData;
   }
 
   /**
@@ -1379,7 +1779,7 @@ export namespace Applications {
     export type RequestQuery = {};
     export type RequestBody = ApplicationSnoopPut;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = SnoopsUpdateData;
   }
 }
 
@@ -1410,9 +1810,7 @@ export namespace Calls {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = {
-      items?: Call[];
-    };
+    export type ResponseBody = CallsListResult;
   }
 
   /**
@@ -1431,7 +1829,7 @@ export namespace Calls {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = Call;
+    export type ResponseBody = CallsCreateResult;
   }
 
   /**
@@ -1453,7 +1851,7 @@ export namespace Calls {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = CallsDeleteResult;
   }
 
   /**
@@ -1475,7 +1873,7 @@ export namespace Calls {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = Call;
+    export type ResponseBody = CallsDetailData;
   }
 
   /**
@@ -1497,7 +1895,7 @@ export namespace Calls {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = AnswerUpdateData;
   }
 
   /**
@@ -1522,7 +1920,7 @@ export namespace Calls {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = DtmfUpdateData;
   }
 
   /**
@@ -1544,7 +1942,7 @@ export namespace Calls {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = HoldStartUpdateData;
   }
 
   /**
@@ -1566,7 +1964,7 @@ export namespace Calls {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = HoldStopUpdateData;
   }
 
   /**
@@ -1588,7 +1986,7 @@ export namespace Calls {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = MuteStartUpdateData;
   }
 
   /**
@@ -1610,7 +2008,7 @@ export namespace Calls {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = MuteStopUpdateData;
   }
 
   /**
@@ -1632,7 +2030,7 @@ export namespace Calls {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = ParkedCallInfo;
+    export type ResponseBody = ParkUpdateData;
   }
 
   /**
@@ -1654,7 +2052,7 @@ export namespace Calls {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = RecordPauseUpdateData;
   }
 
   /**
@@ -1676,7 +2074,7 @@ export namespace Calls {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = RecordResumeUpdateData;
   }
 
   /**
@@ -1698,7 +2096,7 @@ export namespace Calls {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = RecordStartUpdateData;
   }
 
   /**
@@ -1720,7 +2118,7 @@ export namespace Calls {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = RecordStopUpdateData;
   }
 
   /**
@@ -1744,7 +2142,7 @@ export namespace Calls {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = Call;
+    export type ResponseBody = UserUpdateData;
   }
 }
 
@@ -1765,7 +2163,7 @@ export namespace Conferences {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = ParticipantList;
+    export type ResponseBody = ParticipantsListData;
   }
 
   /**
@@ -1786,7 +2184,7 @@ export namespace Conferences {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = ParticipantsDeleteData;
   }
 
   /**
@@ -1807,7 +2205,7 @@ export namespace Conferences {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = ParticipantsMuteUpdateData;
   }
 
   /**
@@ -1828,7 +2226,7 @@ export namespace Conferences {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = ParticipantsUnmuteUpdateData;
   }
 
   /**
@@ -1847,7 +2245,7 @@ export namespace Conferences {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = RecordDeleteData;
   }
 
   /**
@@ -1866,7 +2264,7 @@ export namespace Conferences {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = RecordCreateData;
   }
 }
 
@@ -1884,7 +2282,7 @@ export namespace Config {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = GetConfigData;
   }
 
   /**
@@ -1898,9 +2296,9 @@ export namespace Config {
   export namespace PatchConfig {
     export type RequestParams = {};
     export type RequestQuery = {};
-    export type RequestBody = ConfigPatchItem[];
+    export type RequestBody = PatchConfigPayload;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = PatchConfigData;
   }
 }
 
@@ -1930,9 +2328,9 @@ export namespace Faxes {
       /** Time waiting before sending fax when destination has answered (in seconds) */
       wait_time?: number;
     };
-    export type RequestBody = File;
+    export type RequestBody = FaxesCreatePayload;
     export type RequestHeaders = {};
-    export type ResponseBody = Fax;
+    export type ResponseBody = FaxesCreateData;
   }
 }
 
@@ -1953,7 +2351,7 @@ export namespace Guests {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = MeetingStatus;
+    export type ResponseBody = MeMeetingsStatusListData;
   }
 }
 
@@ -1974,7 +2372,7 @@ export namespace Lines {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = EndpointLines;
+    export type ResponseBody = LinesListData;
   }
 }
 
@@ -1995,7 +2393,7 @@ export namespace Meetings {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = ParticipantList;
+    export type ResponseBody = ParticipantsListResult;
   }
 
   /**
@@ -2016,7 +2414,7 @@ export namespace Meetings {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = ParticipantsDeleteResult;
   }
 }
 
@@ -2037,9 +2435,7 @@ export namespace Parkinglots {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = {
-      items?: ParkingLot[];
-    };
+    export type ResponseBody = ParkinglotsListData;
   }
 
   /**
@@ -2061,7 +2457,7 @@ export namespace Parkinglots {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = ParkingLot;
+    export type ResponseBody = ParkinglotsDetailData;
   }
 }
 
@@ -2079,7 +2475,7 @@ export namespace Status {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = StatusSummary;
+    export type ResponseBody = StatusListData;
   }
 }
 
@@ -2103,7 +2499,7 @@ export namespace Switchboards {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = SwitchboardHeldCalls;
+    export type ResponseBody = CallsHeldListData;
   }
 
   /**
@@ -2127,7 +2523,7 @@ export namespace Switchboards {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = CallsHeldUpdateData;
   }
 
   /**
@@ -2154,7 +2550,7 @@ export namespace Switchboards {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = CallID;
+    export type ResponseBody = CallsHeldAnswerUpdateData;
   }
 
   /**
@@ -2176,7 +2572,7 @@ export namespace Switchboards {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = SwitchboardQueuedCalls;
+    export type ResponseBody = CallsQueuedListData;
   }
 
   /**
@@ -2203,7 +2599,7 @@ export namespace Switchboards {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = CallID;
+    export type ResponseBody = CallsQueuedAnswerUpdateData;
   }
 }
 
@@ -2221,7 +2617,7 @@ export namespace Transfers {
     export type RequestQuery = {};
     export type RequestBody = TransferRequest;
     export type RequestHeaders = {};
-    export type ResponseBody = Transfer;
+    export type ResponseBody = TransfersCreateData;
   }
 
   /**
@@ -2240,7 +2636,7 @@ export namespace Transfers {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = TransfersDeleteData;
   }
 
   /**
@@ -2259,7 +2655,7 @@ export namespace Transfers {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = Transfer;
+    export type ResponseBody = TransfersDetailData;
   }
 
   /**
@@ -2278,7 +2674,7 @@ export namespace Transfers {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = CompleteUpdateData;
   }
 }
 
@@ -2299,7 +2695,7 @@ export namespace Trunks {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = EndpointTrunks;
+    export type ResponseBody = TrunksListData;
   }
 }
 
@@ -2322,9 +2718,7 @@ export namespace Users {
     };
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = {
-      items?: Call[];
-    };
+    export type ResponseBody = MeCallsListData;
   }
 
   /**
@@ -2340,7 +2734,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = UserCallRequest;
     export type RequestHeaders = {};
-    export type ResponseBody = Call;
+    export type ResponseBody = MeCallsCreateData;
   }
 
   /**
@@ -2359,7 +2753,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = MeCallsDeleteData;
   }
 
   /**
@@ -2378,7 +2772,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = MeCallsAnswerUpdateData;
   }
 
   /**
@@ -2400,7 +2794,7 @@ export namespace Users {
     };
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = MeCallsDtmfUpdateData;
   }
 
   /**
@@ -2419,7 +2813,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = MeCallsHoldStartUpdateData;
   }
 
   /**
@@ -2438,7 +2832,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = MeCallsHoldStopUpdateData;
   }
 
   /**
@@ -2457,7 +2851,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = MeCallsMuteStartUpdateData;
   }
 
   /**
@@ -2476,7 +2870,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = MeCallsMuteStopUpdateData;
   }
 
   /**
@@ -2498,7 +2892,7 @@ export namespace Users {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = ParkedCallInfo;
+    export type ResponseBody = MeCallsParkUpdateData;
   }
 
   /**
@@ -2517,7 +2911,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = MeCallsRecordPauseUpdateData;
   }
 
   /**
@@ -2536,7 +2930,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = MeCallsRecordResumeUpdateData;
   }
 
   /**
@@ -2555,7 +2949,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = MeCallsRecordStartUpdateData;
   }
 
   /**
@@ -2574,7 +2968,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = MeCallsRecordStopUpdateData;
   }
 
   /**
@@ -2590,7 +2984,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = AdhocConferenceCreation;
     export type RequestHeaders = {};
-    export type ResponseBody = AdhocConference;
+    export type ResponseBody = MeConferencesAdhocCreateData;
   }
 
   /**
@@ -2609,7 +3003,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = AdhocConference;
+    export type ResponseBody = MeConferencesAdhocDeleteData;
   }
 
   /**
@@ -2630,7 +3024,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = MeConferencesAdhocParticipantsDeleteData;
   }
 
   /**
@@ -2651,7 +3045,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = MeConferencesAdhocParticipantsUpdateData;
   }
 
   /**
@@ -2670,7 +3064,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = ParticipantList;
+    export type ResponseBody = MeConferencesParticipantsListData;
   }
 
   /**
@@ -2696,9 +3090,9 @@ export namespace Users {
       /** Time waiting before sending fax when destination has answered (in seconds) */
       wait_time?: number;
     };
-    export type RequestBody = File;
+    export type RequestBody = MeFaxesCreatePayload;
     export type RequestHeaders = {};
-    export type ResponseBody = Fax;
+    export type ResponseBody = MeFaxesCreateData;
   }
 
   /**
@@ -2717,7 +3111,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = ParticipantList;
+    export type ResponseBody = MeMeetingsParticipantsListData;
   }
 
   /**
@@ -2738,7 +3132,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = MeMeetingsParticipantsDeleteData;
   }
 
   /**
@@ -2754,7 +3148,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = RelocateList;
+    export type ResponseBody = MeRelocatesListData;
   }
 
   /**
@@ -2770,7 +3164,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = UserRelocateRequest;
     export type RequestHeaders = {};
-    export type ResponseBody = Relocate;
+    export type ResponseBody = MeRelocatesCreateData;
   }
 
   /**
@@ -2789,7 +3183,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = Relocate;
+    export type ResponseBody = MeRelocatesDetailData;
   }
 
   /**
@@ -2808,7 +3202,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = MeRelocatesCancelUpdateData;
   }
 
   /**
@@ -2827,7 +3221,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = MeRelocatesCompleteUpdateData;
   }
 
   /**
@@ -2843,7 +3237,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = TransferList;
+    export type ResponseBody = MeTransfersListData;
   }
 
   /**
@@ -2859,7 +3253,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = UserTransferRequest;
     export type RequestHeaders = {};
-    export type ResponseBody = Transfer;
+    export type ResponseBody = MeTransfersCreateData;
   }
 
   /**
@@ -2878,7 +3272,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = MeTransfersDeleteData;
   }
 
   /**
@@ -2897,7 +3291,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = MeTransfersCompleteUpdateData;
   }
 
   /**
@@ -2913,7 +3307,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = Voicemail;
+    export type ResponseBody = MeVoicemailsListData;
   }
 
   /**
@@ -2932,7 +3326,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = VoicemailFolder;
+    export type ResponseBody = MeVoicemailsFoldersDetailData;
   }
 
   /**
@@ -2951,7 +3345,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = MeVoicemailsGreetingsDeleteData;
   }
 
   /**
@@ -2970,7 +3364,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = MeVoicemailsGreetingsDetailData;
   }
 
   /**
@@ -2989,7 +3383,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = HeadUsersData;
   }
 
   /**
@@ -3006,9 +3400,9 @@ export namespace Users {
       greeting: "unavailable" | "busy" | "name";
     };
     export type RequestQuery = {};
-    export type RequestBody = any;
+    export type RequestBody = MeVoicemailsGreetingsCreatePayload;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = MeVoicemailsGreetingsCreateData;
   }
 
   /**
@@ -3025,9 +3419,9 @@ export namespace Users {
       greeting: "unavailable" | "busy" | "name";
     };
     export type RequestQuery = {};
-    export type RequestBody = any;
+    export type RequestBody = MeVoicemailsGreetingsUpdatePayload;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = MeVoicemailsGreetingsUpdateData;
   }
 
   /**
@@ -3046,7 +3440,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = GreetingCopy;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = MeVoicemailsGreetingsCopyCreateData;
   }
 
   /**
@@ -3065,7 +3459,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = MeVoicemailsMessagesDeleteData;
   }
 
   /**
@@ -3084,7 +3478,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = VoicemailMessage;
+    export type ResponseBody = MeVoicemailsMessagesDetailData;
   }
 
   /**
@@ -3103,7 +3497,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = VoicemailMessageUpdate;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = MeVoicemailsMessagesUpdateData;
   }
 
   /**
@@ -3127,7 +3521,7 @@ export namespace Users {
     };
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = MeVoicemailsMessagesRecordingListData;
   }
 }
 
@@ -3151,7 +3545,7 @@ export namespace Voicemails {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = Voicemail;
+    export type ResponseBody = VoicemailsDetailData;
   }
 
   /**
@@ -3172,7 +3566,7 @@ export namespace Voicemails {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = VoicemailFolder;
+    export type ResponseBody = FoldersDetailData;
   }
 
   /**
@@ -3193,7 +3587,7 @@ export namespace Voicemails {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = GreetingsDeleteData;
   }
 
   /**
@@ -3214,7 +3608,7 @@ export namespace Voicemails {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = GreetingsDetailData;
   }
 
   /**
@@ -3235,7 +3629,7 @@ export namespace Voicemails {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = HeadVoicemailsData;
   }
 
   /**
@@ -3254,9 +3648,9 @@ export namespace Voicemails {
       voicemailId: number;
     };
     export type RequestQuery = {};
-    export type RequestBody = any;
+    export type RequestBody = GreetingsCreatePayload;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = GreetingsCreateData;
   }
 
   /**
@@ -3275,9 +3669,9 @@ export namespace Voicemails {
       voicemailId: number;
     };
     export type RequestQuery = {};
-    export type RequestBody = any;
+    export type RequestBody = GreetingsUpdatePayload;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = GreetingsUpdateData;
   }
 
   /**
@@ -3298,7 +3692,7 @@ export namespace Voicemails {
     export type RequestQuery = {};
     export type RequestBody = GreetingCopy;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = GreetingsCopyCreateData;
   }
 
   /**
@@ -3319,7 +3713,7 @@ export namespace Voicemails {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = MessagesDeleteData;
   }
 
   /**
@@ -3340,7 +3734,7 @@ export namespace Voicemails {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = VoicemailMessage;
+    export type ResponseBody = MessagesDetailData;
   }
 
   /**
@@ -3361,7 +3755,7 @@ export namespace Voicemails {
     export type RequestQuery = {};
     export type RequestBody = VoicemailMessageUpdate;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = MessagesUpdateData;
   }
 
   /**
@@ -3387,6 +3781,6 @@ export namespace Voicemails {
     };
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = MessagesRecordingListData;
   }
 }

@@ -12,6 +12,8 @@
 
 export type CapabilitiesObject = Record<string, Record<string, string>>;
 
+export type CfgMgrListData = LinksObject;
+
 export interface ComponentWithStatus {
   status?: StatusValue;
 }
@@ -67,6 +69,12 @@ export interface ConfigsObject {
   configs?: Config[];
 }
 
+export type ConfigsRawListData = RawConfigurationObject;
+
+export type ConfigureDetailData = Param;
+
+export type ConfigureListData = GeneralConfigsObject;
+
 export interface DHCPInfo {
   /** The IP address of the device */
   ip?: string;
@@ -80,6 +88,8 @@ export interface DHCPInfo {
 export interface DHCPInfoObject {
   dhcp_info?: DHCPInfo;
 }
+
+export type DevMgrListData = LinksObject;
 
 /** A device schema */
 export interface Device {
@@ -182,6 +192,8 @@ export interface GeneralConfigsObject {
   params?: GeneralConfigObject[];
 }
 
+export type GetRootData = LinksObject;
+
 /**
  * HTTP proxy configuration
  * @example {"param":{"value":"http://root:secret@example.com:8080"}}
@@ -204,6 +216,18 @@ export interface HttpsProxy {
 export interface IdObject {
   id?: string;
 }
+
+export type InstallInstallDetailData = OperationInProgressObject;
+
+export type InstallInstallableListData = PackageList;
+
+export type InstallInstalledListData = PackageList;
+
+export type InstallListData = LinksObject;
+
+export type InstallUpdateDetailData = OperationInProgressObject;
+
+export type InstallUpgradeDetailData = OperationInProgressObject;
 
 /** Link Object */
 export interface LinkObject {
@@ -281,6 +305,8 @@ export interface ParamObject {
   value?: string;
 }
 
+export type PgMgrListData = LinksObject;
+
 export interface PluginInfo {
   plugin_info?: PluginInfoObject;
 }
@@ -302,6 +328,22 @@ export interface PluginServer {
 
 export type Plugins = Record<string, LinksObject>;
 
+export type PluginsDetailData = LinksObject;
+
+export type PluginsInfoListData = PluginInfo;
+
+export type PluginsInstallInstallDetailData = OperationInProgressObject;
+
+export type PluginsInstallInstallableListData = PackageList;
+
+export type PluginsInstallInstalledListData = PackageList;
+
+export type PluginsInstallListData = LinksObject;
+
+export type PluginsInstallUpgradeDetailData = OperationInProgressObject;
+
+export type PluginsListData = PluginsObject;
+
 export interface PluginsObject {
   plugins?: Plugins;
 }
@@ -320,6 +362,8 @@ export interface RawConfigurationObject {
   raw_config?: object;
 }
 
+export type StatusListData = StatusSummary;
+
 export interface StatusSummary {
   rest_api?: ComponentWithStatus;
 }
@@ -328,6 +372,10 @@ export enum StatusValue {
   Fail = "fail",
   Ok = "ok",
 }
+
+export type SynchronizeCreateData = any;
+
+export type SynchronizeDetailData = OperationInProgressObject;
 
 export namespace CfgMgr {
   /**
@@ -343,7 +391,7 @@ export namespace CfgMgr {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = LinksObject;
+    export type ResponseBody = CfgMgrListData;
   }
 
   /**
@@ -494,7 +542,7 @@ export namespace CfgMgr {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = RawConfigurationObject;
+    export type ResponseBody = ConfigsRawListData;
   }
 }
 
@@ -512,7 +560,7 @@ export namespace Configure {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = GeneralConfigsObject;
+    export type ResponseBody = ConfigureListData;
   }
 
   /**
@@ -649,7 +697,7 @@ export namespace Configure {
       /** The tenant's UUID, defining the ownership of a given resource */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = Param;
+    export type ResponseBody = ConfigureDetailData;
   }
 
   /**
@@ -686,7 +734,7 @@ export namespace DevMgr {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = LinksObject;
+    export type ResponseBody = DevMgrListData;
   }
 
   /**
@@ -879,7 +927,7 @@ export namespace DevMgr {
       /** The tenant's UUID, defining the ownership of a given resource */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = SynchronizeCreateData;
   }
 
   /**
@@ -917,7 +965,7 @@ export namespace DevMgr {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = OperationInProgressObject;
+    export type ResponseBody = SynchronizeDetailData;
   }
 }
 
@@ -935,7 +983,7 @@ export namespace PgMgr {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = LinksObject;
+    export type ResponseBody = PgMgrListData;
   }
 
   /**
@@ -951,7 +999,7 @@ export namespace PgMgr {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = LinksObject;
+    export type ResponseBody = InstallListData;
   }
 
   /**
@@ -1005,7 +1053,7 @@ export namespace PgMgr {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = OperationInProgressObject;
+    export type ResponseBody = InstallInstallDetailData;
   }
 
   /**
@@ -1021,7 +1069,7 @@ export namespace PgMgr {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = PackageList;
+    export type ResponseBody = InstallInstallableListData;
   }
 
   /**
@@ -1037,7 +1085,7 @@ export namespace PgMgr {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = PackageList;
+    export type ResponseBody = InstallInstalledListData;
   }
 
   /**
@@ -1107,7 +1155,7 @@ export namespace PgMgr {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = OperationInProgressObject;
+    export type ResponseBody = InstallUpdateDetailData;
   }
 
   /**
@@ -1161,7 +1209,7 @@ export namespace PgMgr {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = OperationInProgressObject;
+    export type ResponseBody = InstallUpgradeDetailData;
   }
 
   /**
@@ -1177,7 +1225,7 @@ export namespace PgMgr {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = PluginsObject;
+    export type ResponseBody = PluginsListData;
   }
 
   /**
@@ -1196,7 +1244,7 @@ export namespace PgMgr {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = LinksObject;
+    export type ResponseBody = PluginsDetailData;
   }
 
   /**
@@ -1215,7 +1263,7 @@ export namespace PgMgr {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = PluginInfo;
+    export type ResponseBody = PluginsInfoListData;
   }
 
   /**
@@ -1234,7 +1282,7 @@ export namespace PgMgr {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = LinksObject;
+    export type ResponseBody = PluginsInstallListData;
   }
 
   /**
@@ -1295,7 +1343,7 @@ export namespace PgMgr {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = OperationInProgressObject;
+    export type ResponseBody = PluginsInstallInstallDetailData;
   }
 
   /**
@@ -1314,7 +1362,7 @@ export namespace PgMgr {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = PackageList;
+    export type ResponseBody = PluginsInstallInstallableListData;
   }
 
   /**
@@ -1333,7 +1381,7 @@ export namespace PgMgr {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = PackageList;
+    export type ResponseBody = PluginsInstallInstalledListData;
   }
 
   /**
@@ -1394,7 +1442,7 @@ export namespace PgMgr {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = OperationInProgressObject;
+    export type ResponseBody = PluginsInstallUpgradeDetailData;
   }
 
   /**
@@ -1428,6 +1476,6 @@ export namespace Status {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = StatusSummary;
+    export type ResponseBody = StatusListData;
   }
 }

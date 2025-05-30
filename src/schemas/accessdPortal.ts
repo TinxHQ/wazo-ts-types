@@ -17,6 +17,10 @@ export interface APIError {
   timestamp?: number;
 }
 
+export type ActivateCustomerSubscriptionDefaultData = any;
+
+export type ActivateSubscriptionDefaultData = any;
+
 /** AuthorizationCreate */
 export interface AuthorizationBase {
   /** The date of the authorization's creation */
@@ -48,6 +52,14 @@ export interface BaseAuthorizationList {
   filtered?: number;
   total?: number;
 }
+
+export type CreateAuthorizationData = SubAuthorization;
+
+export type CreateAuthorizationsTokenData = Token;
+
+export type CreateSubscriptionAuthorizationData = MainAuthorization;
+
+export type CreateSubscriptionAuthorizationsTokenData = Token;
 
 /** CustomerSubscription */
 export interface CustomerSubscription {
@@ -140,16 +152,42 @@ export interface CustomerSubscriptionSummarySeats {
   quantity_last_month?: number;
 }
 
+export type DeleteAuthorizationData = any;
+
+export type DeleteSubscriptionAuthorizationData = any;
+
+export type DeleteSubscriptionData = any;
+
 export interface Error {
   reason?: string[];
   status_code?: number;
   timestamp?: string[];
 }
 
+export type ExpireCustomerSubscriptionDefaultData = any;
+
+export type ExpireSubscriptionDefaultData = any;
+
+export type GetAuthorizationData = SubAuthorization;
+
+export type GetConfigData = any;
+
+export type GetCustomerSubscriptionData = CustomerSubscription;
+
+export type GetSubscriptionData = Subscription;
+
+export type GetSubscriptionDefaultData = Subscription;
+
+export type GetSubscriptionSummaryData = SubscriptionSummary;
+
 export interface GetSubscriptionSummaryParams {
   /** Whether to recurse for subtenants */
   recurse?: boolean;
 }
+
+export type HeadStatusData = any;
+
+export type ListAuthorizationsData = SubAuthorizationList;
 
 export interface ListAuthorizationsParams {
   /** The uuid of the main authorization authorizations are linked to */
@@ -157,6 +195,11 @@ export interface ListAuthorizationsParams {
   /** The status of the authorization. Possible values are: OPEN, REVOKED */
   status?: string;
 }
+
+export type ListAuthorizationsSeatsData = Seats;
+
+export type ListCustomerSubscriptionSummariesData =
+  CustomerSubscriptionSummaryList;
 
 export interface ListCustomerSubscriptionSummariesParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
@@ -171,12 +214,16 @@ export interface ListCustomerSubscriptionSummariesParams {
   search?: string;
 }
 
+export type ListSubscriptionAuthorizationsData = MainAuthorizationList;
+
 export interface ListSubscriptionAuthorizationsParams {
   /** The status of the authorization. Possible values are: OPEN, REVOKED */
   status?: string;
   /** The UUID of the subscription */
   subscriptionUuid: string;
 }
+
+export type ListSubscriptionsData = SubscriptionList;
 
 export interface ListSubscriptionsParams {
   /** Whether the subscription auto renew itself */
@@ -336,6 +383,16 @@ export interface Token {
   jwt?: string;
 }
 
+export type UpdateAuthorizationData = SubAuthorization;
+
+export type UpdateCustomerSubscriptionData = CustomerSubscription;
+
+export type UpdateSubscriptionAuthorizationData = MainAuthorization;
+
+export type UpdateSubscriptionData = Subscription;
+
+export type UpdateSubscriptionDefaultData = Subscription;
+
 export namespace Authorizations {
   /**
    * @description **Required ACL:** `accessd.authorizations.read`
@@ -358,7 +415,7 @@ export namespace Authorizations {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = SubAuthorizationList;
+    export type ResponseBody = ListAuthorizationsData;
   }
 
   /**
@@ -377,7 +434,7 @@ export namespace Authorizations {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = SubAuthorization;
+    export type ResponseBody = CreateAuthorizationData;
   }
 
   /**
@@ -396,7 +453,7 @@ export namespace Authorizations {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = Seats;
+    export type ResponseBody = ListAuthorizationsSeatsData;
   }
 
   /**
@@ -412,7 +469,7 @@ export namespace Authorizations {
     export type RequestQuery = {};
     export type RequestBody = AuthorizationsUUIDs;
     export type RequestHeaders = {};
-    export type ResponseBody = Token;
+    export type ResponseBody = CreateAuthorizationsTokenData;
   }
 
   /**
@@ -434,7 +491,7 @@ export namespace Authorizations {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = DeleteAuthorizationData;
   }
 
   /**
@@ -456,7 +513,7 @@ export namespace Authorizations {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = SubAuthorization;
+    export type ResponseBody = GetAuthorizationData;
   }
 
   /**
@@ -478,7 +535,7 @@ export namespace Authorizations {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = SubAuthorization;
+    export type ResponseBody = UpdateAuthorizationData;
   }
 }
 
@@ -496,7 +553,7 @@ export namespace Config {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = GetConfigData;
   }
 }
 
@@ -528,7 +585,7 @@ export namespace Customers {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = CustomerSubscriptionSummaryList;
+    export type ResponseBody = ListCustomerSubscriptionSummariesData;
   }
 
   /**
@@ -547,7 +604,7 @@ export namespace Customers {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = CustomerSubscription;
+    export type ResponseBody = GetCustomerSubscriptionData;
   }
 
   /**
@@ -566,7 +623,7 @@ export namespace Customers {
     export type RequestQuery = {};
     export type RequestBody = CustomerSubscription;
     export type RequestHeaders = {};
-    export type ResponseBody = CustomerSubscription;
+    export type ResponseBody = UpdateCustomerSubscriptionData;
   }
 
   /**
@@ -585,7 +642,7 @@ export namespace Customers {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = ActivateCustomerSubscriptionDefaultData;
   }
 
   /**
@@ -604,7 +661,7 @@ export namespace Customers {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = ExpireCustomerSubscriptionDefaultData;
   }
 }
 
@@ -622,7 +679,7 @@ export namespace Status {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = HeadStatusData;
   }
 }
 
@@ -656,7 +713,7 @@ export namespace Subscriptions {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = SubscriptionList;
+    export type ResponseBody = ListSubscriptionsData;
   }
 
   /**
@@ -675,7 +732,7 @@ export namespace Subscriptions {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = Subscription;
+    export type ResponseBody = GetSubscriptionDefaultData;
   }
 
   /**
@@ -694,7 +751,7 @@ export namespace Subscriptions {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = Subscription;
+    export type ResponseBody = UpdateSubscriptionDefaultData;
   }
 
   /**
@@ -713,7 +770,7 @@ export namespace Subscriptions {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = ActivateSubscriptionDefaultData;
   }
 
   /**
@@ -732,7 +789,7 @@ export namespace Subscriptions {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = ExpireSubscriptionDefaultData;
   }
 
   /**
@@ -754,7 +811,7 @@ export namespace Subscriptions {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = SubscriptionSummary;
+    export type ResponseBody = GetSubscriptionSummaryData;
   }
 
   /**
@@ -773,7 +830,7 @@ export namespace Subscriptions {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = Token;
+    export type ResponseBody = CreateSubscriptionAuthorizationsTokenData;
   }
 
   /**
@@ -795,7 +852,7 @@ export namespace Subscriptions {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = DeleteSubscriptionData;
   }
 
   /**
@@ -817,7 +874,7 @@ export namespace Subscriptions {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = Subscription;
+    export type ResponseBody = GetSubscriptionData;
   }
 
   /**
@@ -839,7 +896,7 @@ export namespace Subscriptions {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = Subscription;
+    export type ResponseBody = UpdateSubscriptionData;
   }
 
   /**
@@ -864,7 +921,7 @@ export namespace Subscriptions {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = MainAuthorizationList;
+    export type ResponseBody = ListSubscriptionAuthorizationsData;
   }
 
   /**
@@ -886,7 +943,7 @@ export namespace Subscriptions {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = MainAuthorization;
+    export type ResponseBody = CreateSubscriptionAuthorizationData;
   }
 
   /**
@@ -910,7 +967,7 @@ export namespace Subscriptions {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = DeleteSubscriptionAuthorizationData;
   }
 
   /**
@@ -934,6 +991,6 @@ export namespace Subscriptions {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = MainAuthorization;
+    export type ResponseBody = UpdateSubscriptionAuthorizationData;
   }
 }

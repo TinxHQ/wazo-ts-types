@@ -17,6 +17,26 @@ export interface APIError {
   timestamp?: number;
 }
 
+export type AddGroupPolicyData = any;
+
+export type AddGroupPolicyError = Error;
+
+export type AddPolicyAccessData = any;
+
+export type AddPolicyAccessError = Error;
+
+export type AddUserGroupData = any;
+
+export type AddUserGroupError = Error;
+
+export type AddUserIdpData = any;
+
+export type AddUserIdpError = Error;
+
+export type AddUserPolicyData = any;
+
+export type AddUserPolicyError = Error;
+
 export interface AdminUserEmailList {
   emails?: {
     address?: string;
@@ -29,6 +49,20 @@ export interface BackendList {
   data?: string[];
 }
 
+export type BackendsListData = BackendList;
+
+export type ConfigCreateData = any;
+
+export type ConfigCreateError = Error;
+
+export type ConfigDeleteData = any;
+
+export type ConfigDeleteError = Error;
+
+export type ConfigListData = ExternalConfig;
+
+export type ConfigListError = Error;
+
 export interface ConfigPatchItem {
   /** Patch operation. Supported operations: `replace`. */
   op?: string;
@@ -38,12 +72,159 @@ export interface ConfigPatchItem {
   value?: object;
 }
 
+export type ConfigUpdateData = any;
+
+export type ConfigUpdateError = Error;
+
+export type ConfirmListData = any;
+
+export type ConfirmListError = Error;
+
 export interface ConfirmListParams {
   /** The UUID of the email */
   emailUuid: string;
   /** The UUID of the token used to confirm the email address */
   token: string;
 }
+
+export type ConfirmUpdateData = any;
+
+export type ConfirmUpdateError = Error;
+
+export type CreateGroupsData = GroupResult;
+
+export type CreateGroupsError = Error;
+
+export type CreatePoliciesData = PolicyResult;
+
+export type CreatePoliciesError = Error;
+
+export type CreateSamlBackendConfigData = SAMLBackendConfig;
+
+export type CreateSamlBackendConfigError = Error;
+
+export interface CreateSamlBackendConfigPayload {
+  /**
+   * The SAML ACS URL configured in the IdP.
+   * @format uri
+   */
+  acs_url: string;
+  /** The UUID of the domain to use for the SAML backend. */
+  domain_uuid: string;
+  /** The name of the SAML Entity. */
+  entity_id: string;
+  /** The IDP metadata file in XML format. */
+  metadata: File;
+}
+
+export type CreateTenantData = TenantPostResponse;
+
+export type CreateTenantError = APIError;
+
+export type CreateTokenData = Token;
+
+export type CreateTokenError = Error;
+
+export interface CreateTokenPayload {
+  /**
+   * The `access_type` indicates whether your application can refresh the tokens when the user is not
+   * present at the browser. Valid parameter values are *online*, which is the default value, and *offline*
+   *
+   * Only one refresh token will be created for a given user with a given `client_id`. The old refresh
+   * for `client_id` will be revoken when creating a new one.
+   *
+   * The *client_id* field is required when using the `access_type` *offline*
+   * @default "online"
+   */
+  access_type?: "online" | "offline";
+  /**
+   * The `client_id` is used in conjunction with the `access_type` *offline* to known for which application
+   * a refresh token has been emitted.
+   *
+   * *Required when using `access_type: offline`*
+   */
+  client_id?: string;
+  /** The `domain_name` must match a tenant's domain_name entry to find the appropriate ldap configuration. */
+  domain_name?: string;
+  /**
+   * Expiration time in seconds.
+   * @max 315360000
+   * @default 7200
+   */
+  expiration?: number;
+  /**
+   * The `refresh_token` can be used to get a new access token without using the username/password.
+   * This is useful for client application that should not store the username and password once the
+   * user has logged in a first time.
+   */
+  refresh_token?: string;
+  /**
+   * The `saml_session_id` can be used to get a new access token or refresh token instead of using
+   * the username/password. It can be created using the `/saml/sso` and `/saml/acs` resources. A token
+   * created this way has the same properties as another token created using this API.
+   */
+  saml_session_id?: string;
+}
+
+export type CreateUserData = UserPostResponse;
+
+export type CreateUserError = APIError;
+
+export type DeleteGroupData = any;
+
+export type DeleteGroupError = Error;
+
+export type DeleteLdapBackendConfigData = any;
+
+export type DeleteLdapBackendConfigError = Error;
+
+export type DeletePolicyAccessData = any;
+
+export type DeletePolicyAccessError = Error;
+
+export type DeletePolicyData = any;
+
+export type DeletePolicyError = Error;
+
+export type DeleteRefreshTokensData = any;
+
+export type DeleteRefreshTokensError = APIError;
+
+export type DeleteSamlBackendConfigData = any;
+
+export type DeleteSamlBackendConfigError = Error;
+
+export type DeleteSessionData = any;
+
+export type DeleteSessionError = Error;
+
+export type DeleteTenantData = any;
+
+export type DeleteTenantError = Error;
+
+export type DeleteUserData = any;
+
+export type DeleteUserError = Error;
+
+export type DomainsListData = TenantDomainsList;
+
+export type DomainsListError = Error;
+
+export type EditGroupsData = GroupResult;
+
+export type EditGroupsError = Error;
+
+export type EditPoliciesData = PolicyResult;
+
+export type EditPoliciesError = Error;
+
+export type EmailsConfirmListData = any;
+
+export type EmailsConfirmListError = Error;
+
+export type EmailsUpdateData = any;
+
+export type EmailsUpdateError = Error;
 
 export interface Error {
   reason?: string[];
@@ -121,6 +302,8 @@ export interface ExternalConfig {
   use_sandbox?: boolean;
 }
 
+export type ExternalListData = ExternalAuthList;
+
 export interface ExternalListParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
   direction?: "asc" | "desc";
@@ -139,6 +322,8 @@ export interface ExternalListParams {
   userUuid: string;
 }
 
+export type GetConfigData = any;
+
 export interface GetGroupsResult {
   /** The number of groups matching the searched term. */
   filtered: number;
@@ -148,12 +333,22 @@ export interface GetGroupsResult {
   total: number;
 }
 
+export type GetIdpData = IDPList;
+
+export type GetLdapBackendConfigData = LDAPBackendConfig;
+
+export type GetLdapBackendConfigError = Error;
+
 export interface GetPoliciesResult {
   /** A paginated list of policies */
   items: PolicyResult[];
   /** The number of policies matching the searched term */
   total: number;
 }
+
+export type GetSamlBackendConfigData = SAMLBackendConfig;
+
+export type GetSamlBackendConfigError = Error;
 
 export interface GetSessionsResult {
   /** The number of sessions matching the searched term. */
@@ -184,6 +379,14 @@ export interface GroupResult {
   uuid?: string;
 }
 
+export type GroupsDetailData = GroupResult;
+
+export type GroupsDetailError = Error;
+
+export type GroupsListData = GetGroupsResult;
+
+export type GroupsListError = Error;
+
 export interface GroupsListParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
   direction?: "asc" | "desc";
@@ -201,6 +404,12 @@ export interface GroupsListParams {
   /** The UUID of the user */
   userUuid: string;
 }
+
+export type HeadStatusData = any;
+
+export type HeadTokenData = any;
+
+export type HeadTokenError = Error;
 
 export interface HeadTokenParams {
   /** The required ACL */
@@ -293,6 +502,10 @@ export type LDAPBackendConfigEdit = LDAPBackendConfig & {
   bind_password?: string;
 };
 
+export type ListGroupsData = GetGroupsResult;
+
+export type ListGroupsError = Error;
+
 export interface ListGroupsParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
   direction?: "asc" | "desc";
@@ -326,6 +539,10 @@ export interface ListGroupsParams {
   uuid?: string;
 }
 
+export type ListPoliciesData = GetPoliciesResult;
+
+export type ListPoliciesError = Error;
+
 export interface ListPoliciesParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
   direction?: "asc" | "desc";
@@ -346,6 +563,10 @@ export interface ListPoliciesParams {
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
   search?: string;
 }
+
+export type ListRefreshTokensData = RefreshTokenList;
+
+export type ListRefreshTokensError = APIError;
 
 export interface ListRefreshTokensParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
@@ -368,6 +589,10 @@ export interface ListRefreshTokensParams {
   search?: string;
 }
 
+export type ListSessionsData = GetSessionsResult;
+
+export type ListSessionsError = Error;
+
 export interface ListSessionsParams {
   /** The limit defines the number of individual objects that are returned */
   limit?: number;
@@ -382,6 +607,10 @@ export interface ListSessionsParams {
    */
   recurse?: boolean;
 }
+
+export type ListUserRefreshTokensData = RefreshTokenList;
+
+export type ListUserRefreshTokensError = APIError;
 
 export interface ListUserRefreshTokensParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
@@ -407,6 +636,24 @@ export interface PasswordChange {
   /** The old password */
   old_password: string;
 }
+
+export type PasswordUpdateData = any;
+
+export type PasswordUpdateError = Error;
+
+export type PatchConfigData = any;
+
+export type PatchConfigPayload = ConfigPatchItem[];
+
+export type PoliciesDetailData = PolicyResult;
+
+export type PoliciesDetailError = Error;
+
+export type PoliciesListData = GetPoliciesResult;
+
+export type PoliciesListError = Error;
+
+export type PoliciesListFail = Error;
 
 export interface PoliciesListParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
@@ -444,6 +691,8 @@ export interface PoliciesListParams2 {
   userUuid: string;
 }
 
+export type PoliciesListResult = GetPoliciesResult;
+
 export interface Policy {
   acl?: string[];
   description?: string;
@@ -472,6 +721,8 @@ export interface PostPasswordReset {
   password: string;
 }
 
+export type ProcessAcsError = Error;
+
 export interface RefreshToken {
   /** The `client_id` that was used to create this refresh token */
   client_id?: string;
@@ -494,10 +745,34 @@ export interface RefreshTokenList {
   total?: number;
 }
 
+export type RegisterUserData = UserPostResponse;
+
+export type RegisterUserError = APIError;
+
+export type RemoveGroupPolicyData = any;
+
+export type RemoveGroupPolicyError = Error;
+
+export type RemoveIdpUserData = any;
+
+export type RemoveIdpUserError = Error;
+
+export type RemoveUserGroupData = any;
+
+export type RemoveUserGroupError = Error;
+
+export type RemoveUserPolicyData = any;
+
+export type RemoveUserPolicyError = Error;
+
+export type ResetPasswordChangeData = any;
+
 export interface ResetPasswordChangeParams {
   /** The user's UUID */
   user_uuid: string;
 }
+
+export type ResetPasswordData = any;
 
 export interface ResetPasswordParams {
   /** The user's email address */
@@ -567,6 +842,24 @@ export interface SAMLSSOResponse {
   saml_session_id?: string;
 }
 
+export type SamlAcsUrlTemplateListData = SAMLAcsUrlTemplate;
+
+export type SamlAcsUrlTemplateListError = Error;
+
+export type SamlLogoutData = SAMLLogoutRequest;
+
+export type SamlLogoutResponseData = any;
+
+/**
+ * The  metadata file in XML format.
+ * @format binary
+ */
+export type SamlMetadataListData = File;
+
+export type SamlMetadataListError = Error;
+
+export type SamlSsoData = SAMLSSOResponse;
+
 export interface ScopeCheckRequest {
   /** Scopes to check against */
   scopes: string[];
@@ -582,12 +875,20 @@ export interface ScopeList {
   scopes?: object[];
 }
 
+export type ScopesCheckCreateData = ScopeList;
+
+export type ScopesCheckCreateError = Error;
+
 export interface SessionResult {
   mobile?: boolean;
   tenant_uuid?: string;
   user_uuid?: string;
   uuid?: string;
 }
+
+export type SessionsListData = GetSessionsResult;
+
+export type SessionsListError = Error;
 
 export interface SessionsListParams {
   /** The limit defines the number of individual objects that are returned */
@@ -673,6 +974,12 @@ export type TenantResult = TenantBase & {
   uuid?: string;
 };
 
+export type TenantsDetailData = TenantResult;
+
+export type TenantsDetailError = Error;
+
+export type TenantsListData = TenantList;
+
 export interface TenantsListParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
   direction?: "asc" | "desc";
@@ -715,6 +1022,14 @@ export interface Token {
   };
 }
 
+export type TokenDeleteData = any;
+
+export type TokenDeleteError = Error;
+
+export type TokenDetailData = Token;
+
+export type TokenDetailError = Error;
+
 export interface TokenDetailParams {
   /** The required ACL */
   scope?: string;
@@ -723,6 +1038,40 @@ export interface TokenDetailParams {
   /** The token to query */
   token: string;
 }
+
+export type UpdateLdapBackendConfigData = LDAPBackendConfig;
+
+export type UpdateLdapBackendConfigError = Error;
+
+export type UpdateSamlBackendConfigData = SAMLBackendConfig;
+
+export type UpdateSamlBackendConfigError = Error;
+
+export interface UpdateSamlBackendConfigPayload {
+  /**
+   * The SAML ACS URL configured in the IdP.
+   * @format uri
+   */
+  acs_url?: string;
+  /** The UUID of the domain to use for the SAML backend. */
+  domain_uuid?: string;
+  /** The name of the SAML Entity. */
+  entity_id?: string;
+  /** The IDP metadata file in XML format. */
+  metadata?: File;
+}
+
+export type UpdateTenantData = TenantPostResponse;
+
+export type UpdateTenantError = APIError | Error;
+
+export type UpdateUserData = UserPostResponse;
+
+export type UpdateUserError = APIError | Error;
+
+export type UpdateUsersIdpData = any;
+
+export type UpdateUsersIdpError = Error;
 
 export interface UserBase {
   /**
@@ -749,6 +1098,10 @@ export type UserCreate = UserBase & {
   /** The user's UUID */
   uuid?: string;
 };
+
+export type UserDeleteSessionData = any;
+
+export type UserDeleteSessionError = Error;
 
 export type UserEdit = UserBase;
 
@@ -809,6 +1162,22 @@ export interface UserResult {
   username?: string;
   uuid?: string;
 }
+
+export type UsersDetailData = UserResult;
+
+export type UsersDetailError = Error;
+
+export type UsersEmailsUpdateData = any;
+
+export type UsersEmailsUpdateError = Error;
+
+export type UsersListData = ExternalAuthUserList;
+
+export type UsersListError = Error;
+
+export type UsersListFail = Error;
+
+export type UsersListOutput = UserList;
 
 export interface UsersListParams {
   /** External auth type name */
@@ -874,6 +1243,8 @@ export interface UsersListParams4 {
   search?: string;
 }
 
+export type UsersListResult = UserList;
+
 export namespace Admin {
   /**
    * @description **Required ACL**: `auth.admin.users.{user_uuid}.emails.update` Update all of the users email address at the same time. If an existing address is missing from the list, it will be removed. An empty list will remove all addresses. If addresses are defined, one and only one address should be main. If the confirmed field is set to none or ommited the existing value will be reused if it exists, otherwise the address will not be confirmed.
@@ -891,7 +1262,7 @@ export namespace Admin {
     export type RequestQuery = {};
     export type RequestBody = AdminUserEmailList;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = UsersEmailsUpdateData;
   }
 }
 
@@ -908,7 +1279,7 @@ export namespace Backends {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = BackendList;
+    export type ResponseBody = BackendsListData;
   }
 
   /**
@@ -927,7 +1298,7 @@ export namespace Backends {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = DeleteLdapBackendConfigData;
   }
 
   /**
@@ -947,7 +1318,7 @@ all the fields will be `null`.
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = LDAPBackendConfig;
+    export type ResponseBody = GetLdapBackendConfigData;
   }
 
   /**
@@ -966,7 +1337,7 @@ all the fields will be `null`.
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = LDAPBackendConfig;
+    export type ResponseBody = UpdateLdapBackendConfigData;
   }
 
   /**
@@ -985,7 +1356,7 @@ all the fields will be `null`.
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = DeleteSamlBackendConfigData;
   }
 
   /**
@@ -1005,7 +1376,7 @@ all the fields will be `null`.
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = SAMLBackendConfig;
+    export type ResponseBody = GetSamlBackendConfigData;
   }
 
   /**
@@ -1019,24 +1390,12 @@ all the fields will be `null`.
   export namespace CreateSamlBackendConfig {
     export type RequestParams = {};
     export type RequestQuery = {};
-    export type RequestBody = {
-      /**
-       * The SAML ACS URL configured in the IdP.
-       * @format uri
-       */
-      acs_url: string;
-      /** The UUID of the domain to use for the SAML backend. */
-      domain_uuid: string;
-      /** The name of the SAML Entity. */
-      entity_id: string;
-      /** The IDP metadata file in XML format. */
-      metadata: File;
-    };
+    export type RequestBody = CreateSamlBackendConfigPayload;
     export type RequestHeaders = {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = SAMLBackendConfig;
+    export type ResponseBody = CreateSamlBackendConfigData;
   }
 
   /**
@@ -1050,24 +1409,12 @@ all the fields will be `null`.
   export namespace UpdateSamlBackendConfig {
     export type RequestParams = {};
     export type RequestQuery = {};
-    export type RequestBody = {
-      /**
-       * The SAML ACS URL configured in the IdP.
-       * @format uri
-       */
-      acs_url?: string;
-      /** The UUID of the domain to use for the SAML backend. */
-      domain_uuid?: string;
-      /** The name of the SAML Entity. */
-      entity_id?: string;
-      /** The IDP metadata file in XML format. */
-      metadata?: File;
-    };
+    export type RequestBody = UpdateSamlBackendConfigPayload;
     export type RequestHeaders = {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = SAMLBackendConfig;
+    export type ResponseBody = UpdateSamlBackendConfigData;
   }
 
   /**
@@ -1082,7 +1429,7 @@ all the fields will be `null`.
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = SAMLAcsUrlTemplate;
+    export type ResponseBody = SamlAcsUrlTemplateListData;
   }
 
   /**
@@ -1100,7 +1447,7 @@ all the fields will be `null`.
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = File;
+    export type ResponseBody = SamlMetadataListData;
   }
 }
 
@@ -1117,7 +1464,7 @@ export namespace Config {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = GetConfigData;
   }
 
   /**
@@ -1130,9 +1477,9 @@ export namespace Config {
   export namespace PatchConfig {
     export type RequestParams = {};
     export type RequestQuery = {};
-    export type RequestBody = ConfigPatchItem[];
+    export type RequestBody = PatchConfigPayload;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = PatchConfigData;
   }
 }
 
@@ -1155,7 +1502,7 @@ export namespace Emails {
     };
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = ConfirmListData;
   }
 
   /**
@@ -1174,7 +1521,7 @@ export namespace Emails {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = ConfirmUpdateData;
   }
 }
 
@@ -1197,7 +1544,7 @@ export namespace External {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = ConfigDeleteData;
   }
 
   /**
@@ -1218,7 +1565,7 @@ export namespace External {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = ExternalConfig;
+    export type ResponseBody = ConfigListData;
   }
 
   /**
@@ -1239,7 +1586,7 @@ export namespace External {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = ConfigCreateData;
   }
 
   /**
@@ -1260,7 +1607,7 @@ export namespace External {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = ConfigUpdateData;
   }
 
   /**
@@ -1294,7 +1641,7 @@ export namespace External {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = ExternalAuthUserList;
+    export type ResponseBody = UsersListData;
   }
 }
 
@@ -1346,7 +1693,7 @@ export namespace Groups {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = GetGroupsResult;
+    export type ResponseBody = ListGroupsData;
   }
 
   /**
@@ -1365,7 +1712,7 @@ export namespace Groups {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = GroupResult;
+    export type ResponseBody = CreateGroupsData;
   }
 
   /**
@@ -1387,7 +1734,7 @@ export namespace Groups {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = DeleteGroupData;
   }
 
   /**
@@ -1409,7 +1756,7 @@ export namespace Groups {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = GroupResult;
+    export type ResponseBody = GroupsDetailData;
   }
 
   /**
@@ -1431,7 +1778,7 @@ export namespace Groups {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = GroupResult;
+    export type ResponseBody = EditGroupsData;
   }
 
   /**
@@ -1464,7 +1811,7 @@ export namespace Groups {
     };
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = GetPoliciesResult;
+    export type ResponseBody = PoliciesListData;
   }
 
   /**
@@ -1485,7 +1832,7 @@ export namespace Groups {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = RemoveGroupPolicyData;
   }
 
   /**
@@ -1506,7 +1853,7 @@ export namespace Groups {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = AddGroupPolicyData;
   }
 
   /**
@@ -1539,7 +1886,7 @@ export namespace Groups {
     };
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = UserList;
+    export type ResponseBody = UsersListResult;
   }
 
   /**
@@ -1560,7 +1907,7 @@ export namespace Groups {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = RemoveUserGroupData;
   }
 
   /**
@@ -1581,7 +1928,7 @@ export namespace Groups {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = AddUserGroupData;
   }
 }
 
@@ -1599,7 +1946,7 @@ export namespace Idp {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = IDPList;
+    export type ResponseBody = GetIdpData;
   }
 
   /**
@@ -1617,7 +1964,7 @@ export namespace Idp {
     export type RequestQuery = {};
     export type RequestBody = IDPUsers;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = UpdateUsersIdpData;
   }
 
   /**
@@ -1638,7 +1985,7 @@ export namespace Idp {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = RemoveIdpUserData;
   }
 
   /**
@@ -1659,7 +2006,7 @@ export namespace Idp {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = AddUserIdpData;
   }
 }
 
@@ -1699,7 +2046,7 @@ export namespace Policies {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = GetPoliciesResult;
+    export type ResponseBody = ListPoliciesData;
   }
 
   /**
@@ -1718,7 +2065,7 @@ export namespace Policies {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = PolicyResult;
+    export type ResponseBody = CreatePoliciesData;
   }
 
   /**
@@ -1740,7 +2087,7 @@ export namespace Policies {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = DeletePolicyData;
   }
 
   /**
@@ -1762,7 +2109,7 @@ export namespace Policies {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = PolicyResult;
+    export type ResponseBody = PoliciesDetailData;
   }
 
   /**
@@ -1784,7 +2131,7 @@ export namespace Policies {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = PolicyResult;
+    export type ResponseBody = EditPoliciesData;
   }
 
   /**
@@ -1808,7 +2155,7 @@ export namespace Policies {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = DeletePolicyAccessData;
   }
 
   /**
@@ -1832,7 +2179,7 @@ export namespace Policies {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = AddPolicyAccessData;
   }
 }
 
@@ -1866,7 +2213,7 @@ failed to allow further processing by the frontend application.
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = SAMLLogoutRequest;
+    export type ResponseBody = SamlLogoutData;
   }
 
   /**
@@ -1881,7 +2228,7 @@ failed to allow further processing by the frontend application.
     export type RequestQuery = {};
     export type RequestBody = SAMLIdpLogoutResponse;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = SamlLogoutResponseData;
   }
 
   /**
@@ -1896,7 +2243,7 @@ failed to allow further processing by the frontend application.
     export type RequestQuery = {};
     export type RequestBody = SAMLLoginContext;
     export type RequestHeaders = {};
-    export type ResponseBody = SAMLSSOResponse;
+    export type ResponseBody = SamlSsoData;
   }
 }
 
@@ -1930,7 +2277,7 @@ export namespace Sessions {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = GetSessionsResult;
+    export type ResponseBody = ListSessionsData;
   }
 
   /**
@@ -1949,7 +2296,7 @@ export namespace Sessions {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = DeleteSessionData;
   }
 }
 
@@ -1966,7 +2313,7 @@ export namespace Status {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = HeadStatusData;
   }
 }
 
@@ -2001,7 +2348,7 @@ export namespace Tenants {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = TenantList;
+    export type ResponseBody = TenantsListData;
   }
 
   /**
@@ -2020,7 +2367,7 @@ export namespace Tenants {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = TenantPostResponse;
+    export type ResponseBody = CreateTenantData;
   }
 
   /**
@@ -2039,7 +2386,7 @@ export namespace Tenants {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = DeleteTenantData;
   }
 
   /**
@@ -2058,7 +2405,7 @@ export namespace Tenants {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = TenantResult;
+    export type ResponseBody = TenantsDetailData;
   }
 
   /**
@@ -2077,7 +2424,7 @@ export namespace Tenants {
     export type RequestQuery = {};
     export type RequestBody = TenantEdit;
     export type RequestHeaders = {};
-    export type ResponseBody = TenantPostResponse;
+    export type ResponseBody = UpdateTenantData;
   }
 
   /**
@@ -2096,7 +2443,7 @@ export namespace Tenants {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = TenantDomainsList;
+    export type ResponseBody = DomainsListData;
   }
 }
 
@@ -2112,51 +2459,12 @@ export namespace Token {
   export namespace CreateToken {
     export type RequestParams = {};
     export type RequestQuery = {};
-    export type RequestBody = {
-      /**
-       * The `access_type` indicates whether your application can refresh the tokens when the user is not
-       * present at the browser. Valid parameter values are *online*, which is the default value, and *offline*
-       *
-       * Only one refresh token will be created for a given user with a given `client_id`. The old refresh
-       * for `client_id` will be revoken when creating a new one.
-       *
-       * The *client_id* field is required when using the `access_type` *offline*
-       * @default "online"
-       */
-      access_type?: "online" | "offline";
-      /**
-       * The `client_id` is used in conjunction with the `access_type` *offline* to known for which application
-       * a refresh token has been emitted.
-       *
-       * *Required when using `access_type: offline`*
-       */
-      client_id?: string;
-      /** The `domain_name` must match a tenant's domain_name entry to find the appropriate ldap configuration. */
-      domain_name?: string;
-      /**
-       * Expiration time in seconds.
-       * @max 315360000
-       * @default 7200
-       */
-      expiration?: number;
-      /**
-       * The `refresh_token` can be used to get a new access token without using the username/password.
-       * This is useful for client application that should not store the username and password once the
-       * user has logged in a first time.
-       */
-      refresh_token?: string;
-      /**
-       * The `saml_session_id` can be used to get a new access token or refresh token instead of using
-       * the username/password. It can be created using the `/saml/sso` and `/saml/acs` resources. A token
-       * created this way has the same properties as another token created using this API.
-       */
-      saml_session_id?: string;
-    };
+    export type RequestBody = CreateTokenPayload;
     export type RequestHeaders = {
       /** The session type */
       "Wazo-Session-Type"?: "mobile" | "desktop";
     };
-    export type ResponseBody = Token;
+    export type ResponseBody = CreateTokenData;
   }
 
   /**
@@ -2175,7 +2483,7 @@ export namespace Token {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = TokenDeleteData;
   }
 
   /**
@@ -2199,7 +2507,7 @@ export namespace Token {
     };
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = Token;
+    export type ResponseBody = TokenDetailData;
   }
 
   /**
@@ -2223,7 +2531,7 @@ export namespace Token {
     };
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = HeadTokenData;
   }
 
   /**
@@ -2242,7 +2550,7 @@ export namespace Token {
     export type RequestQuery = {};
     export type RequestBody = ScopeCheckRequest;
     export type RequestHeaders = {};
-    export type ResponseBody = ScopeList;
+    export type ResponseBody = ScopesCheckCreateData;
   }
 }
 
@@ -2282,7 +2590,7 @@ export namespace Tokens {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = RefreshTokenList;
+    export type ResponseBody = ListRefreshTokensData;
   }
 }
 
@@ -2330,7 +2638,7 @@ export namespace Users {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = UserList;
+    export type ResponseBody = UsersListOutput;
   }
 
   /**
@@ -2348,7 +2656,7 @@ export namespace Users {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = UserPostResponse;
+    export type ResponseBody = CreateUserData;
   }
 
   /**
@@ -2370,7 +2678,7 @@ export namespace Users {
     };
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = ResetPasswordData;
   }
 
   /**
@@ -2389,7 +2697,7 @@ export namespace Users {
     };
     export type RequestBody = PostPasswordReset;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = ResetPasswordChangeData;
   }
 
   /**
@@ -2404,7 +2712,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = UserRegister;
     export type RequestHeaders = {};
-    export type ResponseBody = UserPostResponse;
+    export type ResponseBody = RegisterUserData;
   }
 
   /**
@@ -2440,7 +2748,7 @@ export namespace Users {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = RefreshTokenList;
+    export type ResponseBody = ListUserRefreshTokensData;
   }
 
   /**
@@ -2461,7 +2769,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = DeleteRefreshTokensData;
   }
 
   /**
@@ -2480,7 +2788,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = DeleteUserData;
   }
 
   /**
@@ -2499,7 +2807,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = UserResult;
+    export type ResponseBody = UsersDetailData;
   }
 
   /**
@@ -2517,7 +2825,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = UserEdit;
     export type RequestHeaders = {};
-    export type ResponseBody = UserPostResponse;
+    export type ResponseBody = UpdateUserData;
   }
 
   /**
@@ -2536,7 +2844,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = UserEmailList;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = EmailsUpdateData;
   }
 
   /**
@@ -2557,7 +2865,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = EmailsConfirmListData;
   }
 
   /**
@@ -2590,7 +2898,7 @@ export namespace Users {
     };
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = ExternalAuthList;
+    export type ResponseBody = ExternalListData;
   }
 
   /**
@@ -2623,7 +2931,7 @@ export namespace Users {
     };
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = GetGroupsResult;
+    export type ResponseBody = GroupsListData;
   }
 
   /**
@@ -2642,7 +2950,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = PasswordChange;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = PasswordUpdateData;
   }
 
   /**
@@ -2675,7 +2983,7 @@ export namespace Users {
     };
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = GetPoliciesResult;
+    export type ResponseBody = PoliciesListResult;
   }
 
   /**
@@ -2696,7 +3004,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = RemoveUserPolicyData;
   }
 
   /**
@@ -2717,7 +3025,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = AddUserPolicyData;
   }
 
   /**
@@ -2747,7 +3055,7 @@ export namespace Users {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = GetSessionsResult;
+    export type ResponseBody = SessionsListData;
   }
 
   /**
@@ -2768,6 +3076,6 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = UserDeleteSessionData;
   }
 }

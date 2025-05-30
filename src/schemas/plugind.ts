@@ -34,6 +34,8 @@ export interface Error {
   timestamp?: number;
 }
 
+export type GetConfigData = any;
+
 export interface GetMarketResult {
   /** The number of plugins matching the given search */
   filtered?: number;
@@ -50,10 +52,16 @@ export interface GetPluginsResult {
   total?: number;
 }
 
+export type GetStatusData = StatusSummary;
+
 export interface InstallResponse {
   /** A UUID associated to this plugin installation */
   uuid?: string;
 }
+
+export type MarketDetailData = MarketPluginList;
+
+export type MarketListData = GetMarketResult;
 
 export interface MarketListParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
@@ -99,10 +107,18 @@ export interface PluginMetadata {
   version?: string;
 }
 
+export type PluginsCreateData = InstallResponse;
+
 export interface PluginsCreateParams {
   /** With this option the plugin will be reinstalled if it is already installed */
   reinstall?: boolean;
 }
+
+export type PluginsDeleteData = any;
+
+export type PluginsDetailData = PluginMetadata;
+
+export type PluginsListData = GetPluginsResult;
 
 export interface StatusSummary {
   master_tenant?: ComponentWithStatus;
@@ -139,7 +155,7 @@ export namespace Config {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = GetConfigData;
   }
 }
 
@@ -174,7 +190,7 @@ export namespace Market {
     };
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = GetMarketResult;
+    export type ResponseBody = MarketListData;
   }
 
   /**
@@ -195,7 +211,7 @@ export namespace Market {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = MarketPluginList;
+    export type ResponseBody = MarketDetailData;
   }
 }
 
@@ -213,7 +229,7 @@ export namespace Plugins {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = GetPluginsResult;
+    export type ResponseBody = PluginsListData;
   }
 
   /**
@@ -232,7 +248,7 @@ export namespace Plugins {
     };
     export type RequestBody = PluginInstallParameters;
     export type RequestHeaders = {};
-    export type ResponseBody = InstallResponse;
+    export type ResponseBody = PluginsCreateData;
   }
 
   /**
@@ -253,7 +269,7 @@ export namespace Plugins {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = PluginsDeleteData;
   }
 
   /**
@@ -274,7 +290,7 @@ export namespace Plugins {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = PluginMetadata;
+    export type ResponseBody = PluginsDetailData;
   }
 }
 
@@ -292,6 +308,6 @@ export namespace Status {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = StatusSummary;
+    export type ResponseBody = GetStatusData;
   }
 }

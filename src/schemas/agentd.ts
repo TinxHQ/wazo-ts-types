@@ -10,6 +10,10 @@
  * ---------------------------------------------------------------
  */
 
+export type AddAgentByIdData = any;
+
+export type AddAgentByIdError = Error;
+
 /** Pause reason information */
 export interface AgentPauseReason {
   /** Pause Reason */
@@ -59,6 +63,16 @@ export interface Error {
   error?: string;
 }
 
+export type GetAgentByIdData = AgentStatus;
+
+export type GetAgentByIdError = Error;
+
+export type GetAgentByNumberData = AgentStatus;
+
+export type GetAgentByNumberError = Error;
+
+export type GetAgentsData = AgentStatus;
+
 export interface GetAgentsParams {
   /**
    * Should the query include sub-tenants
@@ -66,6 +80,20 @@ export interface GetAgentsParams {
    */
   recurse?: boolean;
 }
+
+export type GetStatusData = StatusSummary;
+
+export type GetUserAgentData = AgentStatus;
+
+export type GetUserAgentError = Error;
+
+export type LoginAgentByIdData = any;
+
+export type LoginAgentByIdError = Error;
+
+export type LoginAgentByNumberData = any;
+
+export type LoginAgentByNumberError = Error;
 
 /** Login information */
 export interface LoginInfo {
@@ -75,11 +103,43 @@ export interface LoginInfo {
   extension?: string;
 }
 
+export type LoginUserAgentData = any;
+
+export type LoginUserAgentError = Error;
+
+export type LogoffAgentByIdData = any;
+
+export type LogoffAgentByIdError = Error;
+
+export type LogoffAgentByNumberData = any;
+
+export type LogoffAgentByNumberError = Error;
+
+export type LogoffAgentsData = any;
+
+export type LogoffUserAgentData = any;
+
+export type LogoffUserAgentError = Error;
+
+export type PauseAgentByNumberData = any;
+
+export type PauseAgentByNumberError = Error;
+
+export type PauseUserAgentData = any;
+
+export type PauseUserAgentError = Error;
+
 /** Queue */
 export interface Queue {
   /** Queue's ID */
   queue_id?: number;
 }
+
+export type RelogAgentsData = any;
+
+export type RemoveAgentByIdData = any;
+
+export type RemoveAgentByIdError = Error;
 
 export interface StatusSummary {
   bus_consumer?: ComponentWithStatus;
@@ -90,6 +150,14 @@ export enum StatusValue {
   Fail = "fail",
   Ok = "ok",
 }
+
+export type UnpauseAgentByNumberData = any;
+
+export type UnpauseAgentByNumberError = Error;
+
+export type UnpauseUserAgentData = any;
+
+export type UnpauseUserAgentError = Error;
 
 /** Login information */
 export interface UserAgentLoginInfo {
@@ -120,7 +188,7 @@ export namespace Agents {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = AgentStatus;
+    export type ResponseBody = GetAgentsData;
   }
 
   /**
@@ -142,7 +210,7 @@ export namespace Agents {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = AgentStatus;
+    export type ResponseBody = GetAgentByIdData;
   }
 
   /**
@@ -164,7 +232,7 @@ export namespace Agents {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = AddAgentByIdData;
   }
 
   /**
@@ -186,7 +254,7 @@ export namespace Agents {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = LoginAgentByIdData;
   }
 
   /**
@@ -208,7 +276,7 @@ export namespace Agents {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = LogoffAgentByIdData;
   }
 
   /**
@@ -230,7 +298,7 @@ export namespace Agents {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = RemoveAgentByIdData;
   }
 
   /**
@@ -252,7 +320,7 @@ export namespace Agents {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = AgentStatus;
+    export type ResponseBody = GetAgentByNumberData;
   }
 
   /**
@@ -274,7 +342,7 @@ export namespace Agents {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = LoginAgentByNumberData;
   }
 
   /**
@@ -296,7 +364,7 @@ export namespace Agents {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = LogoffAgentByNumberData;
   }
 
   /**
@@ -318,7 +386,7 @@ export namespace Agents {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = PauseAgentByNumberData;
   }
 
   /**
@@ -340,7 +408,7 @@ export namespace Agents {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = UnpauseAgentByNumberData;
   }
 
   /**
@@ -359,7 +427,7 @@ export namespace Agents {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = LogoffAgentsData;
   }
 
   /**
@@ -378,7 +446,7 @@ export namespace Agents {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = RelogAgentsData;
   }
 }
 
@@ -396,7 +464,7 @@ export namespace Status {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = StatusSummary;
+    export type ResponseBody = GetStatusData;
   }
 }
 
@@ -417,7 +485,7 @@ export namespace Users {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = AgentStatus;
+    export type ResponseBody = GetUserAgentData;
   }
 
   /**
@@ -436,7 +504,7 @@ export namespace Users {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = LoginUserAgentData;
   }
 
   /**
@@ -455,7 +523,7 @@ export namespace Users {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = LogoffUserAgentData;
   }
 
   /**
@@ -474,7 +542,7 @@ export namespace Users {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = PauseUserAgentData;
   }
 
   /**
@@ -493,6 +561,6 @@ export namespace Users {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = UnpauseUserAgentData;
   }
 }

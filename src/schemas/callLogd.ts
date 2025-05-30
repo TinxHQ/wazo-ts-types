@@ -117,6 +117,8 @@ export interface ConfigPatchItem {
   value?: object;
 }
 
+export type DownloadListData = any;
+
 /**
  * Error
  * Error message for the client
@@ -144,6 +146,12 @@ export interface Export {
   user_uuid?: string;
   uuid?: string;
 }
+
+export type ExportsDetailData = Export;
+
+export type GetCdr2Data = CDR;
+
+export type GetCdrData = CDRList;
 
 export interface GetCdrParams {
   /** Filter list of items */
@@ -199,6 +207,10 @@ export interface GetCdrParams {
   user_uuid?: string[];
 }
 
+export type GetConfigData = any;
+
+export type GetUsersData = CDRList;
+
 export interface GetUsersParams {
   /** Filter list of items */
   call_direction?: "internal" | "inbound" | "outbound";
@@ -246,6 +258,8 @@ export interface GetUsersParams {
   userUuid: string;
 }
 
+export type MeCdrListData = CDRList;
+
 export interface MeCdrListParams {
   /** Filter list of items */
   call_direction?: "internal" | "inbound" | "outbound";
@@ -292,6 +306,12 @@ export interface MeCdrListParams {
   /** Filter by user_uuid. Many uuid can be specified. Each uuid MUST be separated by a comma (,). Many uuid will perform a logical OR. */
   user_uuid?: string[];
 }
+
+export type MeCdrRecordingsMediaListData = any;
+
+export type PatchConfigData = any;
+
+export type PatchConfigPayload = ConfigPatchItem[];
 
 export interface QueueQoSStatistic {
   /** Start of the statistic interval. */
@@ -386,6 +406,18 @@ export interface Recording {
   uuid?: string;
 }
 
+export type RecordingsMediaDelete2Data = any;
+
+export type RecordingsMediaDeleteData = any;
+
+export interface RecordingsMediaDeletePayload {
+  cdr_ids?: number[];
+}
+
+export interface RecordingsMediaExportCreateData {
+  export_uuid?: string;
+}
+
 export interface RecordingsMediaExportCreateParams {
   /** Filter list of items */
   call_direction?: "internal" | "inbound" | "outbound";
@@ -424,6 +456,12 @@ export interface RecordingsMediaExportCreateParams {
   user_uuid?: string[];
 }
 
+export interface RecordingsMediaExportCreatePayload {
+  cdr_ids?: string[];
+}
+
+export type RecordingsMediaListData = any;
+
 export interface Retention {
   cdr_days?: number;
   default_cdr_days?: number;
@@ -432,6 +470,12 @@ export interface Retention {
   export_days?: number;
   recording_days?: number;
 }
+
+export type RetentionListData = Retention;
+
+export type RetentionUpdateData = any;
+
+export type StatisticsList2Data = AgentStatistics;
 
 export interface StatisticsList2Params {
   /** ID of the agent. */
@@ -515,6 +559,10 @@ export interface StatisticsList2Params2 {
   week_days?: number[];
 }
 
+export type StatisticsList2Result = QueueStatistics;
+
+export type StatisticsListData = AgentsStatistics;
+
 export interface StatisticsListParams {
   /** The time at which a day ends, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
   day_end_time?: string;
@@ -589,6 +637,10 @@ export interface StatisticsListParams2 {
   week_days?: number[];
 }
 
+export type StatisticsListResult = QueuesStatistics;
+
+export type StatisticsQosListData = QueueQoSStatistics;
+
 export interface StatisticsQosListParams {
   /** The time at which a day ends, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
   day_end_time?: string;
@@ -633,6 +685,8 @@ export interface StatisticsQosListParams {
    */
   week_days?: number[];
 }
+
+export type StatusListData = StatusSummary;
 
 export interface StatusSummary {
   bus_consumer?: ComponentWithStatus;
@@ -696,7 +750,7 @@ export namespace Agents {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = AgentsStatistics;
+    export type ResponseBody = StatisticsListData;
   }
 
   /**
@@ -756,7 +810,7 @@ export namespace Agents {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = AgentStatistics;
+    export type ResponseBody = StatisticsList2Data;
   }
 }
 
@@ -829,7 +883,7 @@ export namespace Cdr {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = CDRList;
+    export type ResponseBody = GetCdrData;
   }
 
   /**
@@ -843,11 +897,9 @@ export namespace Cdr {
   export namespace RecordingsMediaDelete {
     export type RequestParams = {};
     export type RequestQuery = {};
-    export type RequestBody = {
-      cdr_ids?: number[];
-    };
+    export type RequestBody = RecordingsMediaDeletePayload;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = RecordingsMediaDeleteData;
   }
 
   /**
@@ -897,16 +949,12 @@ export namespace Cdr {
       /** Filter by user_uuid. Many uuid can be specified. Each uuid MUST be separated by a comma (,). Many uuid will perform a logical OR. */
       user_uuid?: string[];
     };
-    export type RequestBody = {
-      cdr_ids?: string[];
-    };
+    export type RequestBody = RecordingsMediaExportCreatePayload;
     export type RequestHeaders = {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = {
-      export_uuid?: string;
-    };
+    export type ResponseBody = RecordingsMediaExportCreateData;
   }
 
   /**
@@ -927,7 +975,7 @@ export namespace Cdr {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = CDR;
+    export type ResponseBody = GetCdr2Data;
   }
 
   /**
@@ -950,7 +998,7 @@ export namespace Cdr {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = RecordingsMediaDelete2Data;
   }
 
   /**
@@ -971,7 +1019,7 @@ export namespace Cdr {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = RecordingsMediaListData;
   }
 }
 
@@ -989,7 +1037,7 @@ export namespace Config {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = GetConfigData;
   }
 
   /**
@@ -1003,9 +1051,9 @@ export namespace Config {
   export namespace PatchConfig {
     export type RequestParams = {};
     export type RequestQuery = {};
-    export type RequestBody = ConfigPatchItem[];
+    export type RequestBody = PatchConfigPayload;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = PatchConfigData;
   }
 }
 
@@ -1026,7 +1074,7 @@ export namespace Exports {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = Export;
+    export type ResponseBody = ExportsDetailData;
   }
 
   /**
@@ -1045,7 +1093,7 @@ export namespace Exports {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = DownloadListData;
   }
 }
 
@@ -1102,7 +1150,7 @@ export namespace Queues {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = QueuesStatistics;
+    export type ResponseBody = StatisticsListResult;
   }
 
   /**
@@ -1164,7 +1212,7 @@ export namespace Queues {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = QueueStatistics;
+    export type ResponseBody = StatisticsList2Result;
   }
 
   /**
@@ -1227,7 +1275,7 @@ export namespace Queues {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = QueueQoSStatistics;
+    export type ResponseBody = StatisticsQosListData;
   }
 }
 
@@ -1248,7 +1296,7 @@ export namespace Retention {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = Retention;
+    export type ResponseBody = RetentionListData;
   }
 
   /**
@@ -1267,7 +1315,7 @@ export namespace Retention {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = RetentionUpdateData;
   }
 }
 
@@ -1285,7 +1333,7 @@ export namespace Status {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = StatusSummary;
+    export type ResponseBody = StatusListData;
   }
 }
 
@@ -1348,7 +1396,7 @@ export namespace Users {
     };
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = CDRList;
+    export type ResponseBody = MeCdrListData;
   }
 
   /**
@@ -1369,7 +1417,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = MeCdrRecordingsMediaListData;
   }
 
   /**
@@ -1431,6 +1479,6 @@ export namespace Users {
     };
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = CDRList;
+    export type ResponseBody = GetUsersData;
   }
 }

@@ -23,6 +23,12 @@ export interface ConfigPatchItem {
   value?: object;
 }
 
+export type CreateData = any;
+
+export type DeleteData = any;
+
+export type EditData = Subscription;
+
 /**
  * Error
  * Error message for the client
@@ -40,6 +46,16 @@ export interface Error {
    */
   timestamp?: number;
 }
+
+export type GetConfigData = any;
+
+export type GetData = Subscription;
+
+export type GetLogsData = SubscriptionLog;
+
+export type GetSubscriptionsServicesData = Services;
+
+export type GetUserSubscriptionData = Subscription;
 
 export interface HTTPServiceConfig {
   /** Jinja2 template, where variables come from the event triggering the webhook. For more details, see https://wazo-platform.org/uc-doc/api_sdk/rest_api/webhookd/templates. **Default:** the complete event data, JSON-encoded. */
@@ -66,6 +82,8 @@ export interface HTTPServiceLog {
   response_method?: string;
   response_url?: string;
 }
+
+export type ListData = SubscriptionList;
 
 export interface ListParams {
   /**
@@ -98,12 +116,22 @@ export interface Notification {
   user_uuid: string;
 }
 
+export type PatchConfigData = any;
+
+export type PatchConfigPayload = ConfigPatchItem[];
+
+export type PostMobileNotificationData = any;
+
+export type PostMobileNotificationError = Error;
+
 export type ServiceConfig = Record<string, string>;
 
 export interface Services {
   /** The keys are the service names. */
   services?: object;
 }
+
+export type StatusListData = StatusSummary;
 
 export interface StatusSummary {
   bus_consumer?: ComponentWithStatus;
@@ -164,6 +192,12 @@ export interface SubscriptionRequest {
   tags?: object;
 }
 
+export type UserCreateData = any;
+
+export type UserDeleteData = any;
+
+export type UserListData = SubscriptionList;
+
 export interface UserListParams {
   /** A search term formatted like "key:value" that will only match subscriptions having a metadata entry "key=value". May be given multiple times to filter more precisely on different metadata keys. */
   search_metadata?: string;
@@ -193,7 +227,7 @@ export namespace Config {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = GetConfigData;
   }
 
   /**
@@ -207,9 +241,9 @@ export namespace Config {
   export namespace PatchConfig {
     export type RequestParams = {};
     export type RequestQuery = {};
-    export type RequestBody = ConfigPatchItem[];
+    export type RequestBody = PatchConfigPayload;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = PatchConfigData;
   }
 }
 
@@ -230,7 +264,7 @@ export namespace Mobile {
       /** The User's tenant UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = PostMobileNotificationData;
   }
 }
 
@@ -248,7 +282,7 @@ export namespace Status {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = StatusSummary;
+    export type ResponseBody = StatusListData;
   }
 }
 
@@ -277,7 +311,7 @@ export namespace Subscriptions {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = SubscriptionList;
+    export type ResponseBody = ListData;
   }
 
   /**
@@ -293,7 +327,7 @@ export namespace Subscriptions {
     export type RequestQuery = {};
     export type RequestBody = SubscriptionRequest;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = CreateData;
   }
 
   /**
@@ -309,7 +343,7 @@ export namespace Subscriptions {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = Services;
+    export type ResponseBody = GetSubscriptionsServicesData;
   }
 
   /**
@@ -328,7 +362,7 @@ export namespace Subscriptions {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = DeleteData;
   }
 
   /**
@@ -347,7 +381,7 @@ export namespace Subscriptions {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = Subscription;
+    export type ResponseBody = GetData;
   }
 
   /**
@@ -366,7 +400,7 @@ export namespace Subscriptions {
     export type RequestQuery = {};
     export type RequestBody = SubscriptionRequest;
     export type RequestHeaders = {};
-    export type ResponseBody = Subscription;
+    export type ResponseBody = EditData;
   }
 
   /**
@@ -385,7 +419,7 @@ export namespace Subscriptions {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = SubscriptionLog;
+    export type ResponseBody = GetLogsData;
   }
 }
 
@@ -406,7 +440,7 @@ export namespace Users {
     };
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = SubscriptionList;
+    export type ResponseBody = UserListData;
   }
 
   /**
@@ -422,7 +456,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = UserSubscriptionRequest;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = UserCreateData;
   }
 
   /**
@@ -441,7 +475,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = UserDeleteData;
   }
 
   /**
@@ -460,6 +494,6 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = Subscription;
+    export type ResponseBody = GetUserSubscriptionData;
   }
 }

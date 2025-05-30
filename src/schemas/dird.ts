@@ -17,6 +17,10 @@ export interface APIError {
   timestamp?: number;
 }
 
+export type AddFavoriteData = any;
+
+export type AddPersonalData = Contact;
+
 /** Backend */
 export type Backend = {
   name?: string;
@@ -125,6 +129,8 @@ export interface ConfigPatchItem {
   value?: object;
 }
 
+export type ConfigurationGetData = any;
+
 export interface Contact {
   /** Backend type */
   backend?: string;
@@ -158,6 +164,16 @@ export interface ContactList {
   results?: Contact[];
 }
 
+export type ContactsDeleteData = any;
+
+export type ContactsDeleteError = LegacyError;
+
+export type ContactsDetailData = any;
+
+export type ContactsDetailError = LegacyError;
+
+export type ContactsListData = PhonebookContactListResponse;
+
 export interface ContactsListParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
   direction?: "asc" | "desc";
@@ -175,6 +191,62 @@ export interface ContactsListParams {
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
   search?: string;
 }
+
+export type ContactsUpdateData = any;
+
+export type ContactsUpdateError = LegacyError;
+
+export type CreateConferenceSourceData = ConferenceSource;
+
+export type CreateConferenceSourceError = LegacyError;
+
+export type CreateCsvSourceData = CSVSource;
+
+export type CreateCsvSourceError = LegacyError;
+
+export type CreateCsvWsSourceData = CSVWSSource;
+
+export type CreateCsvWsSourceError = LegacyError;
+
+export type CreateDisplayData = Display;
+
+export type CreateGoogleSourceData = GoogleSource;
+
+export type CreateGoogleSourceError = LegacyError;
+
+export type CreateLdapSourceData = LDAPSource;
+
+export type CreateLdapSourceError = LegacyError;
+
+export type CreateMicrosoftSourceData = MicrosoftSource;
+
+export type CreateMicrosoftSourceError = LegacyError;
+
+export type CreatePersonalSourceData = PersonalSource;
+
+export type CreatePersonalSourceError = LegacyError;
+
+export type CreatePhonebookContactData = PhonebookContact;
+
+export type CreatePhonebookContactDeprecatedData = PhonebookContact;
+
+export type CreatePhonebookData = Phonebook;
+
+export type CreatePhonebookDeprecatedData = Phonebook;
+
+export type CreatePhonebookDeprecatedError = LegacyError;
+
+export type CreatePhonebookError = LegacyError;
+
+export type CreatePhonebookSourceData = PhonebookSource;
+
+export type CreatePhonebookSourceError = LegacyError;
+
+export type CreateProfileData = Profile;
+
+export type CreateWazoSourceData = WazoSource;
+
+export type CreateWazoSourceError = LegacyError;
 
 /** Display */
 export type Display = {
@@ -215,6 +287,8 @@ export type DisplayItems = {
   total?: number;
 };
 
+export type EditPersonalData = Contact;
+
 /**
  * Error
  * Error message for the client
@@ -246,6 +320,32 @@ export interface ExternalServiceConfig {
   verify_certificate?: string;
 }
 
+export type GetAConferenceSourceData = ConferenceSource;
+
+export type GetACsvSourceData = CSVSource;
+
+export type GetACsvWsSourceData = CSVWSSource;
+
+export type GetAGoogleSourceData = GoogleSource;
+
+export type GetALdapSourceData = LDAPSource;
+
+export type GetAMicrosoftSourceData = MicrosoftSource;
+
+export type GetAPersonalSourceData = PersonalSource;
+
+export type GetAPhonebookSourceData = PhonebookSource;
+
+export type GetAWazoSourceData = WazoSource;
+
+export type GetDisplayData = Display;
+
+export type GetHeadersData = Header;
+
+export type GetPersonalData = Contact;
+
+export type GetProfileData = Profile;
+
 export interface GoogleContactList {
   /** The number of contacts matching the searched terms */
   filtered?: number;
@@ -264,12 +364,40 @@ export type GoogleSourceItems = SourceItems & {
   items?: GoogleSource[];
 };
 
+export type GraphiqlData = any;
+
+export type GraphqlQueryData = any;
+
 export interface Header {
   /** Labels for the headers */
   column_headers?: string[];
   /** Data types for the headers */
   column_types?: string[];
 }
+
+export type ImportPersonalData = ContactImportResponse;
+
+export type ImportPersonalError = LegacyError;
+
+export type ImportPersonalPayload = string;
+
+export type ImportPhonebookData = PhonebookContactImportResponse;
+
+export type ImportPhonebookDeprecatedData = PhonebookContactImportResponse;
+
+export type ImportPhonebookDeprecatedError = LegacyError;
+
+export type ImportPhonebookDeprecatedPayload = string;
+
+export type ImportPhonebookError = PhonebookContactImportError;
+
+/**
+ * @example "firstname,lastname,phone_number,extension
+ * John,Doe,+33 6 00 00 00 00,5001
+ * Jane,Doe,+33 6 00 00 00 01,5002
+ * "
+ */
+export type ImportPhonebookPayload = string;
 
 /** LDAPSource */
 export type LDAPSource = Source & {
@@ -317,6 +445,8 @@ export interface LegacyError {
   timestamp?: number[];
 }
 
+export type ListBackendData = BackendItems;
+
 export interface ListBackendParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
   direction?: "asc" | "desc";
@@ -332,6 +462,10 @@ export interface ListBackendParams {
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
   search?: string;
 }
+
+export type ListConferenceContactsFromSourceData = ConferenceContactList;
+
+export type ListConferenceContactsFromSourceError = LegacyError;
 
 export interface ListConferenceContactsFromSourceParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
@@ -350,6 +484,8 @@ export interface ListConferenceContactsFromSourceParams {
   /** Source uuid */
   sourceUuid: string;
 }
+
+export type ListConferenceSourcesData = ConferenceSourceItems;
 
 export interface ListConferenceSourcesParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
@@ -370,6 +506,8 @@ export interface ListConferenceSourcesParams {
   recurse?: boolean;
 }
 
+export type ListCsvSourceData = CSVSourceItems;
+
 export interface ListCsvSourceParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
   direction?: "asc" | "desc";
@@ -388,6 +526,8 @@ export interface ListCsvSourceParams {
    */
   recurse?: boolean;
 }
+
+export type ListCsvWsSourceData = CSVWSSourceItems;
 
 export interface ListCsvWsSourceParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
@@ -408,6 +548,8 @@ export interface ListCsvWsSourceParams {
   recurse?: boolean;
 }
 
+export type ListDisplayData = DisplayItems;
+
 export interface ListDisplayParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
   direction?: "asc" | "desc";
@@ -427,6 +569,12 @@ export interface ListDisplayParams {
   recurse?: boolean;
 }
 
+export type ListFavoritesData = ContactList;
+
+export type ListGoogleContactsFromSourceData = GoogleContactList;
+
+export type ListGoogleContactsFromSourceError = LegacyError;
+
 export interface ListGoogleContactsFromSourceParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
   direction?: "asc" | "desc";
@@ -444,6 +592,8 @@ export interface ListGoogleContactsFromSourceParams {
   /** Source uuid */
   sourceUuid: string;
 }
+
+export type ListGoogleSourceData = GoogleSourceItems;
 
 export interface ListGoogleSourceParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
@@ -464,6 +614,8 @@ export interface ListGoogleSourceParams {
   recurse?: boolean;
 }
 
+export type ListLdapSourceData = LDAPSourceItems;
+
 export interface ListLdapSourceParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
   direction?: "asc" | "desc";
@@ -483,6 +635,10 @@ export interface ListLdapSourceParams {
   recurse?: boolean;
 }
 
+export type ListMicrosoftContactsFromSourceData = Office365ContactList;
+
+export type ListMicrosoftContactsFromSourceError = LegacyError;
+
 export interface ListMicrosoftContactsFromSourceParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
   direction?: "asc" | "desc";
@@ -501,6 +657,8 @@ export interface ListMicrosoftContactsFromSourceParams {
   sourceUuid: string;
 }
 
+export type ListMicrosoftSourceData = MicrosoftSourceItems;
+
 export interface ListMicrosoftSourceParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
   direction?: "asc" | "desc";
@@ -518,6 +676,10 @@ export interface ListMicrosoftSourceParams {
    * @default false
    */
   recurse?: boolean;
+}
+
+export interface ListPersonalData {
+  items?: PhonebookContactList;
 }
 
 export interface ListPersonalParams {
@@ -539,6 +701,10 @@ export interface ListPersonalParams {
   order?: string;
 }
 
+export type ListPersonalProfileData = PhonebookContactList;
+
+export type ListPersonalSourceData = PersonalSourceItems;
+
 export interface ListPersonalSourceParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
   direction?: "asc" | "desc";
@@ -558,6 +724,10 @@ export interface ListPersonalSourceParams {
   recurse?: boolean;
 }
 
+export type ListPhonebookSourceContactsData = PhonebookContactList;
+
+export type ListPhonebookSourceContactsError = LegacyError;
+
 export interface ListPhonebookSourceContactsParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
   direction?: "asc" | "desc";
@@ -575,6 +745,8 @@ export interface ListPhonebookSourceContactsParams {
   /** Source uuid */
   sourceUuid: string;
 }
+
+export type ListPhonebookSourceData = PhonebookSourceItems;
 
 export interface ListPhonebookSourceParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
@@ -594,6 +766,8 @@ export interface ListPhonebookSourceParams {
    */
   recurse?: boolean;
 }
+
+export type ListProfileData = ProfileItems;
 
 export interface ListProfileParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
@@ -616,6 +790,8 @@ export interface ListProfileParams {
   search?: string;
 }
 
+export type ListServicesData = ServiceItems;
+
 export interface ListServicesParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
   direction?: "asc" | "desc";
@@ -629,6 +805,8 @@ export interface ListServicesParams {
   /** Name of the field to use for sorting the list of items returned. */
   order?: string;
 }
+
+export type ListSourceData = SourceListItems;
 
 export interface ListSourceParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
@@ -651,6 +829,10 @@ export interface ListSourceParams {
   search?: string;
 }
 
+export type ListWazoContactsFromSourceData = WazoContactList;
+
+export type ListWazoContactsFromSourceError = LegacyError;
+
 export interface ListWazoContactsFromSourceParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
   direction?: "asc" | "desc";
@@ -670,6 +852,8 @@ export interface ListWazoContactsFromSourceParams {
   /** Filter by contact uuid. Many uuid can be specified. Each uuid MUST be separated by a comma (,). Many uuid will perform a logical OR. */
   uuid?: string[];
 }
+
+export type ListWazoSourceData = WazoSourceItems;
 
 export interface ListWazoSourceParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
@@ -695,12 +879,16 @@ export type Lookup = ContactList & {
   term?: string;
 };
 
+export type LookupData = Lookup;
+
 export interface LookupParams {
   /** The profile defines the list of directories to query and how the results are displayed. The profile is the context name of the user who started the contact lookup, e.g. `default`. More precisely, it is the name of the "Direct directory" defined in the web interface. */
   profile: string;
   /** A search term to look for */
   term: string;
 }
+
+export type LookupUserData = Lookup;
 
 export interface LookupUserParams {
   /** The profile defines the list of directories to query and how the results are displayed. The profile is the context name of the user who started the contact lookup, e.g. `default`. More precisely, it is the name of the "Direct directory" defined in the web interface. */
@@ -741,6 +929,10 @@ export interface Office365ContactList {
   /** The number of contacts */
   total?: number;
 }
+
+export type PatchConfigData = any;
+
+export type PatchConfigPayload = ConfigPatchItem[];
 
 /** PersonalSource */
 export type PersonalSource = Source;
@@ -803,6 +995,16 @@ export type PhonebookSourceItems = SourceItems & {
   items?: PhonebookSource[];
 };
 
+export type PhonebooksContactsDeleteData = any;
+
+export type PhonebooksContactsDeleteError = LegacyError;
+
+export type PhonebooksContactsDetailData = any;
+
+export type PhonebooksContactsDetailError = LegacyError;
+
+export type PhonebooksContactsListData = PhonebookContactList;
+
 export interface PhonebooksContactsListParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
   direction?: "asc" | "desc";
@@ -822,6 +1024,28 @@ export interface PhonebooksContactsListParams {
   /** The tenant defines the ownership of a given resource. */
   tenant: string;
 }
+
+export type PhonebooksContactsUpdateData = any;
+
+export type PhonebooksContactsUpdateError = LegacyError;
+
+export type PhonebooksDeleteData = any;
+
+export type PhonebooksDeleteError = LegacyError;
+
+export type PhonebooksDeleteFail = LegacyError;
+
+export type PhonebooksDeleteResult = any;
+
+export type PhonebooksDetailData = Phonebook;
+
+export type PhonebooksDetailError = LegacyError;
+
+export type PhonebooksDetailFail = LegacyError;
+
+export type PhonebooksDetailResult = Phonebook;
+
+export type PhonebooksListData = Phonebook[];
 
 export interface PhonebooksListParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
@@ -862,6 +1086,16 @@ export interface PhonebooksListParams2 {
   tenant: string;
 }
 
+export type PhonebooksListResult = Phonebook[];
+
+export type PhonebooksUpdateData = any;
+
+export type PhonebooksUpdateError = LegacyError;
+
+export type PhonebooksUpdateFail = LegacyError;
+
+export type PhonebooksUpdateResult = any;
+
 /** Profile */
 export type Profile = {
   display?: DisplayIdentifier;
@@ -901,6 +1135,8 @@ export interface ProfileSourceItems {
   total?: number;
 }
 
+export type PurgePersonalData = any;
+
 export interface Relation {
   agent_id?: string;
   endpoint_id?: string;
@@ -909,6 +1145,12 @@ export interface Relation {
   user_uuid?: string;
   xivo_id?: string;
 }
+
+export type RemoveFavoriteData = any;
+
+export type RemoveFavoriteError = LegacyError;
+
+export type RemovePersonalData = any;
 
 export type ResultFields = any;
 
@@ -920,6 +1162,8 @@ export interface Reverse {
   fields: ResultFields;
   source: string;
 }
+
+export type ReverseData = Reverse;
 
 export interface ReverseParams {
   /** A search exten to look for */
@@ -993,6 +1237,8 @@ export interface SourceListItems {
   total: number;
 }
 
+export type SourcesListData = ProfileSourceItems;
+
 export interface SourcesListParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
   direction?: "asc" | "desc";
@@ -1011,6 +1257,8 @@ export interface SourcesListParams {
   search?: string;
 }
 
+export type StatusListData = StatusSummary;
+
 export interface StatusSummary {
   bus_consumer?: ComponentWithStatus;
   master_tenant?: ComponentWithStatus;
@@ -1021,6 +1269,24 @@ export enum StatusValue {
   Fail = "fail",
   Ok = "ok",
 }
+
+export type UpdateConferenceSourceError = LegacyError;
+
+export type UpdateCsvSourceError = LegacyError;
+
+export type UpdateCsvWsSourceError = LegacyError;
+
+export type UpdateGoogleSourceError = LegacyError;
+
+export type UpdateLdapSourceError = LegacyError;
+
+export type UpdateMicrosoftSourceError = LegacyError;
+
+export type UpdatePersonalSourceError = LegacyError;
+
+export type UpdatePhonebookSourceError = LegacyError;
+
+export type UpdateWazoSourceError = LegacyError;
 
 /** Auth */
 export type WazoAuthConfig = ExternalServiceConfig & {
@@ -1110,7 +1376,7 @@ export namespace Backends {
     };
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = BackendItems;
+    export type ResponseBody = ListBackendData;
   }
 
   /**
@@ -1146,7 +1412,7 @@ export namespace Backends {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = ConferenceSourceItems;
+    export type ResponseBody = ListConferenceSourcesData;
   }
 
   /**
@@ -1165,7 +1431,7 @@ export namespace Backends {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = ConferenceSource;
+    export type ResponseBody = CreateConferenceSourceData;
   }
 
   /**
@@ -1209,7 +1475,7 @@ export namespace Backends {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = ConferenceSource;
+    export type ResponseBody = GetAConferenceSourceData;
   }
 
   /**
@@ -1267,7 +1533,7 @@ export namespace Backends {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = ConferenceContactList;
+    export type ResponseBody = ListConferenceContactsFromSourceData;
   }
 
   /**
@@ -1303,7 +1569,7 @@ export namespace Backends {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = CSVSourceItems;
+    export type ResponseBody = ListCsvSourceData;
   }
 
   /**
@@ -1322,7 +1588,7 @@ export namespace Backends {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = CSVSource;
+    export type ResponseBody = CreateCsvSourceData;
   }
 
   /**
@@ -1366,7 +1632,7 @@ export namespace Backends {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = CSVSource;
+    export type ResponseBody = GetACsvSourceData;
   }
 
   /**
@@ -1424,7 +1690,7 @@ export namespace Backends {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = CSVWSSourceItems;
+    export type ResponseBody = ListCsvWsSourceData;
   }
 
   /**
@@ -1443,7 +1709,7 @@ export namespace Backends {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = CSVWSSource;
+    export type ResponseBody = CreateCsvWsSourceData;
   }
 
   /**
@@ -1487,7 +1753,7 @@ export namespace Backends {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = CSVWSSource;
+    export type ResponseBody = GetACsvWsSourceData;
   }
 
   /**
@@ -1545,7 +1811,7 @@ export namespace Backends {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = GoogleSourceItems;
+    export type ResponseBody = ListGoogleSourceData;
   }
 
   /**
@@ -1564,7 +1830,7 @@ export namespace Backends {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = GoogleSource;
+    export type ResponseBody = CreateGoogleSourceData;
   }
 
   /**
@@ -1608,7 +1874,7 @@ export namespace Backends {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = GoogleSource;
+    export type ResponseBody = GetAGoogleSourceData;
   }
 
   /**
@@ -1666,7 +1932,7 @@ export namespace Backends {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = GoogleContactList;
+    export type ResponseBody = ListGoogleContactsFromSourceData;
   }
 
   /**
@@ -1702,7 +1968,7 @@ export namespace Backends {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = LDAPSourceItems;
+    export type ResponseBody = ListLdapSourceData;
   }
 
   /**
@@ -1721,7 +1987,7 @@ export namespace Backends {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = LDAPSource;
+    export type ResponseBody = CreateLdapSourceData;
   }
 
   /**
@@ -1765,7 +2031,7 @@ export namespace Backends {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = LDAPSource;
+    export type ResponseBody = GetALdapSourceData;
   }
 
   /**
@@ -1823,7 +2089,7 @@ export namespace Backends {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = MicrosoftSourceItems;
+    export type ResponseBody = ListMicrosoftSourceData;
   }
 
   /**
@@ -1842,7 +2108,7 @@ export namespace Backends {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = MicrosoftSource;
+    export type ResponseBody = CreateMicrosoftSourceData;
   }
 
   /**
@@ -1886,7 +2152,7 @@ export namespace Backends {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = MicrosoftSource;
+    export type ResponseBody = GetAMicrosoftSourceData;
   }
 
   /**
@@ -1944,7 +2210,7 @@ export namespace Backends {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = Office365ContactList;
+    export type ResponseBody = ListMicrosoftContactsFromSourceData;
   }
 
   /**
@@ -1980,7 +2246,7 @@ export namespace Backends {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = PersonalSourceItems;
+    export type ResponseBody = ListPersonalSourceData;
   }
 
   /**
@@ -1999,7 +2265,7 @@ export namespace Backends {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = PersonalSource;
+    export type ResponseBody = CreatePersonalSourceData;
   }
 
   /**
@@ -2043,7 +2309,7 @@ export namespace Backends {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = PersonalSource;
+    export type ResponseBody = GetAPersonalSourceData;
   }
 
   /**
@@ -2101,7 +2367,7 @@ export namespace Backends {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = PhonebookSourceItems;
+    export type ResponseBody = ListPhonebookSourceData;
   }
 
   /**
@@ -2120,7 +2386,7 @@ export namespace Backends {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = PhonebookSource;
+    export type ResponseBody = CreatePhonebookSourceData;
   }
 
   /**
@@ -2164,7 +2430,7 @@ export namespace Backends {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = PhonebookSource;
+    export type ResponseBody = GetAPhonebookSourceData;
   }
 
   /**
@@ -2222,7 +2488,7 @@ export namespace Backends {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = PhonebookContactList;
+    export type ResponseBody = ListPhonebookSourceContactsData;
   }
 
   /**
@@ -2258,7 +2524,7 @@ export namespace Backends {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = WazoSourceItems;
+    export type ResponseBody = ListWazoSourceData;
   }
 
   /**
@@ -2277,7 +2543,7 @@ export namespace Backends {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = WazoSource;
+    export type ResponseBody = CreateWazoSourceData;
   }
 
   /**
@@ -2321,7 +2587,7 @@ export namespace Backends {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = WazoSource;
+    export type ResponseBody = GetAWazoSourceData;
   }
 
   /**
@@ -2381,7 +2647,7 @@ export namespace Backends {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = WazoContactList;
+    export type ResponseBody = ListWazoContactsFromSourceData;
   }
 }
 
@@ -2399,7 +2665,7 @@ export namespace Config {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = ConfigurationGetData;
   }
 
   /**
@@ -2413,9 +2679,9 @@ export namespace Config {
   export namespace PatchConfig {
     export type RequestParams = {};
     export type RequestQuery = {};
-    export type RequestBody = ConfigPatchItem[];
+    export type RequestBody = PatchConfigPayload;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = PatchConfigData;
   }
 }
 
@@ -2441,7 +2707,7 @@ export namespace Directories {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = RemoveFavoriteData;
   }
 
   /**
@@ -2465,7 +2731,7 @@ export namespace Directories {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = AddFavoriteData;
   }
 
   /**
@@ -2487,7 +2753,7 @@ export namespace Directories {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = ContactList;
+    export type ResponseBody = ListFavoritesData;
   }
 
   /**
@@ -2512,7 +2778,7 @@ export namespace Directories {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = Lookup;
+    export type ResponseBody = LookupData;
   }
 
   /**
@@ -2534,7 +2800,7 @@ export namespace Directories {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = Header;
+    export type ResponseBody = GetHeadersData;
   }
 
   /**
@@ -2561,7 +2827,7 @@ export namespace Directories {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = Lookup;
+    export type ResponseBody = LookupUserData;
   }
 
   /**
@@ -2583,7 +2849,7 @@ export namespace Directories {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = PhonebookContactList;
+    export type ResponseBody = ListPersonalProfileData;
   }
 
   /**
@@ -2610,7 +2876,7 @@ export namespace Directories {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = Reverse;
+    export type ResponseBody = ReverseData;
   }
 
   /**
@@ -2646,7 +2912,7 @@ export namespace Directories {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = ProfileSourceItems;
+    export type ResponseBody = SourcesListData;
   }
 }
 
@@ -2684,7 +2950,7 @@ export namespace Displays {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = DisplayItems;
+    export type ResponseBody = ListDisplayData;
   }
 
   /**
@@ -2703,7 +2969,7 @@ export namespace Displays {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = Display;
+    export type ResponseBody = CreateDisplayData;
   }
 
   /**
@@ -2747,7 +3013,7 @@ export namespace Displays {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = Display;
+    export type ResponseBody = GetDisplayData;
   }
 
   /**
@@ -2787,7 +3053,7 @@ export namespace Graphql {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = GraphiqlData;
   }
 
   /**
@@ -2803,7 +3069,7 @@ export namespace Graphql {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = GraphqlQueryData;
   }
 }
 
@@ -2821,7 +3087,7 @@ export namespace Personal {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = PurgePersonalData;
   }
 
   /**
@@ -2854,9 +3120,7 @@ export namespace Personal {
     };
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = {
-      items?: PhonebookContactList;
-    };
+    export type ResponseBody = ListPersonalData;
   }
 
   /**
@@ -2872,7 +3136,7 @@ export namespace Personal {
     export type RequestQuery = {};
     export type RequestBody = ContactBodySample;
     export type RequestHeaders = {};
-    export type ResponseBody = Contact;
+    export type ResponseBody = AddPersonalData;
   }
 
   /**
@@ -2886,9 +3150,9 @@ export namespace Personal {
   export namespace ImportPersonal {
     export type RequestParams = {};
     export type RequestQuery = {};
-    export type RequestBody = string;
+    export type RequestBody = ImportPersonalPayload;
     export type RequestHeaders = {};
-    export type ResponseBody = ContactImportResponse;
+    export type ResponseBody = ImportPersonalData;
   }
 
   /**
@@ -2907,7 +3171,7 @@ export namespace Personal {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = RemovePersonalData;
   }
 
   /**
@@ -2926,7 +3190,7 @@ export namespace Personal {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = Contact;
+    export type ResponseBody = GetPersonalData;
   }
 
   /**
@@ -2945,7 +3209,7 @@ export namespace Personal {
     export type RequestQuery = {};
     export type RequestBody = ContactBodySample;
     export type RequestHeaders = {};
-    export type ResponseBody = Contact;
+    export type ResponseBody = EditPersonalData;
   }
 }
 
@@ -2985,7 +3249,7 @@ export namespace Phonebooks {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = Phonebook[];
+    export type ResponseBody = PhonebooksListData;
   }
 
   /**
@@ -3004,7 +3268,7 @@ export namespace Phonebooks {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = Phonebook;
+    export type ResponseBody = CreatePhonebookData;
   }
 
   /**
@@ -3026,7 +3290,7 @@ export namespace Phonebooks {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = PhonebooksDeleteData;
   }
 
   /**
@@ -3048,7 +3312,7 @@ export namespace Phonebooks {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = Phonebook;
+    export type ResponseBody = PhonebooksDetailData;
   }
 
   /**
@@ -3070,7 +3334,7 @@ export namespace Phonebooks {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = PhonebooksUpdateData;
   }
 
   /**
@@ -3106,7 +3370,7 @@ export namespace Phonebooks {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = PhonebookContactListResponse;
+    export type ResponseBody = ContactsListData;
   }
 
   /**
@@ -3128,7 +3392,7 @@ export namespace Phonebooks {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = PhonebookContact;
+    export type ResponseBody = CreatePhonebookContactData;
   }
 
   /**
@@ -3145,12 +3409,12 @@ export namespace Phonebooks {
       phonebookUuid: string;
     };
     export type RequestQuery = {};
-    export type RequestBody = string;
+    export type RequestBody = ImportPhonebookPayload;
     export type RequestHeaders = {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = PhonebookContactImportResponse;
+    export type ResponseBody = ImportPhonebookData;
   }
 
   /**
@@ -3174,7 +3438,7 @@ export namespace Phonebooks {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = ContactsDeleteData;
   }
 
   /**
@@ -3198,7 +3462,7 @@ export namespace Phonebooks {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = ContactsDetailData;
   }
 
   /**
@@ -3222,7 +3486,7 @@ export namespace Phonebooks {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = ContactsUpdateData;
   }
 }
 
@@ -3262,7 +3526,7 @@ export namespace Profiles {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = ProfileItems;
+    export type ResponseBody = ListProfileData;
   }
 
   /**
@@ -3281,7 +3545,7 @@ export namespace Profiles {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = Profile;
+    export type ResponseBody = CreateProfileData;
   }
 
   /**
@@ -3325,7 +3589,7 @@ export namespace Profiles {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = Profile;
+    export type ResponseBody = GetProfileData;
   }
 
   /**
@@ -3377,7 +3641,7 @@ export namespace Services {
     };
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = ServiceItems;
+    export type ResponseBody = ListServicesData;
   }
 }
 
@@ -3417,7 +3681,7 @@ export namespace Sources {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = SourceListItems;
+    export type ResponseBody = ListSourceData;
   }
 }
 
@@ -3435,7 +3699,7 @@ export namespace Status {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = StatusSummary;
+    export type ResponseBody = StatusListData;
   }
 }
 
@@ -3471,7 +3735,7 @@ export namespace Tenants {
     };
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = Phonebook[];
+    export type ResponseBody = PhonebooksListResult;
   }
 
   /**
@@ -3491,7 +3755,7 @@ export namespace Tenants {
     export type RequestQuery = {};
     export type RequestBody = PhonebookBody;
     export type RequestHeaders = {};
-    export type ResponseBody = Phonebook;
+    export type ResponseBody = CreatePhonebookDeprecatedData;
   }
 
   /**
@@ -3513,7 +3777,7 @@ export namespace Tenants {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = PhonebooksDeleteResult;
   }
 
   /**
@@ -3535,7 +3799,7 @@ export namespace Tenants {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = Phonebook;
+    export type ResponseBody = PhonebooksDetailResult;
   }
 
   /**
@@ -3557,7 +3821,7 @@ export namespace Tenants {
     export type RequestQuery = {};
     export type RequestBody = PhonebookBody;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = PhonebooksUpdateResult;
   }
 
   /**
@@ -3593,7 +3857,7 @@ export namespace Tenants {
     };
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = PhonebookContactList;
+    export type ResponseBody = PhonebooksContactsListData;
   }
 
   /**
@@ -3615,7 +3879,7 @@ export namespace Tenants {
     export type RequestQuery = {};
     export type RequestBody = PhonebookContact;
     export type RequestHeaders = {};
-    export type ResponseBody = PhonebookContact;
+    export type ResponseBody = CreatePhonebookContactDeprecatedData;
   }
 
   /**
@@ -3635,9 +3899,9 @@ export namespace Tenants {
       tenant: string;
     };
     export type RequestQuery = {};
-    export type RequestBody = string;
+    export type RequestBody = ImportPhonebookDeprecatedPayload;
     export type RequestHeaders = {};
-    export type ResponseBody = PhonebookContactImportResponse;
+    export type ResponseBody = ImportPhonebookDeprecatedData;
   }
 
   /**
@@ -3661,7 +3925,7 @@ export namespace Tenants {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = PhonebooksContactsDeleteData;
   }
 
   /**
@@ -3685,7 +3949,7 @@ export namespace Tenants {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = PhonebooksContactsDetailData;
   }
 
   /**
@@ -3709,6 +3973,6 @@ export namespace Tenants {
     export type RequestQuery = {};
     export type RequestBody = ContactBodySample;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = PhonebooksContactsUpdateData;
   }
 }

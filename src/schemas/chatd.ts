@@ -28,6 +28,10 @@ export interface ConfigPatchItem {
   value?: object;
 }
 
+export type CreateRoomData = Room;
+
+export type CreateRoomMessageData = Message;
+
 /**
  * Error
  * Error message for the client
@@ -46,10 +50,16 @@ export interface Error {
   timestamp?: number;
 }
 
+export type GetConfigData = any;
+
+export type GetRoomData = Rooms;
+
 export interface GetRoomParams {
   /** Filter by user_uuid. Many uuid can be specified. A logical AND is used for filtering. Each uuid MUST be separated by a comma (,). */
   user_uuid?: string[];
 }
+
+export type GetUserPresenceData = Presence;
 
 export interface Line {
   id?: number;
@@ -63,6 +73,8 @@ export interface Line {
     | "unavailable";
 }
 
+export type ListPresencesData = PresenceList;
+
 export interface ListPresencesParams {
   /**
    * Should the query include sub-tenants
@@ -72,6 +84,8 @@ export interface ListPresencesParams {
   /** Filter by user_uuid. Many uuid can be specified. A logical AND is used for filtering. Each uuid MUST be separated by a comma (,). */
   user_uuid?: string[];
 }
+
+export type ListRoomMessageData = Messages;
 
 export interface ListRoomMessageParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
@@ -92,6 +106,8 @@ export interface ListRoomMessageParams {
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. Required if `distinct` is not specified. */
   search?: string;
 }
+
+export type ListRoomsMessagesData = Messages;
 
 export interface ListRoomsMessagesParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
@@ -132,6 +148,10 @@ export interface Messages {
   items?: Message[];
   total?: number;
 }
+
+export type PatchConfigData = any;
+
+export type PatchConfigPayload = ConfigPatchItem[];
 
 /** Presence */
 export interface Presence {
@@ -206,6 +226,8 @@ export interface Rooms {
   total?: number;
 }
 
+export type StatusListData = StatusSummary;
+
 export interface StatusSummary {
   bus_consumer?: ComponentWithStatus;
   master_tenant?: ComponentWithStatus;
@@ -217,6 +239,10 @@ export enum StatusValue {
   Fail = "fail",
   Ok = "ok",
 }
+
+export type UpdateTeamsPresenceData = ResourceUpdated;
+
+export type UpdateTeamsPresenceError = NotFoundError;
 
 export interface UserMessagePOST {
   /** Alias/nickname of the sender */
@@ -239,7 +265,7 @@ export namespace Config {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = GetConfigData;
   }
 
   /**
@@ -253,9 +279,9 @@ export namespace Config {
   export namespace PatchConfig {
     export type RequestParams = {};
     export type RequestQuery = {};
-    export type RequestBody = ConfigPatchItem[];
+    export type RequestBody = PatchConfigPayload;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = PatchConfigData;
   }
 }
 
@@ -273,7 +299,7 @@ export namespace Status {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = StatusSummary;
+    export type ResponseBody = StatusListData;
   }
 }
 
@@ -294,7 +320,7 @@ export namespace Users {
     };
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = Rooms;
+    export type ResponseBody = GetRoomData;
   }
 
   /**
@@ -310,7 +336,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = Room;
     export type RequestHeaders = {};
-    export type ResponseBody = Room;
+    export type ResponseBody = CreateRoomData;
   }
 
   /**
@@ -339,7 +365,7 @@ export namespace Users {
     };
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = Messages;
+    export type ResponseBody = ListRoomsMessagesData;
   }
 
   /**
@@ -374,7 +400,7 @@ export namespace Users {
     };
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = Messages;
+    export type ResponseBody = ListRoomMessageData;
   }
 
   /**
@@ -393,7 +419,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = UserMessagePOST;
     export type RequestHeaders = {};
-    export type ResponseBody = Message;
+    export type ResponseBody = CreateRoomMessageData;
   }
 
   /**
@@ -420,7 +446,7 @@ export namespace Users {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = PresenceList;
+    export type ResponseBody = ListPresencesData;
   }
 
   /**
@@ -442,7 +468,7 @@ export namespace Users {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = Presence;
+    export type ResponseBody = GetUserPresenceData;
   }
 
   /**
@@ -483,6 +509,6 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = ResourceUpdated;
+    export type ResponseBody = UpdateTeamsPresenceData;
   }
 }

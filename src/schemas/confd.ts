@@ -122,6 +122,64 @@
     lines?: (LineRelationBase)[],
 }
 
+    export type AssociateAgentSkillData = any
+
+    export type AssociateConferenceExtensionData = any
+
+    export type AssociateContextContextsData = any
+
+    export type AssociateGroupExtensionData = any
+
+    export type AssociateGroupScheduleData = any
+
+    export type AssociateIncallExtensionData = any
+
+    export type AssociateIncallScheduleData = any
+
+    export type AssociateLineApplicationData = any
+
+    export type AssociateLineDeviceData = any
+
+    export type AssociateLineEndpointCustomData = any
+
+    export type AssociateLineEndpointSccpData = any
+
+    export type AssociateLineEndpointSipData = any
+
+    export type AssociateLineExtensionData = any
+
+    export type AssociateOutcallExtensionData = any
+
+    export type AssociateOutcallScheduleData = any
+
+    export type AssociateOutcallTrunksData = any
+
+    export type AssociateParkingLotExtensionData = any
+
+    export type AssociateQueueExtensionData = any
+
+    export type AssociateQueueScheduleData = any
+
+    export type AssociateTrunkEndpointCustomData = any
+
+    export type AssociateTrunkEndpointIaxData = any
+
+    export type AssociateTrunkEndpointSipData = any
+
+    export type AssociateTrunkRegisterIaxData = any
+
+    export type AssociateUserAgentData = any
+
+    export type AssociateUserFuncKeyTemplateData = any
+
+    export type AssociateUserLineData = any
+
+    export type AssociateUserLinesData = any
+
+    export type AssociateUserScheduleData = any
+
+    export type AssociateUserVoicemailData = any
+
     export interface AuthUserPost {
     auth?: {
     emails?: ({
@@ -655,6 +713,102 @@
     contexts?: (ContextId)[],
 }
 
+    export type CreateAccessFeatureData = AccessFeature
+
+    export type CreateAgentData = Agent
+
+    export type CreateApplicationData = Application
+
+    export type CreateCallfilterData = CallFilter
+
+    export type CreateCallpermissionData = CallPermission
+
+    export type CreateCallpickupData = CallPickup
+
+    export type CreateConferenceData = Conference
+
+    export type CreateContextData = Context
+
+    export type CreateDeviceData = Device
+
+    export type CreateEndpointCustomData = EndpointCustom
+
+    export type CreateEndpointIaxData = EndpointIAX
+
+    export type CreateEndpointSccpData = EndpointSccp
+
+    export type CreateEndpointSipData = EndpointSIP
+
+    export type CreateEndpointSipTemplateData = EndpointSIP
+
+    export type CreateExtensionData = Extension
+
+    export type CreateExternalAppData = ExternalApp
+
+    export type CreateFuncKeyTemplateData = FuncKeyTemplate
+
+    export type CreateGroupData = Group
+
+    export type CreateGuestMeetingAuthorizationData = MeetingAuthorization
+
+    export type CreateHttpIngressData = HTTPIngress
+
+    export type CreateIncallData = Incall
+
+    export type CreateIvrData = Ivr
+
+    export type CreateLineData = LineView
+
+    export type CreateLineExtensionData = Extension
+
+    export type CreateLineExtensionError = (NotFoundError)
+
+    export type CreateMeetingData = Meeting
+
+    export type CreateMohData = Moh
+
+    export type CreateOutcallData = Outcall
+
+    export type CreatePagingData = Paging
+
+    export type CreateParkingLotData = ParkingLot
+
+    export type CreatePhoneNumberData = PhoneNumber
+
+    export type CreatePhoneNumbersRangeData = PhoneNumberRangeResponse
+
+    export type CreateQueueData = Queue
+
+    export type CreateRegisterIaxData = RegisterIAX
+
+    export type CreateRegistrarData = Registrar
+
+    export type CreateScheduleData = Schedule
+
+    export type CreateSipTransportData = SIPTransport
+
+    export type CreateSkillData = Skill
+
+    export type CreateSkillRuleData = SkillRule
+
+    export type CreateSoundsData = Sound
+
+    export type CreateTrunkData = Trunk
+
+    export type CreateUserData = UserPostResponse
+
+    export type CreateUserExternalAppData = UserExternalApp
+
+    export type CreateUserMeetingData = Meeting
+
+    export type CreateUserVoicemailData = Voicemail
+
+    export type CreateUserVoicemailError = (NotFoundError)
+
+    export type CreateUsersMeBlocklistNumberData = UserBlocklistNumber
+
+    export type CreateVoicemailData = Voicemail
+
   /** DHCP */
   export interface DHCP {
   /** Is the DHCP service enabled? */
@@ -988,6 +1142,68 @@
     switchboard?: boolean,
 }
 
+    export type DissociateAgentQueueData = any
+
+    export type DissociateAgentSkillData = any
+
+    export type DissociateConferenceExtensionData = any
+
+    export type DissociateGroupCallpermissionData = any
+
+    export type DissociateGroupExtensionData = any
+
+    export type DissociateGroupScheduleData = any
+
+    export type DissociateIncallExtensionData = any
+
+    export type DissociateIncallScheduleData = any
+
+    export type DissociateLineApplicationData = any
+
+    export type DissociateLineDeviceData = any
+
+    export type DissociateLineEndpointCustomData = any
+
+    export type DissociateLineEndpointSccpData = any
+
+    export type DissociateLineEndpointSipData = any
+
+    export type DissociateLineExtensionData = any
+
+    export type DissociateOutcallCallpermissionData = any
+
+    export type DissociateOutcallExtensionData = any
+
+    export type DissociateOutcallScheduleData = any
+
+    export type DissociateParkingLotExtensionData = any
+
+    export type DissociateQueueExtensionData = any
+
+    export type DissociateQueueScheduleData = any
+
+    export type DissociateTrunkEndpointCustomData = any
+
+    export type DissociateTrunkEndpointIaxData = any
+
+    export type DissociateTrunkEndpointSipData = any
+
+    export type DissociateTrunkRegisterIaxData = any
+
+    export type DissociateUserAgentData = any
+
+    export type DissociateUserCallpermissionData = any
+
+    export type DissociateUserFuncKeyTemplateData = any
+
+    export type DissociateUserLineData = any
+
+    export type DissociateUserQueueData = any
+
+    export type DissociateUserScheduleData = any
+
+    export type DissociateUserVoicemailData = any
+
   /** E-mail configuration */
   export interface EmailConfig {
   /** Rules for local address to external address rewriting */
@@ -1264,6 +1480,8 @@
 
     export type Error = (string)[]
 
+    export type ExportUsersCsvData = UserExport
+
   /** Extension */
   export type Extension = (ExtensionRelationBase & {
   /** If True the extension is disabled. Deprecated, use enabled instead */
@@ -1419,6 +1637,44 @@
     tenant_uuid?: string,
 }
 
+    export type GetAccessFeatureData = AccessFeature
+
+    export type GetAgentData = Agent
+
+    export type GetApplicationData = Application
+
+    export type GetBlocklistNumberData = BlocklistNumber
+
+    export type GetCallFilterFallbackData = CallFilterFallbacks
+
+    export type GetCallfilterData = CallFilter
+
+    export type GetCallpermissionData = CallPermission
+
+    export type GetCallpickupData = CallPickup
+
+    export type GetConferenceData = Conference
+
+    export type GetConfigurationData = LiveReload
+
+    export type GetContextData = Context
+
+    export type GetDeviceData = Device
+
+    export type GetDeviceLineAssociationData = LineDeviceItems
+
+    export type GetDhcpData = DHCP
+
+    export type GetEmailsConfigData = EmailConfig
+
+    export type GetEndpointCustomData = EndpointCustom
+
+    export type GetEndpointIaxData = EndpointIAX
+
+    export type GetEndpointSccpData = EndpointSccp
+
+    export type GetEndpointSipData = EndpointSIP
+
     export interface GetEndpointSipParams {
     sipUuid: string,
   /**
@@ -1431,6 +1687,76 @@
    */
     view?: "merged",
 }
+
+    export type GetEndpointSipTemplateData = EndpointSIP
+
+    export type GetExtensionData = Extension
+
+    export type GetExtensionFeatureData = ExtensionFeature
+
+    export type GetExternalAppData = ExternalApp
+
+    export type GetFuncKeyData = FuncKey
+
+    export type GetFuncKeyTemplateData = FuncKeyTemplate
+
+    export type GetGroupData = Group
+
+    export type GetGroupFallbackData = GroupFallbacks
+
+    export type GetGuestMeetingAuthorizationData = MeetingAuthorization
+
+    export type GetGuestMeetingData = Meeting
+
+    export type GetHaData = HA
+
+    export type GetHttpIngressData = HTTPIngress
+
+    export type GetIncallData = Incall
+
+    export type GetInfosData = Info
+
+    export type GetIvrData = Ivr
+
+    export type GetLineData = LineView
+
+    export type GetLineDeviceData = LineDevice
+
+    export type GetLineDeviceError = (Error)
+
+    export type GetLocalizationData = Localization
+
+    export type GetMeetingData = Meeting
+
+    export type GetMohData = Moh
+
+    export type GetMohFilesData = any
+
+    export type GetOutcallData = Outcall
+
+    export type GetPagingData = Paging
+
+    export type GetParkingLotData = ParkingLot
+
+    export type GetPhoneNumberData = PhoneNumber
+
+    export type GetPhoneNumberMainData = PhoneNumber
+
+    export type GetPhoneNumberMainError = (NotFoundError)
+
+    export type GetProvisioningNetworkingData = ProvisioningNetworking
+
+    export type GetQueueData = Queue
+
+    export type GetQueueFallbackData = QueueFallbacks
+
+    export type GetRecordingsAnnouncementsData = RecordingsAnnouncements
+
+    export type GetRegisterIaxData = RegisterIAX
+
+    export type GetRegistrarData = Registrar
+
+    export type GetRegistrarsData = RegistrarItems
 
     export interface GetRegistrarsParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
@@ -1445,6 +1771,18 @@
     search?: string,
 }
 
+    export type GetScheduleData = Schedule
+
+    export type GetSipTransportData = SIPTransport
+
+    export type GetSkillData = Skill
+
+    export type GetSkillRuleData = SkillRule
+
+    export type GetSoundsData = Sound
+
+    export type GetSoundsFilesData = any
+
     export interface GetSoundsFilesParams {
   /** Format of the sound */
     format?: string,
@@ -1453,6 +1791,16 @@
     soundCategory: string,
     soundFilename: string,
 }
+
+    export type GetSwitchboardFallbackData = SwitchboardFallbacks
+
+    export type GetTenantData = Tenant
+
+    export type GetTrunkData = Trunk
+
+    export type GetUserData = User
+
+    export type GetUserExternalAppData = UserExternalApp
 
     export interface GetUserExternalAppParams {
   /** External App's name */
@@ -1476,6 +1824,14 @@
     view?: "fallback",
 }
 
+    export type GetUserFallbackData = UserFallbacks
+
+    export type GetUserForwardData = UserForward
+
+    export type GetUserFuncKeyData = FuncKey
+
+    export type GetUserLineAssociatedEndpointsSipData = EndpointSIP
+
     export interface GetUserLineAssociatedEndpointsSipParams {
     lineId: number,
   /**
@@ -1494,6 +1850,8 @@
     view?: "merged",
 }
 
+    export type GetUserLineMainAssociatedEndpointsSipData = EndpointSIP
+
     export interface GetUserLineMainAssociatedEndpointsSipParams {
   /**
    * the user's UUID
@@ -1510,6 +1868,26 @@
    */
     view?: "merged",
 }
+
+    export type GetUserMeetingAuthorizationData = MeetingAuthorization
+
+    export type GetUserMeetingData = Meeting
+
+    export type GetUserServiceData = UserService
+
+    export type GetUserServicesData = UserServices
+
+    export type GetUserVoicemailData = VoicemailItems
+
+    export type GetUsersMeBlocklistNumberData = UserBlocklistNumber
+
+    export type GetUsersSubscriptionsData = UserSubscriptionItems
+
+    export type GetVoicemailData = Voicemail
+
+    export type GetWizardDiscoverData = WizardDiscover
+
+    export type GetWizardStatusData = WizardConfigured
 
   /** Group */
   export type Group = (GroupRelationBase & {
@@ -1691,6 +2069,8 @@
     uri: string,
 }
 
+    export type HeadUserData = any
+
   /** IAXCallNumberLimits */
   export interface IAXCallNumberLimits {
   /** IPv4 address of the destination */
@@ -1752,6 +2132,12 @@
    */
     ordered_options?: (KeyValueOption)[],
 }
+
+    export type ImportUsersCsvData = UserImport
+
+    export type ImportUsersCsvError = (UserImportError)
+
+    export type ImportUsersCsvPayload = string
 
   /**
  * Incall
@@ -2013,6 +2399,8 @@
     rel?: string,
 }
 
+    export type ListAccessFeaturesData = AccessFeatureItems
+
     export interface ListAccessFeaturesParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
@@ -2025,6 +2413,8 @@
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 }
+
+    export type ListAgentsData = AgentItems
 
     export interface ListAgentsParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
@@ -2044,6 +2434,8 @@
     search?: string,
 }
 
+    export type ListApplicationsData = ApplicationItems
+
     export interface ListApplicationsParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
@@ -2061,6 +2453,40 @@
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 }
+
+    export type ListAsteriskConfbridgeWazoDefaultBridgeData = ConfBridgeConfiguration
+
+    export type ListAsteriskConfbridgeWazoDefaultUserData = ConfBridgeConfiguration
+
+    export type ListAsteriskFeaturesApplicationmapData = FeaturesConfiguration
+
+    export type ListAsteriskFeaturesFeaturemapData = FeaturesConfiguration
+
+    export type ListAsteriskFeaturesGeneralData = FeaturesConfiguration
+
+    export type ListAsteriskHepGeneralData = HEPConfiguration
+
+    export type ListAsteriskIaxCallnumberlimitsData = IAXCallNumberLimitss
+
+    export type ListAsteriskIaxGeneralData = IAXGeneral
+
+    export type ListAsteriskPjsipGlobalData = PJSIPGlobal
+
+    export type ListAsteriskPjsipSystemData = PJSIPSystem
+
+    export type ListAsteriskQueueGeneralData = QueueGeneral
+
+    export type ListAsteriskRtpGeneralData = RTPConfiguration
+
+    export type ListAsteriskRtpIceHostCandidatesData = RTPConfiguration
+
+    export type ListAsteriskSccpGeneralData = SCCPGeneral
+
+    export type ListAsteriskVoicemailGeneralData = VoicemailGeneral
+
+    export type ListAsteriskVoicemailZonemessagesData = VoicemailZoneMessages
+
+    export type ListBlocklistNumbersData = BlocklistNumbersListResponse
 
     export interface ListBlocklistNumbersParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
@@ -2086,6 +2512,8 @@
     user_uuid?: string,
 }
 
+    export type ListCallFiltersData = CallFilterItems
+
     export interface ListCallFiltersParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
@@ -2103,6 +2531,8 @@
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 }
+
+    export type ListCallPickupsData = CallPickupItems
 
     export interface ListCallPickupsParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
@@ -2122,6 +2552,8 @@
     search?: string,
 }
 
+    export type ListCallpermissionsData = CallPermissionItems
+
     export interface ListCallpermissionsParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
@@ -2139,6 +2571,8 @@
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 }
+
+    export type ListConferencesData = ConferenceItems
 
     export interface ListConferencesParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
@@ -2158,6 +2592,8 @@
     search?: string,
 }
 
+    export type ListContextsData = ContextItems
+
     export interface ListContextsParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
@@ -2175,6 +2611,8 @@
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 }
+
+    export type ListContextsRangeData = ContextRangeItems
 
     export interface ListContextsRangeParams {
   /**
@@ -2198,6 +2636,8 @@
     search?: string,
 }
 
+    export type ListDevicesData = DeviceItems
+
     export interface ListDevicesParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
@@ -2215,6 +2655,8 @@
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 }
+
+    export type ListEndpointsCustomData = EndpointCustomItems
 
     export interface ListEndpointsCustomParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
@@ -2234,6 +2676,8 @@
     search?: string,
 }
 
+    export type ListEndpointsIaxData = EndpointIAXItems
+
     export interface ListEndpointsIaxParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
@@ -2252,6 +2696,8 @@
     search?: string,
 }
 
+    export type ListEndpointsSccpData = EndpointSccpItems
+
     export interface ListEndpointsSccpParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
@@ -2269,6 +2715,8 @@
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 }
+
+    export type ListEndpointsSipData = EndpointSIPItems
 
     export interface ListEndpointsSipParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
@@ -2295,6 +2743,8 @@
     uuid?: (string)[],
 }
 
+    export type ListEndpointsSipTemplatesData = EndpointSIPItems
+
     export interface ListEndpointsSipTemplatesParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
@@ -2312,6 +2762,10 @@
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 }
+
+    export type ListExtensionsData = ExtensionItems
+
+    export type ListExtensionsFeaturesData = ExtensionFeatureItems
 
     export interface ListExtensionsFeaturesParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
@@ -2350,6 +2804,8 @@
     type?: "internal" | "incall",
 }
 
+    export type ListExternalAppsData = ExternalAppItems
+
     export interface ListExternalAppsParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
@@ -2368,6 +2824,10 @@
     search?: string,
 }
 
+    export type ListFuncKeyDestinationsData = FuncKeyDestinationItems
+
+    export type ListFuncKeyTemplateData = FuncKeyTemplate
+
     export interface ListFuncKeyTemplateParams {
   /** Maximum number of items to return in the list */
     limit?: number,
@@ -2381,6 +2841,10 @@
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 }
+
+    export type ListFuncKeyTemplateUserAssociationsData = UserFuncKeyTemplate
+
+    export type ListGroupsData = GroupItems
 
     export interface ListGroupsParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
@@ -2399,6 +2863,8 @@
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 }
+
+    export type ListHttpIngressesData = HTTPIngressItems
 
     export interface ListHttpIngressesParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
@@ -2424,6 +2890,8 @@
     view?: "default" | "fallback",
 }
 
+    export type ListIncallsData = IncallItems
+
     export interface ListIncallsParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
@@ -2444,6 +2912,8 @@
     user_id?: number,
 }
 
+    export type ListIvrData = IvrItems
+
     export interface ListIvrParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
@@ -2461,6 +2931,8 @@
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 }
+
+    export type ListLinesData = LineItems
 
     export interface ListLinesParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
@@ -2480,6 +2952,8 @@
     search?: string,
 }
 
+    export type ListMeetingsData = MeetingItems
+
     export interface ListMeetingsParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
@@ -2497,6 +2971,8 @@
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 }
+
+    export type ListMohData = MohItems
 
     export interface ListMohParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
@@ -2516,6 +2992,8 @@
     search?: string,
 }
 
+    export type ListOutcallsData = OutcallItems
+
     export interface ListOutcallsParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
@@ -2533,6 +3011,8 @@
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 }
+
+    export type ListPagingsData = PagingItems
 
     export interface ListPagingsParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
@@ -2552,6 +3032,8 @@
     search?: string,
 }
 
+    export type ListParkingLotsData = ParkingLotItems
+
     export interface ListParkingLotsParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
@@ -2569,6 +3051,8 @@
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 }
+
+    export type ListPhoneNumbersData = PhoneNumberItems
 
     export interface ListPhoneNumbersParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
@@ -2592,6 +3076,8 @@
     shared?: boolean,
 }
 
+    export type ListQueuesData = QueueItems
+
     export interface ListQueuesParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
@@ -2610,6 +3096,8 @@
     search?: string,
 }
 
+    export type ListRegistersIaxData = RegisterIAXItems
+
     export interface ListRegistersIaxParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
@@ -2622,6 +3110,8 @@
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 }
+
+    export type ListSchedulesData = ScheduleItems
 
     export interface ListSchedulesParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
@@ -2641,6 +3131,8 @@
     search?: string,
 }
 
+    export type ListSipTransportsData = SIPTransportItems
+
     export interface ListSipTransportsParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
@@ -2653,6 +3145,8 @@
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 }
+
+    export type ListSkillRulesData = SkillRuleItems
 
     export interface ListSkillRulesParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
@@ -2672,6 +3166,8 @@
     search?: string,
 }
 
+    export type ListSkillsData = SkillItems
+
     export interface ListSkillsParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
@@ -2689,6 +3185,10 @@
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 }
+
+    export type ListSoundsData = SoundItems
+
+    export type ListSoundsLanguagesData = SoundLanguageItems
 
     export interface ListSoundsParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
@@ -2708,6 +3208,8 @@
     search?: string,
 }
 
+    export type ListTenantsData = TenantItems
+
     export interface ListTenantsParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
@@ -2725,6 +3227,10 @@
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 }
+
+    export type ListTimezonesData = TimezoneItems
+
+    export type ListTrunksData = TrunkItems
 
     export interface ListTrunksParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
@@ -2744,6 +3250,8 @@
     search?: string,
 }
 
+    export type ListUnallocatedDevicesData = DeviceItems
+
     export interface ListUnallocatedDevicesParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
@@ -2756,6 +3264,8 @@
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 }
+
+    export type ListUserBlocklistNumbersData = BlocklistNumbersListResponse
 
     export interface ListUserBlocklistNumbersParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
@@ -2778,6 +3288,12 @@
    */
     userUuid: string,
 }
+
+    export type ListUserCalleridOutgoingData = UserCallerIDItems
+
+    export type ListUserData = UserItems
+
+    export type ListUserExternalAppsData = UserExternalAppItems
 
     export interface ListUserExternalAppsParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
@@ -2808,6 +3324,16 @@
    */
     view?: "fallback",
 }
+
+    export type ListUserForwardsData = UserForwards
+
+    export type ListUserFuncKeyTemplateAssociationsData = UserFuncKeyTemplate
+
+    export type ListUserFuncKeysData = FuncKeyTemplate
+
+    export type ListUserMeetingAuthorizationsData = MeetingAuthorizationItems
+
+    export type ListUserMeetingsData = MeetingItems
 
     export interface ListUserMeetingsParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
@@ -2854,6 +3380,8 @@
     view?: "directory" | "summary",
 }
 
+    export type ListUsersMeBlocklistNumbersData = UserBlocklistNumbersListResponse
+
     export interface ListUsersMeBlocklistNumbersParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
@@ -2870,6 +3398,8 @@
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 }
+
+    export type ListVoicemailsData = VoicemailItems
 
     export interface ListVoicemailsParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
@@ -2901,6 +3431,8 @@
   /** UUID of the tenant */
     tenant_uuid?: string,
 }
+
+    export type LookupUserBlocklistNumberData = any
 
     export interface LookupUserBlocklistNumberParams {
   /** E.164 number string to lookup(exact match) in the user's blocklist */
@@ -3217,6 +3749,8 @@
     extensions?: (ExtensionRelationBase)[],
 }
 
+    export type PassWizardData = Wizard
+
   /** a phone number resource, usable for outgoing caller id or incall routing */
   export interface PhoneNumber {
   /** The Caller ID name that should be used when calling with this number as a Caller ID */
@@ -3277,6 +3811,10 @@
   /** The port used by the HTTP provisioning server. */
     provision_http_port?: number,
 }
+
+    export type PutUserMeetingAuthorizationAcceptData = MeetingAuthorization
+
+    export type PutUserMeetingAuthorizationRejectData = MeetingAuthorization
 
   /** Queue */
   export type Queue = (QueueRelationBase & {
@@ -3628,6 +4166,8 @@
     total?: number,
 }
 
+    export type ResetDeviceAutoprovData = any
+
   /** Rewriting rule */
   export interface RewritingRule {
   /**
@@ -3760,6 +4300,18 @@
     incalls?: (UserRelationBase)[],
 }
 
+    export interface SetPhoneNumberMainPayload {
+  /**
+   * UUID of the phone number to set as main
+   * @example "b5bcc98c-10cf-4a68-bf3d-802fb5170911"
+   */
+    phone_number_uuid: string,
+}
+
+    export type ShowPjsipDocData = PJSIPConfigurationOptions
+
+    export type ShowPjsipDocError = (Error)
+
   /** Skill */
   export type Skill = (SkillRelationBase & {
     description?: string,
@@ -3851,6 +4403,8 @@
     total?: number,
 }
 
+    export type StatusListData = StatusSummary
+
     export interface StatusSummary {
     bus_consumer?: ComponentWithStatus,
     master_tenant?: ComponentWithStatus,
@@ -3906,6 +4460,14 @@
     members?: SwitchboardRelationMemberUsers,
 }
 
+    export type SwitchboardsCreateData = Switchboard
+
+    export type SwitchboardsDetailData = Switchboard
+
+    export interface SwitchboardsListData {
+    items?: (Switchboard)[],
+}
+
     export interface SwitchboardsListParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
@@ -3923,6 +4485,8 @@
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 }
+
+    export type SynchronizeDeviceData = any
 
     export interface Tenant {
     global_sip_template_uuid?: string,
@@ -4000,6 +4564,37 @@
     trunks?: (TrunkId)[],
 }
 
+    export type UpdateAgentQueueAssociationData = any
+
+    export type UpdateCallFilterCallerUsersData = any
+
+    export type UpdateCallFilterFallbackData = any
+
+    export type UpdateCallFilterMemberUsersData = any
+
+    export type UpdateCallPickupInterceptorGroupsData = any
+
+    export type UpdateCallPickupInterceptorUsersData = any
+
+    export type UpdateCallPickupTargetGroupsData = any
+
+    export type UpdateCallPickupTargetUsersData = any
+
+    export type UpdateGroupFallbackData = any
+
+    export type UpdateGroupMemberExtensionsData = any
+
+    export type UpdateGroupMemberUsersData = any
+
+  /** @format binary */
+  export type UpdateMohFilesPayload = any
+
+    export type UpdatePagingCallerUsersData = any
+
+    export type UpdatePagingMemberUsersData = any
+
+    export type UpdateQueueFallbackData = any
+
     export interface UpdateSoundsFilesParams {
   /** Format of the sound */
     format?: string,
@@ -4008,6 +4603,25 @@
     soundCategory: string,
     soundFilename: string,
 }
+
+  /** @format binary */
+  export type UpdateSoundsFilesPayload = any
+
+    export type UpdateSwitchboardFallbackData = any
+
+    export type UpdateSwitchboardMemberUsersData = any
+
+    export type UpdateUserFallbackData = any
+
+    export type UpdateUserGroupsData = any
+
+    export type UpdateUserQueueAssociationData = any
+
+    export type UpdateUsersCsvData = UserUpdate
+
+    export type UpdateUsersCsvError = (UserImportError)
+
+    export type UpdateUsersCsvPayload = string
 
   /** User */
   export type User = (BaseUser & UserRelationAgent & UserRelationFallbacks & UserRelationForwards & UserRelationGroups & UserRelationIncalls & UserRelationLines & UserRelationServices & UserRelationSwitchboards & UserRelationVoicemail & UserRelationQueues & UserRelationCallPickupTargets)
@@ -4695,7 +5309,7 @@ export namespace ListAccessFeatures {
 };
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = AccessFeatureItems;
+  export type ResponseBody = ListAccessFeaturesData;
 }
         
 /**
@@ -4711,7 +5325,7 @@ export namespace CreateAccessFeature {
   export type RequestQuery = {};
   export type RequestBody = AccessFeature;
   export type RequestHeaders = {};
-  export type ResponseBody = AccessFeature;
+  export type ResponseBody = CreateAccessFeatureData;
 }
         
 /**
@@ -4751,7 +5365,7 @@ export namespace GetAccessFeature {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = AccessFeature;
+  export type ResponseBody = GetAccessFeatureData;
 }
         
 /**
@@ -4811,7 +5425,7 @@ export namespace ListAgents {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = AgentItems;
+  export type ResponseBody = ListAgentsData;
 }
         
 /**
@@ -4831,7 +5445,7 @@ export namespace CreateAgent {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = Agent;
+  export type ResponseBody = CreateAgentData;
 }
         
 /**
@@ -4868,7 +5482,7 @@ export namespace ListSkills {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = SkillItems;
+  export type ResponseBody = ListSkillsData;
 }
         
 /**
@@ -4888,7 +5502,7 @@ export namespace CreateSkill {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = Skill;
+  export type ResponseBody = CreateSkillData;
 }
         
 /**
@@ -4936,7 +5550,7 @@ export namespace GetSkill {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = Skill;
+  export type ResponseBody = GetSkillData;
 }
         
 /**
@@ -5008,7 +5622,7 @@ export namespace GetAgent {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = Agent;
+  export type ResponseBody = GetAgentData;
 }
         
 /**
@@ -5058,7 +5672,7 @@ export namespace DissociateAgentSkill {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = void;
+  export type ResponseBody = DissociateAgentSkillData;
 }
         
 /**
@@ -5084,7 +5698,7 @@ export namespace AssociateAgentSkill {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = void;
+  export type ResponseBody = AssociateAgentSkillData;
 }
       }
 
@@ -5124,7 +5738,7 @@ export namespace ListApplications {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = ApplicationItems;
+  export type ResponseBody = ListApplicationsData;
 }
         
 /**
@@ -5144,7 +5758,7 @@ export namespace CreateApplication {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = Application;
+  export type ResponseBody = CreateApplicationData;
 }
         
 /**
@@ -5192,7 +5806,7 @@ export namespace GetApplication {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = Application;
+  export type ResponseBody = GetApplicationData;
 }
         
 /**
@@ -5235,7 +5849,7 @@ export namespace ListAsteriskConfbridgeWazoDefaultBridge {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = ConfBridgeConfiguration;
+  export type ResponseBody = ListAsteriskConfbridgeWazoDefaultBridgeData;
 }
         
 /**
@@ -5267,7 +5881,7 @@ export namespace ListAsteriskConfbridgeWazoDefaultUser {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = ConfBridgeConfiguration;
+  export type ResponseBody = ListAsteriskConfbridgeWazoDefaultUserData;
 }
         
 /**
@@ -5299,7 +5913,7 @@ export namespace ListAsteriskFeaturesApplicationmap {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = FeaturesConfiguration;
+  export type ResponseBody = ListAsteriskFeaturesApplicationmapData;
 }
         
 /**
@@ -5331,7 +5945,7 @@ export namespace ListAsteriskFeaturesFeaturemap {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = FeaturesConfiguration;
+  export type ResponseBody = ListAsteriskFeaturesFeaturemapData;
 }
         
 /**
@@ -5363,7 +5977,7 @@ export namespace ListAsteriskFeaturesGeneral {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = FeaturesConfiguration;
+  export type ResponseBody = ListAsteriskFeaturesGeneralData;
 }
         
 /**
@@ -5395,7 +6009,7 @@ export namespace ListAsteriskHepGeneral {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = HEPConfiguration;
+  export type ResponseBody = ListAsteriskHepGeneralData;
 }
         
 /**
@@ -5427,7 +6041,7 @@ export namespace ListAsteriskIaxCallnumberlimits {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = IAXCallNumberLimitss;
+  export type ResponseBody = ListAsteriskIaxCallnumberlimitsData;
 }
         
 /**
@@ -5459,7 +6073,7 @@ export namespace ListAsteriskIaxGeneral {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = IAXGeneral;
+  export type ResponseBody = ListAsteriskIaxGeneralData;
 }
         
 /**
@@ -5491,7 +6105,7 @@ export namespace ShowPjsipDoc {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = PJSIPConfigurationOptions;
+  export type ResponseBody = ShowPjsipDocData;
 }
         
 /**
@@ -5507,7 +6121,7 @@ export namespace ListAsteriskPjsipGlobal {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = PJSIPGlobal;
+  export type ResponseBody = ListAsteriskPjsipGlobalData;
 }
         
 /**
@@ -5539,7 +6153,7 @@ export namespace ListAsteriskPjsipSystem {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = PJSIPSystem;
+  export type ResponseBody = ListAsteriskPjsipSystemData;
 }
         
 /**
@@ -5571,7 +6185,7 @@ export namespace ListAsteriskQueueGeneral {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = QueueGeneral;
+  export type ResponseBody = ListAsteriskQueueGeneralData;
 }
         
 /**
@@ -5603,7 +6217,7 @@ export namespace ListAsteriskRtpGeneral {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = RTPConfiguration;
+  export type ResponseBody = ListAsteriskRtpGeneralData;
 }
         
 /**
@@ -5635,7 +6249,7 @@ export namespace ListAsteriskRtpIceHostCandidates {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = RTPConfiguration;
+  export type ResponseBody = ListAsteriskRtpIceHostCandidatesData;
 }
         
 /**
@@ -5667,7 +6281,7 @@ export namespace ListAsteriskSccpGeneral {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = SCCPGeneral;
+  export type ResponseBody = ListAsteriskSccpGeneralData;
 }
         
 /**
@@ -5699,7 +6313,7 @@ export namespace ListAsteriskVoicemailGeneral {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = VoicemailGeneral;
+  export type ResponseBody = ListAsteriskVoicemailGeneralData;
 }
         
 /**
@@ -5731,7 +6345,7 @@ export namespace ListAsteriskVoicemailZonemessages {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = VoicemailZoneMessages;
+  export type ResponseBody = ListAsteriskVoicemailZonemessagesData;
 }
         
 /**
@@ -5787,7 +6401,7 @@ export namespace ListCallFilters {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = CallFilterItems;
+  export type ResponseBody = ListCallFiltersData;
 }
         
 /**
@@ -5807,7 +6421,7 @@ export namespace CreateCallfilter {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = CallFilter;
+  export type ResponseBody = CreateCallfilterData;
 }
         
 /**
@@ -5855,7 +6469,7 @@ export namespace GetCallfilter {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = CallFilter;
+  export type ResponseBody = GetCallfilterData;
 }
         
 /**
@@ -5899,7 +6513,7 @@ export namespace GetCallFilterFallback {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = CallFilterFallbacks;
+  export type ResponseBody = GetCallFilterFallbackData;
 }
         
 /**
@@ -5919,7 +6533,7 @@ export namespace UpdateCallFilterFallback {
   export type RequestQuery = {};
   export type RequestBody = CallFilterFallbacks;
   export type RequestHeaders = {};
-  export type ResponseBody = void;
+  export type ResponseBody = UpdateCallFilterFallbackData;
 }
         
 /**
@@ -5939,7 +6553,7 @@ export namespace UpdateCallFilterCallerUsers {
   export type RequestQuery = {};
   export type RequestBody = CallFilterRecipientUsersUuid;
   export type RequestHeaders = {};
-  export type ResponseBody = void;
+  export type ResponseBody = UpdateCallFilterCallerUsersData;
 }
         
 /**
@@ -5959,7 +6573,7 @@ export namespace UpdateCallFilterMemberUsers {
   export type RequestQuery = {};
   export type RequestBody = UsersUuid;
   export type RequestHeaders = {};
-  export type ResponseBody = void;
+  export type ResponseBody = UpdateCallFilterMemberUsersData;
 }
       }
 
@@ -5999,7 +6613,7 @@ export namespace ListCallpermissions {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = CallPermissionItems;
+  export type ResponseBody = ListCallpermissionsData;
 }
         
 /**
@@ -6019,7 +6633,7 @@ export namespace CreateCallpermission {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = CallPermission;
+  export type ResponseBody = CreateCallpermissionData;
 }
         
 /**
@@ -6067,7 +6681,7 @@ export namespace GetCallpermission {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = CallPermission;
+  export type ResponseBody = GetCallpermissionData;
 }
         
 /**
@@ -6131,7 +6745,7 @@ export namespace ListCallPickups {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = CallPickupItems;
+  export type ResponseBody = ListCallPickupsData;
 }
         
 /**
@@ -6151,7 +6765,7 @@ export namespace CreateCallpickup {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = CallPickup;
+  export type ResponseBody = CreateCallpickupData;
 }
         
 /**
@@ -6199,7 +6813,7 @@ export namespace GetCallpickup {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = CallPickup;
+  export type ResponseBody = GetCallpickupData;
 }
         
 /**
@@ -6247,7 +6861,7 @@ export namespace UpdateCallPickupInterceptorGroups {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = void;
+  export type ResponseBody = UpdateCallPickupInterceptorGroupsData;
 }
         
 /**
@@ -6271,7 +6885,7 @@ export namespace UpdateCallPickupInterceptorUsers {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = void;
+  export type ResponseBody = UpdateCallPickupInterceptorUsersData;
 }
         
 /**
@@ -6295,7 +6909,7 @@ export namespace UpdateCallPickupTargetGroups {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = void;
+  export type ResponseBody = UpdateCallPickupTargetGroupsData;
 }
         
 /**
@@ -6319,7 +6933,7 @@ export namespace UpdateCallPickupTargetUsers {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = void;
+  export type ResponseBody = UpdateCallPickupTargetUsersData;
 }
       }
 
@@ -6359,7 +6973,7 @@ export namespace ListConferences {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = ConferenceItems;
+  export type ResponseBody = ListConferencesData;
 }
         
 /**
@@ -6379,7 +6993,7 @@ export namespace CreateConference {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = Conference;
+  export type ResponseBody = CreateConferenceData;
 }
         
 /**
@@ -6427,7 +7041,7 @@ export namespace GetConference {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = Conference;
+  export type ResponseBody = GetConferenceData;
 }
         
 /**
@@ -6472,7 +7086,7 @@ export namespace DissociateConferenceExtension {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = void;
+  export type ResponseBody = DissociateConferenceExtensionData;
 }
         
 /**
@@ -6493,7 +7107,7 @@ export namespace AssociateConferenceExtension {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = void;
+  export type ResponseBody = AssociateConferenceExtensionData;
 }
       }
 
@@ -6512,7 +7126,7 @@ export namespace GetConfiguration {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = LiveReload;
+  export type ResponseBody = GetConfigurationData;
 }
         
 /**
@@ -6568,7 +7182,7 @@ export namespace ListContexts {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = ContextItems;
+  export type ResponseBody = ListContextsData;
 }
         
 /**
@@ -6588,7 +7202,7 @@ export namespace CreateContext {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = Context;
+  export type ResponseBody = CreateContextData;
 }
         
 /**
@@ -6628,7 +7242,7 @@ export namespace GetContext {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = Context;
+  export type ResponseBody = GetContextData;
 }
         
 /**
@@ -6668,7 +7282,7 @@ export namespace AssociateContextContexts {
   export type RequestQuery = {};
   export type RequestBody = ContextsId;
   export type RequestHeaders = {};
-  export type ResponseBody = void;
+  export type ResponseBody = AssociateContextContextsData;
 }
         
 /**
@@ -6711,7 +7325,7 @@ export namespace ListContextsRange {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = ContextRangeItems;
+  export type ResponseBody = ListContextsRangeData;
 }
       }
 
@@ -6751,7 +7365,7 @@ export namespace ListDevices {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = DeviceItems;
+  export type ResponseBody = ListDevicesData;
 }
         
 /**
@@ -6771,7 +7385,7 @@ export namespace CreateDevice {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = Device;
+  export type ResponseBody = CreateDeviceData;
 }
         
 /**
@@ -6799,7 +7413,7 @@ export namespace ListUnallocatedDevices {
 };
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = DeviceItems;
+  export type ResponseBody = ListUnallocatedDevicesData;
 }
         
 /**
@@ -6871,7 +7485,7 @@ export namespace GetDevice {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = Device;
+  export type ResponseBody = GetDeviceData;
 }
         
 /**
@@ -6919,7 +7533,7 @@ export namespace ResetDeviceAutoprov {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = void;
+  export type ResponseBody = ResetDeviceAutoprovData;
 }
         
 /**
@@ -6943,7 +7557,7 @@ export namespace GetDeviceLineAssociation {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = LineDeviceItems;
+  export type ResponseBody = GetDeviceLineAssociationData;
 }
         
 /**
@@ -6967,7 +7581,7 @@ export namespace SynchronizeDevice {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = void;
+  export type ResponseBody = SynchronizeDeviceData;
 }
       }
 
@@ -6986,7 +7600,7 @@ export namespace GetDhcp {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = DHCP;
+  export type ResponseBody = GetDhcpData;
 }
         
 /**
@@ -7021,7 +7635,7 @@ export namespace GetEmailsConfig {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = EmailConfig;
+  export type ResponseBody = GetEmailsConfigData;
 }
         
 /**
@@ -7077,7 +7691,7 @@ export namespace ListEndpointsCustom {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = EndpointCustomItems;
+  export type ResponseBody = ListEndpointsCustomData;
 }
         
 /**
@@ -7097,7 +7711,7 @@ export namespace CreateEndpointCustom {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = EndpointCustom;
+  export type ResponseBody = CreateEndpointCustomData;
 }
         
 /**
@@ -7143,7 +7757,7 @@ export namespace GetEndpointCustom {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = EndpointCustom;
+  export type ResponseBody = GetEndpointCustomData;
 }
         
 /**
@@ -7203,7 +7817,7 @@ export namespace ListEndpointsIax {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = EndpointIAXItems;
+  export type ResponseBody = ListEndpointsIaxData;
 }
         
 /**
@@ -7223,7 +7837,7 @@ export namespace CreateEndpointIax {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = EndpointIAX;
+  export type ResponseBody = CreateEndpointIaxData;
 }
         
 /**
@@ -7269,7 +7883,7 @@ export namespace GetEndpointIax {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = EndpointIAX;
+  export type ResponseBody = GetEndpointIaxData;
 }
         
 /**
@@ -7329,7 +7943,7 @@ export namespace ListEndpointsSccp {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = EndpointSccpItems;
+  export type ResponseBody = ListEndpointsSccpData;
 }
         
 /**
@@ -7349,7 +7963,7 @@ export namespace CreateEndpointSccp {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = EndpointSccp;
+  export type ResponseBody = CreateEndpointSccpData;
 }
         
 /**
@@ -7395,7 +8009,7 @@ export namespace GetEndpointSccp {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = EndpointSccp;
+  export type ResponseBody = GetEndpointSccpData;
 }
         
 /**
@@ -7462,7 +8076,7 @@ export namespace ListEndpointsSip {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = EndpointSIPItems;
+  export type ResponseBody = ListEndpointsSipData;
 }
         
 /**
@@ -7482,7 +8096,7 @@ export namespace CreateEndpointSip {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = EndpointSIP;
+  export type ResponseBody = CreateEndpointSipData;
 }
         
 /**
@@ -7519,7 +8133,7 @@ export namespace ListEndpointsSipTemplates {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = EndpointSIPItems;
+  export type ResponseBody = ListEndpointsSipTemplatesData;
 }
         
 /**
@@ -7539,7 +8153,7 @@ export namespace CreateEndpointSipTemplate {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = EndpointSIP;
+  export type ResponseBody = CreateEndpointSipTemplateData;
 }
         
 /**
@@ -7585,7 +8199,7 @@ export namespace GetEndpointSipTemplate {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = EndpointSIP;
+  export type ResponseBody = GetEndpointSipTemplateData;
 }
         
 /**
@@ -7665,7 +8279,7 @@ export namespace GetEndpointSip {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = EndpointSIP;
+  export type ResponseBody = GetEndpointSipData;
 }
         
 /**
@@ -7734,7 +8348,7 @@ export namespace ListExtensions {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = ExtensionItems;
+  export type ResponseBody = ListExtensionsData;
 }
         
 /**
@@ -7754,7 +8368,7 @@ export namespace CreateExtension {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = Extension;
+  export type ResponseBody = CreateExtensionData;
 }
         
 /**
@@ -7782,7 +8396,7 @@ export namespace ListExtensionsFeatures {
 };
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = ExtensionFeatureItems;
+  export type ResponseBody = ListExtensionsFeaturesData;
 }
         
 /**
@@ -7801,7 +8415,7 @@ export namespace GetExtensionFeature {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = ExtensionFeature;
+  export type ResponseBody = GetExtensionFeatureData;
 }
         
 /**
@@ -7858,7 +8472,7 @@ export namespace GetExtension {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = Extension;
+  export type ResponseBody = GetExtensionData;
 }
         
 /**
@@ -7917,7 +8531,7 @@ export namespace ListExternalApps {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = ExternalAppItems;
+  export type ResponseBody = ListExternalAppsData;
 }
         
 /**
@@ -7965,7 +8579,7 @@ export namespace GetExternalApp {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = ExternalApp;
+  export type ResponseBody = GetExternalAppData;
 }
         
 /**
@@ -7989,7 +8603,7 @@ export namespace CreateExternalApp {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = ExternalApp;
+  export type ResponseBody = CreateExternalAppData;
 }
         
 /**
@@ -8032,7 +8646,7 @@ export namespace ListFuncKeyDestinations {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = FuncKeyDestinationItems;
+  export type ResponseBody = ListFuncKeyDestinationsData;
 }
         
 /**
@@ -8065,7 +8679,7 @@ export namespace ListFuncKeyTemplate {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = FuncKeyTemplate;
+  export type ResponseBody = ListFuncKeyTemplateData;
 }
         
 /**
@@ -8085,7 +8699,7 @@ export namespace CreateFuncKeyTemplate {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = FuncKeyTemplate;
+  export type ResponseBody = CreateFuncKeyTemplateData;
 }
         
 /**
@@ -8131,7 +8745,7 @@ export namespace GetFuncKeyTemplate {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = FuncKeyTemplate;
+  export type ResponseBody = GetFuncKeyTemplateData;
 }
         
 /**
@@ -8177,7 +8791,7 @@ export namespace ListFuncKeyTemplateUserAssociations {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = UserFuncKeyTemplate;
+  export type ResponseBody = ListFuncKeyTemplateUserAssociationsData;
 }
         
 /**
@@ -8227,7 +8841,7 @@ export namespace GetFuncKey {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = FuncKey;
+  export type ResponseBody = GetFuncKeyData;
 }
         
 /**
@@ -8292,7 +8906,7 @@ export namespace ListGroups {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = GroupItems;
+  export type ResponseBody = ListGroupsData;
 }
         
 /**
@@ -8312,7 +8926,7 @@ export namespace CreateGroup {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = Group;
+  export type ResponseBody = CreateGroupData;
 }
         
 /**
@@ -8360,7 +8974,7 @@ export namespace GetGroup {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = Group;
+  export type ResponseBody = GetGroupData;
 }
         
 /**
@@ -8410,7 +9024,7 @@ export namespace DissociateGroupCallpermission {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = void;
+  export type ResponseBody = DissociateGroupCallpermissionData;
 }
         
 /**
@@ -8457,7 +9071,7 @@ export namespace DissociateGroupExtension {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = void;
+  export type ResponseBody = DissociateGroupExtensionData;
 }
         
 /**
@@ -8478,7 +9092,7 @@ export namespace AssociateGroupExtension {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = void;
+  export type ResponseBody = AssociateGroupExtensionData;
 }
         
 /**
@@ -8498,7 +9112,7 @@ export namespace GetGroupFallback {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = GroupFallbacks;
+  export type ResponseBody = GetGroupFallbackData;
 }
         
 /**
@@ -8518,7 +9132,7 @@ export namespace UpdateGroupFallback {
   export type RequestQuery = {};
   export type RequestBody = GroupFallbacks;
   export type RequestHeaders = {};
-  export type ResponseBody = void;
+  export type ResponseBody = UpdateGroupFallbackData;
 }
         
 /**
@@ -8538,7 +9152,7 @@ export namespace UpdateGroupMemberExtensions {
   export type RequestQuery = {};
   export type RequestBody = GroupMemberExtensions;
   export type RequestHeaders = {};
-  export type ResponseBody = void;
+  export type ResponseBody = UpdateGroupMemberExtensionsData;
 }
         
 /**
@@ -8558,7 +9172,7 @@ export namespace UpdateGroupMemberUsers {
   export type RequestQuery = {};
   export type RequestBody = GroupMemberUsers;
   export type RequestHeaders = {};
-  export type ResponseBody = void;
+  export type ResponseBody = UpdateGroupMemberUsersData;
 }
         
 /**
@@ -8584,7 +9198,7 @@ export namespace DissociateGroupSchedule {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = void;
+  export type ResponseBody = DissociateGroupScheduleData;
 }
         
 /**
@@ -8610,7 +9224,7 @@ export namespace AssociateGroupSchedule {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = void;
+  export type ResponseBody = AssociateGroupScheduleData;
 }
       }
 
@@ -8633,7 +9247,7 @@ export namespace GetGuestMeeting {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = Meeting;
+  export type ResponseBody = GetGuestMeetingData;
 }
         
 /**
@@ -8655,7 +9269,7 @@ export namespace CreateGuestMeetingAuthorization {
   export type RequestQuery = {};
   export type RequestBody = MeetingAuthorizationRequest;
   export type RequestHeaders = {};
-  export type ResponseBody = MeetingAuthorization;
+  export type ResponseBody = CreateGuestMeetingAuthorizationData;
 }
         
 /**
@@ -8679,7 +9293,7 @@ export namespace GetGuestMeetingAuthorization {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = MeetingAuthorization;
+  export type ResponseBody = GetGuestMeetingAuthorizationData;
 }
       }
 
@@ -8698,7 +9312,7 @@ export namespace GetHa {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = HA;
+  export type ResponseBody = GetHaData;
 }
         
 /**
@@ -8756,7 +9370,7 @@ export namespace ListIncalls {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = IncallItems;
+  export type ResponseBody = ListIncallsData;
 }
         
 /**
@@ -8776,7 +9390,7 @@ export namespace CreateIncall {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = Incall;
+  export type ResponseBody = CreateIncallData;
 }
         
 /**
@@ -8824,7 +9438,7 @@ export namespace GetIncall {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = Incall;
+  export type ResponseBody = GetIncallData;
 }
         
 /**
@@ -8869,7 +9483,7 @@ export namespace DissociateIncallExtension {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = void;
+  export type ResponseBody = DissociateIncallExtensionData;
 }
         
 /**
@@ -8890,7 +9504,7 @@ export namespace AssociateIncallExtension {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = void;
+  export type ResponseBody = AssociateIncallExtensionData;
 }
         
 /**
@@ -8916,7 +9530,7 @@ export namespace DissociateIncallSchedule {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = void;
+  export type ResponseBody = DissociateIncallScheduleData;
 }
         
 /**
@@ -8942,7 +9556,7 @@ export namespace AssociateIncallSchedule {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = void;
+  export type ResponseBody = AssociateIncallScheduleData;
 }
       }
 
@@ -8961,7 +9575,7 @@ export namespace GetInfos {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = Info;
+  export type ResponseBody = GetInfosData;
 }
       }
 
@@ -9007,7 +9621,7 @@ export namespace ListHttpIngresses {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = HTTPIngressItems;
+  export type ResponseBody = ListHttpIngressesData;
 }
         
 /**
@@ -9027,7 +9641,7 @@ export namespace CreateHttpIngress {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = HTTPIngress;
+  export type ResponseBody = CreateHttpIngressData;
 }
         
 /**
@@ -9073,7 +9687,7 @@ export namespace GetHttpIngress {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = HTTPIngress;
+  export type ResponseBody = GetHttpIngressData;
 }
         
 /**
@@ -9136,7 +9750,7 @@ export namespace ListIvr {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = IvrItems;
+  export type ResponseBody = ListIvrData;
 }
         
 /**
@@ -9156,7 +9770,7 @@ export namespace CreateIvr {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = Ivr;
+  export type ResponseBody = CreateIvrData;
 }
         
 /**
@@ -9204,7 +9818,7 @@ export namespace GetIvr {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = Ivr;
+  export type ResponseBody = GetIvrData;
 }
         
 /**
@@ -9268,7 +9882,7 @@ export namespace ListLines {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = LineItems;
+  export type ResponseBody = ListLinesData;
 }
         
 /**
@@ -9288,7 +9902,7 @@ export namespace CreateLine {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = LineView;
+  export type ResponseBody = CreateLineData;
 }
         
 /**
@@ -9334,7 +9948,7 @@ export namespace GetLine {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = LineView;
+  export type ResponseBody = GetLineData;
 }
         
 /**
@@ -9382,7 +9996,7 @@ export namespace DissociateLineApplication {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = void;
+  export type ResponseBody = DissociateLineApplicationData;
 }
         
 /**
@@ -9407,7 +10021,7 @@ export namespace AssociateLineApplication {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = void;
+  export type ResponseBody = AssociateLineApplicationData;
 }
         
 /**
@@ -9430,7 +10044,7 @@ export namespace GetLineDevice {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = LineDevice;
+  export type ResponseBody = GetLineDeviceData;
 }
         
 /**
@@ -9455,7 +10069,7 @@ export namespace DissociateLineDevice {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = void;
+  export type ResponseBody = DissociateLineDeviceData;
 }
         
 /**
@@ -9480,7 +10094,7 @@ export namespace AssociateLineDevice {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = void;
+  export type ResponseBody = AssociateLineDeviceData;
 }
         
 /**
@@ -9500,7 +10114,7 @@ export namespace DissociateLineEndpointCustom {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = void;
+  export type ResponseBody = DissociateLineEndpointCustomData;
 }
         
 /**
@@ -9520,7 +10134,7 @@ export namespace AssociateLineEndpointCustom {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = void;
+  export type ResponseBody = AssociateLineEndpointCustomData;
 }
         
 /**
@@ -9540,7 +10154,7 @@ export namespace DissociateLineEndpointSccp {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = void;
+  export type ResponseBody = DissociateLineEndpointSccpData;
 }
         
 /**
@@ -9560,7 +10174,7 @@ export namespace AssociateLineEndpointSccp {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = void;
+  export type ResponseBody = AssociateLineEndpointSccpData;
 }
         
 /**
@@ -9580,7 +10194,7 @@ export namespace DissociateLineEndpointSip {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = void;
+  export type ResponseBody = DissociateLineEndpointSipData;
 }
         
 /**
@@ -9600,7 +10214,7 @@ export namespace AssociateLineEndpointSip {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = void;
+  export type ResponseBody = AssociateLineEndpointSipData;
 }
         
 /**
@@ -9623,7 +10237,7 @@ export namespace CreateLineExtension {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = Extension;
+  export type ResponseBody = CreateLineExtensionData;
 }
         
 /**
@@ -9643,7 +10257,7 @@ export namespace DissociateLineExtension {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = void;
+  export type ResponseBody = DissociateLineExtensionData;
 }
         
 /**
@@ -9663,7 +10277,7 @@ export namespace AssociateLineExtension {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = void;
+  export type ResponseBody = AssociateLineExtensionData;
 }
       }
 
@@ -9686,7 +10300,7 @@ export namespace GetLocalization {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = Localization;
+  export type ResponseBody = GetLocalizationData;
 }
         
 /**
@@ -9746,7 +10360,7 @@ export namespace ListMeetings {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = MeetingItems;
+  export type ResponseBody = ListMeetingsData;
 }
         
 /**
@@ -9766,7 +10380,7 @@ export namespace CreateMeeting {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = Meeting;
+  export type ResponseBody = CreateMeetingData;
 }
         
 /**
@@ -9814,7 +10428,7 @@ export namespace GetMeeting {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = Meeting;
+  export type ResponseBody = GetMeetingData;
 }
         
 /**
@@ -9878,7 +10492,7 @@ export namespace ListMoh {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = MohItems;
+  export type ResponseBody = ListMohData;
 }
         
 /**
@@ -9894,7 +10508,7 @@ export namespace CreateMoh {
   export type RequestQuery = {};
   export type RequestBody = Moh;
   export type RequestHeaders = {};
-  export type ResponseBody = Moh;
+  export type ResponseBody = CreateMohData;
 }
         
 /**
@@ -9940,7 +10554,7 @@ export namespace GetMoh {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = Moh;
+  export type ResponseBody = GetMohData;
 }
         
 /**
@@ -10011,7 +10625,7 @@ export namespace GetMohFiles {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = void;
+  export type ResponseBody = GetMohFilesData;
 }
         
 /**
@@ -10029,7 +10643,7 @@ export namespace UpdateMohFiles {
 
 };
   export type RequestQuery = {};
-  export type RequestBody = any;
+  export type RequestBody = UpdateMohFilesPayload;
   export type RequestHeaders = {
   /** The tenant's UUID, defining the ownership of a given resource. */
     "Wazo-Tenant"?: string,
@@ -10075,7 +10689,7 @@ export namespace ListOutcalls {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = OutcallItems;
+  export type ResponseBody = ListOutcallsData;
 }
         
 /**
@@ -10095,7 +10709,7 @@ export namespace CreateOutcall {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = Outcall;
+  export type ResponseBody = CreateOutcallData;
 }
         
 /**
@@ -10143,7 +10757,7 @@ export namespace GetOutcall {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = Outcall;
+  export type ResponseBody = GetOutcallData;
 }
         
 /**
@@ -10193,7 +10807,7 @@ export namespace DissociateOutcallCallpermission {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = void;
+  export type ResponseBody = DissociateOutcallCallpermissionData;
 }
         
 /**
@@ -10240,7 +10854,7 @@ export namespace DissociateOutcallExtension {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = void;
+  export type ResponseBody = DissociateOutcallExtensionData;
 }
         
 /**
@@ -10261,7 +10875,7 @@ export namespace AssociateOutcallExtension {
   export type RequestQuery = {};
   export type RequestBody = OutcallExtension;
   export type RequestHeaders = {};
-  export type ResponseBody = void;
+  export type ResponseBody = AssociateOutcallExtensionData;
 }
         
 /**
@@ -10287,7 +10901,7 @@ export namespace DissociateOutcallSchedule {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = void;
+  export type ResponseBody = DissociateOutcallScheduleData;
 }
         
 /**
@@ -10313,7 +10927,7 @@ export namespace AssociateOutcallSchedule {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = void;
+  export type ResponseBody = AssociateOutcallScheduleData;
 }
         
 /**
@@ -10333,7 +10947,7 @@ export namespace AssociateOutcallTrunks {
   export type RequestQuery = {};
   export type RequestBody = TrunksId;
   export type RequestHeaders = {};
-  export type ResponseBody = void;
+  export type ResponseBody = AssociateOutcallTrunksData;
 }
       }
 
@@ -10373,7 +10987,7 @@ export namespace ListPagings {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = PagingItems;
+  export type ResponseBody = ListPagingsData;
 }
         
 /**
@@ -10393,7 +11007,7 @@ export namespace CreatePaging {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = Paging;
+  export type ResponseBody = CreatePagingData;
 }
         
 /**
@@ -10441,7 +11055,7 @@ export namespace GetPaging {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = Paging;
+  export type ResponseBody = GetPagingData;
 }
         
 /**
@@ -10485,7 +11099,7 @@ export namespace UpdatePagingCallerUsers {
   export type RequestQuery = {};
   export type RequestBody = UsersUuid;
   export type RequestHeaders = {};
-  export type ResponseBody = void;
+  export type ResponseBody = UpdatePagingCallerUsersData;
 }
         
 /**
@@ -10505,7 +11119,7 @@ export namespace UpdatePagingMemberUsers {
   export type RequestQuery = {};
   export type RequestBody = UsersUuid;
   export type RequestHeaders = {};
-  export type ResponseBody = void;
+  export type ResponseBody = UpdatePagingMemberUsersData;
 }
       }
 
@@ -10545,7 +11159,7 @@ export namespace ListParkingLots {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = ParkingLotItems;
+  export type ResponseBody = ListParkingLotsData;
 }
         
 /**
@@ -10565,7 +11179,7 @@ export namespace CreateParkingLot {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = ParkingLot;
+  export type ResponseBody = CreateParkingLotData;
 }
         
 /**
@@ -10613,7 +11227,7 @@ export namespace GetParkingLot {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = ParkingLot;
+  export type ResponseBody = GetParkingLotData;
 }
         
 /**
@@ -10658,7 +11272,7 @@ export namespace DissociateParkingLotExtension {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = void;
+  export type ResponseBody = DissociateParkingLotExtensionData;
 }
         
 /**
@@ -10679,7 +11293,7 @@ export namespace AssociateParkingLotExtension {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = void;
+  export type ResponseBody = AssociateParkingLotExtensionData;
 }
       }
 
@@ -10723,7 +11337,7 @@ export namespace ListPhoneNumbers {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = PhoneNumberItems;
+  export type ResponseBody = ListPhoneNumbersData;
 }
         
 /**
@@ -10743,7 +11357,7 @@ export namespace CreatePhoneNumber {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = PhoneNumber;
+  export type ResponseBody = CreatePhoneNumberData;
 }
         
 /**
@@ -10763,7 +11377,7 @@ export namespace GetPhoneNumberMain {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = PhoneNumber;
+  export type ResponseBody = GetPhoneNumberMainData;
 }
         
 /**
@@ -10777,14 +11391,7 @@ export namespace GetPhoneNumberMain {
 export namespace SetPhoneNumberMain {
   export type RequestParams = {};
   export type RequestQuery = {};
-  export type RequestBody = {
-  /**
-   * UUID of the phone number to set as main
-   * @example "b5bcc98c-10cf-4a68-bf3d-802fb5170911"
-   */
-    phone_number_uuid: string,
-
-};
+  export type RequestBody = SetPhoneNumberMainPayload;
   export type RequestHeaders = {
   /** The tenant's UUID, defining the ownership of a given resource. */
     "Wazo-Tenant"?: string,
@@ -10810,7 +11417,7 @@ export namespace CreatePhoneNumbersRange {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = PhoneNumberRangeResponse;
+  export type ResponseBody = CreatePhoneNumbersRangeData;
 }
         
 /**
@@ -10858,7 +11465,7 @@ export namespace GetPhoneNumber {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = PhoneNumber;
+  export type ResponseBody = GetPhoneNumberData;
 }
         
 /**
@@ -10901,7 +11508,7 @@ export namespace GetProvisioningNetworking {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = ProvisioningNetworking;
+  export type ResponseBody = GetProvisioningNetworkingData;
 }
         
 /**
@@ -10957,7 +11564,7 @@ export namespace ListQueues {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = QueueItems;
+  export type ResponseBody = ListQueuesData;
 }
         
 /**
@@ -10977,7 +11584,7 @@ export namespace CreateQueue {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = Queue;
+  export type ResponseBody = CreateQueueData;
 }
         
 /**
@@ -11014,7 +11621,7 @@ export namespace ListSkillRules {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = SkillRuleItems;
+  export type ResponseBody = ListSkillRulesData;
 }
         
 /**
@@ -11034,7 +11641,7 @@ export namespace CreateSkillRule {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = SkillRule;
+  export type ResponseBody = CreateSkillRuleData;
 }
         
 /**
@@ -11082,7 +11689,7 @@ export namespace GetSkillRule {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = SkillRule;
+  export type ResponseBody = GetSkillRuleData;
 }
         
 /**
@@ -11154,7 +11761,7 @@ export namespace GetQueue {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = Queue;
+  export type ResponseBody = GetQueueData;
 }
         
 /**
@@ -11203,7 +11810,7 @@ export namespace DissociateQueueExtension {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = void;
+  export type ResponseBody = DissociateQueueExtensionData;
 }
         
 /**
@@ -11228,7 +11835,7 @@ export namespace AssociateQueueExtension {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = void;
+  export type ResponseBody = AssociateQueueExtensionData;
 }
         
 /**
@@ -11252,7 +11859,7 @@ export namespace GetQueueFallback {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = QueueFallbacks;
+  export type ResponseBody = GetQueueFallbackData;
 }
         
 /**
@@ -11276,7 +11883,7 @@ export namespace UpdateQueueFallback {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = void;
+  export type ResponseBody = UpdateQueueFallbackData;
 }
         
 /**
@@ -11302,7 +11909,7 @@ export namespace DissociateAgentQueue {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = void;
+  export type ResponseBody = DissociateAgentQueueData;
 }
         
 /**
@@ -11328,7 +11935,7 @@ export namespace UpdateAgentQueueAssociation {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = void;
+  export type ResponseBody = UpdateAgentQueueAssociationData;
 }
         
 /**
@@ -11354,7 +11961,7 @@ export namespace DissociateUserQueue {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = void;
+  export type ResponseBody = DissociateUserQueueData;
 }
         
 /**
@@ -11380,7 +11987,7 @@ export namespace UpdateUserQueueAssociation {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = void;
+  export type ResponseBody = UpdateUserQueueAssociationData;
 }
         
 /**
@@ -11406,7 +12013,7 @@ export namespace DissociateQueueSchedule {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = void;
+  export type ResponseBody = DissociateQueueScheduleData;
 }
         
 /**
@@ -11432,7 +12039,7 @@ export namespace AssociateQueueSchedule {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = void;
+  export type ResponseBody = AssociateQueueScheduleData;
 }
       }
 
@@ -11455,7 +12062,7 @@ export namespace GetRecordingsAnnouncements {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = RecordingsAnnouncements;
+  export type ResponseBody = GetRecordingsAnnouncementsData;
 }
         
 /**
@@ -11506,7 +12113,7 @@ export namespace ListRegistersIax {
 };
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = RegisterIAXItems;
+  export type ResponseBody = ListRegistersIaxData;
 }
         
 /**
@@ -11522,7 +12129,7 @@ export namespace CreateRegisterIax {
   export type RequestQuery = {};
   export type RequestBody = RegisterIAX;
   export type RequestHeaders = {};
-  export type ResponseBody = RegisterIAX;
+  export type ResponseBody = CreateRegisterIaxData;
 }
         
 /**
@@ -11562,7 +12169,7 @@ export namespace GetRegisterIax {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = RegisterIAX;
+  export type ResponseBody = GetRegisterIaxData;
 }
         
 /**
@@ -11613,7 +12220,7 @@ export namespace GetRegistrars {
 };
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = RegistrarItems;
+  export type ResponseBody = GetRegistrarsData;
 }
         
 /**
@@ -11629,7 +12236,7 @@ export namespace CreateRegistrar {
   export type RequestQuery = {};
   export type RequestBody = Registrar;
   export type RequestHeaders = {};
-  export type ResponseBody = Registrar;
+  export type ResponseBody = CreateRegistrarData;
 }
         
 /**
@@ -11669,7 +12276,7 @@ export namespace GetRegistrar {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = Registrar;
+  export type ResponseBody = GetRegistrarData;
 }
         
 /**
@@ -11729,7 +12336,7 @@ export namespace ListSchedules {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = ScheduleItems;
+  export type ResponseBody = ListSchedulesData;
 }
         
 /**
@@ -11749,7 +12356,7 @@ export namespace CreateSchedule {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = Schedule;
+  export type ResponseBody = CreateScheduleData;
 }
         
 /**
@@ -11797,7 +12404,7 @@ export namespace GetSchedule {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = Schedule;
+  export type ResponseBody = GetScheduleData;
 }
         
 /**
@@ -11852,7 +12459,7 @@ export namespace ListSipTransports {
 };
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = SIPTransportItems;
+  export type ResponseBody = ListSipTransportsData;
 }
         
 /**
@@ -11868,7 +12475,7 @@ export namespace CreateSipTransport {
   export type RequestQuery = {};
   export type RequestBody = SIPTransport;
   export type RequestHeaders = {};
-  export type ResponseBody = SIPTransport;
+  export type ResponseBody = CreateSipTransportData;
 }
         
 /**
@@ -11915,7 +12522,7 @@ export namespace GetSipTransport {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = SIPTransport;
+  export type ResponseBody = GetSipTransportData;
 }
         
 /**
@@ -11975,7 +12582,7 @@ export namespace ListSounds {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = SoundItems;
+  export type ResponseBody = ListSoundsData;
 }
         
 /**
@@ -11995,7 +12602,7 @@ export namespace CreateSounds {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = Sound;
+  export type ResponseBody = CreateSoundsData;
 }
         
 /**
@@ -12011,7 +12618,7 @@ export namespace ListSoundsLanguages {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = SoundLanguageItems;
+  export type ResponseBody = ListSoundsLanguagesData;
 }
         
 /**
@@ -12057,7 +12664,7 @@ export namespace GetSounds {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = Sound;
+  export type ResponseBody = GetSoundsData;
 }
         
 /**
@@ -12117,7 +12724,7 @@ export namespace GetSoundsFiles {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = void;
+  export type ResponseBody = GetSoundsFilesData;
 }
         
 /**
@@ -12141,7 +12748,7 @@ export namespace UpdateSoundsFiles {
     language?: string,
 
 };
-  export type RequestBody = any;
+  export type RequestBody = UpdateSoundsFilesPayload;
   export type RequestHeaders = {
   /** The tenant's UUID, defining the ownership of a given resource. */
     "Wazo-Tenant"?: string,
@@ -12166,7 +12773,7 @@ export namespace StatusList {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = StatusSummary;
+  export type ResponseBody = StatusListData;
 }
       }
 
@@ -12206,10 +12813,7 @@ export namespace SwitchboardsList {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = {
-    items?: (Switchboard)[],
-
-};
+  export type ResponseBody = SwitchboardsListData;
 }
         
 /**
@@ -12229,7 +12833,7 @@ export namespace SwitchboardsCreate {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = Switchboard;
+  export type ResponseBody = SwitchboardsCreateData;
 }
         
 /**
@@ -12275,7 +12879,7 @@ export namespace SwitchboardsDetail {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = Switchboard;
+  export type ResponseBody = SwitchboardsDetailData;
 }
         
 /**
@@ -12321,7 +12925,7 @@ export namespace GetSwitchboardFallback {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = SwitchboardFallbacks;
+  export type ResponseBody = GetSwitchboardFallbackData;
 }
         
 /**
@@ -12344,7 +12948,7 @@ export namespace UpdateSwitchboardFallback {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = void;
+  export type ResponseBody = UpdateSwitchboardFallbackData;
 }
         
 /**
@@ -12363,7 +12967,7 @@ export namespace UpdateSwitchboardMemberUsers {
   export type RequestQuery = {};
   export type RequestBody = UsersUuid;
   export type RequestHeaders = {};
-  export type ResponseBody = void;
+  export type ResponseBody = UpdateSwitchboardMemberUsersData;
 }
       }
 
@@ -12403,7 +13007,7 @@ export namespace ListTenants {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = TenantItems;
+  export type ResponseBody = ListTenantsData;
 }
         
 /**
@@ -12427,7 +13031,7 @@ export namespace GetTenant {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = Tenant;
+  export type ResponseBody = GetTenantData;
 }
       }
 
@@ -12446,7 +13050,7 @@ export namespace ListTimezones {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = TimezoneItems;
+  export type ResponseBody = ListTimezonesData;
 }
       }
 
@@ -12486,7 +13090,7 @@ export namespace ListTrunks {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = TrunkItems;
+  export type ResponseBody = ListTrunksData;
 }
         
 /**
@@ -12506,7 +13110,7 @@ export namespace CreateTrunk {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = Trunk;
+  export type ResponseBody = CreateTrunkData;
 }
         
 /**
@@ -12554,7 +13158,7 @@ export namespace GetTrunk {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = Trunk;
+  export type ResponseBody = GetTrunkData;
 }
         
 /**
@@ -12599,7 +13203,7 @@ export namespace DissociateTrunkEndpointCustom {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = void;
+  export type ResponseBody = DissociateTrunkEndpointCustomData;
 }
         
 /**
@@ -12620,7 +13224,7 @@ export namespace AssociateTrunkEndpointCustom {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = void;
+  export type ResponseBody = AssociateTrunkEndpointCustomData;
 }
         
 /**
@@ -12641,7 +13245,7 @@ export namespace DissociateTrunkEndpointIax {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = void;
+  export type ResponseBody = DissociateTrunkEndpointIaxData;
 }
         
 /**
@@ -12662,7 +13266,7 @@ export namespace AssociateTrunkEndpointIax {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = void;
+  export type ResponseBody = AssociateTrunkEndpointIaxData;
 }
         
 /**
@@ -12683,7 +13287,7 @@ export namespace DissociateTrunkEndpointSip {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = void;
+  export type ResponseBody = DissociateTrunkEndpointSipData;
 }
         
 /**
@@ -12704,7 +13308,7 @@ export namespace AssociateTrunkEndpointSip {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = void;
+  export type ResponseBody = AssociateTrunkEndpointSipData;
 }
         
 /**
@@ -12725,7 +13329,7 @@ export namespace DissociateTrunkRegisterIax {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = void;
+  export type ResponseBody = DissociateTrunkRegisterIaxData;
 }
         
 /**
@@ -12746,7 +13350,7 @@ export namespace AssociateTrunkRegisterIax {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = void;
+  export type ResponseBody = AssociateTrunkRegisterIaxData;
 }
       }
 
@@ -12769,7 +13373,7 @@ export namespace ListUserMeetingAuthorizations {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = MeetingAuthorizationItems;
+  export type ResponseBody = ListUserMeetingAuthorizationsData;
 }
         
 /**
@@ -12791,7 +13395,7 @@ export namespace PutUserMeetingAuthorizationAccept {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = MeetingAuthorization;
+  export type ResponseBody = PutUserMeetingAuthorizationAcceptData;
 }
         
 /**
@@ -12813,7 +13417,7 @@ export namespace PutUserMeetingAuthorizationReject {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = MeetingAuthorization;
+  export type ResponseBody = PutUserMeetingAuthorizationRejectData;
 }
       }
 
@@ -12862,7 +13466,7 @@ export namespace ListUser {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = UserItems;
+  export type ResponseBody = ListUserData;
 }
         
 /**
@@ -12882,7 +13486,7 @@ export namespace CreateUser {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = UserPostResponse;
+  export type ResponseBody = CreateUserData;
 }
         
 /**
@@ -12925,7 +13529,7 @@ export namespace ListBlocklistNumbers {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = BlocklistNumbersListResponse;
+  export type ResponseBody = ListBlocklistNumbersData;
 }
         
 /**
@@ -12952,7 +13556,7 @@ export namespace GetBlocklistNumber {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = BlocklistNumber;
+  export type ResponseBody = GetBlocklistNumberData;
 }
         
 /**
@@ -12972,7 +13576,7 @@ export namespace ExportUsersCsv {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = UserExport;
+  export type ResponseBody = ExportUsersCsvData;
 }
         
 /**
@@ -12986,13 +13590,13 @@ export namespace ExportUsersCsv {
 export namespace ImportUsersCsv {
   export type RequestParams = {};
   export type RequestQuery = {};
-  export type RequestBody = UserExport;
+  export type RequestBody = ImportUsersCsvPayload;
   export type RequestHeaders = {
   /** The tenant's UUID, defining the ownership of a given resource. */
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = UserImport;
+  export type ResponseBody = ImportUsersCsvData;
 }
         
 /**
@@ -13006,13 +13610,13 @@ export namespace ImportUsersCsv {
 export namespace UpdateUsersCsv {
   export type RequestParams = {};
   export type RequestQuery = {};
-  export type RequestBody = UserExport;
+  export type RequestBody = UpdateUsersCsvPayload;
   export type RequestHeaders = {
   /** The tenant's UUID, defining the ownership of a given resource. */
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = UserUpdate;
+  export type ResponseBody = UpdateUsersCsvData;
 }
         
 /**
@@ -13044,7 +13648,7 @@ export namespace ListUsersMeBlocklistNumbers {
 };
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = UserBlocklistNumbersListResponse;
+  export type ResponseBody = ListUsersMeBlocklistNumbersData;
 }
         
 /**
@@ -13060,7 +13664,7 @@ export namespace CreateUsersMeBlocklistNumber {
   export type RequestQuery = {};
   export type RequestBody = UserBlocklistNumber;
   export type RequestHeaders = {};
-  export type ResponseBody = UserBlocklistNumber;
+  export type ResponseBody = CreateUsersMeBlocklistNumberData;
 }
         
 /**
@@ -13106,7 +13710,7 @@ export namespace GetUsersMeBlocklistNumber {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = UserBlocklistNumber;
+  export type ResponseBody = GetUsersMeBlocklistNumberData;
 }
         
 /**
@@ -13166,7 +13770,7 @@ export namespace ListUserMeetings {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = MeetingItems;
+  export type ResponseBody = ListUserMeetingsData;
 }
         
 /**
@@ -13186,7 +13790,7 @@ export namespace CreateUserMeeting {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = Meeting;
+  export type ResponseBody = CreateUserMeetingData;
 }
         
 /**
@@ -13234,7 +13838,7 @@ export namespace GetUserMeeting {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = Meeting;
+  export type ResponseBody = GetUserMeetingData;
 }
         
 /**
@@ -13306,7 +13910,7 @@ export namespace GetUserMeetingAuthorization {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = MeetingAuthorization;
+  export type ResponseBody = GetUserMeetingAuthorizationData;
 }
         
 /**
@@ -13326,7 +13930,7 @@ export namespace GetUsersSubscriptions {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = UserSubscriptionItems;
+  export type ResponseBody = GetUsersSubscriptionsData;
 }
         
 /**
@@ -13378,7 +13982,7 @@ export namespace GetUser {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = User;
+  export type ResponseBody = GetUserData;
 }
         
 /**
@@ -13402,7 +14006,7 @@ export namespace HeadUser {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = void;
+  export type ResponseBody = HeadUserData;
 }
         
 /**
@@ -13450,7 +14054,7 @@ export namespace DissociateUserAgent {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = void;
+  export type ResponseBody = DissociateUserAgentData;
 }
         
 /**
@@ -13476,7 +14080,7 @@ export namespace AssociateUserAgent {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = void;
+  export type ResponseBody = AssociateUserAgentData;
 }
         
 /**
@@ -13500,7 +14104,7 @@ export namespace ListUserCalleridOutgoing {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = UserCallerIDItems;
+  export type ResponseBody = ListUserCalleridOutgoingData;
 }
         
 /**
@@ -13526,7 +14130,7 @@ export namespace DissociateUserCallpermission {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = void;
+  export type ResponseBody = DissociateUserCallpermissionData;
 }
         
 /**
@@ -13572,7 +14176,7 @@ export namespace GetUserFallback {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = UserFallbacks;
+  export type ResponseBody = GetUserFallbackData;
 }
         
 /**
@@ -13592,7 +14196,7 @@ export namespace UpdateUserFallback {
   export type RequestQuery = {};
   export type RequestBody = UserFallbacks;
   export type RequestHeaders = {};
-  export type ResponseBody = void;
+  export type ResponseBody = UpdateUserFallbackData;
 }
         
 /**
@@ -13612,7 +14216,7 @@ export namespace ListUserForwards {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = UserForwards;
+  export type ResponseBody = ListUserForwardsData;
 }
         
 /**
@@ -13654,7 +14258,7 @@ export namespace GetUserForward {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = UserForward;
+  export type ResponseBody = GetUserForwardData;
 }
         
 /**
@@ -13700,7 +14304,7 @@ export namespace ListUserFuncKeys {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = FuncKeyTemplate;
+  export type ResponseBody = ListUserFuncKeysData;
 }
         
 /**
@@ -13748,7 +14352,7 @@ export namespace ListUserFuncKeyTemplateAssociations {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = UserFuncKeyTemplate;
+  export type ResponseBody = ListUserFuncKeyTemplateAssociationsData;
 }
         
 /**
@@ -13773,7 +14377,7 @@ export namespace DissociateUserFuncKeyTemplate {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = void;
+  export type ResponseBody = DissociateUserFuncKeyTemplateData;
 }
         
 /**
@@ -13798,7 +14402,7 @@ export namespace AssociateUserFuncKeyTemplate {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = void;
+  export type ResponseBody = AssociateUserFuncKeyTemplateData;
 }
         
 /**
@@ -13850,7 +14454,7 @@ export namespace GetUserFuncKey {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = FuncKey;
+  export type ResponseBody = GetUserFuncKeyData;
 }
         
 /**
@@ -13896,7 +14500,7 @@ export namespace UpdateUserGroups {
   export type RequestQuery = {};
   export type RequestBody = UserGroupsID;
   export type RequestHeaders = {};
-  export type ResponseBody = void;
+  export type ResponseBody = UpdateUserGroupsData;
 }
         
 /**
@@ -13916,7 +14520,7 @@ export namespace AssociateUserLines {
   export type RequestQuery = {};
   export type RequestBody = LinesID;
   export type RequestHeaders = {};
-  export type ResponseBody = void;
+  export type ResponseBody = AssociateUserLinesData;
 }
         
 /**
@@ -13937,7 +14541,7 @@ export namespace DissociateUserLine {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = void;
+  export type ResponseBody = DissociateUserLineData;
 }
         
 /**
@@ -13958,7 +14562,7 @@ export namespace AssociateUserLine {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = void;
+  export type ResponseBody = AssociateUserLineData;
 }
         
 /**
@@ -13984,7 +14588,7 @@ export namespace DissociateUserSchedule {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = void;
+  export type ResponseBody = DissociateUserScheduleData;
 }
         
 /**
@@ -14010,7 +14614,7 @@ export namespace AssociateUserSchedule {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = void;
+  export type ResponseBody = AssociateUserScheduleData;
 }
         
 /**
@@ -14030,7 +14634,7 @@ export namespace GetUserServices {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = UserServices;
+  export type ResponseBody = GetUserServicesData;
 }
         
 /**
@@ -14072,7 +14676,7 @@ export namespace GetUserService {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = UserService;
+  export type ResponseBody = GetUserServiceData;
 }
         
 /**
@@ -14114,7 +14718,7 @@ export namespace DissociateUserVoicemail {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = void;
+  export type ResponseBody = DissociateUserVoicemailData;
 }
         
 /**
@@ -14138,7 +14742,7 @@ export namespace GetUserVoicemail {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = VoicemailItems;
+  export type ResponseBody = GetUserVoicemailData;
 }
         
 /**
@@ -14162,7 +14766,7 @@ export namespace CreateUserVoicemail {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = Voicemail;
+  export type ResponseBody = CreateUserVoicemailData;
 }
         
 /**
@@ -14183,7 +14787,7 @@ export namespace AssociateUserVoicemail {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = void;
+  export type ResponseBody = AssociateUserVoicemailData;
 }
         
 /**
@@ -14226,7 +14830,7 @@ export namespace ListUserBlocklistNumbers {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = BlocklistNumbersListResponse;
+  export type ResponseBody = ListUserBlocklistNumbersData;
 }
         
 /**
@@ -14257,7 +14861,7 @@ export namespace LookupUserBlocklistNumber {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = void;
+  export type ResponseBody = LookupUserBlocklistNumberData;
 }
         
 /**
@@ -14308,7 +14912,7 @@ export namespace ListUserExternalApps {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = UserExternalAppItems;
+  export type ResponseBody = ListUserExternalAppsData;
 }
         
 /**
@@ -14380,7 +14984,7 @@ export namespace GetUserExternalApp {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = UserExternalApp;
+  export type ResponseBody = GetUserExternalAppData;
 }
         
 /**
@@ -14409,7 +15013,7 @@ export namespace CreateUserExternalApp {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = UserExternalApp;
+  export type ResponseBody = CreateUserExternalAppData;
 }
         
 /**
@@ -14472,7 +15076,7 @@ export namespace GetUserLineMainAssociatedEndpointsSip {
 };
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = EndpointSIP;
+  export type ResponseBody = GetUserLineMainAssociatedEndpointsSipData;
 }
         
 /**
@@ -14507,7 +15111,7 @@ export namespace GetUserLineAssociatedEndpointsSip {
 };
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = EndpointSIP;
+  export type ResponseBody = GetUserLineAssociatedEndpointsSipData;
 }
       }
 
@@ -14547,7 +15151,7 @@ export namespace ListVoicemails {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = VoicemailItems;
+  export type ResponseBody = ListVoicemailsData;
 }
         
 /**
@@ -14563,7 +15167,7 @@ export namespace CreateVoicemail {
   export type RequestQuery = {};
   export type RequestBody = Voicemail;
   export type RequestHeaders = {};
-  export type ResponseBody = Voicemail;
+  export type ResponseBody = CreateVoicemailData;
 }
         
 /**
@@ -14609,7 +15213,7 @@ export namespace GetVoicemail {
     "Wazo-Tenant"?: string,
 
 };
-  export type ResponseBody = Voicemail;
+  export type ResponseBody = GetVoicemailData;
 }
         
 /**
@@ -14651,7 +15255,7 @@ export namespace GetWizardStatus {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = WizardConfigured;
+  export type ResponseBody = GetWizardStatusData;
 }
         
 /**
@@ -14667,7 +15271,7 @@ export namespace PassWizard {
   export type RequestQuery = {};
   export type RequestBody = Wizard;
   export type RequestHeaders = {};
-  export type ResponseBody = Wizard;
+  export type ResponseBody = PassWizardData;
 }
         
 /**
@@ -14683,7 +15287,7 @@ export namespace GetWizardDiscover {
   export type RequestQuery = {};
   export type RequestBody = never;
   export type RequestHeaders = {};
-  export type ResponseBody = WizardDiscover;
+  export type ResponseBody = GetWizardDiscoverData;
 }
       }
 

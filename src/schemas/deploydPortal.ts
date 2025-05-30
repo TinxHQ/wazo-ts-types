@@ -10,6 +10,10 @@
  * ---------------------------------------------------------------
  */
 
+export type CreateInstanceData = RestrictedInstance;
+
+export type CreateProviderData = Provider;
+
 export interface Credential {
   instance?: CredentialInstance;
   instance_tenant_uuid?: string;
@@ -30,6 +34,14 @@ export interface CredentialInstance {
   uuid?: string;
 }
 
+export type CredentialsCreateData = any;
+
+export type CredentialsDeleteData = any;
+
+export type CredentialsDetailData = Credential;
+
+export type CredentialsUpdateData = Credential;
+
 /**
  * Error
  * Error message for the client
@@ -47,6 +59,12 @@ export interface Error {
    */
   timestamp?: number;
 }
+
+export type GetConfigData = any;
+
+export type HeadStatusData = any;
+
+export type ImagesListData = ProviderResource;
 
 export interface ImagesListParams {
   /** Provider's UUID */
@@ -109,6 +127,14 @@ export interface InstanceItems {
   total?: number;
 }
 
+export type InstancesDeleteData = any;
+
+export type InstancesDeleteResult = object;
+
+export type InstancesDetailData = Instance;
+
+export type InstancesListData = InstanceItems;
+
 export interface InstancesListParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
   direction?: "asc" | "desc";
@@ -125,12 +151,20 @@ export interface InstancesListParams {
   search?: string;
 }
 
+export type InstancesListResult = InstanceItems;
+
+export type InstancesUpdateData = Instance;
+
+export type KeypairsListData = ProviderResource;
+
 export interface KeypairsListParams {
   /** Provider's UUID */
   providerUuid: string;
   /** Region's name */
   region: string;
 }
+
+export type LocationsListData = ProviderResource;
 
 export interface LocationsListParams {
   /** Provider's UUID */
@@ -139,12 +173,16 @@ export interface LocationsListParams {
   region: string;
 }
 
+export type NetworksListData = ProviderResource;
+
 export interface NetworksListParams {
   /** Provider's UUID */
   providerUuid: string;
   /** Region's name */
   region: string;
 }
+
+export type PlatformsListData = ProviderPlatform;
 
 export interface Provider {
   config: Record<string, any>;
@@ -178,6 +216,12 @@ export interface ProviderResourceItems {
   items?: ProviderResource[];
 }
 
+export type ProvidersDeleteData = any;
+
+export type ProvidersDetailData = Provider;
+
+export type ProvidersListData = ProviderItems;
+
 export interface ProvidersListParams {
   /**
    * Should the query include sub-tenants
@@ -186,11 +230,19 @@ export interface ProvidersListParams {
   recurse?: boolean;
 }
 
+export type ProvidersUpdateData = Provider;
+
+export type RegionsListData = ProviderResource;
+
+export type RegisterInstanceData = Instance;
+
 export interface RestrictedInstance {
   /** Depends on the provider. See the [README](https://github.com/TinxHQ/wazo-deployd/blob/master/README.md#platforms) for the details of the keys. */
   config: Record<string, any>;
   name: string;
 }
+
+export type SizesListData = ProviderResource;
 
 export interface SizesListParams {
   /** Provider's UUID */
@@ -198,6 +250,8 @@ export interface SizesListParams {
   /** Region's name */
   region: string;
 }
+
+export type SubnetsListData = ProviderResource;
 
 export interface SubnetsListParams {
   /** Provider's UUID */
@@ -212,6 +266,8 @@ export interface WazoInformations {
   wazo_version?: string;
 }
 
+export type WazoListData = WazoInformations;
+
 export namespace Config {
   /**
    * @description **Required ACL**: `deployd.config.read`
@@ -225,7 +281,7 @@ export namespace Config {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = GetConfigData;
   }
 }
 
@@ -259,7 +315,7 @@ export namespace Instances {
       /** Tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = InstanceItems;
+    export type ResponseBody = InstancesListData;
   }
 
   /**
@@ -277,7 +333,7 @@ export namespace Instances {
       /** Tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = Instance;
+    export type ResponseBody = RegisterInstanceData;
   }
 
   /**
@@ -298,7 +354,7 @@ export namespace Instances {
       /** Tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = InstancesDeleteData;
   }
 
   /**
@@ -319,7 +375,7 @@ export namespace Instances {
       /** Tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = Instance;
+    export type ResponseBody = InstancesDetailData;
   }
 
   /**
@@ -340,7 +396,7 @@ export namespace Instances {
       /** Tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = Instance;
+    export type ResponseBody = InstancesUpdateData;
   }
 
   /**
@@ -361,7 +417,7 @@ export namespace Instances {
       /** Tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = CredentialsCreateData;
   }
 
   /**
@@ -384,7 +440,7 @@ export namespace Instances {
       /** Tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = CredentialsDeleteData;
   }
 
   /**
@@ -407,7 +463,7 @@ export namespace Instances {
       /** Tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = Credential;
+    export type ResponseBody = CredentialsDetailData;
   }
 
   /**
@@ -430,7 +486,7 @@ export namespace Instances {
       /** Tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = Credential;
+    export type ResponseBody = CredentialsUpdateData;
   }
 
   /**
@@ -451,7 +507,7 @@ export namespace Instances {
       /** Tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = WazoInformations;
+    export type ResponseBody = WazoListData;
   }
 }
 
@@ -477,7 +533,7 @@ export namespace Providers {
       /** Tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = ProviderItems;
+    export type ResponseBody = ProvidersListData;
   }
 
   /**
@@ -495,7 +551,7 @@ export namespace Providers {
       /** Tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = Provider;
+    export type ResponseBody = CreateProviderData;
   }
 
   /**
@@ -510,7 +566,7 @@ export namespace Providers {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = ProviderPlatform;
+    export type ResponseBody = PlatformsListData;
   }
 
   /**
@@ -531,7 +587,7 @@ export namespace Providers {
       /** Tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = void;
+    export type ResponseBody = ProvidersDeleteData;
   }
 
   /**
@@ -552,7 +608,7 @@ export namespace Providers {
       /** Tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = Provider;
+    export type ResponseBody = ProvidersDetailData;
   }
 
   /**
@@ -573,7 +629,7 @@ export namespace Providers {
       /** Tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = Provider;
+    export type ResponseBody = ProvidersUpdateData;
   }
 
   /**
@@ -597,7 +653,7 @@ export namespace Providers {
       /** Tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = ProviderResource;
+    export type ResponseBody = ImagesListData;
   }
 
   /**
@@ -618,7 +674,7 @@ export namespace Providers {
       /** Tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = InstanceItems;
+    export type ResponseBody = InstancesListResult;
   }
 
   /**
@@ -639,7 +695,7 @@ export namespace Providers {
       /** Tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = RestrictedInstance;
+    export type ResponseBody = CreateInstanceData;
   }
 
   /**
@@ -662,7 +718,7 @@ export namespace Providers {
       /** Tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = object;
+    export type ResponseBody = InstancesDeleteResult;
   }
 
   /**
@@ -686,7 +742,7 @@ export namespace Providers {
       /** Tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = ProviderResource;
+    export type ResponseBody = KeypairsListData;
   }
 
   /**
@@ -710,7 +766,7 @@ export namespace Providers {
       /** Tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = ProviderResource;
+    export type ResponseBody = LocationsListData;
   }
 
   /**
@@ -734,7 +790,7 @@ export namespace Providers {
       /** Tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = ProviderResource;
+    export type ResponseBody = NetworksListData;
   }
 
   /**
@@ -755,7 +811,7 @@ export namespace Providers {
       /** Tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = ProviderResource;
+    export type ResponseBody = RegionsListData;
   }
 
   /**
@@ -779,7 +835,7 @@ export namespace Providers {
       /** Tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = ProviderResource;
+    export type ResponseBody = SizesListData;
   }
 
   /**
@@ -803,7 +859,7 @@ export namespace Providers {
       /** Tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = ProviderResource;
+    export type ResponseBody = SubnetsListData;
   }
 }
 
@@ -820,6 +876,6 @@ export namespace Status {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = HeadStatusData;
   }
 }

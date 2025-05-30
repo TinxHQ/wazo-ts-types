@@ -51,12 +51,22 @@ export interface AccountSummary {
   subscriptions?: object;
 }
 
+export type CheckEngineInstanceAccountSynchronizeData = any;
+
 export interface CheckEngineInstanceAccountSynchronizeParams {
   /** The sha256 hash of accounts */
   hash: string;
   /** UUID of the instance */
   instanceUuid: string;
 }
+
+export type CreateCustomerData = Customer;
+
+export type CreateLocationData = Location;
+
+export type CreateResellerData = Reseller;
+
+export type CreateUserData = User;
 
 /** CustomerCreate */
 export type Customer = CustomerRelationBase &
@@ -114,6 +124,18 @@ export interface EngineAccounts {
   engine_version?: string;
 }
 
+export type EngineInstanceAccountSynchronizeData = any;
+
+export type GetConfigData = any;
+
+export type GetCustomerData = Customer;
+
+export type GetLocationData = Location;
+
+export type GetPluginData = Plugin;
+
+export type GetPluginsData = PluginList;
+
 export interface GetPluginsParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
   direction?: "asc" | "desc";
@@ -130,12 +152,26 @@ export interface GetPluginsParams {
   search?: string;
 }
 
+export type GetResellerData = Reseller;
+
+export type GetTenantData = Tenant;
+
+export type GetTenantsSummaryAccountData = AccountSummary;
+
+export type GetUserData = User;
+
+export type HeadStatusData = any;
+
 export interface Init {
   reseller: ResellerInit;
 }
 
 /** Nestbox confd was initialized successfully */
 export type Initialized = any;
+
+export type InstallsCustomersCreateData = PluginInstallCreate;
+
+export type InstallsCustomersListData = PluginCustomerInstallation;
 
 export interface InstallsCustomersListParams {
   /** The limit defines the number of individual objects that are returned */
@@ -159,6 +195,10 @@ export interface InstallsCustomersListParams {
   uuids?: string[];
 }
 
+export type InstallsLocationsCreateData = PluginInstallCreate;
+
+export type InstallsLocationsListData = PluginLocationInstallation;
+
 export interface InstallsLocationsListParams {
   /** The limit defines the number of individual objects that are returned */
   limit?: number;
@@ -180,6 +220,10 @@ export interface InstallsLocationsListParams {
    */
   uuids?: string[];
 }
+
+export type InstallsResellersCreateData = PluginInstallCreate;
+
+export type InstallsResellersListData = PluginResellerInstallation;
 
 export interface InstallsResellersListParams {
   /** The limit defines the number of individual objects that are returned */
@@ -219,6 +263,10 @@ export interface InstanceList {
   total?: number;
 }
 
+export type ListAccountsData = AccountList;
+
+export type ListCustomersData = CustomerList;
+
 export interface ListCustomersParams {
   /** Comma-separated list of client_id to filter customers by */
   client_id?: string;
@@ -246,6 +294,8 @@ export interface ListCustomersParams {
   uuid?: string;
 }
 
+export type ListInstancesData = InstanceList;
+
 export interface ListInstancesParams {
   /**
    * Should the query include sub-tenants
@@ -253,6 +303,8 @@ export interface ListInstancesParams {
    */
   recurse?: boolean;
 }
+
+export type ListLocationsData = LocationList;
 
 export interface ListLocationsParams {
   /** Comma-separated list of customer UUIDs to filter locations by */
@@ -285,6 +337,8 @@ export interface ListLocationsParams {
   wazo_tenant_uuid?: string;
 }
 
+export type ListResellersData = ResellerList;
+
 export interface ListResellersParams {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
   direction?: "asc" | "desc";
@@ -306,6 +360,8 @@ export interface ListResellersParams {
   /** Comma-separated list of UUIDs to filter resellers by */
   uuid?: string;
 }
+
+export type ListUsersData = UserList;
 
 /** LocationCreate */
 export type Location = LocationRelationBase &
@@ -556,7 +612,7 @@ export namespace Accounts {
        */
       "Wazo-Tenant": string;
     };
-    export type ResponseBody = AccountList;
+    export type ResponseBody = ListAccountsData;
   }
 
   /**
@@ -578,7 +634,7 @@ export namespace Accounts {
        */
       "Wazo-Tenant": string;
     };
-    export type ResponseBody = AccountSummary;
+    export type ResponseBody = GetTenantsSummaryAccountData;
   }
 }
 
@@ -596,7 +652,7 @@ export namespace Config {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = GetConfigData;
   }
 }
 
@@ -639,7 +695,7 @@ export namespace Customers {
     };
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = CustomerList;
+    export type ResponseBody = ListCustomersData;
   }
 
   /**
@@ -655,7 +711,7 @@ export namespace Customers {
     export type RequestQuery = {};
     export type RequestBody = Customer;
     export type RequestHeaders = {};
-    export type ResponseBody = Customer;
+    export type ResponseBody = CreateCustomerData;
   }
 
   /**
@@ -693,7 +749,7 @@ export namespace Customers {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = Customer;
+    export type ResponseBody = GetCustomerData;
   }
 
   /**
@@ -755,7 +811,7 @@ export namespace Engines {
     };
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = CheckEngineInstanceAccountSynchronizeData;
   }
 
   /**
@@ -774,7 +830,7 @@ export namespace Engines {
     export type RequestQuery = {};
     export type RequestBody = EngineAccounts;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = EngineInstanceAccountSynchronizeData;
   }
 }
 
@@ -822,7 +878,7 @@ export namespace Instances {
        */
       "Wazo-Tenant": string;
     };
-    export type ResponseBody = InstanceList;
+    export type ResponseBody = ListInstancesData;
   }
 }
 
@@ -869,7 +925,7 @@ export namespace Locations {
     };
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = LocationList;
+    export type ResponseBody = ListLocationsData;
   }
 
   /**
@@ -885,7 +941,7 @@ export namespace Locations {
     export type RequestQuery = {};
     export type RequestBody = Location;
     export type RequestHeaders = {};
-    export type ResponseBody = Location;
+    export type ResponseBody = CreateLocationData;
   }
 
   /**
@@ -923,7 +979,7 @@ export namespace Locations {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = Location;
+    export type ResponseBody = GetLocationData;
   }
 
   /**
@@ -999,7 +1055,7 @@ export namespace Plugins {
        */
       "Wazo-Tenant": string;
     };
-    export type ResponseBody = PluginList;
+    export type ResponseBody = GetPluginsData;
   }
 
   /**
@@ -1077,7 +1133,7 @@ export namespace Plugins {
        */
       "Wazo-Tenant": string;
     };
-    export type ResponseBody = Plugin;
+    export type ResponseBody = GetPluginData;
   }
 
   /**
@@ -1148,7 +1204,7 @@ export namespace Plugins {
        */
       "Wazo-Tenant": string;
     };
-    export type ResponseBody = PluginCustomerInstallation;
+    export type ResponseBody = InstallsCustomersListData;
   }
 
   /**
@@ -1176,7 +1232,7 @@ export namespace Plugins {
        */
       "Wazo-Tenant": string;
     };
-    export type ResponseBody = PluginInstallCreate;
+    export type ResponseBody = InstallsCustomersCreateData;
   }
 
   /**
@@ -1219,7 +1275,7 @@ export namespace Plugins {
        */
       "Wazo-Tenant": string;
     };
-    export type ResponseBody = PluginLocationInstallation;
+    export type ResponseBody = InstallsLocationsListData;
   }
 
   /**
@@ -1247,7 +1303,7 @@ export namespace Plugins {
        */
       "Wazo-Tenant": string;
     };
-    export type ResponseBody = PluginInstallCreate;
+    export type ResponseBody = InstallsLocationsCreateData;
   }
 
   /**
@@ -1290,7 +1346,7 @@ export namespace Plugins {
        */
       "Wazo-Tenant": string;
     };
-    export type ResponseBody = PluginResellerInstallation;
+    export type ResponseBody = InstallsResellersListData;
   }
 
   /**
@@ -1318,7 +1374,7 @@ export namespace Plugins {
        */
       "Wazo-Tenant": string;
     };
-    export type ResponseBody = PluginInstallCreate;
+    export type ResponseBody = InstallsResellersCreateData;
   }
 }
 
@@ -1356,7 +1412,7 @@ export namespace Resellers {
     };
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = ResellerList;
+    export type ResponseBody = ListResellersData;
   }
 
   /**
@@ -1372,7 +1428,7 @@ export namespace Resellers {
     export type RequestQuery = {};
     export type RequestBody = Reseller;
     export type RequestHeaders = {};
-    export type ResponseBody = Reseller;
+    export type ResponseBody = CreateResellerData;
   }
 
   /**
@@ -1410,7 +1466,7 @@ export namespace Resellers {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = Reseller;
+    export type ResponseBody = GetResellerData;
   }
 
   /**
@@ -1447,7 +1503,7 @@ export namespace Status {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
+    export type ResponseBody = HeadStatusData;
   }
 }
 
@@ -1468,7 +1524,7 @@ export namespace Tenants {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = Tenant;
+    export type ResponseBody = GetTenantData;
   }
 }
 
@@ -1486,7 +1542,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = UserList;
+    export type ResponseBody = ListUsersData;
   }
 
   /**
@@ -1502,7 +1558,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = User;
     export type RequestHeaders = {};
-    export type ResponseBody = User;
+    export type ResponseBody = CreateUserData;
   }
 
   /**
@@ -1540,7 +1596,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = User;
+    export type ResponseBody = GetUserData;
   }
 
   /**
