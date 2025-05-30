@@ -1,5 +1,5 @@
 {
-  "name": "wazo-ts-types",
+  "name": "@wazo/types",
   "version": "1.0.0",
   "description": "TS types for Wazo APIs",
   "main": "index.js",
