@@ -379,7 +379,7 @@
 
 })
 
-    export type BlocklistNumbersListResponse = (BlocklistNumbersListResponse & {
+    export type BlocklistNumbersListResponse = ({
     items?: (BlocklistNumber)[],
 
 })
