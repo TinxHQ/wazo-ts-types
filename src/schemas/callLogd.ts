@@ -10,17 +10,6 @@
  * ---------------------------------------------------------------
  */
 
-export enum CallStatus {
-  Answered = "answered",
-  Blocked = "blocked",
-  Unknown = "unknown",
-}
-
-export enum StatusValue {
-  Fail = "fail",
-  Ok = "ok",
-}
-
 export interface AgentStatistic {
   /** ID of the corresponding agent. */
   agent_id?: number;
@@ -109,6 +98,12 @@ export interface CDRList {
   total?: number;
 }
 
+export enum CallStatus {
+  Answered = "answered",
+  Blocked = "blocked",
+  Unknown = "unknown",
+}
+
 export interface ComponentWithStatus {
   status?: StatusValue;
 }
@@ -148,6 +143,154 @@ export interface Export {
   tenant_uuid?: string;
   user_uuid?: string;
   uuid?: string;
+}
+
+export interface GetCdrParams {
+  /** Filter list of items */
+  call_direction?: "internal" | "inbound" | "outbound";
+  /** Filter by call statuses (comma-separated status strings). Defaults to non-blocked calls. */
+  call_status?: "answered" | "blocked";
+  /** Filter by conversation identifier */
+  conversation_id?: string;
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+  direction?: "asc" | "desc";
+  /** Will only return one result for the selected field */
+  distinct?: "peer_exten";
+  /** Overrides the Content-Type header. This is used to be able to have a downloadable link. Allowed values are "csv" and "json" */
+  format?: "csv" | "json";
+  /**
+   * Ignore calls before the given date. Format is
+   * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be
+   * converted according to the `timezone` parameter. If missing, the statistics
+   * will start at the oldest available call with timezone UTC.
+   * @format date-time
+   */
+  from?: string;
+  /** Ignore CDR created before the given CDR ID. */
+  from_id?: number;
+  /** Maximum number of items to return in the list. Default to 1000 if not specified. */
+  limit?: number;
+  /** Filter by source_extension and destination_extension. A wildcard (underscore) can be used at the start and/or the end of the number. */
+  number?: string;
+  /** Number of items to skip over in the list. Useful for pagination. */
+  offset?: number;
+  /** Name of the field to use for sorting the list of items returned. Unsupported values: ``end``. */
+  order?: string;
+  /** Filter by recorded status. */
+  recorded?: boolean;
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+  recurse?: boolean;
+  /** Filter list of items */
+  search?: string;
+  /** Filter by tags. Each tag MUST be separated by a coma (,). Many tag will perform a logical AND. */
+  tags?: string[];
+  /**
+   * Ignore calls starting at or after the given date. Format is
+   * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be converted
+   * according to the `timezone` parameter. If missing, the statistics will include the current
+   * day.
+   * @format date-time
+   */
+  until?: string;
+  /** Filter by user_uuid. Many uuid can be specified. Each uuid MUST be separated by a comma (,). Many uuid will perform a logical OR. */
+  user_uuid?: string[];
+}
+
+export interface GetUsersParams {
+  /** Filter list of items */
+  call_direction?: "internal" | "inbound" | "outbound";
+  /** Filter by call statuses (comma-separated status strings). Defaults to non-blocked calls. */
+  call_status?: "answered" | "blocked";
+  /** Filter by conversation identifier */
+  conversation_id?: string;
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+  direction?: "asc" | "desc";
+  /** Will only return one result for the selected field */
+  distinct?: "peer_exten";
+  /** Overrides the Content-Type header. This is used to be able to have a downloadable link. Allowed values are "csv" and "json" */
+  format?: "csv" | "json";
+  /**
+   * Ignore calls before the given date. Format is
+   * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be
+   * converted according to the `timezone` parameter. If missing, the statistics
+   * will start at the oldest available call with timezone UTC.
+   * @format date-time
+   */
+  from?: string;
+  /** Ignore CDR created before the given CDR ID. */
+  from_id?: number;
+  /** Maximum number of items to return in the list. Default to 1000 if not specified. */
+  limit?: number;
+  /** Filter by source_extension and destination_extension. A wildcard (underscore) can be used at the start and/or the end of the number. */
+  number?: string;
+  /** Number of items to skip over in the list. Useful for pagination. */
+  offset?: number;
+  /** Name of the field to use for sorting the list of items returned. Unsupported values: ``end``. */
+  order?: string;
+  /** Filter by recorded status. */
+  recorded?: boolean;
+  /** Filter list of items */
+  search?: string;
+  /**
+   * Ignore calls starting at or after the given date. Format is
+   * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be converted
+   * according to the `timezone` parameter. If missing, the statistics will include the current
+   * day.
+   * @format date-time
+   */
+  until?: string;
+  /** UUID of the given user */
+  userUuid: string;
+}
+
+export interface MeCdrListParams {
+  /** Filter list of items */
+  call_direction?: "internal" | "inbound" | "outbound";
+  /** Filter by call statuses (comma-separated status strings). Defaults to non-blocked calls. */
+  call_status?: "answered" | "blocked";
+  /** Filter by conversation identifier */
+  conversation_id?: string;
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+  direction?: "asc" | "desc";
+  /** Will only return one result for the selected field */
+  distinct?: "peer_exten";
+  /** Overrides the Content-Type header. This is used to be able to have a downloadable link. Allowed values are "csv" and "json" */
+  format?: "csv" | "json";
+  /**
+   * Ignore calls before the given date. Format is
+   * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be
+   * converted according to the `timezone` parameter. If missing, the statistics
+   * will start at the oldest available call with timezone UTC.
+   * @format date-time
+   */
+  from?: string;
+  /** Ignore CDR created before the given CDR ID. */
+  from_id?: number;
+  /** Maximum number of items to return in the list. Default to 1000 if not specified. */
+  limit?: number;
+  /** Filter by source_extension and destination_extension. A wildcard (underscore) can be used at the start and/or the end of the number. */
+  number?: string;
+  /** Number of items to skip over in the list. Useful for pagination. */
+  offset?: number;
+  /** Name of the field to use for sorting the list of items returned. Unsupported values: ``end``. */
+  order?: string;
+  /** Filter by recorded status. */
+  recorded?: boolean;
+  /** Filter list of items */
+  search?: string;
+  /**
+   * Ignore calls starting at or after the given date. Format is
+   * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be converted
+   * according to the `timezone` parameter. If missing, the statistics will include the current
+   * day.
+   * @format date-time
+   */
+  until?: string;
+  /** Filter by user_uuid. Many uuid can be specified. Each uuid MUST be separated by a comma (,). Many uuid will perform a logical OR. */
+  user_uuid?: string[];
 }
 
 export interface QueueQoSStatistic {
@@ -243,6 +386,44 @@ export interface Recording {
   uuid?: string;
 }
 
+export interface RecordingsMediaExportCreateParams {
+  /** Filter list of items */
+  call_direction?: "internal" | "inbound" | "outbound";
+  /** E-mail address */
+  email?: string;
+  /**
+   * Ignore calls before the given date. Format is
+   * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be
+   * converted according to the `timezone` parameter. If missing, the statistics
+   * will start at the oldest available call with timezone UTC.
+   * @format date-time
+   */
+  from?: string;
+  /** Ignore CDR created before the given CDR ID. */
+  from_id?: number;
+  /** Filter by source_extension and destination_extension. A wildcard (underscore) can be used at the start and/or the end of the number. */
+  number?: string;
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+  recurse?: boolean;
+  /** Filter list of items */
+  search?: string;
+  /** Filter by tags. Each tag MUST be separated by a coma (,). Many tag will perform a logical AND. */
+  tags?: string[];
+  /**
+   * Ignore calls starting at or after the given date. Format is
+   * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be converted
+   * according to the `timezone` parameter. If missing, the statistics will include the current
+   * day.
+   * @format date-time
+   */
+  until?: string;
+  /** Filter by user_uuid. Many uuid can be specified. Each uuid MUST be separated by a comma (,). Many uuid will perform a logical OR. */
+  user_uuid?: string[];
+}
+
 export interface Retention {
   cdr_days?: number;
   default_cdr_days?: number;
@@ -252,1085 +433,1004 @@ export interface Retention {
   recording_days?: number;
 }
 
+export interface StatisticsList2Params {
+  /** ID of the agent. */
+  agentId: number;
+  /** The time at which a day ends, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
+  day_end_time?: string;
+  /** The time at which a day starts, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
+  day_start_time?: string;
+  /**
+   * Ignore calls before the given date. Format is
+   * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be
+   * converted according to the `timezone` parameter. If missing, the statistics
+   * will start at the oldest available call with timezone UTC.
+   * @format date-time
+   */
+  from?: string;
+  /** Aggregation interval. An empty value means no interval, so an aggregation on all values. */
+  interval?: "hour" | "day" | "month";
+  /**
+   * Name of the timezone to use for dates and times. Example: America/New_York. Valid timezones
+   * are defined by the <a href="https://en.wikipedia.org/wiki/Tz_database">Time Zone Database</a>
+   * version installed on the server.
+   * @default "UTC"
+   */
+  timezone?: string;
+  /**
+   * Ignore calls starting at or after the given date. Format is
+   * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be converted
+   * according to the `timezone` parameter. If missing, the statistics will include the current
+   * day.
+   * @format date-time
+   */
+  until?: string;
+  /**
+   * The days of the week that should be included. A week starts on Monday (1) and ends on Sunday (7).
+   * @uniqueItems true
+   * @default [1,2,3,4,5,6,7]
+   */
+  week_days?: number[];
+}
+
+export interface StatisticsList2Params2 {
+  /** The time at which a day ends, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
+  day_end_time?: string;
+  /** The time at which a day starts, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
+  day_start_time?: string;
+  /**
+   * Ignore calls before the given date. Format is
+   * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be
+   * converted according to the `timezone` parameter. If missing, the statistics
+   * will start at the oldest available call with timezone UTC.
+   * @format date-time
+   */
+  from?: string;
+  /** Aggregation interval. An empty value means no interval, so an aggregation on all values. */
+  interval?: "hour" | "day" | "month";
+  /** The number of seconds representing a good quality of service. */
+  qos_threshold?: number;
+  /** ID of the queue. */
+  queueId: number;
+  /**
+   * Name of the timezone to use for dates and times. Example: America/New_York. Valid timezones
+   * are defined by the <a href="https://en.wikipedia.org/wiki/Tz_database">Time Zone Database</a>
+   * version installed on the server.
+   * @default "UTC"
+   */
+  timezone?: string;
+  /**
+   * Ignore calls starting at or after the given date. Format is
+   * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be converted
+   * according to the `timezone` parameter. If missing, the statistics will include the current
+   * day.
+   * @format date-time
+   */
+  until?: string;
+  /**
+   * The days of the week that should be included. A week starts on Monday (1) and ends on Sunday (7).
+   * @uniqueItems true
+   * @default [1,2,3,4,5,6,7]
+   */
+  week_days?: number[];
+}
+
+export interface StatisticsListParams {
+  /** The time at which a day ends, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
+  day_end_time?: string;
+  /** The time at which a day starts, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
+  day_start_time?: string;
+  /**
+   * Ignore calls before the given date. Format is
+   * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be
+   * converted according to the `timezone` parameter. If missing, the statistics
+   * will start at the oldest available call with timezone UTC.
+   * @format date-time
+   */
+  from?: string;
+  /**
+   * Name of the timezone to use for dates and times. Example: America/New_York. Valid timezones
+   * are defined by the <a href="https://en.wikipedia.org/wiki/Tz_database">Time Zone Database</a>
+   * version installed on the server.
+   * @default "UTC"
+   */
+  timezone?: string;
+  /**
+   * Ignore calls starting at or after the given date. Format is
+   * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be converted
+   * according to the `timezone` parameter. If missing, the statistics will include the current
+   * day.
+   * @format date-time
+   */
+  until?: string;
+  /**
+   * The days of the week that should be included. A week starts on Monday (1) and ends on Sunday (7).
+   * @uniqueItems true
+   * @default [1,2,3,4,5,6,7]
+   */
+  week_days?: number[];
+}
+
+export interface StatisticsListParams2 {
+  /** The time at which a day ends, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
+  day_end_time?: string;
+  /** The time at which a day starts, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
+  day_start_time?: string;
+  /**
+   * Ignore calls before the given date. Format is
+   * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be
+   * converted according to the `timezone` parameter. If missing, the statistics
+   * will start at the oldest available call with timezone UTC.
+   * @format date-time
+   */
+  from?: string;
+  /** The number of seconds representing a good quality of service. */
+  qos_threshold?: number;
+  /**
+   * Name of the timezone to use for dates and times. Example: America/New_York. Valid timezones
+   * are defined by the <a href="https://en.wikipedia.org/wiki/Tz_database">Time Zone Database</a>
+   * version installed on the server.
+   * @default "UTC"
+   */
+  timezone?: string;
+  /**
+   * Ignore calls starting at or after the given date. Format is
+   * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be converted
+   * according to the `timezone` parameter. If missing, the statistics will include the current
+   * day.
+   * @format date-time
+   */
+  until?: string;
+  /**
+   * The days of the week that should be included. A week starts on Monday (1) and ends on Sunday (7).
+   * @uniqueItems true
+   * @default [1,2,3,4,5,6,7]
+   */
+  week_days?: number[];
+}
+
+export interface StatisticsQosListParams {
+  /** The time at which a day ends, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
+  day_end_time?: string;
+  /** The time at which a day starts, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
+  day_start_time?: string;
+  /**
+   * Ignore calls before the given date. Format is
+   * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be
+   * converted according to the `timezone` parameter. If missing, the statistics
+   * will start at the oldest available call with timezone UTC.
+   * @format date-time
+   */
+  from?: string;
+  /** Aggregation interval. An empty value means no interval, so an aggregation on all values. */
+  interval?: "hour" | "day" | "month";
+  /**
+   * The steps of quality of service times used for the interval generation.
+   * @uniqueItems true
+   */
+  qos_thresholds?: number[];
+  /** ID of the queue. */
+  queueId: number;
+  /**
+   * Name of the timezone to use for dates and times. Example: America/New_York. Valid timezones
+   * are defined by the <a href="https://en.wikipedia.org/wiki/Tz_database">Time Zone Database</a>
+   * version installed on the server.
+   * @default "UTC"
+   */
+  timezone?: string;
+  /**
+   * Ignore calls starting at or after the given date. Format is
+   * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be converted
+   * according to the `timezone` parameter. If missing, the statistics will include the current
+   * day.
+   * @format date-time
+   */
+  until?: string;
+  /**
+   * The days of the week that should be included. A week starts on Monday (1) and ends on Sunday (7).
+   * @uniqueItems true
+   * @default [1,2,3,4,5,6,7]
+   */
+  week_days?: number[];
+}
+
 export interface StatusSummary {
   bus_consumer?: ComponentWithStatus;
   service_token?: ComponentWithStatus;
   task_queue?: ComponentWithStatus;
 }
 
-export type QueryParamsType = Record<string | number, any>;
-export type ResponseFormat = keyof Omit<Body, "body" | "bodyUsed">;
-
-export interface FullRequestParams extends Omit<RequestInit, "body"> {
-  /** set parameter to `true` for call `securityWorker` for this request */
-  secure?: boolean;
-  /** request path */
-  path: string;
-  /** content type of request body */
-  type?: ContentType;
-  /** query params */
-  query?: QueryParamsType;
-  /** format of response (i.e. response.json() -> format: "json") */
-  format?: ResponseFormat;
-  /** request body */
-  body?: unknown;
-  /** base url */
-  baseUrl?: string;
-  /** request cancellation token */
-  cancelToken?: CancelToken;
+export enum StatusValue {
+  Fail = "fail",
+  Ok = "ok",
 }
 
-export type RequestParams = Omit<
-  FullRequestParams,
-  "body" | "method" | "query" | "path"
->;
+export namespace Agents {
+  /**
+   * @description **Required ACL:** `call-logd.agents.statistics.read` Statistics are aggregated by agents over the period specified by the `from` and `until` query parameters.
+   * @tags agent_statistics
+   * @name StatisticsList
+   * @summary Statistics for all agents
+   * @request GET:/agents/statistics
+   * @secure
+   */
+  export namespace StatisticsList {
+    export type RequestParams = {};
+    export type RequestQuery = {
+      /** The time at which a day ends, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
+      day_end_time?: string;
+      /** The time at which a day starts, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
+      day_start_time?: string;
+      /**
+       * Ignore calls before the given date. Format is
+       * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be
+       * converted according to the `timezone` parameter. If missing, the statistics
+       * will start at the oldest available call with timezone UTC.
+       * @format date-time
+       */
+      from?: string;
+      /**
+       * Name of the timezone to use for dates and times. Example: America/New_York. Valid timezones
+       * are defined by the <a href="https://en.wikipedia.org/wiki/Tz_database">Time Zone Database</a>
+       * version installed on the server.
+       * @default "UTC"
+       */
+      timezone?: string;
+      /**
+       * Ignore calls starting at or after the given date. Format is
+       * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be converted
+       * according to the `timezone` parameter. If missing, the statistics will include the current
+       * day.
+       * @format date-time
+       */
+      until?: string;
+      /**
+       * The days of the week that should be included. A week starts on Monday (1) and ends on Sunday (7).
+       * @uniqueItems true
+       * @default [1,2,3,4,5,6,7]
+       */
+      week_days?: number[];
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = AgentsStatistics;
+  }
 
-export interface ApiConfig<SecurityDataType = unknown> {
-  baseUrl?: string;
-  baseApiParams?: Omit<RequestParams, "baseUrl" | "cancelToken" | "signal">;
-  securityWorker?: (
-    securityData: SecurityDataType | null,
-  ) => Promise<RequestParams | void> | RequestParams | void;
-  customFetch?: typeof fetch;
+  /**
+   * @description **Required ACL:** `call-logd.agents.statistics.{agent_id}.read` Statistics for an agent are aggregated by the `interval` query parameter, or if not specified or empty, as a unique result over the period. The period is specified by the `from` and `until` query parameters. The last result returned by this route is always the aggregation of all calls over the whole specified period.
+   * @tags agent_statistics
+   * @name StatisticsList2
+   * @summary Statistics for a specific agent
+   * @request GET:/agents/{agent_id}/statistics
+   * @originalName statisticsList
+   * @duplicate
+   * @secure
+   */
+  export namespace StatisticsList2 {
+    export type RequestParams = {
+      /** ID of the agent. */
+      agentId: number;
+    };
+    export type RequestQuery = {
+      /** The time at which a day ends, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
+      day_end_time?: string;
+      /** The time at which a day starts, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
+      day_start_time?: string;
+      /**
+       * Ignore calls before the given date. Format is
+       * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be
+       * converted according to the `timezone` parameter. If missing, the statistics
+       * will start at the oldest available call with timezone UTC.
+       * @format date-time
+       */
+      from?: string;
+      /** Aggregation interval. An empty value means no interval, so an aggregation on all values. */
+      interval?: "hour" | "day" | "month";
+      /**
+       * Name of the timezone to use for dates and times. Example: America/New_York. Valid timezones
+       * are defined by the <a href="https://en.wikipedia.org/wiki/Tz_database">Time Zone Database</a>
+       * version installed on the server.
+       * @default "UTC"
+       */
+      timezone?: string;
+      /**
+       * Ignore calls starting at or after the given date. Format is
+       * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be converted
+       * according to the `timezone` parameter. If missing, the statistics will include the current
+       * day.
+       * @format date-time
+       */
+      until?: string;
+      /**
+       * The days of the week that should be included. A week starts on Monday (1) and ends on Sunday (7).
+       * @uniqueItems true
+       * @default [1,2,3,4,5,6,7]
+       */
+      week_days?: number[];
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = AgentStatistics;
+  }
 }
 
-export interface HttpResponse<D extends unknown, E extends unknown = unknown>
-  extends Response {
-  data: D;
-  error: E;
-}
-
-type CancelToken = Symbol | string | number;
-
-export enum ContentType {
-  Json = "application/json",
-  FormData = "multipart/form-data",
-  UrlEncoded = "application/x-www-form-urlencoded",
-  Text = "text/plain",
-}
-
-export class HttpClient<SecurityDataType = unknown> {
-  public baseUrl: string = "/1.0";
-  private securityData: SecurityDataType | null = null;
-  private securityWorker?: ApiConfig<SecurityDataType>["securityWorker"];
-  private abortControllers = new Map<CancelToken, AbortController>();
-  private customFetch = (...fetchParams: Parameters<typeof fetch>) =>
-    fetch(...fetchParams);
-
-  private baseApiParams: RequestParams = {
-    credentials: "same-origin",
-    headers: {},
-    redirect: "follow",
-    referrerPolicy: "no-referrer",
-  };
-
-  constructor(apiConfig: ApiConfig<SecurityDataType> = {}) {
-    Object.assign(this, apiConfig);
+export namespace Cdr {
+  /**
+   * @description **Required ACL:** `call-logd.cdr.read` This endpoint allow to use `?token={token_uuid}` and `?tenant={tenant_uuid}` query string to bypass headers
+   * @tags cdr
+   * @name GetCdr
+   * @summary List CDR
+   * @request GET:/cdr
+   * @secure
+   */
+  export namespace GetCdr {
+    export type RequestParams = {};
+    export type RequestQuery = {
+      /** Filter list of items */
+      call_direction?: "internal" | "inbound" | "outbound";
+      /** Filter by call statuses (comma-separated status strings). Defaults to non-blocked calls. */
+      call_status?: "answered" | "blocked";
+      /** Filter by conversation identifier */
+      conversation_id?: string;
+      /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+      direction?: "asc" | "desc";
+      /** Will only return one result for the selected field */
+      distinct?: "peer_exten";
+      /** Overrides the Content-Type header. This is used to be able to have a downloadable link. Allowed values are "csv" and "json" */
+      format?: "csv" | "json";
+      /**
+       * Ignore calls before the given date. Format is
+       * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be
+       * converted according to the `timezone` parameter. If missing, the statistics
+       * will start at the oldest available call with timezone UTC.
+       * @format date-time
+       */
+      from?: string;
+      /** Ignore CDR created before the given CDR ID. */
+      from_id?: number;
+      /** Maximum number of items to return in the list. Default to 1000 if not specified. */
+      limit?: number;
+      /** Filter by source_extension and destination_extension. A wildcard (underscore) can be used at the start and/or the end of the number. */
+      number?: string;
+      /** Number of items to skip over in the list. Useful for pagination. */
+      offset?: number;
+      /** Name of the field to use for sorting the list of items returned. Unsupported values: ``end``. */
+      order?: string;
+      /** Filter by recorded status. */
+      recorded?: boolean;
+      /**
+       * Should the query include sub-tenants
+       * @default false
+       */
+      recurse?: boolean;
+      /** Filter list of items */
+      search?: string;
+      /** Filter by tags. Each tag MUST be separated by a coma (,). Many tag will perform a logical AND. */
+      tags?: string[];
+      /**
+       * Ignore calls starting at or after the given date. Format is
+       * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be converted
+       * according to the `timezone` parameter. If missing, the statistics will include the current
+       * day.
+       * @format date-time
+       */
+      until?: string;
+      /** Filter by user_uuid. Many uuid can be specified. Each uuid MUST be separated by a comma (,). Many uuid will perform a logical OR. */
+      user_uuid?: string[];
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = CDRList;
   }
 
-  public setSecurityData = (data: SecurityDataType | null) => {
-    this.securityData = data;
-  };
-
-  protected encodeQueryParam(key: string, value: any) {
-    const encodedKey = encodeURIComponent(key);
-    return `${encodedKey}=${encodeURIComponent(typeof value === "number" ? value : `${value}`)}`;
+  /**
+   * @description **Required ACL:** `call-logd.cdr.recordings.media.delete`
+   * @tags cdr
+   * @name RecordingsMediaDelete
+   * @summary Delete multiple CDRs recording media
+   * @request DELETE:/cdr/recordings/media
+   * @secure
+   */
+  export namespace RecordingsMediaDelete {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = {
+      cdr_ids?: number[];
+    };
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
   }
 
-  protected addQueryParam(query: QueryParamsType, key: string) {
-    return this.encodeQueryParam(key, query[key]);
-  }
-
-  protected addArrayQueryParam(query: QueryParamsType, key: string) {
-    const value = query[key];
-    return value.map((v: any) => this.encodeQueryParam(key, v)).join("&");
-  }
-
-  protected toQueryString(rawQuery?: QueryParamsType): string {
-    const query = rawQuery || {};
-    const keys = Object.keys(query).filter(
-      (key) => "undefined" !== typeof query[key],
-    );
-    return keys
-      .map((key) =>
-        Array.isArray(query[key])
-          ? this.addArrayQueryParam(query, key)
-          : this.addQueryParam(query, key),
-      )
-      .join("&");
-  }
-
-  protected addQueryParams(rawQuery?: QueryParamsType): string {
-    const queryString = this.toQueryString(rawQuery);
-    return queryString ? `?${queryString}` : "";
-  }
-
-  private contentFormatters: Record<ContentType, (input: any) => any> = {
-    [ContentType.Json]: (input: any) =>
-      input !== null && (typeof input === "object" || typeof input === "string")
-        ? JSON.stringify(input)
-        : input,
-    [ContentType.Text]: (input: any) =>
-      input !== null && typeof input !== "string"
-        ? JSON.stringify(input)
-        : input,
-    [ContentType.FormData]: (input: any) =>
-      Object.keys(input || {}).reduce((formData, key) => {
-        const property = input[key];
-        formData.append(
-          key,
-          property instanceof Blob
-            ? property
-            : typeof property === "object" && property !== null
-              ? JSON.stringify(property)
-              : `${property}`,
-        );
-        return formData;
-      }, new FormData()),
-    [ContentType.UrlEncoded]: (input: any) => this.toQueryString(input),
-  };
-
-  protected mergeRequestParams(
-    params1: RequestParams,
-    params2?: RequestParams,
-  ): RequestParams {
-    return {
-      ...this.baseApiParams,
-      ...params1,
-      ...(params2 || {}),
-      headers: {
-        ...(this.baseApiParams.headers || {}),
-        ...(params1.headers || {}),
-        ...((params2 && params2.headers) || {}),
-      },
+  /**
+   * @description **Required ACL:** `call-logd.cdr.recordings.media.export.create` This endpoint creates a new export and returns its UUID.
+   * @tags cdr, exports
+   * @name RecordingsMediaExportCreate
+   * @summary Create an export for the recording media of multiple CDRs
+   * @request POST:/cdr/recordings/media/export
+   * @secure
+   */
+  export namespace RecordingsMediaExportCreate {
+    export type RequestParams = {};
+    export type RequestQuery = {
+      /** Filter list of items */
+      call_direction?: "internal" | "inbound" | "outbound";
+      /** E-mail address */
+      email?: string;
+      /**
+       * Ignore calls before the given date. Format is
+       * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be
+       * converted according to the `timezone` parameter. If missing, the statistics
+       * will start at the oldest available call with timezone UTC.
+       * @format date-time
+       */
+      from?: string;
+      /** Ignore CDR created before the given CDR ID. */
+      from_id?: number;
+      /** Filter by source_extension and destination_extension. A wildcard (underscore) can be used at the start and/or the end of the number. */
+      number?: string;
+      /**
+       * Should the query include sub-tenants
+       * @default false
+       */
+      recurse?: boolean;
+      /** Filter list of items */
+      search?: string;
+      /** Filter by tags. Each tag MUST be separated by a coma (,). Many tag will perform a logical AND. */
+      tags?: string[];
+      /**
+       * Ignore calls starting at or after the given date. Format is
+       * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be converted
+       * according to the `timezone` parameter. If missing, the statistics will include the current
+       * day.
+       * @format date-time
+       */
+      until?: string;
+      /** Filter by user_uuid. Many uuid can be specified. Each uuid MUST be separated by a comma (,). Many uuid will perform a logical OR. */
+      user_uuid?: string[];
+    };
+    export type RequestBody = {
+      cdr_ids?: string[];
+    };
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = {
+      export_uuid?: string;
     };
   }
 
-  protected createAbortSignal = (
-    cancelToken: CancelToken,
-  ): AbortSignal | undefined => {
-    if (this.abortControllers.has(cancelToken)) {
-      const abortController = this.abortControllers.get(cancelToken);
-      if (abortController) {
-        return abortController.signal;
-      }
-      return void 0;
-    }
+  /**
+   * @description **Required ACL:** `call-logd.cdr.{cdr_id}.read`
+   * @tags cdr
+   * @name GetCdr2
+   * @summary Get a CDR by ID
+   * @request GET:/cdr/{cdr_id}
+   * @originalName getCdr
+   * @duplicate
+   * @secure
+   */
+  export namespace GetCdr2 {
+    export type RequestParams = {
+      /** ID of the CDR */
+      cdrId: number;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = CDR;
+  }
 
-    const abortController = new AbortController();
-    this.abortControllers.set(cancelToken, abortController);
-    return abortController.signal;
-  };
+  /**
+   * @description **Required ACL:** `call-logd.cdr.{cdr_id}.recordings.{recording_uuid}.media.delete`
+   * @tags cdr
+   * @name RecordingsMediaDelete2
+   * @summary Delete a recording media
+   * @request DELETE:/cdr/{cdr_id}/recordings/{recording_uuid}/media
+   * @originalName recordingsMediaDelete
+   * @duplicate
+   * @secure
+   */
+  export namespace RecordingsMediaDelete2 {
+    export type RequestParams = {
+      /** ID of the CDR */
+      cdrId: number;
+      /** UUID of the recording */
+      recordingUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
 
-  public abortRequest = (cancelToken: CancelToken) => {
-    const abortController = this.abortControllers.get(cancelToken);
-
-    if (abortController) {
-      abortController.abort();
-      this.abortControllers.delete(cancelToken);
-    }
-  };
-
-  public request = async <T = any, E = any>({
-    body,
-    secure,
-    path,
-    type,
-    query,
-    format,
-    baseUrl,
-    cancelToken,
-    ...params
-  }: FullRequestParams): Promise<HttpResponse<T, E>> => {
-    const secureParams =
-      ((typeof secure === "boolean" ? secure : this.baseApiParams.secure) &&
-        this.securityWorker &&
-        (await this.securityWorker(this.securityData))) ||
-      {};
-    const requestParams = this.mergeRequestParams(params, secureParams);
-    const queryString = query && this.toQueryString(query);
-    const payloadFormatter = this.contentFormatters[type || ContentType.Json];
-    const responseFormat = format || requestParams.format;
-
-    return this.customFetch(
-      `${baseUrl || this.baseUrl || ""}${path}${queryString ? `?${queryString}` : ""}`,
-      {
-        ...requestParams,
-        headers: {
-          ...(requestParams.headers || {}),
-          ...(type && type !== ContentType.FormData
-            ? { "Content-Type": type }
-            : {}),
-        },
-        signal:
-          (cancelToken
-            ? this.createAbortSignal(cancelToken)
-            : requestParams.signal) || null,
-        body:
-          typeof body === "undefined" || body === null
-            ? null
-            : payloadFormatter(body),
-      },
-    ).then(async (response) => {
-      const r = response.clone() as HttpResponse<T, E>;
-      r.data = null as unknown as T;
-      r.error = null as unknown as E;
-
-      const data = !responseFormat
-        ? r
-        : await response[responseFormat]()
-            .then((data) => {
-              if (r.ok) {
-                r.data = data;
-              } else {
-                r.error = data;
-              }
-              return r;
-            })
-            .catch((e) => {
-              r.error = e;
-              return r;
-            });
-
-      if (cancelToken) {
-        this.abortControllers.delete(cancelToken);
-      }
-
-      if (!response.ok) throw data;
-      return data;
-    });
-  };
+  /**
+   * @description **Required ACL:** `call-logd.cdr.{cdr_id}.recordings.{recording_uuid}.media.read` This endpoint allow to use `?token={token_uuid}` and `?tenant={tenant_uuid}` query string to bypass headers
+   * @tags cdr
+   * @name RecordingsMediaList
+   * @summary Get a recording media
+   * @request GET:/cdr/{cdr_id}/recordings/{recording_uuid}/media
+   * @secure
+   */
+  export namespace RecordingsMediaList {
+    export type RequestParams = {
+      /** ID of the CDR */
+      cdrId: number;
+      /** UUID of the recording */
+      recordingUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
 }
 
-/**
- * @title wazo-call-logd
- * @version 1.0.0
- * @baseUrl /1.0
- * @contact Wazo Dev Team <dev@wazo.community> (https://wazo-platform.org/)
- *
- * Consult call logs from a REST API
- */
-export class Api<
-  SecurityDataType extends unknown,
-> extends HttpClient<SecurityDataType> {
-  agents = {
-    /**
-     * @description **Required ACL:** `call-logd.agents.statistics.read` Statistics are aggregated by agents over the period specified by the `from` and `until` query parameters.
-     *
-     * @tags agent_statistics
-     * @name StatisticsList
-     * @summary Statistics for all agents
-     * @request GET:/agents/statistics
-     * @secure
-     */
-    statisticsList: (
-      query?: {
-        /**
-         * Ignore calls before the given date. Format is
-         * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be
-         * converted according to the `timezone` parameter. If missing, the statistics
-         * will start at the oldest available call with timezone UTC.
-         * @format date-time
-         */
-        from?: string;
-        /**
-         * Ignore calls starting at or after the given date. Format is
-         * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be converted
-         * according to the `timezone` parameter. If missing, the statistics will include the current
-         * day.
-         * @format date-time
-         */
-        until?: string;
-        /** The time at which a day starts, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
-        day_start_time?: string;
-        /** The time at which a day ends, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
-        day_end_time?: string;
-        /**
-         * The days of the week that should be included. A week starts on Monday (1) and ends on Sunday (7).
-         * @uniqueItems true
-         * @default [1,2,3,4,5,6,7]
-         */
-        week_days?: number[];
-        /**
-         * Name of the timezone to use for dates and times. Example: America/New_York. Valid timezones
-         * are defined by the <a href="https://en.wikipedia.org/wiki/Tz_database">Time Zone Database</a>
-         * version installed on the server.
-         * @default "UTC"
-         */
-        timezone?: string;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<AgentsStatistics, Error>({
-        path: `/agents/statistics`,
-        method: "GET",
-        query: query,
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+export namespace Config {
+  /**
+   * @description **Required ACL:** `call_logd.config.read`
+   * @tags config
+   * @name GetConfig
+   * @summary Show the current configuration
+   * @request GET:/config
+   * @secure
+   */
+  export namespace GetConfig {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
 
-    /**
-     * @description **Required ACL:** `call-logd.agents.statistics.{agent_id}.read` Statistics for an agent are aggregated by the `interval` query parameter, or if not specified or empty, as a unique result over the period. The period is specified by the `from` and `until` query parameters. The last result returned by this route is always the aggregation of all calls over the whole specified period.
-     *
-     * @tags agent_statistics
-     * @name StatisticsList2
-     * @summary Statistics for a specific agent
-     * @request GET:/agents/{agent_id}/statistics
-     * @originalName statisticsList
-     * @duplicate
-     * @secure
-     */
-    statisticsList2: (
-      agentId: number,
-      query?: {
-        /**
-         * Ignore calls before the given date. Format is
-         * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be
-         * converted according to the `timezone` parameter. If missing, the statistics
-         * will start at the oldest available call with timezone UTC.
-         * @format date-time
-         */
-        from?: string;
-        /**
-         * Ignore calls starting at or after the given date. Format is
-         * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be converted
-         * according to the `timezone` parameter. If missing, the statistics will include the current
-         * day.
-         * @format date-time
-         */
-        until?: string;
-        /** Aggregation interval. An empty value means no interval, so an aggregation on all values. */
-        interval?: "hour" | "day" | "month";
-        /** The time at which a day starts, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
-        day_start_time?: string;
-        /** The time at which a day ends, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
-        day_end_time?: string;
-        /**
-         * The days of the week that should be included. A week starts on Monday (1) and ends on Sunday (7).
-         * @uniqueItems true
-         * @default [1,2,3,4,5,6,7]
-         */
-        week_days?: number[];
-        /**
-         * Name of the timezone to use for dates and times. Example: America/New_York. Valid timezones
-         * are defined by the <a href="https://en.wikipedia.org/wiki/Tz_database">Time Zone Database</a>
-         * version installed on the server.
-         * @default "UTC"
-         */
-        timezone?: string;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<AgentStatistics, Error>({
-        path: `/agents/${agentId}/statistics`,
-        method: "GET",
-        query: query,
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-  };
-  cdr = {
-    /**
-     * @description **Required ACL:** `call-logd.cdr.read` This endpoint allow to use `?token={token_uuid}` and `?tenant={tenant_uuid}` query string to bypass headers
-     *
-     * @tags cdr
-     * @name GetCdr
-     * @summary List CDR
-     * @request GET:/cdr
-     * @secure
-     */
-    getCdr: (
-      query?: {
-        /**
-         * Ignore calls before the given date. Format is
-         * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be
-         * converted according to the `timezone` parameter. If missing, the statistics
-         * will start at the oldest available call with timezone UTC.
-         * @format date-time
-         */
-        from?: string;
-        /**
-         * Ignore calls starting at or after the given date. Format is
-         * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be converted
-         * according to the `timezone` parameter. If missing, the statistics will include the current
-         * day.
-         * @format date-time
-         */
-        until?: string;
-        /** Maximum number of items to return in the list. Default to 1000 if not specified. */
-        limit?: number;
-        /** Number of items to skip over in the list. Useful for pagination. */
-        offset?: number;
-        /** Name of the field to use for sorting the list of items returned. Unsupported values: ``end``. */
-        order?: string;
-        /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
-        direction?: "asc" | "desc";
-        /** Filter list of items */
-        search?: string;
-        /** Filter list of items */
-        call_direction?: "internal" | "inbound" | "outbound";
-        /** Filter by source_extension and destination_extension. A wildcard (underscore) can be used at the start and/or the end of the number. */
-        number?: string;
-        /** Filter by tags. Each tag MUST be separated by a coma (,). Many tag will perform a logical AND. */
-        tags?: string[];
-        /** Filter by user_uuid. Many uuid can be specified. Each uuid MUST be separated by a comma (,). Many uuid will perform a logical OR. */
-        user_uuid?: string[];
-        /** Ignore CDR created before the given CDR ID. */
-        from_id?: number;
-        /**
-         * Should the query include sub-tenants
-         * @default false
-         */
-        recurse?: boolean;
-        /** Will only return one result for the selected field */
-        distinct?: "peer_exten";
-        /** Filter by recorded status. */
-        recorded?: boolean;
-        /** Overrides the Content-Type header. This is used to be able to have a downloadable link. Allowed values are "csv" and "json" */
-        format?: "csv" | "json";
-        /** Filter by conversation identifier */
-        conversation_id?: string;
-        /** Filter by call statuses (comma-separated status strings). Defaults to non-blocked calls. */
-        call_status?: "answered" | "blocked";
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<CDRList, Error>({
-        path: `/cdr`,
-        method: "GET",
-        query: query,
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `call_logd.config.update` Changes are not persistent across service restart.
+   * @tags config
+   * @name PatchConfig
+   * @summary Update the current configuration.
+   * @request PATCH:/config
+   * @secure
+   */
+  export namespace PatchConfig {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = ConfigPatchItem[];
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+}
 
-    /**
-     * @description **Required ACL:** `call-logd.cdr.recordings.media.delete`
-     *
-     * @tags cdr
-     * @name RecordingsMediaDelete
-     * @summary Delete multiple CDRs recording media
-     * @request DELETE:/cdr/recordings/media
-     * @secure
-     */
-    recordingsMediaDelete: (
-      body: {
-        cdr_ids?: number[];
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/cdr/recordings/media`,
-        method: "DELETE",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
+export namespace Exports {
+  /**
+   * @description **Required ACL:** `call-logd.exports.{export_uuid}.read`
+   * @tags exports
+   * @name ExportsDetail
+   * @summary Get an export by the given UUID
+   * @request GET:/exports/{export_uuid}
+   * @secure
+   */
+  export namespace ExportsDetail {
+    export type RequestParams = {
+      /** UUID of the given export */
+      exportUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = Export;
+  }
 
-    /**
-     * @description **Required ACL:** `call-logd.cdr.recordings.media.export.create` This endpoint creates a new export and returns its UUID.
-     *
-     * @tags cdr, exports
-     * @name RecordingsMediaExportCreate
-     * @summary Create an export for the recording media of multiple CDRs
-     * @request POST:/cdr/recordings/media/export
-     * @secure
-     */
-    recordingsMediaExportCreate: (
-      body: {
-        cdr_ids?: string[];
-      },
-      query?: {
-        /**
-         * Ignore calls before the given date. Format is
-         * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be
-         * converted according to the `timezone` parameter. If missing, the statistics
-         * will start at the oldest available call with timezone UTC.
-         * @format date-time
-         */
-        from?: string;
-        /**
-         * Ignore calls starting at or after the given date. Format is
-         * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be converted
-         * according to the `timezone` parameter. If missing, the statistics will include the current
-         * day.
-         * @format date-time
-         */
-        until?: string;
-        /** Filter list of items */
-        search?: string;
-        /** Filter list of items */
-        call_direction?: "internal" | "inbound" | "outbound";
-        /** Filter by source_extension and destination_extension. A wildcard (underscore) can be used at the start and/or the end of the number. */
-        number?: string;
-        /** Filter by tags. Each tag MUST be separated by a coma (,). Many tag will perform a logical AND. */
-        tags?: string[];
-        /** Filter by user_uuid. Many uuid can be specified. Each uuid MUST be separated by a comma (,). Many uuid will perform a logical OR. */
-        user_uuid?: string[];
-        /** Ignore CDR created before the given CDR ID. */
-        from_id?: number;
-        /**
-         * Should the query include sub-tenants
-         * @default false
-         */
-        recurse?: boolean;
-        /** E-mail address */
-        email?: string;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<
-        {
-          export_uuid?: string;
-        },
-        Error
-      >({
-        path: `/cdr/recordings/media/export`,
-        method: "POST",
-        query: query,
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `call-logd.exports.{export_uuid}.download.read` This endpoint allow to use `?token={token_uuid}` and `?tenant={tenant_uuid}` query string to bypass headers
+   * @tags exports
+   * @name DownloadList
+   * @summary Download an export as a ZIP archive by the given UUID
+   * @request GET:/exports/{export_uuid}/download
+   * @secure
+   */
+  export namespace DownloadList {
+    export type RequestParams = {
+      /** UUID of the given export */
+      exportUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+}
 
-    /**
-     * @description **Required ACL:** `call-logd.cdr.{cdr_id}.read`
-     *
-     * @tags cdr
-     * @name GetCdr2
-     * @summary Get a CDR by ID
-     * @request GET:/cdr/{cdr_id}
-     * @originalName getCdr
-     * @duplicate
-     * @secure
-     */
-    getCdr2: (cdrId: number, params: RequestParams = {}) =>
-      this.request<CDR, Error>({
-        path: `/cdr/${cdrId}`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+export namespace Queues {
+  /**
+   * @description **Required ACL:** `call-logd.queues.statistics.read` Statistics are aggregated by queues over the period specified by the `from` and `until` query parameters. **Notice**: Statistics are generated every 6 hours
+   * @tags queue_statistics
+   * @name StatisticsList
+   * @summary Statistics for all queues
+   * @request GET:/queues/statistics
+   * @secure
+   */
+  export namespace StatisticsList {
+    export type RequestParams = {};
+    export type RequestQuery = {
+      /** The time at which a day ends, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
+      day_end_time?: string;
+      /** The time at which a day starts, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
+      day_start_time?: string;
+      /**
+       * Ignore calls before the given date. Format is
+       * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be
+       * converted according to the `timezone` parameter. If missing, the statistics
+       * will start at the oldest available call with timezone UTC.
+       * @format date-time
+       */
+      from?: string;
+      /** The number of seconds representing a good quality of service. */
+      qos_threshold?: number;
+      /**
+       * Name of the timezone to use for dates and times. Example: America/New_York. Valid timezones
+       * are defined by the <a href="https://en.wikipedia.org/wiki/Tz_database">Time Zone Database</a>
+       * version installed on the server.
+       * @default "UTC"
+       */
+      timezone?: string;
+      /**
+       * Ignore calls starting at or after the given date. Format is
+       * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be converted
+       * according to the `timezone` parameter. If missing, the statistics will include the current
+       * day.
+       * @format date-time
+       */
+      until?: string;
+      /**
+       * The days of the week that should be included. A week starts on Monday (1) and ends on Sunday (7).
+       * @uniqueItems true
+       * @default [1,2,3,4,5,6,7]
+       */
+      week_days?: number[];
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = QueuesStatistics;
+  }
 
-    /**
-     * @description **Required ACL:** `call-logd.cdr.{cdr_id}.recordings.{recording_uuid}.media.delete`
-     *
-     * @tags cdr
-     * @name RecordingsMediaDelete2
-     * @summary Delete a recording media
-     * @request DELETE:/cdr/{cdr_id}/recordings/{recording_uuid}/media
-     * @originalName recordingsMediaDelete
-     * @duplicate
-     * @secure
-     */
-    recordingsMediaDelete2: (
-      cdrId: number,
-      recordingUuid: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/cdr/${cdrId}/recordings/${recordingUuid}/media`,
-        method: "DELETE",
-        secure: true,
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `call-logd.queues.statistics.{queue_id}.read` Statistics for a queue are aggregated by the `interval` query parameter, or if not specified or empty, as a unique result over the period. The period is specified by the `from` and `until` query parameters. The last result returned by this route is always the aggregation of all calls over the whole specified period. **Notice**: Statistics are generated every 6 hours
+   * @tags queue_statistics
+   * @name StatisticsList2
+   * @summary Statistics for a specific queue
+   * @request GET:/queues/{queue_id}/statistics
+   * @originalName statisticsList
+   * @duplicate
+   * @secure
+   */
+  export namespace StatisticsList2 {
+    export type RequestParams = {
+      /** ID of the queue. */
+      queueId: number;
+    };
+    export type RequestQuery = {
+      /** The time at which a day ends, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
+      day_end_time?: string;
+      /** The time at which a day starts, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
+      day_start_time?: string;
+      /**
+       * Ignore calls before the given date. Format is
+       * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be
+       * converted according to the `timezone` parameter. If missing, the statistics
+       * will start at the oldest available call with timezone UTC.
+       * @format date-time
+       */
+      from?: string;
+      /** Aggregation interval. An empty value means no interval, so an aggregation on all values. */
+      interval?: "hour" | "day" | "month";
+      /** The number of seconds representing a good quality of service. */
+      qos_threshold?: number;
+      /**
+       * Name of the timezone to use for dates and times. Example: America/New_York. Valid timezones
+       * are defined by the <a href="https://en.wikipedia.org/wiki/Tz_database">Time Zone Database</a>
+       * version installed on the server.
+       * @default "UTC"
+       */
+      timezone?: string;
+      /**
+       * Ignore calls starting at or after the given date. Format is
+       * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be converted
+       * according to the `timezone` parameter. If missing, the statistics will include the current
+       * day.
+       * @format date-time
+       */
+      until?: string;
+      /**
+       * The days of the week that should be included. A week starts on Monday (1) and ends on Sunday (7).
+       * @uniqueItems true
+       * @default [1,2,3,4,5,6,7]
+       */
+      week_days?: number[];
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = QueueStatistics;
+  }
 
-    /**
-     * @description **Required ACL:** `call-logd.cdr.{cdr_id}.recordings.{recording_uuid}.media.read` This endpoint allow to use `?token={token_uuid}` and `?tenant={tenant_uuid}` query string to bypass headers
-     *
-     * @tags cdr
-     * @name RecordingsMediaList
-     * @summary Get a recording media
-     * @request GET:/cdr/{cdr_id}/recordings/{recording_uuid}/media
-     * @secure
-     */
-    recordingsMediaList: (
-      cdrId: number,
-      recordingUuid: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/cdr/${cdrId}/recordings/${recordingUuid}/media`,
-        method: "GET",
-        secure: true,
-        ...params,
-      }),
-  };
-  config = {
-    /**
-     * @description **Required ACL:** `call_logd.config.read`
-     *
-     * @tags config
-     * @name GetConfig
-     * @summary Show the current configuration
-     * @request GET:/config
-     * @secure
-     */
-    getConfig: (params: RequestParams = {}) =>
-      this.request<void, any>({
-        path: `/config`,
-        method: "GET",
-        secure: true,
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `call-logd.queues.statistics.{queue_id}.qos.read` QoS thresholds implicitly include a starting 0 and ending to infinite (null). Statistics for a queue are aggregated by the `interval` query parameter, or if not specified or empty, as a unique result over the period. The period is specified by the `from` and `until` query parameters. The last result returned by this route is always the aggregation of all calls over the whole specified period. **Notice**: Statistics are generated every 6 hours
+   * @tags queue_statistics
+   * @name StatisticsQosList
+   * @summary QoS statistics for a specific queue
+   * @request GET:/queues/{queue_id}/statistics/qos
+   * @secure
+   */
+  export namespace StatisticsQosList {
+    export type RequestParams = {
+      /** ID of the queue. */
+      queueId: number;
+    };
+    export type RequestQuery = {
+      /** The time at which a day ends, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
+      day_end_time?: string;
+      /** The time at which a day starts, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
+      day_start_time?: string;
+      /**
+       * Ignore calls before the given date. Format is
+       * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be
+       * converted according to the `timezone` parameter. If missing, the statistics
+       * will start at the oldest available call with timezone UTC.
+       * @format date-time
+       */
+      from?: string;
+      /** Aggregation interval. An empty value means no interval, so an aggregation on all values. */
+      interval?: "hour" | "day" | "month";
+      /**
+       * The steps of quality of service times used for the interval generation.
+       * @uniqueItems true
+       */
+      qos_thresholds?: number[];
+      /**
+       * Name of the timezone to use for dates and times. Example: America/New_York. Valid timezones
+       * are defined by the <a href="https://en.wikipedia.org/wiki/Tz_database">Time Zone Database</a>
+       * version installed on the server.
+       * @default "UTC"
+       */
+      timezone?: string;
+      /**
+       * Ignore calls starting at or after the given date. Format is
+       * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be converted
+       * according to the `timezone` parameter. If missing, the statistics will include the current
+       * day.
+       * @format date-time
+       */
+      until?: string;
+      /**
+       * The days of the week that should be included. A week starts on Monday (1) and ends on Sunday (7).
+       * @uniqueItems true
+       * @default [1,2,3,4,5,6,7]
+       */
+      week_days?: number[];
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = QueueQoSStatistics;
+  }
+}
 
-    /**
-     * @description **Required ACL:** `call_logd.config.update` Changes are not persistent across service restart.
-     *
-     * @tags config
-     * @name PatchConfig
-     * @summary Update the current configuration.
-     * @request PATCH:/config
-     * @secure
-     */
-    patchConfig: (ConfigPatch: ConfigPatchItem[], params: RequestParams = {}) =>
-      this.request<void, void>({
-        path: `/config`,
-        method: "PATCH",
-        body: ConfigPatch,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
-  };
-  exports = {
-    /**
-     * @description **Required ACL:** `call-logd.exports.{export_uuid}.read`
-     *
-     * @tags exports
-     * @name ExportsDetail
-     * @summary Get an export by the given UUID
-     * @request GET:/exports/{export_uuid}
-     * @secure
-     */
-    exportsDetail: (exportUuid: string, params: RequestParams = {}) =>
-      this.request<Export, Error>({
-        path: `/exports/${exportUuid}`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+export namespace Retention {
+  /**
+   * @description **Required ACL:** `call-logd.retention.read`
+   * @tags retention
+   * @name RetentionList
+   * @summary Retention configuration
+   * @request GET:/retention
+   * @secure
+   */
+  export namespace RetentionList {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = Retention;
+  }
 
-    /**
-     * @description **Required ACL:** `call-logd.exports.{export_uuid}.download.read` This endpoint allow to use `?token={token_uuid}` and `?tenant={tenant_uuid}` query string to bypass headers
-     *
-     * @tags exports
-     * @name DownloadList
-     * @summary Download an export as a ZIP archive by the given UUID
-     * @request GET:/exports/{export_uuid}/download
-     * @secure
-     */
-    downloadList: (exportUuid: string, params: RequestParams = {}) =>
-      this.request<void, Error>({
-        path: `/exports/${exportUuid}/download`,
-        method: "GET",
-        secure: true,
-        ...params,
-      }),
-  };
-  queues = {
-    /**
-     * @description **Required ACL:** `call-logd.queues.statistics.read` Statistics are aggregated by queues over the period specified by the `from` and `until` query parameters. **Notice**: Statistics are generated every 6 hours
-     *
-     * @tags queue_statistics
-     * @name StatisticsList
-     * @summary Statistics for all queues
-     * @request GET:/queues/statistics
-     * @secure
-     */
-    statisticsList: (
-      query?: {
-        /**
-         * Ignore calls before the given date. Format is
-         * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be
-         * converted according to the `timezone` parameter. If missing, the statistics
-         * will start at the oldest available call with timezone UTC.
-         * @format date-time
-         */
-        from?: string;
-        /**
-         * Ignore calls starting at or after the given date. Format is
-         * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be converted
-         * according to the `timezone` parameter. If missing, the statistics will include the current
-         * day.
-         * @format date-time
-         */
-        until?: string;
-        /** The number of seconds representing a good quality of service. */
-        qos_threshold?: number;
-        /** The time at which a day starts, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
-        day_start_time?: string;
-        /** The time at which a day ends, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
-        day_end_time?: string;
-        /**
-         * The days of the week that should be included. A week starts on Monday (1) and ends on Sunday (7).
-         * @uniqueItems true
-         * @default [1,2,3,4,5,6,7]
-         */
-        week_days?: number[];
-        /**
-         * Name of the timezone to use for dates and times. Example: America/New_York. Valid timezones
-         * are defined by the <a href="https://en.wikipedia.org/wiki/Tz_database">Time Zone Database</a>
-         * version installed on the server.
-         * @default "UTC"
-         */
-        timezone?: string;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<QueuesStatistics, Error>({
-        path: `/queues/statistics`,
-        method: "GET",
-        query: query,
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `call-logd.retention.update` **WARNING** This endpoint reset undefined keys to `null`.
+   * @tags retention
+   * @name RetentionUpdate
+   * @summary Update retention configuration
+   * @request PUT:/retention
+   * @secure
+   */
+  export namespace RetentionUpdate {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = Retention;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = void;
+  }
+}
 
-    /**
-     * @description **Required ACL:** `call-logd.queues.statistics.{queue_id}.read` Statistics for a queue are aggregated by the `interval` query parameter, or if not specified or empty, as a unique result over the period. The period is specified by the `from` and `until` query parameters. The last result returned by this route is always the aggregation of all calls over the whole specified period. **Notice**: Statistics are generated every 6 hours
-     *
-     * @tags queue_statistics
-     * @name StatisticsList2
-     * @summary Statistics for a specific queue
-     * @request GET:/queues/{queue_id}/statistics
-     * @originalName statisticsList
-     * @duplicate
-     * @secure
-     */
-    statisticsList2: (
-      queueId: number,
-      query?: {
-        /**
-         * Ignore calls before the given date. Format is
-         * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be
-         * converted according to the `timezone` parameter. If missing, the statistics
-         * will start at the oldest available call with timezone UTC.
-         * @format date-time
-         */
-        from?: string;
-        /**
-         * Ignore calls starting at or after the given date. Format is
-         * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be converted
-         * according to the `timezone` parameter. If missing, the statistics will include the current
-         * day.
-         * @format date-time
-         */
-        until?: string;
-        /** Aggregation interval. An empty value means no interval, so an aggregation on all values. */
-        interval?: "hour" | "day" | "month";
-        /** The number of seconds representing a good quality of service. */
-        qos_threshold?: number;
-        /** The time at which a day starts, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
-        day_start_time?: string;
-        /** The time at which a day ends, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
-        day_end_time?: string;
-        /**
-         * The days of the week that should be included. A week starts on Monday (1) and ends on Sunday (7).
-         * @uniqueItems true
-         * @default [1,2,3,4,5,6,7]
-         */
-        week_days?: number[];
-        /**
-         * Name of the timezone to use for dates and times. Example: America/New_York. Valid timezones
-         * are defined by the <a href="https://en.wikipedia.org/wiki/Tz_database">Time Zone Database</a>
-         * version installed on the server.
-         * @default "UTC"
-         */
-        timezone?: string;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<QueueStatistics, Error>({
-        path: `/queues/${queueId}/statistics`,
-        method: "GET",
-        query: query,
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+export namespace Status {
+  /**
+   * @description **Required ACL:** `call-logd.status.read`
+   * @tags status
+   * @name StatusList
+   * @summary Print infos about internal status of wazo-call-logd
+   * @request GET:/status
+   * @secure
+   */
+  export namespace StatusList {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = StatusSummary;
+  }
+}
 
-    /**
-     * @description **Required ACL:** `call-logd.queues.statistics.{queue_id}.qos.read` QoS thresholds implicitly include a starting 0 and ending to infinite (null). Statistics for a queue are aggregated by the `interval` query parameter, or if not specified or empty, as a unique result over the period. The period is specified by the `from` and `until` query parameters. The last result returned by this route is always the aggregation of all calls over the whole specified period. **Notice**: Statistics are generated every 6 hours
-     *
-     * @tags queue_statistics
-     * @name StatisticsQosList
-     * @summary QoS statistics for a specific queue
-     * @request GET:/queues/{queue_id}/statistics/qos
-     * @secure
-     */
-    statisticsQosList: (
-      queueId: number,
-      query?: {
-        /**
-         * Ignore calls before the given date. Format is
-         * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be
-         * converted according to the `timezone` parameter. If missing, the statistics
-         * will start at the oldest available call with timezone UTC.
-         * @format date-time
-         */
-        from?: string;
-        /**
-         * Ignore calls starting at or after the given date. Format is
-         * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be converted
-         * according to the `timezone` parameter. If missing, the statistics will include the current
-         * day.
-         * @format date-time
-         */
-        until?: string;
-        /** Aggregation interval. An empty value means no interval, so an aggregation on all values. */
-        interval?: "hour" | "day" | "month";
-        /**
-         * The steps of quality of service times used for the interval generation.
-         * @uniqueItems true
-         */
-        qos_thresholds?: number[];
-        /** The time at which a day starts, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
-        day_start_time?: string;
-        /** The time at which a day ends, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
-        day_end_time?: string;
-        /**
-         * The days of the week that should be included. A week starts on Monday (1) and ends on Sunday (7).
-         * @uniqueItems true
-         * @default [1,2,3,4,5,6,7]
-         */
-        week_days?: number[];
-        /**
-         * Name of the timezone to use for dates and times. Example: America/New_York. Valid timezones
-         * are defined by the <a href="https://en.wikipedia.org/wiki/Tz_database">Time Zone Database</a>
-         * version installed on the server.
-         * @default "UTC"
-         */
-        timezone?: string;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<QueueQoSStatistics, Error>({
-        path: `/queues/${queueId}/statistics/qos`,
-        method: "GET",
-        query: query,
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-  };
-  retention = {
-    /**
-     * @description **Required ACL:** `call-logd.retention.read`
-     *
-     * @tags retention
-     * @name RetentionList
-     * @summary Retention configuration
-     * @request GET:/retention
-     * @secure
-     */
-    retentionList: (params: RequestParams = {}) =>
-      this.request<Retention, Error>({
-        path: `/retention`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+export namespace Users {
+  /**
+   * @description **Required ACL:** `call-logd.users.me.cdr.read` This endpoint allow to use `?token={token_uuid}` and `?tenant={tenant_uuid}` query string to bypass headers
+   * @tags cdr, users
+   * @name MeCdrList
+   * @summary List CDR of the authenticated user
+   * @request GET:/users/me/cdr
+   * @secure
+   */
+  export namespace MeCdrList {
+    export type RequestParams = {};
+    export type RequestQuery = {
+      /** Filter list of items */
+      call_direction?: "internal" | "inbound" | "outbound";
+      /** Filter by call statuses (comma-separated status strings). Defaults to non-blocked calls. */
+      call_status?: "answered" | "blocked";
+      /** Filter by conversation identifier */
+      conversation_id?: string;
+      /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+      direction?: "asc" | "desc";
+      /** Will only return one result for the selected field */
+      distinct?: "peer_exten";
+      /** Overrides the Content-Type header. This is used to be able to have a downloadable link. Allowed values are "csv" and "json" */
+      format?: "csv" | "json";
+      /**
+       * Ignore calls before the given date. Format is
+       * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be
+       * converted according to the `timezone` parameter. If missing, the statistics
+       * will start at the oldest available call with timezone UTC.
+       * @format date-time
+       */
+      from?: string;
+      /** Ignore CDR created before the given CDR ID. */
+      from_id?: number;
+      /** Maximum number of items to return in the list. Default to 1000 if not specified. */
+      limit?: number;
+      /** Filter by source_extension and destination_extension. A wildcard (underscore) can be used at the start and/or the end of the number. */
+      number?: string;
+      /** Number of items to skip over in the list. Useful for pagination. */
+      offset?: number;
+      /** Name of the field to use for sorting the list of items returned. Unsupported values: ``end``. */
+      order?: string;
+      /** Filter by recorded status. */
+      recorded?: boolean;
+      /** Filter list of items */
+      search?: string;
+      /**
+       * Ignore calls starting at or after the given date. Format is
+       * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be converted
+       * according to the `timezone` parameter. If missing, the statistics will include the current
+       * day.
+       * @format date-time
+       */
+      until?: string;
+      /** Filter by user_uuid. Many uuid can be specified. Each uuid MUST be separated by a comma (,). Many uuid will perform a logical OR. */
+      user_uuid?: string[];
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = CDRList;
+  }
 
-    /**
-     * @description **Required ACL:** `call-logd.retention.update` **WARNING** This endpoint reset undefined keys to `null`.
-     *
-     * @tags retention
-     * @name RetentionUpdate
-     * @summary Update retention configuration
-     * @request PUT:/retention
-     * @secure
-     */
-    retentionUpdate: (body: Retention, params: RequestParams = {}) =>
-      this.request<void, Error>({
-        path: `/retention`,
-        method: "PUT",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
-  };
-  status = {
-    /**
-     * @description **Required ACL:** `call-logd.status.read`
-     *
-     * @tags status
-     * @name StatusList
-     * @summary Print infos about internal status of wazo-call-logd
-     * @request GET:/status
-     * @secure
-     */
-    statusList: (params: RequestParams = {}) =>
-      this.request<StatusSummary, any>({
-        path: `/status`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-  };
-  users = {
-    /**
-     * @description **Required ACL:** `call-logd.users.me.cdr.read` This endpoint allow to use `?token={token_uuid}` and `?tenant={tenant_uuid}` query string to bypass headers
-     *
-     * @tags cdr, users
-     * @name MeCdrList
-     * @summary List CDR of the authenticated user
-     * @request GET:/users/me/cdr
-     * @secure
-     */
-    meCdrList: (
-      query?: {
-        /**
-         * Ignore calls before the given date. Format is
-         * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be
-         * converted according to the `timezone` parameter. If missing, the statistics
-         * will start at the oldest available call with timezone UTC.
-         * @format date-time
-         */
-        from?: string;
-        /**
-         * Ignore calls starting at or after the given date. Format is
-         * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be converted
-         * according to the `timezone` parameter. If missing, the statistics will include the current
-         * day.
-         * @format date-time
-         */
-        until?: string;
-        /** Maximum number of items to return in the list. Default to 1000 if not specified. */
-        limit?: number;
-        /** Number of items to skip over in the list. Useful for pagination. */
-        offset?: number;
-        /** Name of the field to use for sorting the list of items returned. Unsupported values: ``end``. */
-        order?: string;
-        /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
-        direction?: "asc" | "desc";
-        /** Filter list of items */
-        search?: string;
-        /** Filter list of items */
-        call_direction?: "internal" | "inbound" | "outbound";
-        /** Filter by source_extension and destination_extension. A wildcard (underscore) can be used at the start and/or the end of the number. */
-        number?: string;
-        /** Ignore CDR created before the given CDR ID. */
-        from_id?: number;
-        /** Filter by user_uuid. Many uuid can be specified. Each uuid MUST be separated by a comma (,). Many uuid will perform a logical OR. */
-        user_uuid?: string[];
-        /** Will only return one result for the selected field */
-        distinct?: "peer_exten";
-        /** Filter by recorded status. */
-        recorded?: boolean;
-        /** Overrides the Content-Type header. This is used to be able to have a downloadable link. Allowed values are "csv" and "json" */
-        format?: "csv" | "json";
-        /** Filter by conversation identifier */
-        conversation_id?: string;
-        /** Filter by call statuses (comma-separated status strings). Defaults to non-blocked calls. */
-        call_status?: "answered" | "blocked";
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<CDRList, Error>({
-        path: `/users/me/cdr`,
-        method: "GET",
-        query: query,
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `call-logd.users.me.cdr.{cdr_id}.recordings.{recording_uuid}.media.read`
+   * @tags cdr
+   * @name MeCdrRecordingsMediaList
+   * @summary Get a recording media from a user
+   * @request GET:/users/me/cdr/{cdr_id}/recordings/{recording_uuid}/media
+   * @secure
+   */
+  export namespace MeCdrRecordingsMediaList {
+    export type RequestParams = {
+      /** ID of the CDR */
+      cdrId: number;
+      /** UUID of the recording */
+      recordingUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
 
-    /**
-     * @description **Required ACL:** `call-logd.users.me.cdr.{cdr_id}.recordings.{recording_uuid}.media.read`
-     *
-     * @tags cdr
-     * @name MeCdrRecordingsMediaList
-     * @summary Get a recording media from a user
-     * @request GET:/users/me/cdr/{cdr_id}/recordings/{recording_uuid}/media
-     * @secure
-     */
-    meCdrRecordingsMediaList: (
-      cdrId: number,
-      recordingUuid: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/users/me/cdr/${cdrId}/recordings/${recordingUuid}/media`,
-        method: "GET",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `call-logd.users.{user_uuid}.cdr.read` This endpoint allow to use `?token={token_uuid}` and `?tenant={tenant_uuid}` query string to bypass headers
-     *
-     * @tags cdr, users
-     * @name GetUsers
-     * @summary List CDR of the given user
-     * @request GET:/users/{user_uuid}/cdr
-     * @secure
-     */
-    getUsers: (
-      userUuid: string,
-      query?: {
-        /**
-         * Ignore calls before the given date. Format is
-         * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be
-         * converted according to the `timezone` parameter. If missing, the statistics
-         * will start at the oldest available call with timezone UTC.
-         * @format date-time
-         */
-        from?: string;
-        /**
-         * Ignore calls starting at or after the given date. Format is
-         * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be converted
-         * according to the `timezone` parameter. If missing, the statistics will include the current
-         * day.
-         * @format date-time
-         */
-        until?: string;
-        /** Maximum number of items to return in the list. Default to 1000 if not specified. */
-        limit?: number;
-        /** Number of items to skip over in the list. Useful for pagination. */
-        offset?: number;
-        /** Name of the field to use for sorting the list of items returned. Unsupported values: ``end``. */
-        order?: string;
-        /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
-        direction?: "asc" | "desc";
-        /** Filter list of items */
-        search?: string;
-        /** Filter list of items */
-        call_direction?: "internal" | "inbound" | "outbound";
-        /** Filter by source_extension and destination_extension. A wildcard (underscore) can be used at the start and/or the end of the number. */
-        number?: string;
-        /** Ignore CDR created before the given CDR ID. */
-        from_id?: number;
-        /** Will only return one result for the selected field */
-        distinct?: "peer_exten";
-        /** Filter by recorded status. */
-        recorded?: boolean;
-        /** Overrides the Content-Type header. This is used to be able to have a downloadable link. Allowed values are "csv" and "json" */
-        format?: "csv" | "json";
-        /** Filter by conversation identifier */
-        conversation_id?: string;
-        /** Filter by call statuses (comma-separated status strings). Defaults to non-blocked calls. */
-        call_status?: "answered" | "blocked";
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<CDRList, Error>({
-        path: `/users/${userUuid}/cdr`,
-        method: "GET",
-        query: query,
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-  };
+  /**
+   * @description **Required ACL:** `call-logd.users.{user_uuid}.cdr.read` This endpoint allow to use `?token={token_uuid}` and `?tenant={tenant_uuid}` query string to bypass headers
+   * @tags cdr, users
+   * @name GetUsers
+   * @summary List CDR of the given user
+   * @request GET:/users/{user_uuid}/cdr
+   * @secure
+   */
+  export namespace GetUsers {
+    export type RequestParams = {
+      /** UUID of the given user */
+      userUuid: string;
+    };
+    export type RequestQuery = {
+      /** Filter list of items */
+      call_direction?: "internal" | "inbound" | "outbound";
+      /** Filter by call statuses (comma-separated status strings). Defaults to non-blocked calls. */
+      call_status?: "answered" | "blocked";
+      /** Filter by conversation identifier */
+      conversation_id?: string;
+      /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+      direction?: "asc" | "desc";
+      /** Will only return one result for the selected field */
+      distinct?: "peer_exten";
+      /** Overrides the Content-Type header. This is used to be able to have a downloadable link. Allowed values are "csv" and "json" */
+      format?: "csv" | "json";
+      /**
+       * Ignore calls before the given date. Format is
+       * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be
+       * converted according to the `timezone` parameter. If missing, the statistics
+       * will start at the oldest available call with timezone UTC.
+       * @format date-time
+       */
+      from?: string;
+      /** Ignore CDR created before the given CDR ID. */
+      from_id?: number;
+      /** Maximum number of items to return in the list. Default to 1000 if not specified. */
+      limit?: number;
+      /** Filter by source_extension and destination_extension. A wildcard (underscore) can be used at the start and/or the end of the number. */
+      number?: string;
+      /** Number of items to skip over in the list. Useful for pagination. */
+      offset?: number;
+      /** Name of the field to use for sorting the list of items returned. Unsupported values: ``end``. */
+      order?: string;
+      /** Filter by recorded status. */
+      recorded?: boolean;
+      /** Filter list of items */
+      search?: string;
+      /**
+       * Ignore calls starting at or after the given date. Format is
+       * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be converted
+       * according to the `timezone` parameter. If missing, the statistics will include the current
+       * day.
+       * @format date-time
+       */
+      until?: string;
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = CDRList;
+  }
 }

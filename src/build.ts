@@ -28,7 +28,15 @@ const portalSchemas = {
 Promise.all(
   Object.entries({ ...schemas, ...portalSchemas }).map(async ([schemaName, url]) => {
     try {
-      await generateApi({ url, output: path.resolve(process.cwd(), 'src', 'schemas'), fileName: `${schemaName}.ts` });
+      await generateApi({
+        url,
+        output: path.resolve(process.cwd(), 'src', 'schemas'),
+        fileName: `${schemaName}.ts`,
+        generateClient: false,
+        generateRouteTypes: true,
+        extractRequestParams: true,
+        sortTypes: true,
+      });
     } catch (error) {
       console.error(`Error generating types for ${schemaName}:`, error);
     }

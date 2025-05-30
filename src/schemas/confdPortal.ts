@@ -51,6 +51,13 @@ export interface AccountSummary {
   subscriptions?: object;
 }
 
+export interface CheckEngineInstanceAccountSynchronizeParams {
+  /** The sha256 hash of accounts */
+  hash: string;
+  /** UUID of the instance */
+  instanceUuid: string;
+}
+
 /** CustomerCreate */
 export type Customer = CustomerRelationBase &
   TenantSharedProperties & {
@@ -107,12 +114,94 @@ export interface EngineAccounts {
   engine_version?: string;
 }
 
+export interface GetPluginsParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+  direction?: "asc" | "desc";
+  /** The limit defines the number of individual objects that are returned */
+  limit?: number;
+  /**
+   * The offset defines the offsets the start by the number specified
+   * @default 0
+   */
+  offset?: number;
+  /** Name of the field to use for sorting the list of items returned. */
+  order?: string;
+  /** Search term used to filter the result */
+  search?: string;
+}
+
 export interface Init {
   reseller: ResellerInit;
 }
 
 /** Nestbox confd was initialized successfully */
 export type Initialized = any;
+
+export interface InstallsCustomersListParams {
+  /** The limit defines the number of individual objects that are returned */
+  limit?: number;
+  /**
+   * The offset defines the offsets the start by the number specified
+   * @default 0
+   */
+  offset?: number;
+  /**
+   * Plug-in's unique identifier
+   * @format uuid
+   */
+  pluginUuid: string;
+  /**
+   * filter results by resource's unique identifiers (comma-separated list) to a maximum of 25 items
+   * @maxItems 25
+   * @minItems 1
+   * @uniqueItems true
+   */
+  uuids?: string[];
+}
+
+export interface InstallsLocationsListParams {
+  /** The limit defines the number of individual objects that are returned */
+  limit?: number;
+  /**
+   * The offset defines the offsets the start by the number specified
+   * @default 0
+   */
+  offset?: number;
+  /**
+   * Plug-in's unique identifier
+   * @format uuid
+   */
+  pluginUuid: string;
+  /**
+   * filter results by resource's unique identifiers (comma-separated list) to a maximum of 25 items
+   * @maxItems 25
+   * @minItems 1
+   * @uniqueItems true
+   */
+  uuids?: string[];
+}
+
+export interface InstallsResellersListParams {
+  /** The limit defines the number of individual objects that are returned */
+  limit?: number;
+  /**
+   * The offset defines the offsets the start by the number specified
+   * @default 0
+   */
+  offset?: number;
+  /**
+   * Plug-in's unique identifier
+   * @format uuid
+   */
+  pluginUuid: string;
+  /**
+   * filter results by resource's unique identifiers (comma-separated list) to a maximum of 25 items
+   * @maxItems 25
+   * @minItems 1
+   * @uniqueItems true
+   */
+  uuids?: string[];
+}
 
 /** Instance */
 export interface Instance {
@@ -128,6 +217,94 @@ export interface InstanceList {
   filtered?: number;
   items?: Instance[];
   total?: number;
+}
+
+export interface ListCustomersParams {
+  /** Comma-separated list of client_id to filter customers by */
+  client_id?: string;
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+  direction?: "asc" | "desc";
+  /** The limit defines the number of individual objects that are returned */
+  limit?: number;
+  /** Comma-separated list of names to filter resellers by */
+  name?: string;
+  /**
+   * The offset defines the offsets the start by the number specified
+   * @default 0
+   */
+  offset?: number;
+  /** Name of the field to use for sorting the list of items returned. */
+  order?: string;
+  /**
+   * Should the result include customers from sub-resellers
+   * @default false
+   */
+  recurse?: boolean;
+  /** Search term used to filter the result */
+  search?: string;
+  /** Comma-separated list of UUIDs to filter resellers by */
+  uuid?: string;
+}
+
+export interface ListInstancesParams {
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+  recurse?: boolean;
+}
+
+export interface ListLocationsParams {
+  /** Comma-separated list of customer UUIDs to filter locations by */
+  customer_uuid?: string;
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+  direction?: "asc" | "desc";
+  /** Instance UUID to filter locations by */
+  instance_uuid?: string;
+  /** The limit defines the number of individual objects that are returned */
+  limit?: number;
+  /** Comma-separated list of names to filter resellers by */
+  name?: string;
+  /**
+   * The offset defines the offsets the start by the number specified
+   * @default 0
+   */
+  offset?: number;
+  /** Name of the field to use for sorting the list of items returned. */
+  order?: string;
+  /**
+   * Should the result include locations from customers of sub-resellers
+   * @default false
+   */
+  recurse?: boolean;
+  /** Search term used to filter the result */
+  search?: string;
+  /** Comma-separated list of UUIDs to filter resellers by */
+  uuid?: string;
+  /** Instance tenant UUID to filter locations by */
+  wazo_tenant_uuid?: string;
+}
+
+export interface ListResellersParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+  direction?: "asc" | "desc";
+  /** The limit defines the number of individual objects that are returned */
+  limit?: number;
+  /** Comma-separated list of names to filter resellers by */
+  name?: string;
+  /**
+   * The offset defines the offsets the start by the number specified
+   * @default 0
+   */
+  offset?: number;
+  /** Name of the field to use for sorting the list of items returned. */
+  order?: string;
+  /** Comma-separated list of parent UUIDs to filter resellers by */
+  parent_uuid?: string;
+  /** Search term used to filter the result */
+  search?: string;
+  /** Comma-separated list of UUIDs to filter resellers by */
+  uuid?: string;
 }
 
 /** LocationCreate */
@@ -321,12 +498,12 @@ export interface Tenant {
 }
 
 export interface TenantAddress {
-  city?: string;
-  country?: string;
   /** The first line of the address */
   line_1?: string;
   /** The second line of the address */
   line_2?: string;
+  city?: string;
+  country?: string;
   state?: string;
   zip_code?: string;
 }
@@ -359,1270 +536,1029 @@ export interface UserUpdate {
   visualization?: object;
 }
 
-export type QueryParamsType = Record<string | number, any>;
-export type ResponseFormat = keyof Omit<Body, "body" | "bodyUsed">;
-
-export interface FullRequestParams extends Omit<RequestInit, "body"> {
-  /** set parameter to `true` for call `securityWorker` for this request */
-  secure?: boolean;
-  /** request path */
-  path: string;
-  /** content type of request body */
-  type?: ContentType;
-  /** query params */
-  query?: QueryParamsType;
-  /** format of response (i.e. response.json() -> format: "json") */
-  format?: ResponseFormat;
-  /** request body */
-  body?: unknown;
-  /** base url */
-  baseUrl?: string;
-  /** request cancellation token */
-  cancelToken?: CancelToken;
-}
-
-export type RequestParams = Omit<
-  FullRequestParams,
-  "body" | "method" | "query" | "path"
->;
-
-export interface ApiConfig<SecurityDataType = unknown> {
-  baseUrl?: string;
-  baseApiParams?: Omit<RequestParams, "baseUrl" | "cancelToken" | "signal">;
-  securityWorker?: (
-    securityData: SecurityDataType | null,
-  ) => Promise<RequestParams | void> | RequestParams | void;
-  customFetch?: typeof fetch;
-}
-
-export interface HttpResponse<D extends unknown, E extends unknown = unknown>
-  extends Response {
-  data: D;
-  error: E;
-}
-
-type CancelToken = Symbol | string | number;
-
-export enum ContentType {
-  Json = "application/json",
-  FormData = "multipart/form-data",
-  UrlEncoded = "application/x-www-form-urlencoded",
-  Text = "text/plain",
-}
-
-export class HttpClient<SecurityDataType = unknown> {
-  public baseUrl: string = "/1.0";
-  private securityData: SecurityDataType | null = null;
-  private securityWorker?: ApiConfig<SecurityDataType>["securityWorker"];
-  private abortControllers = new Map<CancelToken, AbortController>();
-  private customFetch = (...fetchParams: Parameters<typeof fetch>) =>
-    fetch(...fetchParams);
-
-  private baseApiParams: RequestParams = {
-    credentials: "same-origin",
-    headers: {},
-    redirect: "follow",
-    referrerPolicy: "no-referrer",
-  };
-
-  constructor(apiConfig: ApiConfig<SecurityDataType> = {}) {
-    Object.assign(this, apiConfig);
-  }
-
-  public setSecurityData = (data: SecurityDataType | null) => {
-    this.securityData = data;
-  };
-
-  protected encodeQueryParam(key: string, value: any) {
-    const encodedKey = encodeURIComponent(key);
-    return `${encodedKey}=${encodeURIComponent(typeof value === "number" ? value : `${value}`)}`;
-  }
-
-  protected addQueryParam(query: QueryParamsType, key: string) {
-    return this.encodeQueryParam(key, query[key]);
-  }
-
-  protected addArrayQueryParam(query: QueryParamsType, key: string) {
-    const value = query[key];
-    return value.map((v: any) => this.encodeQueryParam(key, v)).join("&");
-  }
-
-  protected toQueryString(rawQuery?: QueryParamsType): string {
-    const query = rawQuery || {};
-    const keys = Object.keys(query).filter(
-      (key) => "undefined" !== typeof query[key],
-    );
-    return keys
-      .map((key) =>
-        Array.isArray(query[key])
-          ? this.addArrayQueryParam(query, key)
-          : this.addQueryParam(query, key),
-      )
-      .join("&");
-  }
-
-  protected addQueryParams(rawQuery?: QueryParamsType): string {
-    const queryString = this.toQueryString(rawQuery);
-    return queryString ? `?${queryString}` : "";
-  }
-
-  private contentFormatters: Record<ContentType, (input: any) => any> = {
-    [ContentType.Json]: (input: any) =>
-      input !== null && (typeof input === "object" || typeof input === "string")
-        ? JSON.stringify(input)
-        : input,
-    [ContentType.Text]: (input: any) =>
-      input !== null && typeof input !== "string"
-        ? JSON.stringify(input)
-        : input,
-    [ContentType.FormData]: (input: any) =>
-      Object.keys(input || {}).reduce((formData, key) => {
-        const property = input[key];
-        formData.append(
-          key,
-          property instanceof Blob
-            ? property
-            : typeof property === "object" && property !== null
-              ? JSON.stringify(property)
-              : `${property}`,
-        );
-        return formData;
-      }, new FormData()),
-    [ContentType.UrlEncoded]: (input: any) => this.toQueryString(input),
-  };
-
-  protected mergeRequestParams(
-    params1: RequestParams,
-    params2?: RequestParams,
-  ): RequestParams {
-    return {
-      ...this.baseApiParams,
-      ...params1,
-      ...(params2 || {}),
-      headers: {
-        ...(this.baseApiParams.headers || {}),
-        ...(params1.headers || {}),
-        ...((params2 && params2.headers) || {}),
-      },
+export namespace Accounts {
+  /**
+   * @description **Required ACL:** `confd.accounts.read`
+   * @tags accounts
+   * @name ListAccounts
+   * @summary List accounts
+   * @request GET:/accounts
+   * @secure
+   */
+  export namespace ListAccounts {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /**
+       * The tenant's UUID, defining the ownership of a given resource.
+       * @format uuid
+       */
+      "Wazo-Tenant": string;
     };
+    export type ResponseBody = AccountList;
   }
 
-  protected createAbortSignal = (
-    cancelToken: CancelToken,
-  ): AbortSignal | undefined => {
-    if (this.abortControllers.has(cancelToken)) {
-      const abortController = this.abortControllers.get(cancelToken);
-      if (abortController) {
-        return abortController.signal;
-      }
-      return void 0;
-    }
-
-    const abortController = new AbortController();
-    this.abortControllers.set(cancelToken, abortController);
-    return abortController.signal;
-  };
-
-  public abortRequest = (cancelToken: CancelToken) => {
-    const abortController = this.abortControllers.get(cancelToken);
-
-    if (abortController) {
-      abortController.abort();
-      this.abortControllers.delete(cancelToken);
-    }
-  };
-
-  public request = async <T = any, E = any>({
-    body,
-    secure,
-    path,
-    type,
-    query,
-    format,
-    baseUrl,
-    cancelToken,
-    ...params
-  }: FullRequestParams): Promise<HttpResponse<T, E>> => {
-    const secureParams =
-      ((typeof secure === "boolean" ? secure : this.baseApiParams.secure) &&
-        this.securityWorker &&
-        (await this.securityWorker(this.securityData))) ||
-      {};
-    const requestParams = this.mergeRequestParams(params, secureParams);
-    const queryString = query && this.toQueryString(query);
-    const payloadFormatter = this.contentFormatters[type || ContentType.Json];
-    const responseFormat = format || requestParams.format;
-
-    return this.customFetch(
-      `${baseUrl || this.baseUrl || ""}${path}${queryString ? `?${queryString}` : ""}`,
-      {
-        ...requestParams,
-        headers: {
-          ...(requestParams.headers || {}),
-          ...(type && type !== ContentType.FormData
-            ? { "Content-Type": type }
-            : {}),
-        },
-        signal:
-          (cancelToken
-            ? this.createAbortSignal(cancelToken)
-            : requestParams.signal) || null,
-        body:
-          typeof body === "undefined" || body === null
-            ? null
-            : payloadFormatter(body),
-      },
-    ).then(async (response) => {
-      const r = response.clone() as HttpResponse<T, E>;
-      r.data = null as unknown as T;
-      r.error = null as unknown as E;
-
-      const data = !responseFormat
-        ? r
-        : await response[responseFormat]()
-            .then((data) => {
-              if (r.ok) {
-                r.data = data;
-              } else {
-                r.error = data;
-              }
-              return r;
-            })
-            .catch((e) => {
-              r.error = e;
-              return r;
-            });
-
-      if (cancelToken) {
-        this.abortControllers.delete(cancelToken);
-      }
-
-      if (!response.ok) throw data;
-      return data;
-    });
-  };
+  /**
+   * @description **Required ACL:** `confd.accounts.summary.read`
+   * @tags accounts
+   * @name GetTenantsSummaryAccount
+   * @summary Get summary accounts
+   * @request GET:/accounts/summary
+   * @secure
+   */
+  export namespace GetTenantsSummaryAccount {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /**
+       * The tenant's UUID, defining the ownership of a given resource.
+       * @format uuid
+       */
+      "Wazo-Tenant": string;
+    };
+    export type ResponseBody = AccountSummary;
+  }
 }
 
-/**
- * @title nestbox-confd
- * @version 1.0
- * @license GPL v3 (http://www.gnu.org/licenses/gpl.txt)
- * @baseUrl /1.0
- * @contact Dev Team <dev@wazo.io> (http://wazo.io)
- *
- * Nestbox confd exposes an API for managing core resources on a Nestbox server such as clients, etc.
- */
-export class Api<
-  SecurityDataType extends unknown,
-> extends HttpClient<SecurityDataType> {
-  accounts = {
-    /**
-     * @description **Required ACL:** `confd.accounts.read`
-     *
-     * @tags accounts
-     * @name ListAccounts
-     * @summary List accounts
-     * @request GET:/accounts
-     * @secure
-     */
-    listAccounts: (params: RequestParams = {}) =>
-      this.request<AccountList, APIError>({
-        path: `/accounts`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+export namespace Config {
+  /**
+   * @description **Required ACL:** `confd.config.read`
+   * @tags config
+   * @name GetConfig
+   * @summary Show the current configuration
+   * @request GET:/config
+   * @secure
+   */
+  export namespace GetConfig {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+}
 
-    /**
-     * @description **Required ACL:** `confd.accounts.summary.read`
-     *
-     * @tags accounts
-     * @name GetTenantsSummaryAccount
-     * @summary Get summary accounts
-     * @request GET:/accounts/summary
-     * @secure
-     */
-    getTenantsSummaryAccount: (params: RequestParams = {}) =>
-      this.request<AccountSummary, APIError>({
-        path: `/accounts/summary`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-  };
-  config = {
-    /**
-     * @description **Required ACL:** `confd.config.read`
-     *
-     * @tags config
-     * @name GetConfig
-     * @summary Show the current configuration
-     * @request GET:/config
-     * @secure
-     */
-    getConfig: (params: RequestParams = {}) =>
-      this.request<void, any>({
-        path: `/config`,
-        method: "GET",
-        secure: true,
-        ...params,
-      }),
-  };
-  customers = {
-    /**
-     * @description **Required ACL:** `confd.customers.read`
-     *
-     * @tags customers
-     * @name ListCustomers
-     * @summary List customers
-     * @request GET:/customers
-     * @secure
-     */
-    listCustomers: (
-      query?: {
-        /** Search term used to filter the result */
-        search?: string;
-        /** Name of the field to use for sorting the list of items returned. */
-        order?: string;
-        /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
-        direction?: "asc" | "desc";
-        /** The limit defines the number of individual objects that are returned */
-        limit?: number;
-        /**
-         * The offset defines the offsets the start by the number specified
-         * @default 0
-         */
-        offset?: number;
-        /** Comma-separated list of UUIDs to filter resellers by */
-        uuid?: string;
-        /** Comma-separated list of names to filter resellers by */
-        name?: string;
-        /** Comma-separated list of client_id to filter customers by */
-        client_id?: string;
-        /**
-         * Should the result include customers from sub-resellers
-         * @default false
-         */
-        recurse?: boolean;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<CustomerList, any>({
-        path: `/customers`,
-        method: "GET",
-        query: query,
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+export namespace Customers {
+  /**
+   * @description **Required ACL:** `confd.customers.read`
+   * @tags customers
+   * @name ListCustomers
+   * @summary List customers
+   * @request GET:/customers
+   * @secure
+   */
+  export namespace ListCustomers {
+    export type RequestParams = {};
+    export type RequestQuery = {
+      /** Comma-separated list of client_id to filter customers by */
+      client_id?: string;
+      /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+      direction?: "asc" | "desc";
+      /** The limit defines the number of individual objects that are returned */
+      limit?: number;
+      /** Comma-separated list of names to filter resellers by */
+      name?: string;
+      /**
+       * The offset defines the offsets the start by the number specified
+       * @default 0
+       */
+      offset?: number;
+      /** Name of the field to use for sorting the list of items returned. */
+      order?: string;
+      /**
+       * Should the result include customers from sub-resellers
+       * @default false
+       */
+      recurse?: boolean;
+      /** Search term used to filter the result */
+      search?: string;
+      /** Comma-separated list of UUIDs to filter resellers by */
+      uuid?: string;
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = CustomerList;
+  }
 
-    /**
-     * @description **Required ACL:** `confd.customers.create`
-     *
-     * @tags customers
-     * @name CreateCustomer
-     * @summary Create customer
-     * @request POST:/customers
-     * @secure
-     */
-    createCustomer: (body: Customer, params: RequestParams = {}) =>
-      this.request<Customer, APIError>({
-        path: `/customers`,
-        method: "POST",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `confd.customers.create`
+   * @tags customers
+   * @name CreateCustomer
+   * @summary Create customer
+   * @request POST:/customers
+   * @secure
+   */
+  export namespace CreateCustomer {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = Customer;
+    export type RequestHeaders = {};
+    export type ResponseBody = Customer;
+  }
 
-    /**
-     * @description **Required ACL:** `confd.customers.{customer_uuid}.delete`
-     *
-     * @tags customers
-     * @name DeleteCustomer
-     * @summary Delete customer
-     * @request DELETE:/customers/{customer_uuid}
-     * @secure
-     */
-    deleteCustomer: (customerUuid: string, params: RequestParams = {}) =>
-      this.request<any, APIError>({
-        path: `/customers/${customerUuid}`,
-        method: "DELETE",
-        secure: true,
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `confd.customers.{customer_uuid}.delete`
+   * @tags customers
+   * @name DeleteCustomer
+   * @summary Delete customer
+   * @request DELETE:/customers/{customer_uuid}
+   * @secure
+   */
+  export namespace DeleteCustomer {
+    export type RequestParams = {
+      /** The UUID of the customer */
+      customerUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = any;
+  }
 
-    /**
-     * @description **Required ACL:** `confd.customers.{customer_uuid}.read`
-     *
-     * @tags customers
-     * @name GetCustomer
-     * @summary Get customer
-     * @request GET:/customers/{customer_uuid}
-     * @secure
-     */
-    getCustomer: (customerUuid: string, params: RequestParams = {}) =>
-      this.request<Customer, APIError>({
-        path: `/customers/${customerUuid}`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `confd.customers.{customer_uuid}.read`
+   * @tags customers
+   * @name GetCustomer
+   * @summary Get customer
+   * @request GET:/customers/{customer_uuid}
+   * @secure
+   */
+  export namespace GetCustomer {
+    export type RequestParams = {
+      /** The UUID of the customer */
+      customerUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = Customer;
+  }
 
-    /**
-     * @description **Required ACL:** `confd.customers.{customer_uuid}.update`
-     *
-     * @tags customers
-     * @name UpdateCustomer
-     * @summary Update customer
-     * @request PUT:/customers/{customer_uuid}
-     * @secure
-     */
-    updateCustomer: (
-      customerUuid: string,
-      body: CustomerUpdate,
-      params: RequestParams = {},
-    ) =>
-      this.request<any, APIError>({
-        path: `/customers/${customerUuid}`,
-        method: "PUT",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
-  };
-  engines = {
-    /**
-     * @description **Required ACL:** `confd.engines.instances.{instance_uuid}.accounts.events.create`
-     *
-     * @tags accounts
-     * @name AddEngineInstanceAccountEvent
-     * @summary Send account events
-     * @request POST:/engines/instances/{instance_uuid}/accounts/events
-     * @secure
-     */
-    addEngineInstanceAccountEvent: (
-      instanceUuid: string,
-      body: EngineAccountEvent,
-      params: RequestParams = {},
-    ) =>
-      this.request<any, APIError>({
-        path: `/engines/instances/${instanceUuid}/accounts/events`,
-        method: "POST",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `confd.customers.{customer_uuid}.update`
+   * @tags customers
+   * @name UpdateCustomer
+   * @summary Update customer
+   * @request PUT:/customers/{customer_uuid}
+   * @secure
+   */
+  export namespace UpdateCustomer {
+    export type RequestParams = {
+      /** The UUID of the customer */
+      customerUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = CustomerUpdate;
+    export type RequestHeaders = {};
+    export type ResponseBody = any;
+  }
+}
 
-    /**
-     * @description **Required ACL:** `confd.engines.instances.{instance_uuid}.accounts.synchronize.read`
-     *
-     * @tags accounts
-     * @name CheckEngineInstanceAccountSynchronize
-     * @summary Check if accounts are synchronized
-     * @request HEAD:/engines/instances/{instance_uuid}/accounts/synchronize
-     * @secure
-     */
-    checkEngineInstanceAccountSynchronize: (
-      instanceUuid: string,
-      query: {
-        /** The sha256 hash of accounts */
-        hash: string;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<void, void>({
-        path: `/engines/instances/${instanceUuid}/accounts/synchronize`,
-        method: "HEAD",
-        query: query,
-        secure: true,
-        ...params,
-      }),
+export namespace Engines {
+  /**
+   * @description **Required ACL:** `confd.engines.instances.{instance_uuid}.accounts.events.create`
+   * @tags accounts
+   * @name AddEngineInstanceAccountEvent
+   * @summary Send account events
+   * @request POST:/engines/instances/{instance_uuid}/accounts/events
+   * @secure
+   */
+  export namespace AddEngineInstanceAccountEvent {
+    export type RequestParams = {
+      /** UUID of the instance */
+      instanceUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = EngineAccountEvent;
+    export type RequestHeaders = {};
+    export type ResponseBody = any;
+  }
 
-    /**
-     * @description **Required ACL:** `confd.engines.instances.{instance_uuid}.accounts.synchronize.create`
-     *
-     * @tags accounts
-     * @name EngineInstanceAccountSynchronize
-     * @summary Synchronize accounts
-     * @request POST:/engines/instances/{instance_uuid}/accounts/synchronize
-     * @secure
-     */
-    engineInstanceAccountSynchronize: (
-      instanceUuid: string,
-      body: EngineAccounts,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, APIError>({
-        path: `/engines/instances/${instanceUuid}/accounts/synchronize`,
-        method: "POST",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
-  };
-  init = {
-    /**
-     * @description Create the first reseller without parent_uuid
-     *
-     * @tags init
-     * @name InitCreate
-     * @summary Initialize nestbox-confd
-     * @request POST:/init
-     * @secure
-     */
-    initCreate: (body: Init, params: RequestParams = {}) =>
-      this.request<Initialized, any>({
-        path: `/init`,
-        method: "POST",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
-  };
-  instances = {
-    /**
-     * @description **Required ACL:** `confd.instances.read`
-     *
-     * @tags accounts, instances
-     * @name ListInstances
-     * @summary List instances
-     * @request GET:/instances
-     * @secure
-     */
-    listInstances: (
-      query?: {
-        /**
-         * Should the query include sub-tenants
-         * @default false
-         */
-        recurse?: boolean;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<InstanceList, APIError>({
-        path: `/instances`,
-        method: "GET",
-        query: query,
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-  };
-  locations = {
-    /**
-     * @description **Required ACL:** `confd.locations.read`
-     *
-     * @tags locations
-     * @name ListLocations
-     * @summary List locations
-     * @request GET:/locations
-     * @secure
-     */
-    listLocations: (
-      query?: {
-        /** Search term used to filter the result */
-        search?: string;
-        /** Name of the field to use for sorting the list of items returned. */
-        order?: string;
-        /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
-        direction?: "asc" | "desc";
-        /** The limit defines the number of individual objects that are returned */
-        limit?: number;
-        /**
-         * The offset defines the offsets the start by the number specified
-         * @default 0
-         */
-        offset?: number;
-        /** Comma-separated list of UUIDs to filter resellers by */
-        uuid?: string;
-        /** Comma-separated list of names to filter resellers by */
-        name?: string;
-        /** Comma-separated list of customer UUIDs to filter locations by */
-        customer_uuid?: string;
-        /** Instance UUID to filter locations by */
-        instance_uuid?: string;
-        /** Instance tenant UUID to filter locations by */
-        wazo_tenant_uuid?: string;
-        /**
-         * Should the result include locations from customers of sub-resellers
-         * @default false
-         */
-        recurse?: boolean;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<LocationList, any>({
-        path: `/locations`,
-        method: "GET",
-        query: query,
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `confd.engines.instances.{instance_uuid}.accounts.synchronize.read`
+   * @tags accounts
+   * @name CheckEngineInstanceAccountSynchronize
+   * @summary Check if accounts are synchronized
+   * @request HEAD:/engines/instances/{instance_uuid}/accounts/synchronize
+   * @secure
+   */
+  export namespace CheckEngineInstanceAccountSynchronize {
+    export type RequestParams = {
+      /** UUID of the instance */
+      instanceUuid: string;
+    };
+    export type RequestQuery = {
+      /** The sha256 hash of accounts */
+      hash: string;
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
 
-    /**
-     * @description **Required ACL:** `confd.locations.create`
-     *
-     * @tags locations
-     * @name CreateLocation
-     * @summary Create location
-     * @request POST:/locations
-     * @secure
-     */
-    createLocation: (body: Location, params: RequestParams = {}) =>
-      this.request<Location, APIError>({
-        path: `/locations`,
-        method: "POST",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `confd.engines.instances.{instance_uuid}.accounts.synchronize.create`
+   * @tags accounts
+   * @name EngineInstanceAccountSynchronize
+   * @summary Synchronize accounts
+   * @request POST:/engines/instances/{instance_uuid}/accounts/synchronize
+   * @secure
+   */
+  export namespace EngineInstanceAccountSynchronize {
+    export type RequestParams = {
+      /** UUID of the instance */
+      instanceUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = EngineAccounts;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+}
 
-    /**
-     * @description **Required ACL:** `confd.locations.{location_uuid}.delete`
-     *
-     * @tags locations
-     * @name DeleteLocation
-     * @summary Delete location
-     * @request DELETE:/locations/{location_uuid}
-     * @secure
-     */
-    deleteLocation: (locationUuid: string, params: RequestParams = {}) =>
-      this.request<any, APIError>({
-        path: `/locations/${locationUuid}`,
-        method: "DELETE",
-        secure: true,
-        ...params,
-      }),
+export namespace Init {
+  /**
+   * @description Create the first reseller without parent_uuid
+   * @tags init
+   * @name InitCreate
+   * @summary Initialize nestbox-confd
+   * @request POST:/init
+   * @secure
+   */
+  export namespace InitCreate {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = Init;
+    export type RequestHeaders = {};
+    export type ResponseBody = Initialized;
+  }
+}
 
-    /**
-     * @description **Required ACL:** `confd.locations.{location_uuid}.read`
-     *
-     * @tags locations
-     * @name GetLocation
-     * @summary Get location
-     * @request GET:/locations/{location_uuid}
-     * @secure
-     */
-    getLocation: (locationUuid: string, params: RequestParams = {}) =>
-      this.request<Location, APIError>({
-        path: `/locations/${locationUuid}`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+export namespace Instances {
+  /**
+   * @description **Required ACL:** `confd.instances.read`
+   * @tags accounts, instances
+   * @name ListInstances
+   * @summary List instances
+   * @request GET:/instances
+   * @secure
+   */
+  export namespace ListInstances {
+    export type RequestParams = {};
+    export type RequestQuery = {
+      /**
+       * Should the query include sub-tenants
+       * @default false
+       */
+      recurse?: boolean;
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /**
+       * The tenant's UUID, defining the ownership of a given resource.
+       * @format uuid
+       */
+      "Wazo-Tenant": string;
+    };
+    export type ResponseBody = InstanceList;
+  }
+}
 
-    /**
-     * @description **Required ACL:** `confd.locations.{location_uuid}.update`
-     *
-     * @tags locations
-     * @name UpdateLocation
-     * @summary Update location
-     * @request PUT:/locations/{location_uuid}
-     * @secure
-     */
-    updateLocation: (
-      locationUuid: string,
-      body: LocationUpdate,
-      params: RequestParams = {},
-    ) =>
-      this.request<any, APIError>({
-        path: `/locations/${locationUuid}`,
-        method: "PUT",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
+export namespace Locations {
+  /**
+   * @description **Required ACL:** `confd.locations.read`
+   * @tags locations
+   * @name ListLocations
+   * @summary List locations
+   * @request GET:/locations
+   * @secure
+   */
+  export namespace ListLocations {
+    export type RequestParams = {};
+    export type RequestQuery = {
+      /** Comma-separated list of customer UUIDs to filter locations by */
+      customer_uuid?: string;
+      /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+      direction?: "asc" | "desc";
+      /** Instance UUID to filter locations by */
+      instance_uuid?: string;
+      /** The limit defines the number of individual objects that are returned */
+      limit?: number;
+      /** Comma-separated list of names to filter resellers by */
+      name?: string;
+      /**
+       * The offset defines the offsets the start by the number specified
+       * @default 0
+       */
+      offset?: number;
+      /** Name of the field to use for sorting the list of items returned. */
+      order?: string;
+      /**
+       * Should the result include locations from customers of sub-resellers
+       * @default false
+       */
+      recurse?: boolean;
+      /** Search term used to filter the result */
+      search?: string;
+      /** Comma-separated list of UUIDs to filter resellers by */
+      uuid?: string;
+      /** Instance tenant UUID to filter locations by */
+      wazo_tenant_uuid?: string;
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = LocationList;
+  }
 
-    /**
-     * @description **Required ACL:** `confd.locations.{location_uuid}.wazo.tenants.update`
-     *
-     * @tags locations
-     * @name UpdateLocationWazoTenants
-     * @summary Update location Wazo tenants
-     * @request PUT:/locations/{location_uuid}/wazo/tenants
-     * @secure
-     */
-    updateLocationWazoTenants: (
-      locationUuid: string,
-      body: LocationWazoTenants,
-      params: RequestParams = {},
-    ) =>
-      this.request<any, APIError>({
-        path: `/locations/${locationUuid}/wazo/tenants`,
-        method: "PUT",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
-  };
-  plugins = {
-    /**
-     * @description **Required ACL:** `confd.plugins.read`
-     *
-     * @tags plugins
-     * @name GetPlugins
-     * @summary View installed plug-ins for this resource
-     * @request GET:/plugins
-     * @secure
-     */
-    getPlugins: (
-      query?: {
-        /** Search term used to filter the result */
-        search?: string;
-        /** Name of the field to use for sorting the list of items returned. */
-        order?: string;
-        /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
-        direction?: "asc" | "desc";
-        /** The limit defines the number of individual objects that are returned */
-        limit?: number;
-        /**
-         * The offset defines the offsets the start by the number specified
-         * @default 0
-         */
-        offset?: number;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<PluginList, APIError>({
-        path: `/plugins`,
-        method: "GET",
-        query: query,
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `confd.locations.create`
+   * @tags locations
+   * @name CreateLocation
+   * @summary Create location
+   * @request POST:/locations
+   * @secure
+   */
+  export namespace CreateLocation {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = Location;
+    export type RequestHeaders = {};
+    export type ResponseBody = Location;
+  }
 
-    /**
-     * @description **Required ACL:** `confd.plugins.create`
-     *
-     * @tags plugins
-     * @name InstallPlugin
-     * @summary Install plug-in for this resource
-     * @request POST:/plugins
-     * @secure
-     */
-    installPlugin: (plugin: PluginCreate, params: RequestParams = {}) =>
-      this.request<any, APIError>({
-        path: `/plugins`,
-        method: "POST",
-        body: plugin,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `confd.locations.{location_uuid}.delete`
+   * @tags locations
+   * @name DeleteLocation
+   * @summary Delete location
+   * @request DELETE:/locations/{location_uuid}
+   * @secure
+   */
+  export namespace DeleteLocation {
+    export type RequestParams = {
+      /** The UUID of the location */
+      locationUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = any;
+  }
 
-    /**
-     * @description **Required ACL:** `confd.plugins.{plugin_uuid}.delete`
-     *
-     * @tags plugins
-     * @name UninstallPlugin
-     * @summary Uninstall plug-in
-     * @request DELETE:/plugins/{plugin_uuid}
-     * @secure
-     */
-    uninstallPlugin: (pluginUuid: string, params: RequestParams = {}) =>
-      this.request<any, APIError>({
-        path: `/plugins/${pluginUuid}`,
-        method: "DELETE",
-        secure: true,
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `confd.locations.{location_uuid}.read`
+   * @tags locations
+   * @name GetLocation
+   * @summary Get location
+   * @request GET:/locations/{location_uuid}
+   * @secure
+   */
+  export namespace GetLocation {
+    export type RequestParams = {
+      /** The UUID of the location */
+      locationUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = Location;
+  }
 
-    /**
-     * @description **Required ACL:** `confd.plugins.{plugin_uuid}.read`
-     *
-     * @tags plugins
-     * @name GetPlugin
-     * @summary View plug-in information
-     * @request GET:/plugins/{plugin_uuid}
-     * @secure
-     */
-    getPlugin: (pluginUuid: string, params: RequestParams = {}) =>
-      this.request<Plugin, APIError>({
-        path: `/plugins/${pluginUuid}`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `confd.locations.{location_uuid}.update`
+   * @tags locations
+   * @name UpdateLocation
+   * @summary Update location
+   * @request PUT:/locations/{location_uuid}
+   * @secure
+   */
+  export namespace UpdateLocation {
+    export type RequestParams = {
+      /** The UUID of the location */
+      locationUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = LocationUpdate;
+    export type RequestHeaders = {};
+    export type ResponseBody = any;
+  }
 
-    /**
-     * @description **Required ACL:** `confd.plugins.{plugin_uuid}.update`
-     *
-     * @tags plugins
-     * @name UpdatePlugin
-     * @summary Update installed plug-in settings
-     * @request PUT:/plugins/{plugin_uuid}
-     * @secure
-     */
-    updatePlugin: (
-      pluginUuid: string,
-      body: PluginUpdate,
-      params: RequestParams = {},
-    ) =>
-      this.request<any, APIError>({
-        path: `/plugins/${pluginUuid}`,
-        method: "PUT",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `confd.locations.{location_uuid}.wazo.tenants.update`
+   * @tags locations
+   * @name UpdateLocationWazoTenants
+   * @summary Update location Wazo tenants
+   * @request PUT:/locations/{location_uuid}/wazo/tenants
+   * @secure
+   */
+  export namespace UpdateLocationWazoTenants {
+    export type RequestParams = {
+      /** The UUID of the location */
+      locationUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = LocationWazoTenants;
+    export type RequestHeaders = {};
+    export type ResponseBody = any;
+  }
+}
 
-    /**
-     * @description **Required ACL:** `confd.plugins.{plugin_uuid}.installs.customers.read`
-     *
-     * @tags plugins
-     * @name InstallsCustomersList
-     * @summary List this plug-in's installation on customers
-     * @request GET:/plugins/{plugin_uuid}/installs/customers
-     * @secure
-     */
-    installsCustomersList: (
-      pluginUuid: string,
-      query?: {
-        /**
-         * filter results by resource's unique identifiers (comma-separated list) to a maximum of 25 items
-         * @maxItems 25
-         * @minItems 1
-         * @uniqueItems true
-         */
-        uuids?: string[];
-        /** The limit defines the number of individual objects that are returned */
-        limit?: number;
-        /**
-         * The offset defines the offsets the start by the number specified
-         * @default 0
-         */
-        offset?: number;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<PluginCustomerInstallation, APIError>({
-        path: `/plugins/${pluginUuid}/installs/customers`,
-        method: "GET",
-        query: query,
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+export namespace Plugins {
+  /**
+   * @description **Required ACL:** `confd.plugins.read`
+   * @tags plugins
+   * @name GetPlugins
+   * @summary View installed plug-ins for this resource
+   * @request GET:/plugins
+   * @secure
+   */
+  export namespace GetPlugins {
+    export type RequestParams = {};
+    export type RequestQuery = {
+      /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+      direction?: "asc" | "desc";
+      /** The limit defines the number of individual objects that are returned */
+      limit?: number;
+      /**
+       * The offset defines the offsets the start by the number specified
+       * @default 0
+       */
+      offset?: number;
+      /** Name of the field to use for sorting the list of items returned. */
+      order?: string;
+      /** Search term used to filter the result */
+      search?: string;
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /**
+       * The tenant's UUID, defining the ownership of a given resource.
+       * @format uuid
+       */
+      "Wazo-Tenant": string;
+    };
+    export type ResponseBody = PluginList;
+  }
 
-    /**
-     * @description **Required ACL:** `confd.plugins.{plugin_uuid}.installs.customers.create`
-     *
-     * @tags plugins
-     * @name InstallsCustomersCreate
-     * @summary Install (copy) this plug-in to a customer
-     * @request POST:/plugins/{plugin_uuid}/installs/customers
-     * @secure
-     */
-    installsCustomersCreate: (
-      pluginUuid: string,
-      body: PluginInstallParamsCustomer,
-      params: RequestParams = {},
-    ) =>
-      this.request<PluginInstallCreate, APIError>({
-        path: `/plugins/${pluginUuid}/installs/customers`,
-        method: "POST",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `confd.plugins.create`
+   * @tags plugins
+   * @name InstallPlugin
+   * @summary Install plug-in for this resource
+   * @request POST:/plugins
+   * @secure
+   */
+  export namespace InstallPlugin {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = PluginCreate;
+    export type RequestHeaders = {
+      /**
+       * The tenant's UUID, defining the ownership of a given resource.
+       * @format uuid
+       */
+      "Wazo-Tenant": string;
+    };
+    export type ResponseBody = any;
+  }
 
-    /**
-     * @description **Required ACL:** `confd.plugins.{plugin_uuid}.installs.locations.read`
-     *
-     * @tags plugins
-     * @name InstallsLocationsList
-     * @summary List this plug-in's installation on locations
-     * @request GET:/plugins/{plugin_uuid}/installs/locations
-     * @secure
-     */
-    installsLocationsList: (
-      pluginUuid: string,
-      query?: {
-        /**
-         * filter results by resource's unique identifiers (comma-separated list) to a maximum of 25 items
-         * @maxItems 25
-         * @minItems 1
-         * @uniqueItems true
-         */
-        uuids?: string[];
-        /** The limit defines the number of individual objects that are returned */
-        limit?: number;
-        /**
-         * The offset defines the offsets the start by the number specified
-         * @default 0
-         */
-        offset?: number;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<PluginLocationInstallation, APIError>({
-        path: `/plugins/${pluginUuid}/installs/locations`,
-        method: "GET",
-        query: query,
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `confd.plugins.{plugin_uuid}.delete`
+   * @tags plugins
+   * @name UninstallPlugin
+   * @summary Uninstall plug-in
+   * @request DELETE:/plugins/{plugin_uuid}
+   * @secure
+   */
+  export namespace UninstallPlugin {
+    export type RequestParams = {
+      /**
+       * Plug-in's unique identifier
+       * @format uuid
+       */
+      pluginUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /**
+       * The tenant's UUID, defining the ownership of a given resource.
+       * @format uuid
+       */
+      "Wazo-Tenant": string;
+    };
+    export type ResponseBody = any;
+  }
 
-    /**
-     * @description **Required ACL:** `confd.plugins.{plugin_uuid}.installs.locations.create`
-     *
-     * @tags plugins
-     * @name InstallsLocationsCreate
-     * @summary Install (copy) this plug-in to a location
-     * @request POST:/plugins/{plugin_uuid}/installs/locations
-     * @secure
-     */
-    installsLocationsCreate: (
-      pluginUuid: string,
-      body: PluginInstallParamsLocation,
-      params: RequestParams = {},
-    ) =>
-      this.request<PluginInstallCreate, APIError>({
-        path: `/plugins/${pluginUuid}/installs/locations`,
-        method: "POST",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `confd.plugins.{plugin_uuid}.read`
+   * @tags plugins
+   * @name GetPlugin
+   * @summary View plug-in information
+   * @request GET:/plugins/{plugin_uuid}
+   * @secure
+   */
+  export namespace GetPlugin {
+    export type RequestParams = {
+      /**
+       * Plug-in's unique identifier
+       * @format uuid
+       */
+      pluginUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /**
+       * The tenant's UUID, defining the ownership of a given resource.
+       * @format uuid
+       */
+      "Wazo-Tenant": string;
+    };
+    export type ResponseBody = Plugin;
+  }
 
-    /**
-     * @description **Required ACL:** `confd.plugins.{plugin_uuid}.installs.resellers.read`
-     *
-     * @tags plugins
-     * @name InstallsResellersList
-     * @summary List this plug-in's installation on resellers
-     * @request GET:/plugins/{plugin_uuid}/installs/resellers
-     * @secure
-     */
-    installsResellersList: (
-      pluginUuid: string,
-      query?: {
-        /**
-         * filter results by resource's unique identifiers (comma-separated list) to a maximum of 25 items
-         * @maxItems 25
-         * @minItems 1
-         * @uniqueItems true
-         */
-        uuids?: string[];
-        /** The limit defines the number of individual objects that are returned */
-        limit?: number;
-        /**
-         * The offset defines the offsets the start by the number specified
-         * @default 0
-         */
-        offset?: number;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<PluginResellerInstallation, APIError>({
-        path: `/plugins/${pluginUuid}/installs/resellers`,
-        method: "GET",
-        query: query,
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `confd.plugins.{plugin_uuid}.update`
+   * @tags plugins
+   * @name UpdatePlugin
+   * @summary Update installed plug-in settings
+   * @request PUT:/plugins/{plugin_uuid}
+   * @secure
+   */
+  export namespace UpdatePlugin {
+    export type RequestParams = {
+      /**
+       * Plug-in's unique identifier
+       * @format uuid
+       */
+      pluginUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = PluginUpdate;
+    export type RequestHeaders = {
+      /**
+       * The tenant's UUID, defining the ownership of a given resource.
+       * @format uuid
+       */
+      "Wazo-Tenant": string;
+    };
+    export type ResponseBody = any;
+  }
 
-    /**
-     * @description **Required ACL:** `confd.plugins.{plugin_uuid}.installs.resellers.create`
-     *
-     * @tags plugins
-     * @name InstallsResellersCreate
-     * @summary Install (copy) this plug-in to a location
-     * @request POST:/plugins/{plugin_uuid}/installs/resellers
-     * @secure
-     */
-    installsResellersCreate: (
-      pluginUuid: string,
-      body: PluginInstallParamsReseller,
-      params: RequestParams = {},
-    ) =>
-      this.request<PluginInstallCreate, APIError>({
-        path: `/plugins/${pluginUuid}/installs/resellers`,
-        method: "POST",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-  };
-  resellers = {
-    /**
-     * @description **Required ACL:** `confd.resellers.read`
-     *
-     * @tags resellers
-     * @name ListResellers
-     * @summary List resellers
-     * @request GET:/resellers
-     * @secure
-     */
-    listResellers: (
-      query?: {
-        /** Search term used to filter the result */
-        search?: string;
-        /** Name of the field to use for sorting the list of items returned. */
-        order?: string;
-        /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
-        direction?: "asc" | "desc";
-        /** The limit defines the number of individual objects that are returned */
-        limit?: number;
-        /**
-         * The offset defines the offsets the start by the number specified
-         * @default 0
-         */
-        offset?: number;
-        /** Comma-separated list of UUIDs to filter resellers by */
-        uuid?: string;
-        /** Comma-separated list of names to filter resellers by */
-        name?: string;
-        /** Comma-separated list of parent UUIDs to filter resellers by */
-        parent_uuid?: string;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<ResellerList, any>({
-        path: `/resellers`,
-        method: "GET",
-        query: query,
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `confd.plugins.{plugin_uuid}.installs.customers.read`
+   * @tags plugins
+   * @name InstallsCustomersList
+   * @summary List this plug-in's installation on customers
+   * @request GET:/plugins/{plugin_uuid}/installs/customers
+   * @secure
+   */
+  export namespace InstallsCustomersList {
+    export type RequestParams = {
+      /**
+       * Plug-in's unique identifier
+       * @format uuid
+       */
+      pluginUuid: string;
+    };
+    export type RequestQuery = {
+      /** The limit defines the number of individual objects that are returned */
+      limit?: number;
+      /**
+       * The offset defines the offsets the start by the number specified
+       * @default 0
+       */
+      offset?: number;
+      /**
+       * filter results by resource's unique identifiers (comma-separated list) to a maximum of 25 items
+       * @maxItems 25
+       * @minItems 1
+       * @uniqueItems true
+       */
+      uuids?: string[];
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /**
+       * The tenant's UUID, defining the ownership of a given resource.
+       * @format uuid
+       */
+      "Wazo-Tenant": string;
+    };
+    export type ResponseBody = PluginCustomerInstallation;
+  }
 
-    /**
-     * @description **Required ACL:** `confd.resellers.create`
-     *
-     * @tags resellers
-     * @name CreateReseller
-     * @summary Create reseller
-     * @request POST:/resellers
-     * @secure
-     */
-    createReseller: (body: Reseller, params: RequestParams = {}) =>
-      this.request<Reseller, APIError>({
-        path: `/resellers`,
-        method: "POST",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `confd.plugins.{plugin_uuid}.installs.customers.create`
+   * @tags plugins
+   * @name InstallsCustomersCreate
+   * @summary Install (copy) this plug-in to a customer
+   * @request POST:/plugins/{plugin_uuid}/installs/customers
+   * @secure
+   */
+  export namespace InstallsCustomersCreate {
+    export type RequestParams = {
+      /**
+       * Plug-in's unique identifier
+       * @format uuid
+       */
+      pluginUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = PluginInstallParamsCustomer;
+    export type RequestHeaders = {
+      /**
+       * The tenant's UUID, defining the ownership of a given resource.
+       * @format uuid
+       */
+      "Wazo-Tenant": string;
+    };
+    export type ResponseBody = PluginInstallCreate;
+  }
 
-    /**
-     * @description **Required ACL:** `confd.resellers.{reseller_uuid}.delete`
-     *
-     * @tags resellers
-     * @name DeleteReseller
-     * @summary Delete reseller
-     * @request DELETE:/resellers/{reseller_uuid}
-     * @secure
-     */
-    deleteReseller: (resellerUuid: string, params: RequestParams = {}) =>
-      this.request<any, APIError>({
-        path: `/resellers/${resellerUuid}`,
-        method: "DELETE",
-        secure: true,
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `confd.plugins.{plugin_uuid}.installs.locations.read`
+   * @tags plugins
+   * @name InstallsLocationsList
+   * @summary List this plug-in's installation on locations
+   * @request GET:/plugins/{plugin_uuid}/installs/locations
+   * @secure
+   */
+  export namespace InstallsLocationsList {
+    export type RequestParams = {
+      /**
+       * Plug-in's unique identifier
+       * @format uuid
+       */
+      pluginUuid: string;
+    };
+    export type RequestQuery = {
+      /** The limit defines the number of individual objects that are returned */
+      limit?: number;
+      /**
+       * The offset defines the offsets the start by the number specified
+       * @default 0
+       */
+      offset?: number;
+      /**
+       * filter results by resource's unique identifiers (comma-separated list) to a maximum of 25 items
+       * @maxItems 25
+       * @minItems 1
+       * @uniqueItems true
+       */
+      uuids?: string[];
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /**
+       * The tenant's UUID, defining the ownership of a given resource.
+       * @format uuid
+       */
+      "Wazo-Tenant": string;
+    };
+    export type ResponseBody = PluginLocationInstallation;
+  }
 
-    /**
-     * @description **Required ACL:** `confd.resellers.{reseller_uuid}.read`
-     *
-     * @tags resellers
-     * @name GetReseller
-     * @summary Get reseller
-     * @request GET:/resellers/{reseller_uuid}
-     * @secure
-     */
-    getReseller: (resellerUuid: string, params: RequestParams = {}) =>
-      this.request<Reseller, APIError>({
-        path: `/resellers/${resellerUuid}`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `confd.plugins.{plugin_uuid}.installs.locations.create`
+   * @tags plugins
+   * @name InstallsLocationsCreate
+   * @summary Install (copy) this plug-in to a location
+   * @request POST:/plugins/{plugin_uuid}/installs/locations
+   * @secure
+   */
+  export namespace InstallsLocationsCreate {
+    export type RequestParams = {
+      /**
+       * Plug-in's unique identifier
+       * @format uuid
+       */
+      pluginUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = PluginInstallParamsLocation;
+    export type RequestHeaders = {
+      /**
+       * The tenant's UUID, defining the ownership of a given resource.
+       * @format uuid
+       */
+      "Wazo-Tenant": string;
+    };
+    export type ResponseBody = PluginInstallCreate;
+  }
 
-    /**
-     * @description **Required ACL:** `confd.resellers.{reseller_uuid}.update`
-     *
-     * @tags resellers
-     * @name UpdateReseller
-     * @summary Update reseller
-     * @request PUT:/resellers/{reseller_uuid}
-     * @secure
-     */
-    updateReseller: (
-      resellerUuid: string,
-      body: Reseller,
-      params: RequestParams = {},
-    ) =>
-      this.request<any, APIError>({
-        path: `/resellers/${resellerUuid}`,
-        method: "PUT",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
-  };
-  status = {
-    /**
-     * @description This endpoint is not authenticated
-     *
-     * @tags status
-     * @name HeadStatus
-     * @summary Check if nestbox-confd is OK
-     * @request HEAD:/status
-     * @secure
-     */
-    headStatus: (params: RequestParams = {}) =>
-      this.request<void, void>({
-        path: `/status`,
-        method: "HEAD",
-        secure: true,
-        ...params,
-      }),
-  };
-  tenants = {
-    /**
-     * @description **Required ACL:** `confd.tenants.{tenant_uuid}.read`
-     *
-     * @tags tenants
-     * @name GetTenant
-     * @summary Get tenant
-     * @request GET:/tenants/{tenant_uuid}
-     * @secure
-     */
-    getTenant: (tenantUuid: string, params: RequestParams = {}) =>
-      this.request<Tenant, APIError>({
-        path: `/tenants/${tenantUuid}`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-  };
-  users = {
-    /**
-     * @description **Required ACL:** `confd.users.read`
-     *
-     * @tags users
-     * @name ListUsers
-     * @summary List users
-     * @request GET:/users
-     * @secure
-     */
-    listUsers: (params: RequestParams = {}) =>
-      this.request<UserList, any>({
-        path: `/users`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `confd.plugins.{plugin_uuid}.installs.resellers.read`
+   * @tags plugins
+   * @name InstallsResellersList
+   * @summary List this plug-in's installation on resellers
+   * @request GET:/plugins/{plugin_uuid}/installs/resellers
+   * @secure
+   */
+  export namespace InstallsResellersList {
+    export type RequestParams = {
+      /**
+       * Plug-in's unique identifier
+       * @format uuid
+       */
+      pluginUuid: string;
+    };
+    export type RequestQuery = {
+      /** The limit defines the number of individual objects that are returned */
+      limit?: number;
+      /**
+       * The offset defines the offsets the start by the number specified
+       * @default 0
+       */
+      offset?: number;
+      /**
+       * filter results by resource's unique identifiers (comma-separated list) to a maximum of 25 items
+       * @maxItems 25
+       * @minItems 1
+       * @uniqueItems true
+       */
+      uuids?: string[];
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /**
+       * The tenant's UUID, defining the ownership of a given resource.
+       * @format uuid
+       */
+      "Wazo-Tenant": string;
+    };
+    export type ResponseBody = PluginResellerInstallation;
+  }
 
-    /**
-     * @description **Required ACL:** `confd.users.create`
-     *
-     * @tags users
-     * @name CreateUser
-     * @summary Create user
-     * @request POST:/users
-     * @secure
-     */
-    createUser: (body: User, params: RequestParams = {}) =>
-      this.request<User, APIError>({
-        path: `/users`,
-        method: "POST",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `confd.plugins.{plugin_uuid}.installs.resellers.create`
+   * @tags plugins
+   * @name InstallsResellersCreate
+   * @summary Install (copy) this plug-in to a location
+   * @request POST:/plugins/{plugin_uuid}/installs/resellers
+   * @secure
+   */
+  export namespace InstallsResellersCreate {
+    export type RequestParams = {
+      /**
+       * Plug-in's unique identifier
+       * @format uuid
+       */
+      pluginUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = PluginInstallParamsReseller;
+    export type RequestHeaders = {
+      /**
+       * The tenant's UUID, defining the ownership of a given resource.
+       * @format uuid
+       */
+      "Wazo-Tenant": string;
+    };
+    export type ResponseBody = PluginInstallCreate;
+  }
+}
 
-    /**
-     * @description **Required ACL:** `confd.users.{user_uuid}.delete`
-     *
-     * @tags users
-     * @name DeleteUser
-     * @summary Delete user
-     * @request DELETE:/users/{user_uuid}
-     * @secure
-     */
-    deleteUser: (userUuid: string, params: RequestParams = {}) =>
-      this.request<any, APIError>({
-        path: `/users/${userUuid}`,
-        method: "DELETE",
-        secure: true,
-        ...params,
-      }),
+export namespace Resellers {
+  /**
+   * @description **Required ACL:** `confd.resellers.read`
+   * @tags resellers
+   * @name ListResellers
+   * @summary List resellers
+   * @request GET:/resellers
+   * @secure
+   */
+  export namespace ListResellers {
+    export type RequestParams = {};
+    export type RequestQuery = {
+      /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+      direction?: "asc" | "desc";
+      /** The limit defines the number of individual objects that are returned */
+      limit?: number;
+      /** Comma-separated list of names to filter resellers by */
+      name?: string;
+      /**
+       * The offset defines the offsets the start by the number specified
+       * @default 0
+       */
+      offset?: number;
+      /** Name of the field to use for sorting the list of items returned. */
+      order?: string;
+      /** Comma-separated list of parent UUIDs to filter resellers by */
+      parent_uuid?: string;
+      /** Search term used to filter the result */
+      search?: string;
+      /** Comma-separated list of UUIDs to filter resellers by */
+      uuid?: string;
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = ResellerList;
+  }
 
-    /**
-     * @description **Required ACL:** `confd.users.{user_uuid}.read`
-     *
-     * @tags users
-     * @name GetUser
-     * @summary Get user
-     * @request GET:/users/{user_uuid}
-     * @secure
-     */
-    getUser: (userUuid: string, params: RequestParams = {}) =>
-      this.request<User, APIError>({
-        path: `/users/${userUuid}`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `confd.resellers.create`
+   * @tags resellers
+   * @name CreateReseller
+   * @summary Create reseller
+   * @request POST:/resellers
+   * @secure
+   */
+  export namespace CreateReseller {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = Reseller;
+    export type RequestHeaders = {};
+    export type ResponseBody = Reseller;
+  }
 
-    /**
-     * @description **Required ACL:** `confd.users.{user_uuid}.update`
-     *
-     * @tags users
-     * @name UpdateUser
-     * @summary Update user
-     * @request PUT:/users/{user_uuid}
-     * @secure
-     */
-    updateUser: (
-      userUuid: string,
-      body: UserUpdate,
-      params: RequestParams = {},
-    ) =>
-      this.request<any, APIError>({
-        path: `/users/${userUuid}`,
-        method: "PUT",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
-  };
+  /**
+   * @description **Required ACL:** `confd.resellers.{reseller_uuid}.delete`
+   * @tags resellers
+   * @name DeleteReseller
+   * @summary Delete reseller
+   * @request DELETE:/resellers/{reseller_uuid}
+   * @secure
+   */
+  export namespace DeleteReseller {
+    export type RequestParams = {
+      /** The UUID of the reseller */
+      resellerUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = any;
+  }
+
+  /**
+   * @description **Required ACL:** `confd.resellers.{reseller_uuid}.read`
+   * @tags resellers
+   * @name GetReseller
+   * @summary Get reseller
+   * @request GET:/resellers/{reseller_uuid}
+   * @secure
+   */
+  export namespace GetReseller {
+    export type RequestParams = {
+      /** The UUID of the reseller */
+      resellerUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = Reseller;
+  }
+
+  /**
+   * @description **Required ACL:** `confd.resellers.{reseller_uuid}.update`
+   * @tags resellers
+   * @name UpdateReseller
+   * @summary Update reseller
+   * @request PUT:/resellers/{reseller_uuid}
+   * @secure
+   */
+  export namespace UpdateReseller {
+    export type RequestParams = {
+      /** The UUID of the reseller */
+      resellerUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = Reseller;
+    export type RequestHeaders = {};
+    export type ResponseBody = any;
+  }
+}
+
+export namespace Status {
+  /**
+   * @description This endpoint is not authenticated
+   * @tags status
+   * @name HeadStatus
+   * @summary Check if nestbox-confd is OK
+   * @request HEAD:/status
+   * @secure
+   */
+  export namespace HeadStatus {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+}
+
+export namespace Tenants {
+  /**
+   * @description **Required ACL:** `confd.tenants.{tenant_uuid}.read`
+   * @tags tenants
+   * @name GetTenant
+   * @summary Get tenant
+   * @request GET:/tenants/{tenant_uuid}
+   * @secure
+   */
+  export namespace GetTenant {
+    export type RequestParams = {
+      /** The UUID of the tenant */
+      tenantUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = Tenant;
+  }
+}
+
+export namespace Users {
+  /**
+   * @description **Required ACL:** `confd.users.read`
+   * @tags users
+   * @name ListUsers
+   * @summary List users
+   * @request GET:/users
+   * @secure
+   */
+  export namespace ListUsers {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = UserList;
+  }
+
+  /**
+   * @description **Required ACL:** `confd.users.create`
+   * @tags users
+   * @name CreateUser
+   * @summary Create user
+   * @request POST:/users
+   * @secure
+   */
+  export namespace CreateUser {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = User;
+    export type RequestHeaders = {};
+    export type ResponseBody = User;
+  }
+
+  /**
+   * @description **Required ACL:** `confd.users.{user_uuid}.delete`
+   * @tags users
+   * @name DeleteUser
+   * @summary Delete user
+   * @request DELETE:/users/{user_uuid}
+   * @secure
+   */
+  export namespace DeleteUser {
+    export type RequestParams = {
+      /** The UUID of the user */
+      userUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = any;
+  }
+
+  /**
+   * @description **Required ACL:** `confd.users.{user_uuid}.read`
+   * @tags users
+   * @name GetUser
+   * @summary Get user
+   * @request GET:/users/{user_uuid}
+   * @secure
+   */
+  export namespace GetUser {
+    export type RequestParams = {
+      /** The UUID of the user */
+      userUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = User;
+  }
+
+  /**
+   * @description **Required ACL:** `confd.users.{user_uuid}.update`
+   * @tags users
+   * @name UpdateUser
+   * @summary Update user
+   * @request PUT:/users/{user_uuid}
+   * @secure
+   */
+  export namespace UpdateUser {
+    export type RequestParams = {
+      /** The UUID of the user */
+      userUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = UserUpdate;
+    export type RequestHeaders = {};
+    export type ResponseBody = any;
+  }
 }

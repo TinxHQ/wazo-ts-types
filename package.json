@@ -2,7 +2,7 @@
   "name": "@wazo/types",
   "version": "25.07.0",
   "description": "TS types for Wazo APIs",
-  "main": "index.js",
+  "types": "./dist/index.d.ts",
   "author": "Wazo (http://wazo.io)",
   "license": "GPL-3.0-only",
   "files": [

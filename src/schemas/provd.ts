@@ -10,11 +10,6 @@
  * ---------------------------------------------------------------
  */
 
-export enum StatusValue {
-  Fail = "fail",
-  Ok = "ok",
-}
-
 export type CapabilitiesObject = Record<string, Record<string, string>>;
 
 export interface ComponentWithStatus {
@@ -37,6 +32,35 @@ export interface Config {
 export interface ConfigObject {
   /** A complete configuration */
   config?: Config;
+}
+
+export interface ConfigsListParams {
+  /**
+   * A list of fields, separated by comma.
+   *
+   * Example: `mac,ip`
+   */
+  fields?: string;
+  /**
+   * A selector, encoded in JSON, describing which entries should be returned. All entries are returned if not specified.
+   *
+   * Example: `{"ip":"10.34.1.110"}`
+   */
+  q?: string;
+  /**
+   * An integer specifing the number of entries to skip.
+   *
+   * Example: 10
+   */
+  skip?: number;
+  /**
+   * The key on which to sort the results.
+   *
+   * Example: `id`
+   */
+  sort?: string;
+  /** The order of sort */
+  sort_ord?: "ASC" | "DESC";
 }
 
 export interface ConfigsObject {
@@ -95,6 +119,40 @@ export interface DeviceObject {
 /** A list of devices */
 export interface DevicesList {
   devices?: Device[];
+}
+
+export interface DevicesListParams {
+  /**
+   * A list of fields, separated by comma.
+   *
+   * Example: `mac,ip`
+   */
+  fields?: string;
+  /**
+   * A selector, encoded in JSON, describing which entries should be returned. All entries are returned if not specified.
+   *
+   * Example: `{"ip":"10.34.1.110"}`
+   */
+  q?: string;
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+  recurse?: boolean;
+  /**
+   * An integer specifing the number of entries to skip.
+   *
+   * Example: 10
+   */
+  skip?: number;
+  /**
+   * The key on which to sort the results.
+   *
+   * Example: `id`
+   */
+  sort?: string;
+  /** The order of sort */
+  sort_ord?: "ASC" | "DESC";
 }
 
 /** Empty body */
@@ -198,10 +256,10 @@ export interface OperationInProgressObject {
 }
 
 export interface Package {
+  sha1sum?: string;
   capabilities?: CapabilitiesObject;
   description?: string;
   dsize?: number;
-  sha1sum?: string;
   version?: string;
 }
 
@@ -266,1431 +324,1110 @@ export interface StatusSummary {
   rest_api?: ComponentWithStatus;
 }
 
-export type QueryParamsType = Record<string | number, any>;
-export type ResponseFormat = keyof Omit<Body, "body" | "bodyUsed">;
-
-export interface FullRequestParams extends Omit<RequestInit, "body"> {
-  /** set parameter to `true` for call `securityWorker` for this request */
-  secure?: boolean;
-  /** request path */
-  path: string;
-  /** content type of request body */
-  type?: ContentType;
-  /** query params */
-  query?: QueryParamsType;
-  /** format of response (i.e. response.json() -> format: "json") */
-  format?: ResponseFormat;
-  /** request body */
-  body?: unknown;
-  /** base url */
-  baseUrl?: string;
-  /** request cancellation token */
-  cancelToken?: CancelToken;
+export enum StatusValue {
+  Fail = "fail",
+  Ok = "ok",
 }
 
-export type RequestParams = Omit<
-  FullRequestParams,
-  "body" | "method" | "query" | "path"
->;
-
-export interface ApiConfig<SecurityDataType = unknown> {
-  baseUrl?: string;
-  baseApiParams?: Omit<RequestParams, "baseUrl" | "cancelToken" | "signal">;
-  securityWorker?: (
-    securityData: SecurityDataType | null,
-  ) => Promise<RequestParams | void> | RequestParams | void;
-  customFetch?: typeof fetch;
-}
-
-export interface HttpResponse<D extends unknown, E extends unknown = unknown>
-  extends Response {
-  data: D;
-  error: E;
-}
-
-type CancelToken = Symbol | string | number;
-
-export enum ContentType {
-  Json = "application/json",
-  FormData = "multipart/form-data",
-  UrlEncoded = "application/x-www-form-urlencoded",
-  Text = "text/plain",
-}
-
-export class HttpClient<SecurityDataType = unknown> {
-  public baseUrl: string = "/api/provd/0.2";
-  private securityData: SecurityDataType | null = null;
-  private securityWorker?: ApiConfig<SecurityDataType>["securityWorker"];
-  private abortControllers = new Map<CancelToken, AbortController>();
-  private customFetch = (...fetchParams: Parameters<typeof fetch>) =>
-    fetch(...fetchParams);
-
-  private baseApiParams: RequestParams = {
-    credentials: "same-origin",
-    headers: {},
-    redirect: "follow",
-    referrerPolicy: "no-referrer",
-  };
-
-  constructor(apiConfig: ApiConfig<SecurityDataType> = {}) {
-    Object.assign(this, apiConfig);
-  }
-
-  public setSecurityData = (data: SecurityDataType | null) => {
-    this.securityData = data;
-  };
-
-  protected encodeQueryParam(key: string, value: any) {
-    const encodedKey = encodeURIComponent(key);
-    return `${encodedKey}=${encodeURIComponent(typeof value === "number" ? value : `${value}`)}`;
-  }
-
-  protected addQueryParam(query: QueryParamsType, key: string) {
-    return this.encodeQueryParam(key, query[key]);
-  }
-
-  protected addArrayQueryParam(query: QueryParamsType, key: string) {
-    const value = query[key];
-    return value.map((v: any) => this.encodeQueryParam(key, v)).join("&");
-  }
-
-  protected toQueryString(rawQuery?: QueryParamsType): string {
-    const query = rawQuery || {};
-    const keys = Object.keys(query).filter(
-      (key) => "undefined" !== typeof query[key],
-    );
-    return keys
-      .map((key) =>
-        Array.isArray(query[key])
-          ? this.addArrayQueryParam(query, key)
-          : this.addQueryParam(query, key),
-      )
-      .join("&");
-  }
-
-  protected addQueryParams(rawQuery?: QueryParamsType): string {
-    const queryString = this.toQueryString(rawQuery);
-    return queryString ? `?${queryString}` : "";
-  }
-
-  private contentFormatters: Record<ContentType, (input: any) => any> = {
-    [ContentType.Json]: (input: any) =>
-      input !== null && (typeof input === "object" || typeof input === "string")
-        ? JSON.stringify(input)
-        : input,
-    [ContentType.Text]: (input: any) =>
-      input !== null && typeof input !== "string"
-        ? JSON.stringify(input)
-        : input,
-    [ContentType.FormData]: (input: any) =>
-      Object.keys(input || {}).reduce((formData, key) => {
-        const property = input[key];
-        formData.append(
-          key,
-          property instanceof Blob
-            ? property
-            : typeof property === "object" && property !== null
-              ? JSON.stringify(property)
-              : `${property}`,
-        );
-        return formData;
-      }, new FormData()),
-    [ContentType.UrlEncoded]: (input: any) => this.toQueryString(input),
-  };
-
-  protected mergeRequestParams(
-    params1: RequestParams,
-    params2?: RequestParams,
-  ): RequestParams {
-    return {
-      ...this.baseApiParams,
-      ...params1,
-      ...(params2 || {}),
-      headers: {
-        ...(this.baseApiParams.headers || {}),
-        ...(params1.headers || {}),
-        ...((params2 && params2.headers) || {}),
-      },
-    };
-  }
-
-  protected createAbortSignal = (
-    cancelToken: CancelToken,
-  ): AbortSignal | undefined => {
-    if (this.abortControllers.has(cancelToken)) {
-      const abortController = this.abortControllers.get(cancelToken);
-      if (abortController) {
-        return abortController.signal;
-      }
-      return void 0;
-    }
-
-    const abortController = new AbortController();
-    this.abortControllers.set(cancelToken, abortController);
-    return abortController.signal;
-  };
-
-  public abortRequest = (cancelToken: CancelToken) => {
-    const abortController = this.abortControllers.get(cancelToken);
-
-    if (abortController) {
-      abortController.abort();
-      this.abortControllers.delete(cancelToken);
-    }
-  };
-
-  public request = async <T = any, E = any>({
-    body,
-    secure,
-    path,
-    type,
-    query,
-    format,
-    baseUrl,
-    cancelToken,
-    ...params
-  }: FullRequestParams): Promise<HttpResponse<T, E>> => {
-    const secureParams =
-      ((typeof secure === "boolean" ? secure : this.baseApiParams.secure) &&
-        this.securityWorker &&
-        (await this.securityWorker(this.securityData))) ||
-      {};
-    const requestParams = this.mergeRequestParams(params, secureParams);
-    const queryString = query && this.toQueryString(query);
-    const payloadFormatter = this.contentFormatters[type || ContentType.Json];
-    const responseFormat = format || requestParams.format;
-
-    return this.customFetch(
-      `${baseUrl || this.baseUrl || ""}${path}${queryString ? `?${queryString}` : ""}`,
-      {
-        ...requestParams,
-        headers: {
-          ...(requestParams.headers || {}),
-          ...(type && type !== ContentType.FormData
-            ? { "Content-Type": type }
-            : {}),
-        },
-        signal:
-          (cancelToken
-            ? this.createAbortSignal(cancelToken)
-            : requestParams.signal) || null,
-        body:
-          typeof body === "undefined" || body === null
-            ? null
-            : payloadFormatter(body),
-      },
-    ).then(async (response) => {
-      const r = response.clone() as HttpResponse<T, E>;
-      r.data = null as unknown as T;
-      r.error = null as unknown as E;
-
-      const data = !responseFormat
-        ? r
-        : await response[responseFormat]()
-            .then((data) => {
-              if (r.ok) {
-                r.data = data;
-              } else {
-                r.error = data;
-              }
-              return r;
-            })
-            .catch((e) => {
-              r.error = e;
-              return r;
-            });
-
-      if (cancelToken) {
-        this.abortControllers.delete(cancelToken);
-      }
-
-      if (!response.ok) throw data;
-      return data;
-    });
-  };
-}
-
-/**
- * @title wazo-provd
- * @version 0.2
- * @baseUrl /api/provd/0.2
- * @contact Wazo Dev Team <dev@wazo.community> (https://wazo-platform.org/)
- *
- * Provisioning application REST API
- */
-export class Api<
-  SecurityDataType extends unknown,
-> extends HttpClient<SecurityDataType> {
+export namespace CfgMgr {
   /**
-   * @description **Required ACL:** `provd.read` The provd manager resource represents the main entry point to the wazo-provd REST API
-   *
-   * @tags provd
-   * @name GetRoot
-   * @summary Get the Provd Manager resource
-   * @request GET:/
+   * @description **Required ACL:** `provd.cfg_mgr.read` The configuration manager resource represents the entry point to the wazo-provd configuration REST API
+   * @tags configs
+   * @name CfgMgrList
+   * @summary Get the Config Manager resource
+   * @request GET:/cfg_mgr
    * @secure
    */
-  getRoot = (params: RequestParams = {}) =>
-    this.request<LinksObject, any>({
-      path: `/`,
-      method: "GET",
-      secure: true,
-      format: "json",
-      ...params,
-    });
+  export namespace CfgMgrList {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = LinksObject;
+  }
 
-  cfgMgr = {
-    /**
-     * @description **Required ACL:** `provd.cfg_mgr.read` The configuration manager resource represents the entry point to the wazo-provd configuration REST API
-     *
-     * @tags configs
-     * @name CfgMgrList
-     * @summary Get the Config Manager resource
-     * @request GET:/cfg_mgr
-     * @secure
-     */
-    cfgMgrList: (params: RequestParams = {}) =>
-      this.request<LinksObject, any>({
-        path: `/cfg_mgr`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `provd.cfg_mgr.autocreate.create` Create a new config based on the config that has the autocreate role
+   * @tags configs
+   * @name AutocreateCreate
+   * @summary Create an autocreate configuration
+   * @request POST:/cfg_mgr/autocreate
+   * @secure
+   */
+  export namespace AutocreateCreate {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = EmptyObject;
+    export type RequestHeaders = {};
+    export type ResponseBody = IdObject;
+  }
 
-    /**
-     * @description **Required ACL:** `provd.cfg_mgr.autocreate.create` Create a new config based on the config that has the autocreate role
-     *
-     * @tags configs
-     * @name AutocreateCreate
-     * @summary Create an autocreate configuration
-     * @request POST:/cfg_mgr/autocreate
-     * @secure
-     */
-    autocreateCreate: (body: EmptyObject, params: RequestParams = {}) =>
-      this.request<IdObject, any>({
-        path: `/cfg_mgr/autocreate`,
-        method: "POST",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `provd.cfg_mgr.configs.read`
+   * @tags configs
+   * @name ConfigsList
+   * @summary List and find configurations
+   * @request GET:/cfg_mgr/configs
+   * @secure
+   */
+  export namespace ConfigsList {
+    export type RequestParams = {};
+    export type RequestQuery = {
+      /**
+       * A list of fields, separated by comma.
+       *
+       * Example: `mac,ip`
+       */
+      fields?: string;
+      /**
+       * A selector, encoded in JSON, describing which entries should be returned. All entries are returned if not specified.
+       *
+       * Example: `{"ip":"10.34.1.110"}`
+       */
+      q?: string;
+      /**
+       * An integer specifing the number of entries to skip.
+       *
+       * Example: 10
+       */
+      skip?: number;
+      /**
+       * The key on which to sort the results.
+       *
+       * Example: `id`
+       */
+      sort?: string;
+      /** The order of sort */
+      sort_ord?: "ASC" | "DESC";
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = ConfigsObject;
+  }
 
-    /**
-     * @description **Required ACL:** `provd.cfg_mgr.configs.read`
-     *
-     * @tags configs
-     * @name ConfigsList
-     * @summary List and find configurations
-     * @request GET:/cfg_mgr/configs
-     * @secure
-     */
-    configsList: (
-      query?: {
-        /**
-         * A selector, encoded in JSON, describing which entries should be returned. All entries are returned if not specified.
-         *
-         * Example: `{"ip":"10.34.1.110"}`
-         */
-        q?: string;
-        /**
-         * A list of fields, separated by comma.
-         *
-         * Example: `mac,ip`
-         */
-        fields?: string;
-        /**
-         * An integer specifing the number of entries to skip.
-         *
-         * Example: 10
-         */
-        skip?: number;
-        /**
-         * The key on which to sort the results.
-         *
-         * Example: `id`
-         */
-        sort?: string;
-        /** The order of sort */
-        sort_ord?: "ASC" | "DESC";
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<ConfigsObject, any>({
-        path: `/cfg_mgr/configs`,
-        method: "GET",
-        query: query,
-        secure: true,
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `provd.cfg_mgr.configs.create`
+   * @tags configs
+   * @name ConfigsCreate
+   * @summary Create a configuration
+   * @request POST:/cfg_mgr/configs
+   * @secure
+   */
+  export namespace ConfigsCreate {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = ConfigObject;
+    export type RequestHeaders = {};
+    export type ResponseBody = IdObject;
+  }
 
-    /**
-     * @description **Required ACL:** `provd.cfg_mgr.configs.create`
-     *
-     * @tags configs
-     * @name ConfigsCreate
-     * @summary Create a configuration
-     * @request POST:/cfg_mgr/configs
-     * @secure
-     */
-    configsCreate: (body: ConfigObject, params: RequestParams = {}) =>
-      this.request<IdObject, any>({
-        path: `/cfg_mgr/configs`,
-        method: "POST",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `provd.cfg_mgr.configs.{config_id}.delete`
+   * @tags configs
+   * @name ConfigsDelete
+   * @summary Delete a configuration
+   * @request DELETE:/cfg_mgr/configs/{config_id}
+   * @secure
+   */
+  export namespace ConfigsDelete {
+    export type RequestParams = {
+      /** Configuration ID */
+      configId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = any;
+  }
 
-    /**
-     * @description **Required ACL:** `provd.cfg_mgr.configs.{config_id}.delete`
-     *
-     * @tags configs
-     * @name ConfigsDelete
-     * @summary Delete a configuration
-     * @request DELETE:/cfg_mgr/configs/{config_id}
-     * @secure
-     */
-    configsDelete: (configId: string, params: RequestParams = {}) =>
-      this.request<any, ErrorMessage>({
-        path: `/cfg_mgr/configs/${configId}`,
-        method: "DELETE",
-        secure: true,
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `provd.cfg_mgr.configs.{config_id}.read`
+   * @tags configs
+   * @name ConfigsDetail
+   * @summary Get a configuration
+   * @request GET:/cfg_mgr/configs/{config_id}
+   * @secure
+   */
+  export namespace ConfigsDetail {
+    export type RequestParams = {
+      /** Configuration ID */
+      configId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = ConfigObject;
+  }
 
-    /**
-     * @description **Required ACL:** `provd.cfg_mgr.configs.{config_id}.read`
-     *
-     * @tags configs
-     * @name ConfigsDetail
-     * @summary Get a configuration
-     * @request GET:/cfg_mgr/configs/{config_id}
-     * @secure
-     */
-    configsDetail: (configId: string, params: RequestParams = {}) =>
-      this.request<ConfigObject, ErrorMessage>({
-        path: `/cfg_mgr/configs/${configId}`,
-        method: "GET",
-        secure: true,
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `provd.cfg_mgr.configs.{config_id}.update`
+   * @tags configs
+   * @name ConfigsUpdate
+   * @summary Update a configuration
+   * @request PUT:/cfg_mgr/configs/{config_id}
+   * @secure
+   */
+  export namespace ConfigsUpdate {
+    export type RequestParams = {
+      /** Configuration ID */
+      configId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = ConfigObject;
+    export type RequestHeaders = {};
+    export type ResponseBody = any;
+  }
 
-    /**
-     * @description **Required ACL:** `provd.cfg_mgr.configs.{config_id}.update`
-     *
-     * @tags configs
-     * @name ConfigsUpdate
-     * @summary Update a configuration
-     * @request PUT:/cfg_mgr/configs/{config_id}
-     * @secure
-     */
-    configsUpdate: (
-      configId: string,
-      body: ConfigObject,
-      params: RequestParams = {},
-    ) =>
-      this.request<any, ErrorMessage>({
-        path: `/cfg_mgr/configs/${configId}`,
-        method: "PUT",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `provd.cfg_mgr.configs.{config_id}.raw.read`
+   * @tags configs
+   * @name ConfigsRawList
+   * @summary Get a raw configuration
+   * @request GET:/cfg_mgr/configs/{config_id}/raw
+   * @secure
+   */
+  export namespace ConfigsRawList {
+    export type RequestParams = {
+      /** Configuration ID */
+      configId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = RawConfigurationObject;
+  }
+}
 
-    /**
-     * @description **Required ACL:** `provd.cfg_mgr.configs.{config_id}.raw.read`
-     *
-     * @tags configs
-     * @name ConfigsRawList
-     * @summary Get a raw configuration
-     * @request GET:/cfg_mgr/configs/{config_id}/raw
-     * @secure
-     */
-    configsRawList: (configId: string, params: RequestParams = {}) =>
-      this.request<RawConfigurationObject, ErrorMessage>({
-        path: `/cfg_mgr/configs/${configId}/raw`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-  };
-  configure = {
-    /**
-     * @description **Required ACL:** `provd.configure.read`
-     *
-     * @tags provd
-     * @name ConfigureList
-     * @summary Get the general provd configuration
-     * @request GET:/configure
-     * @secure
-     */
-    configureList: (params: RequestParams = {}) =>
-      this.request<GeneralConfigsObject, any>({
-        path: `/configure`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+export namespace Configure {
+  /**
+   * @description **Required ACL:** `provd.configure.read`
+   * @tags provd
+   * @name ConfigureList
+   * @summary Get the general provd configuration
+   * @request GET:/configure
+   * @secure
+   */
+  export namespace ConfigureList {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = GeneralConfigsObject;
+  }
 
-    /**
-     * @description **Required ACL:** `provd.configure.nat.update`
-     *
-     * @tags provd
-     * @name PutConfigure
-     * @summary Update the configuration's NAT
-     * @request PUT:/configure/NAT
-     * @secure
-     */
-    putConfigure: (body: Nat, params: RequestParams = {}) =>
-      this.request<any, ErrorMessage>({
-        path: `/configure/NAT`,
-        method: "PUT",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `provd.configure.nat.update`
+   * @tags provd
+   * @name PutConfigure
+   * @summary Update the configuration's NAT
+   * @request PUT:/configure/NAT
+   * @secure
+   */
+  export namespace PutConfigure {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = Nat;
+    export type RequestHeaders = {};
+    export type ResponseBody = any;
+  }
 
-    /**
-     * @description **Required ACL:** `provd.configure.ftp_proxy.update`
-     *
-     * @tags provd
-     * @name FtpProxyUpdate
-     * @summary Update the configuration's ftp_proxy
-     * @request PUT:/configure/ftp_proxy
-     * @secure
-     */
-    ftpProxyUpdate: (body: FtpProxy, params: RequestParams = {}) =>
-      this.request<any, ErrorMessage>({
-        path: `/configure/ftp_proxy`,
-        method: "PUT",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `provd.configure.ftp_proxy.update`
+   * @tags provd
+   * @name FtpProxyUpdate
+   * @summary Update the configuration's ftp_proxy
+   * @request PUT:/configure/ftp_proxy
+   * @secure
+   */
+  export namespace FtpProxyUpdate {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = FtpProxy;
+    export type RequestHeaders = {};
+    export type ResponseBody = any;
+  }
 
-    /**
-     * @description **Required ACL:** `provd.configure.http_proxy.update`
-     *
-     * @tags provd
-     * @name HttpProxyUpdate
-     * @summary Update the configuration's http_proxy
-     * @request PUT:/configure/http_proxy
-     * @secure
-     */
-    httpProxyUpdate: (body: HttpProxy, params: RequestParams = {}) =>
-      this.request<any, ErrorMessage>({
-        path: `/configure/http_proxy`,
-        method: "PUT",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `provd.configure.http_proxy.update`
+   * @tags provd
+   * @name HttpProxyUpdate
+   * @summary Update the configuration's http_proxy
+   * @request PUT:/configure/http_proxy
+   * @secure
+   */
+  export namespace HttpProxyUpdate {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = HttpProxy;
+    export type RequestHeaders = {};
+    export type ResponseBody = any;
+  }
 
-    /**
-     * @description **Required ACL:** `provd.configure.https_proxy.update`
-     *
-     * @tags provd
-     * @name HttpsProxyUpdate
-     * @summary Update the configuration's https_proxy
-     * @request PUT:/configure/https_proxy
-     * @secure
-     */
-    httpsProxyUpdate: (body: HttpsProxy, params: RequestParams = {}) =>
-      this.request<any, ErrorMessage>({
-        path: `/configure/https_proxy`,
-        method: "PUT",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `provd.configure.https_proxy.update`
+   * @tags provd
+   * @name HttpsProxyUpdate
+   * @summary Update the configuration's https_proxy
+   * @request PUT:/configure/https_proxy
+   * @secure
+   */
+  export namespace HttpsProxyUpdate {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = HttpsProxy;
+    export type RequestHeaders = {};
+    export type ResponseBody = any;
+  }
 
-    /**
-     * @description **Required ACL:** `provd.configure.locale.update`
-     *
-     * @tags provd
-     * @name LocaleUpdate
-     * @summary Update the configuration's locale
-     * @request PUT:/configure/locale
-     * @secure
-     */
-    localeUpdate: (body: Locale, params: RequestParams = {}) =>
-      this.request<any, ErrorMessage>({
-        path: `/configure/locale`,
-        method: "PUT",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `provd.configure.locale.update`
+   * @tags provd
+   * @name LocaleUpdate
+   * @summary Update the configuration's locale
+   * @request PUT:/configure/locale
+   * @secure
+   */
+  export namespace LocaleUpdate {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = Locale;
+    export type RequestHeaders = {};
+    export type ResponseBody = any;
+  }
 
-    /**
-     * @description **Required ACL:** `provd.configure.plugin_server.update`
-     *
-     * @tags provd
-     * @name PluginServerUpdate
-     * @summary Update the configuration's plugin_server
-     * @request PUT:/configure/plugin_server
-     * @secure
-     */
-    pluginServerUpdate: (body: PluginServer, params: RequestParams = {}) =>
-      this.request<any, ErrorMessage>({
-        path: `/configure/plugin_server`,
-        method: "PUT",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `provd.configure.plugin_server.update`
+   * @tags provd
+   * @name PluginServerUpdate
+   * @summary Update the configuration's plugin_server
+   * @request PUT:/configure/plugin_server
+   * @secure
+   */
+  export namespace PluginServerUpdate {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = PluginServer;
+    export type RequestHeaders = {};
+    export type ResponseBody = any;
+  }
 
-    /**
-     * @description **Required ACL:** `provd.configure.{tenant_uuid}.provisioning_key.update`
-     *
-     * @tags provd
-     * @name ProvisioningKeyUpdate
-     * @summary Update the tenant provisioning key
-     * @request PUT:/configure/provisioning_key
-     * @secure
-     */
-    provisioningKeyUpdate: (
-      body: ProvisioningKey,
-      params: RequestParams = {},
-    ) =>
-      this.request<any, ErrorMessage>({
-        path: `/configure/provisioning_key`,
-        method: "PUT",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `provd.configure.{tenant_uuid}.provisioning_key.update`
+   * @tags provd
+   * @name ProvisioningKeyUpdate
+   * @summary Update the tenant provisioning key
+   * @request PUT:/configure/provisioning_key
+   * @secure
+   */
+  export namespace ProvisioningKeyUpdate {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = ProvisioningKey;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = any;
+  }
 
-    /**
-     * @description '**Required ACL:** `provd.configure.{param_id}.read`' Wazo-Tenant header is only valid for `provisioning_key`
-     *
-     * @tags provd
-     * @name ConfigureDetail
-     * @summary Get the configuration parameter value
-     * @request GET:/configure/{param_id}
-     * @secure
-     */
-    configureDetail: (paramId: string, params: RequestParams = {}) =>
-      this.request<Param, ErrorMessage>({
-        path: `/configure/${paramId}`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+  /**
+   * @description '**Required ACL:** `provd.configure.{param_id}.read`' Wazo-Tenant header is only valid for `provisioning_key`
+   * @tags provd
+   * @name ConfigureDetail
+   * @summary Get the configuration parameter value
+   * @request GET:/configure/{param_id}
+   * @secure
+   */
+  export namespace ConfigureDetail {
+    export type RequestParams = {
+      /** Configuration parameter ID */
+      paramId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = Param;
+  }
 
-    /**
-     * @description **Required ACL:** `provd.configure.{param_id}.update`
-     *
-     * @tags provd
-     * @name ConfigureUpdate
-     * @summary Set the value of a parameter
-     * @request PUT:/configure/{param_id}
-     * @secure
-     */
-    configureUpdate: (
-      paramId: string,
-      body: Param,
-      params: RequestParams = {},
-    ) =>
-      this.request<any, ErrorMessage>({
-        path: `/configure/${paramId}`,
-        method: "PUT",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
-  };
-  devMgr = {
-    /**
-     * @description **Required ACL:** `provd.dev_mgr.read` The device manager resource represents the entry point to the wazo-provd device REST API
-     *
-     * @tags devices
-     * @name DevMgrList
-     * @summary Get the Device Manager resource
-     * @request GET:/dev_mgr
-     * @secure
-     */
-    devMgrList: (params: RequestParams = {}) =>
-      this.request<LinksObject, any>({
-        path: `/dev_mgr`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `provd.configure.{param_id}.update`
+   * @tags provd
+   * @name ConfigureUpdate
+   * @summary Set the value of a parameter
+   * @request PUT:/configure/{param_id}
+   * @secure
+   */
+  export namespace ConfigureUpdate {
+    export type RequestParams = {
+      /** Configuration parameter ID */
+      paramId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = Param;
+    export type RequestHeaders = {};
+    export type ResponseBody = any;
+  }
+}
 
-    /**
-     * @description **Required ACL:** `provd.dev_mgr.devices.read`
-     *
-     * @tags devices
-     * @name DevicesList
-     * @summary List and find devices
-     * @request GET:/dev_mgr/devices
-     * @secure
-     */
-    devicesList: (
-      query?: {
-        /**
-         * A selector, encoded in JSON, describing which entries should be returned. All entries are returned if not specified.
-         *
-         * Example: `{"ip":"10.34.1.110"}`
-         */
-        q?: string;
-        /**
-         * A list of fields, separated by comma.
-         *
-         * Example: `mac,ip`
-         */
-        fields?: string;
-        /**
-         * An integer specifing the number of entries to skip.
-         *
-         * Example: 10
-         */
-        skip?: number;
-        /**
-         * The key on which to sort the results.
-         *
-         * Example: `id`
-         */
-        sort?: string;
-        /** The order of sort */
-        sort_ord?: "ASC" | "DESC";
-        /**
-         * Should the query include sub-tenants
-         * @default false
-         */
-        recurse?: boolean;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<DevicesList, any>({
-        path: `/dev_mgr/devices`,
-        method: "GET",
-        query: query,
-        secure: true,
-        ...params,
-      }),
+export namespace DevMgr {
+  /**
+   * @description **Required ACL:** `provd.dev_mgr.read` The device manager resource represents the entry point to the wazo-provd device REST API
+   * @tags devices
+   * @name DevMgrList
+   * @summary Get the Device Manager resource
+   * @request GET:/dev_mgr
+   * @secure
+   */
+  export namespace DevMgrList {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = LinksObject;
+  }
 
-    /**
-     * @description **Required ACL:** `provd.dev_mgr.devices.create`
-     *
-     * @tags devices
-     * @name DevicesCreate
-     * @summary Create a device
-     * @request POST:/dev_mgr/devices
-     * @secure
-     */
-    devicesCreate: (device: DeviceObject, params: RequestParams = {}) =>
-      this.request<IdObject, ErrorMessage>({
-        path: `/dev_mgr/devices`,
-        method: "POST",
-        body: device,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `provd.dev_mgr.devices.read`
+   * @tags devices
+   * @name DevicesList
+   * @summary List and find devices
+   * @request GET:/dev_mgr/devices
+   * @secure
+   */
+  export namespace DevicesList {
+    export type RequestParams = {};
+    export type RequestQuery = {
+      /**
+       * A list of fields, separated by comma.
+       *
+       * Example: `mac,ip`
+       */
+      fields?: string;
+      /**
+       * A selector, encoded in JSON, describing which entries should be returned. All entries are returned if not specified.
+       *
+       * Example: `{"ip":"10.34.1.110"}`
+       */
+      q?: string;
+      /**
+       * Should the query include sub-tenants
+       * @default false
+       */
+      recurse?: boolean;
+      /**
+       * An integer specifing the number of entries to skip.
+       *
+       * Example: 10
+       */
+      skip?: number;
+      /**
+       * The key on which to sort the results.
+       *
+       * Example: `id`
+       */
+      sort?: string;
+      /** The order of sort */
+      sort_ord?: "ASC" | "DESC";
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = DevicesList;
+  }
 
-    /**
-     * @description **Required ACL:** `provd.dev_mgr.devices.{device_id}.delete`
-     *
-     * @tags devices
-     * @name DevicesDelete
-     * @summary Delete a device
-     * @request DELETE:/dev_mgr/devices/{device_id}
-     * @secure
-     */
-    devicesDelete: (deviceId: string, params: RequestParams = {}) =>
-      this.request<any, ErrorMessage>({
-        path: `/dev_mgr/devices/${deviceId}`,
-        method: "DELETE",
-        secure: true,
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `provd.dev_mgr.devices.create`
+   * @tags devices
+   * @name DevicesCreate
+   * @summary Create a device
+   * @request POST:/dev_mgr/devices
+   * @secure
+   */
+  export namespace DevicesCreate {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = DeviceObject;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = IdObject;
+  }
 
-    /**
-     * @description **Required ACL:** `provd.dev_mgr.devices.{device_id}.read` Get a device using its ID
-     *
-     * @tags devices
-     * @name DevicesDetail
-     * @summary Get a device by ID
-     * @request GET:/dev_mgr/devices/{device_id}
-     * @secure
-     */
-    devicesDetail: (deviceId: string, params: RequestParams = {}) =>
-      this.request<DeviceObject, ErrorMessage>({
-        path: `/dev_mgr/devices/${deviceId}`,
-        method: "GET",
-        secure: true,
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `provd.dev_mgr.devices.{device_id}.delete`
+   * @tags devices
+   * @name DevicesDelete
+   * @summary Delete a device
+   * @request DELETE:/dev_mgr/devices/{device_id}
+   * @secure
+   */
+  export namespace DevicesDelete {
+    export type RequestParams = {
+      /** Device ID */
+      deviceId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = any;
+  }
 
-    /**
-     * @description **Required ACL:** `provd.dev_mgr.devices.{device_id}.update` Every field must be specified, otherwise they will be omitted
-     *
-     * @tags devices
-     * @name DevicesUpdate
-     * @summary Update a device
-     * @request PUT:/dev_mgr/devices/{device_id}
-     * @secure
-     */
-    devicesUpdate: (
-      deviceId: string,
-      device: DeviceObject,
-      params: RequestParams = {},
-    ) =>
-      this.request<any, ErrorMessage>({
-        path: `/dev_mgr/devices/${deviceId}`,
-        method: "PUT",
-        body: device,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `provd.dev_mgr.devices.{device_id}.read` Get a device using its ID
+   * @tags devices
+   * @name DevicesDetail
+   * @summary Get a device by ID
+   * @request GET:/dev_mgr/devices/{device_id}
+   * @secure
+   */
+  export namespace DevicesDetail {
+    export type RequestParams = {
+      /** Device ID */
+      deviceId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = DeviceObject;
+  }
 
-    /**
-     * @description **Required ACL:** `provd.dev_mgr.dhcpinfo.create` The provisioning server either creates a new device or changes the information of the device with the same MAC address
-     *
-     * @tags devices
-     * @name DhcpinfoCreate
-     * @summary Push DHCP request information
-     * @request POST:/dev_mgr/dhcpinfo
-     * @secure
-     */
-    dhcpinfoCreate: (body: DHCPInfoObject, params: RequestParams = {}) =>
-      this.request<any, any>({
-        path: `/dev_mgr/dhcpinfo`,
-        method: "POST",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `provd.dev_mgr.devices.{device_id}.update` Every field must be specified, otherwise they will be omitted
+   * @tags devices
+   * @name DevicesUpdate
+   * @summary Update a device
+   * @request PUT:/dev_mgr/devices/{device_id}
+   * @secure
+   */
+  export namespace DevicesUpdate {
+    export type RequestParams = {
+      /** Device ID */
+      deviceId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = DeviceObject;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = any;
+  }
 
-    /**
-     * @description **Required ACL:** `provd.dev_mgr.reconfigure.create` Regenerate the configuration file for the specified device
-     *
-     * @tags devices
-     * @name ReconfigureCreate
-     * @summary Reconfigure a device
-     * @request POST:/dev_mgr/reconfigure
-     * @secure
-     */
-    reconfigureCreate: (body: IdObject, params: RequestParams = {}) =>
-      this.request<any, ErrorMessage>({
-        path: `/dev_mgr/reconfigure`,
-        method: "POST",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `provd.dev_mgr.dhcpinfo.create` The provisioning server either creates a new device or changes the information of the device with the same MAC address
+   * @tags devices
+   * @name DhcpinfoCreate
+   * @summary Push DHCP request information
+   * @request POST:/dev_mgr/dhcpinfo
+   * @secure
+   */
+  export namespace DhcpinfoCreate {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = DHCPInfoObject;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = any;
+  }
 
-    /**
-     * @description **Required ACL:** `provd.dev_mgr.synchronize.create`
-     *
-     * @tags devices
-     * @name SynchronizeCreate
-     * @summary Synchronize a device
-     * @request POST:/dev_mgr/synchronize
-     * @secure
-     */
-    synchronizeCreate: (body: IdObject, params: RequestParams = {}) =>
-      this.request<void, ErrorMessage>({
-        path: `/dev_mgr/synchronize`,
-        method: "POST",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `provd.dev_mgr.reconfigure.create` Regenerate the configuration file for the specified device
+   * @tags devices
+   * @name ReconfigureCreate
+   * @summary Reconfigure a device
+   * @request POST:/dev_mgr/reconfigure
+   * @secure
+   */
+  export namespace ReconfigureCreate {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = IdObject;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = any;
+  }
 
-    /**
-     * @description **Required ACL:** `provd.operation.delete` This does not cancel the underlying operation; it only deletes the monitor Every monitor that is created should be deleted, else they won't be freed by the process and they will accumulate, taking memory
-     *
-     * @tags devices
-     * @name SynchronizeDelete
-     * @summary Delete the Operation In Progress
-     * @request DELETE:/dev_mgr/synchronize/{operation_id}
-     * @secure
-     */
-    synchronizeDelete: (operationId: string, params: RequestParams = {}) =>
-      this.request<any, ErrorMessage>({
-        path: `/dev_mgr/synchronize/${operationId}`,
-        method: "DELETE",
-        secure: true,
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `provd.dev_mgr.synchronize.create`
+   * @tags devices
+   * @name SynchronizeCreate
+   * @summary Synchronize a device
+   * @request POST:/dev_mgr/synchronize
+   * @secure
+   */
+  export namespace SynchronizeCreate {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = IdObject;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = void;
+  }
 
-    /**
-     * @description **Required ACL:** `provd.operation.read`
-     *
-     * @tags devices
-     * @name SynchronizeDetail
-     * @summary Get the status of a synchronize Operation In Progress
-     * @request GET:/dev_mgr/synchronize/{operation_id}
-     * @secure
-     */
-    synchronizeDetail: (operationId: string, params: RequestParams = {}) =>
-      this.request<OperationInProgressObject, ErrorMessage>({
-        path: `/dev_mgr/synchronize/${operationId}`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-  };
-  pgMgr = {
-    /**
-     * @description **Required ACL:** `provd.pg_mgr.read` The plugin manager resource represents the entry point to the wazo-provd plugin REST API
-     *
-     * @tags plugins
-     * @name PgMgrList
-     * @summary Get the Plugin Manager resource
-     * @request GET:/pg_mgr
-     * @secure
-     */
-    pgMgrList: (params: RequestParams = {}) =>
-      this.request<LinksObject, any>({
-        path: `/pg_mgr`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `provd.operation.delete` This does not cancel the underlying operation; it only deletes the monitor Every monitor that is created should be deleted, else they won't be freed by the process and they will accumulate, taking memory
+   * @tags devices
+   * @name SynchronizeDelete
+   * @summary Delete the Operation In Progress
+   * @request DELETE:/dev_mgr/synchronize/{operation_id}
+   * @secure
+   */
+  export namespace SynchronizeDelete {
+    export type RequestParams = {
+      /** Operation In Progress ID */
+      operationId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = any;
+  }
 
-    /**
-     * @description **Required ACL:** `provd.pg_mgr.install.read`
-     *
-     * @tags plugins
-     * @name InstallList
-     * @summary Get the installation service resources
-     * @request GET:/pg_mgr/install
-     * @secure
-     */
-    installList: (params: RequestParams = {}) =>
-      this.request<LinksObject, any>({
-        path: `/pg_mgr/install`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `provd.operation.read`
+   * @tags devices
+   * @name SynchronizeDetail
+   * @summary Get the status of a synchronize Operation In Progress
+   * @request GET:/dev_mgr/synchronize/{operation_id}
+   * @secure
+   */
+  export namespace SynchronizeDetail {
+    export type RequestParams = {
+      /** Operation In Progress ID */
+      operationId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = OperationInProgressObject;
+  }
+}
 
-    /**
-     * @description **Required ACL:** `provd.pg_mgr.install.install.create`
-     *
-     * @tags plugins
-     * @name InstallInstallCreate
-     * @summary Install a plugin
-     * @request POST:/pg_mgr/install/install
-     * @secure
-     */
-    installInstallCreate: (body: IdObject, params: RequestParams = {}) =>
-      this.request<any, ErrorMessage>({
-        path: `/pg_mgr/install/install`,
-        method: "POST",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
+export namespace PgMgr {
+  /**
+   * @description **Required ACL:** `provd.pg_mgr.read` The plugin manager resource represents the entry point to the wazo-provd plugin REST API
+   * @tags plugins
+   * @name PgMgrList
+   * @summary Get the Plugin Manager resource
+   * @request GET:/pg_mgr
+   * @secure
+   */
+  export namespace PgMgrList {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = LinksObject;
+  }
 
-    /**
-     * @description **Required ACL:** `provd.operation.delete` This does not cancel the underlying operation; it only deletes the monitor Every monitor that is created should be deleted, else they won't be freed by the process and they will accumulate, taking memory
-     *
-     * @tags plugins
-     * @name InstallInstallDelete
-     * @summary Delete the Operation In Progress
-     * @request DELETE:/pg_mgr/install/install/{operation_id}
-     * @secure
-     */
-    installInstallDelete: (operationId: string, params: RequestParams = {}) =>
-      this.request<any, ErrorMessage>({
-        path: `/pg_mgr/install/install/${operationId}`,
-        method: "DELETE",
-        secure: true,
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `provd.pg_mgr.install.read`
+   * @tags plugins
+   * @name InstallList
+   * @summary Get the installation service resources
+   * @request GET:/pg_mgr/install
+   * @secure
+   */
+  export namespace InstallList {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = LinksObject;
+  }
 
-    /**
-     * @description **Required ACL:** `provd.operation.read`
-     *
-     * @tags plugins
-     * @name InstallInstallDetail
-     * @summary Get the status of a plugin installation Operation In Progress
-     * @request GET:/pg_mgr/install/install/{operation_id}
-     * @secure
-     */
-    installInstallDetail: (operationId: string, params: RequestParams = {}) =>
-      this.request<OperationInProgressObject, ErrorMessage>({
-        path: `/pg_mgr/install/install/${operationId}`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `provd.pg_mgr.install.install.create`
+   * @tags plugins
+   * @name InstallInstallCreate
+   * @summary Install a plugin
+   * @request POST:/pg_mgr/install/install
+   * @secure
+   */
+  export namespace InstallInstallCreate {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = IdObject;
+    export type RequestHeaders = {};
+    export type ResponseBody = any;
+  }
 
-    /**
-     * @description **Required ACL:** `provd.pg_mgr.install.installable.read`
-     *
-     * @tags plugins
-     * @name InstallInstallableList
-     * @summary Get the installable plugins list
-     * @request GET:/pg_mgr/install/installable
-     * @secure
-     */
-    installInstallableList: (params: RequestParams = {}) =>
-      this.request<PackageList, any>({
-        path: `/pg_mgr/install/installable`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `provd.operation.delete` This does not cancel the underlying operation; it only deletes the monitor Every monitor that is created should be deleted, else they won't be freed by the process and they will accumulate, taking memory
+   * @tags plugins
+   * @name InstallInstallDelete
+   * @summary Delete the Operation In Progress
+   * @request DELETE:/pg_mgr/install/install/{operation_id}
+   * @secure
+   */
+  export namespace InstallInstallDelete {
+    export type RequestParams = {
+      /** Operation In Progress ID */
+      operationId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = any;
+  }
 
-    /**
-     * @description **Required ACL:** `provd.pg_mgr.install.installed.read`
-     *
-     * @tags plugins
-     * @name InstallInstalledList
-     * @summary Get the installed plugins list
-     * @request GET:/pg_mgr/install/installed
-     * @secure
-     */
-    installInstalledList: (params: RequestParams = {}) =>
-      this.request<PackageList, any>({
-        path: `/pg_mgr/install/installed`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `provd.operation.read`
+   * @tags plugins
+   * @name InstallInstallDetail
+   * @summary Get the status of a plugin installation Operation In Progress
+   * @request GET:/pg_mgr/install/install/{operation_id}
+   * @secure
+   */
+  export namespace InstallInstallDetail {
+    export type RequestParams = {
+      /** Operation In Progress ID */
+      operationId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = OperationInProgressObject;
+  }
 
-    /**
-     * @description **Required ACL:** `provd.pg_mgr.install.uninstall.create`
-     *
-     * @tags plugins
-     * @name InstallUninstallCreate
-     * @summary Uninstall a plugin
-     * @request POST:/pg_mgr/install/uninstall
-     * @secure
-     */
-    installUninstallCreate: (body: IdObject, params: RequestParams = {}) =>
-      this.request<any, ErrorMessage>({
-        path: `/pg_mgr/install/uninstall`,
-        method: "POST",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `provd.pg_mgr.install.installable.read`
+   * @tags plugins
+   * @name InstallInstallableList
+   * @summary Get the installable plugins list
+   * @request GET:/pg_mgr/install/installable
+   * @secure
+   */
+  export namespace InstallInstallableList {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = PackageList;
+  }
 
-    /**
-     * @description **Required ACL:** `provd.pg_mgr.install.update.create`
-     *
-     * @tags plugins
-     * @name InstallUpdateCreate
-     * @summary Update the List of installable plugins
-     * @request POST:/pg_mgr/install/update
-     * @secure
-     */
-    installUpdateCreate: (body: EmptyObject, params: RequestParams = {}) =>
-      this.request<any, ErrorMessage>({
-        path: `/pg_mgr/install/update`,
-        method: "POST",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `provd.pg_mgr.install.installed.read`
+   * @tags plugins
+   * @name InstallInstalledList
+   * @summary Get the installed plugins list
+   * @request GET:/pg_mgr/install/installed
+   * @secure
+   */
+  export namespace InstallInstalledList {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = PackageList;
+  }
 
-    /**
-     * @description **Required ACL:** `provd.operation.delete` This does not cancel the underlying operation; it only deletes the monitor Every monitor that is created should be deleted, else they won't be freed by the process and they will accumulate, taking memory
-     *
-     * @tags plugins
-     * @name InstallUpdateDelete
-     * @summary Delete the Operation In Progress
-     * @request DELETE:/pg_mgr/install/update/{operation_id}
-     * @secure
-     */
-    installUpdateDelete: (operationId: string, params: RequestParams = {}) =>
-      this.request<any, ErrorMessage>({
-        path: `/pg_mgr/install/update/${operationId}`,
-        method: "DELETE",
-        secure: true,
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `provd.pg_mgr.install.uninstall.create`
+   * @tags plugins
+   * @name InstallUninstallCreate
+   * @summary Uninstall a plugin
+   * @request POST:/pg_mgr/install/uninstall
+   * @secure
+   */
+  export namespace InstallUninstallCreate {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = IdObject;
+    export type RequestHeaders = {};
+    export type ResponseBody = any;
+  }
 
-    /**
-     * @description **Required ACL:** `provd.operation.read`
-     *
-     * @tags plugins
-     * @name InstallUpdateDetail
-     * @summary Get the status of a plugin database update Operation In Progress
-     * @request GET:/pg_mgr/install/update/{operation_id}
-     * @secure
-     */
-    installUpdateDetail: (operationId: string, params: RequestParams = {}) =>
-      this.request<OperationInProgressObject, ErrorMessage>({
-        path: `/pg_mgr/install/update/${operationId}`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `provd.pg_mgr.install.update.create`
+   * @tags plugins
+   * @name InstallUpdateCreate
+   * @summary Update the List of installable plugins
+   * @request POST:/pg_mgr/install/update
+   * @secure
+   */
+  export namespace InstallUpdateCreate {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = EmptyObject;
+    export type RequestHeaders = {};
+    export type ResponseBody = any;
+  }
 
-    /**
-     * @description **Required ACL:** `provd.pg_mgr.install.upgrade.create`
-     *
-     * @tags plugins
-     * @name InstallUpgradeCreate
-     * @summary Upgrade a plugin
-     * @request POST:/pg_mgr/install/upgrade
-     * @secure
-     */
-    installUpgradeCreate: (body: IdObject, params: RequestParams = {}) =>
-      this.request<any, ErrorMessage>({
-        path: `/pg_mgr/install/upgrade`,
-        method: "POST",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `provd.operation.delete` This does not cancel the underlying operation; it only deletes the monitor Every monitor that is created should be deleted, else they won't be freed by the process and they will accumulate, taking memory
+   * @tags plugins
+   * @name InstallUpdateDelete
+   * @summary Delete the Operation In Progress
+   * @request DELETE:/pg_mgr/install/update/{operation_id}
+   * @secure
+   */
+  export namespace InstallUpdateDelete {
+    export type RequestParams = {
+      /** Operation In Progress ID */
+      operationId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = any;
+  }
 
-    /**
-     * @description **Required ACL:** `provd.operation.delete` This does not cancel the underlying operation; it only deletes the monitor Every monitor that is created should be deleted, else they won't be freed by the process and they will accumulate, taking memory
-     *
-     * @tags plugins
-     * @name InstallUpgradeDelete
-     * @summary Delete the Operation In Progress
-     * @request DELETE:/pg_mgr/install/upgrade/{operation_id}
-     * @secure
-     */
-    installUpgradeDelete: (operationId: string, params: RequestParams = {}) =>
-      this.request<any, ErrorMessage>({
-        path: `/pg_mgr/install/upgrade/${operationId}`,
-        method: "DELETE",
-        secure: true,
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `provd.operation.read`
+   * @tags plugins
+   * @name InstallUpdateDetail
+   * @summary Get the status of a plugin database update Operation In Progress
+   * @request GET:/pg_mgr/install/update/{operation_id}
+   * @secure
+   */
+  export namespace InstallUpdateDetail {
+    export type RequestParams = {
+      /** Operation In Progress ID */
+      operationId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = OperationInProgressObject;
+  }
 
-    /**
-     * @description **Required ACL:** `provd.operation.read`
-     *
-     * @tags plugins
-     * @name InstallUpgradeDetail
-     * @summary Get the status of a plugin upgrade Operation In Progress
-     * @request GET:/pg_mgr/install/upgrade/{operation_id}
-     * @secure
-     */
-    installUpgradeDetail: (operationId: string, params: RequestParams = {}) =>
-      this.request<OperationInProgressObject, ErrorMessage>({
-        path: `/pg_mgr/install/upgrade/${operationId}`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `provd.pg_mgr.install.upgrade.create`
+   * @tags plugins
+   * @name InstallUpgradeCreate
+   * @summary Upgrade a plugin
+   * @request POST:/pg_mgr/install/upgrade
+   * @secure
+   */
+  export namespace InstallUpgradeCreate {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = IdObject;
+    export type RequestHeaders = {};
+    export type ResponseBody = any;
+  }
 
-    /**
-     * @description **Required ACL:** `provd.pg_mgr.plugins.read`
-     *
-     * @tags plugins
-     * @name PluginsList
-     * @summary List the installed plugins
-     * @request GET:/pg_mgr/plugins
-     * @secure
-     */
-    pluginsList: (params: RequestParams = {}) =>
-      this.request<PluginsObject, any>({
-        path: `/pg_mgr/plugins`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `provd.operation.delete` This does not cancel the underlying operation; it only deletes the monitor Every monitor that is created should be deleted, else they won't be freed by the process and they will accumulate, taking memory
+   * @tags plugins
+   * @name InstallUpgradeDelete
+   * @summary Delete the Operation In Progress
+   * @request DELETE:/pg_mgr/install/upgrade/{operation_id}
+   * @secure
+   */
+  export namespace InstallUpgradeDelete {
+    export type RequestParams = {
+      /** Operation In Progress ID */
+      operationId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = any;
+  }
 
-    /**
-     * @description **Required ACL:** `provd.pg_mgr.plugins.{plugin_id}.read`
-     *
-     * @tags plugins
-     * @name PluginsDetail
-     * @summary Get the resources of a specific plugin
-     * @request GET:/pg_mgr/plugins/{plugin_id}
-     * @secure
-     */
-    pluginsDetail: (pluginId: string, params: RequestParams = {}) =>
-      this.request<LinksObject, ErrorMessage>({
-        path: `/pg_mgr/plugins/${pluginId}`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `provd.operation.read`
+   * @tags plugins
+   * @name InstallUpgradeDetail
+   * @summary Get the status of a plugin upgrade Operation In Progress
+   * @request GET:/pg_mgr/install/upgrade/{operation_id}
+   * @secure
+   */
+  export namespace InstallUpgradeDetail {
+    export type RequestParams = {
+      /** Operation In Progress ID */
+      operationId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = OperationInProgressObject;
+  }
 
-    /**
-     * @description **Required ACL:** `provd.pg_mgr.plugins.{plugin_id}.info.read`
-     *
-     * @tags plugins
-     * @name PluginsInfoList
-     * @summary Get the information of a plugin
-     * @request GET:/pg_mgr/plugins/{plugin_id}/info
-     * @secure
-     */
-    pluginsInfoList: (pluginId: string, params: RequestParams = {}) =>
-      this.request<PluginInfo, ErrorMessage>({
-        path: `/pg_mgr/plugins/${pluginId}/info`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `provd.pg_mgr.plugins.read`
+   * @tags plugins
+   * @name PluginsList
+   * @summary List the installed plugins
+   * @request GET:/pg_mgr/plugins
+   * @secure
+   */
+  export namespace PluginsList {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = PluginsObject;
+  }
 
-    /**
-     * @description **Required ACL:** `provd.pg_mgr.plugins.{plugin_id}.install.read`
-     *
-     * @tags plugins
-     * @name PluginsInstallList
-     * @summary Get the package installation service resources
-     * @request GET:/pg_mgr/plugins/{plugin_id}/install
-     * @secure
-     */
-    pluginsInstallList: (pluginId: string, params: RequestParams = {}) =>
-      this.request<LinksObject, ErrorMessage>({
-        path: `/pg_mgr/plugins/${pluginId}/install`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `provd.pg_mgr.plugins.{plugin_id}.read`
+   * @tags plugins
+   * @name PluginsDetail
+   * @summary Get the resources of a specific plugin
+   * @request GET:/pg_mgr/plugins/{plugin_id}
+   * @secure
+   */
+  export namespace PluginsDetail {
+    export type RequestParams = {
+      /** Plugin ID */
+      pluginId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = LinksObject;
+  }
 
-    /**
-     * @description **Required ACL:** `provd.pg_mgr.plugins.{plugin_id}.install.install.create`
-     *
-     * @tags plugins
-     * @name PluginsInstallInstallCreate
-     * @summary Install a package
-     * @request POST:/pg_mgr/plugins/{plugin_id}/install/install
-     * @secure
-     */
-    pluginsInstallInstallCreate: (
-      pluginId: string,
-      body: IdObject,
-      params: RequestParams = {},
-    ) =>
-      this.request<any, ErrorMessage>({
-        path: `/pg_mgr/plugins/${pluginId}/install/install`,
-        method: "POST",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `provd.pg_mgr.plugins.{plugin_id}.info.read`
+   * @tags plugins
+   * @name PluginsInfoList
+   * @summary Get the information of a plugin
+   * @request GET:/pg_mgr/plugins/{plugin_id}/info
+   * @secure
+   */
+  export namespace PluginsInfoList {
+    export type RequestParams = {
+      /** Plugin ID */
+      pluginId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = PluginInfo;
+  }
 
-    /**
-     * @description **Required ACL:** `provd.operation.delete` This does not cancel the underlying operation; it only deletes the monitor Every monitor that is created should be deleted, else they won't be freed by the process and they will accumulate, taking memory
-     *
-     * @tags plugins
-     * @name PluginsInstallInstallDelete
-     * @summary Delete the Operation In Progress
-     * @request DELETE:/pg_mgr/plugins/{plugin_id}/install/install/{operation_id}
-     * @secure
-     */
-    pluginsInstallInstallDelete: (
-      pluginId: string,
-      operationId: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<any, ErrorMessage>({
-        path: `/pg_mgr/plugins/${pluginId}/install/install/${operationId}`,
-        method: "DELETE",
-        secure: true,
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `provd.pg_mgr.plugins.{plugin_id}.install.read`
+   * @tags plugins
+   * @name PluginsInstallList
+   * @summary Get the package installation service resources
+   * @request GET:/pg_mgr/plugins/{plugin_id}/install
+   * @secure
+   */
+  export namespace PluginsInstallList {
+    export type RequestParams = {
+      /** Plugin ID */
+      pluginId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = LinksObject;
+  }
 
-    /**
-     * @description **Required ACL:** `provd.operation.read`
-     *
-     * @tags plugins
-     * @name PluginsInstallInstallDetail
-     * @summary Get the status of a package installation Operation In Progress
-     * @request GET:/pg_mgr/plugins/{plugin_id}/install/install/{operation_id}
-     * @secure
-     */
-    pluginsInstallInstallDetail: (
-      pluginId: string,
-      operationId: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<OperationInProgressObject, ErrorMessage>({
-        path: `/pg_mgr/plugins/${pluginId}/install/install/${operationId}`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `provd.pg_mgr.plugins.{plugin_id}.install.install.create`
+   * @tags plugins
+   * @name PluginsInstallInstallCreate
+   * @summary Install a package
+   * @request POST:/pg_mgr/plugins/{plugin_id}/install/install
+   * @secure
+   */
+  export namespace PluginsInstallInstallCreate {
+    export type RequestParams = {
+      /** Plugin ID */
+      pluginId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = IdObject;
+    export type RequestHeaders = {};
+    export type ResponseBody = any;
+  }
 
-    /**
-     * @description **Required ACL:** `provd.pg_mgr.plugins.{plugin_id}.install.installable.read`
-     *
-     * @tags plugins
-     * @name PluginsInstallInstallableList
-     * @summary Get the installable packages list
-     * @request GET:/pg_mgr/plugins/{plugin_id}/install/installable
-     * @secure
-     */
-    pluginsInstallInstallableList: (
-      pluginId: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<PackageList, ErrorMessage>({
-        path: `/pg_mgr/plugins/${pluginId}/install/installable`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `provd.operation.delete` This does not cancel the underlying operation; it only deletes the monitor Every monitor that is created should be deleted, else they won't be freed by the process and they will accumulate, taking memory
+   * @tags plugins
+   * @name PluginsInstallInstallDelete
+   * @summary Delete the Operation In Progress
+   * @request DELETE:/pg_mgr/plugins/{plugin_id}/install/install/{operation_id}
+   * @secure
+   */
+  export namespace PluginsInstallInstallDelete {
+    export type RequestParams = {
+      /** Operation In Progress ID */
+      operationId: string;
+      /** Plugin ID */
+      pluginId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = any;
+  }
 
-    /**
-     * @description **Required ACL:** `provd.pg_mgr.plugins.{plugin_id}.install.installed.read`
-     *
-     * @tags plugins
-     * @name PluginsInstallInstalledList
-     * @summary Get the installed packages list
-     * @request GET:/pg_mgr/plugins/{plugin_id}/install/installed
-     * @secure
-     */
-    pluginsInstallInstalledList: (
-      pluginId: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<PackageList, ErrorMessage>({
-        path: `/pg_mgr/plugins/${pluginId}/install/installed`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `provd.operation.read`
+   * @tags plugins
+   * @name PluginsInstallInstallDetail
+   * @summary Get the status of a package installation Operation In Progress
+   * @request GET:/pg_mgr/plugins/{plugin_id}/install/install/{operation_id}
+   * @secure
+   */
+  export namespace PluginsInstallInstallDetail {
+    export type RequestParams = {
+      /** Operation In Progress ID */
+      operationId: string;
+      /** Plugin ID */
+      pluginId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = OperationInProgressObject;
+  }
 
-    /**
-     * @description **Required ACL:** `provd.pg_mgr.plugins.{plugin_id}.install.uninstall.create`
-     *
-     * @tags plugins
-     * @name PluginsInstallUninstallCreate
-     * @summary Uninstall a package
-     * @request POST:/pg_mgr/plugins/{plugin_id}/install/uninstall
-     * @secure
-     */
-    pluginsInstallUninstallCreate: (
-      pluginId: string,
-      body: IdObject,
-      params: RequestParams = {},
-    ) =>
-      this.request<any, ErrorMessage>({
-        path: `/pg_mgr/plugins/${pluginId}/install/uninstall`,
-        method: "POST",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `provd.pg_mgr.plugins.{plugin_id}.install.installable.read`
+   * @tags plugins
+   * @name PluginsInstallInstallableList
+   * @summary Get the installable packages list
+   * @request GET:/pg_mgr/plugins/{plugin_id}/install/installable
+   * @secure
+   */
+  export namespace PluginsInstallInstallableList {
+    export type RequestParams = {
+      /** Plugin ID */
+      pluginId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = PackageList;
+  }
 
-    /**
-     * @description **Required ACL:** `provd.operation.delete` This does not cancel the underlying operation; it only deletes the monitor Every monitor that is created should be deleted, else they won't be freed by the process and they will accumulate, taking memory
-     *
-     * @tags plugins
-     * @name PluginsInstallUpgradeDelete
-     * @summary Delete the Operation In Progress
-     * @request DELETE:/pg_mgr/plugins/{plugin_id}/install/upgrade/{operation_id}
-     * @secure
-     */
-    pluginsInstallUpgradeDelete: (
-      pluginId: string,
-      operationId: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<any, ErrorMessage>({
-        path: `/pg_mgr/plugins/${pluginId}/install/upgrade/${operationId}`,
-        method: "DELETE",
-        secure: true,
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `provd.pg_mgr.plugins.{plugin_id}.install.installed.read`
+   * @tags plugins
+   * @name PluginsInstallInstalledList
+   * @summary Get the installed packages list
+   * @request GET:/pg_mgr/plugins/{plugin_id}/install/installed
+   * @secure
+   */
+  export namespace PluginsInstallInstalledList {
+    export type RequestParams = {
+      /** Plugin ID */
+      pluginId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = PackageList;
+  }
 
-    /**
-     * @description **Required ACL:** `provd.operation.read`
-     *
-     * @tags plugins
-     * @name PluginsInstallUpgradeDetail
-     * @summary Get the status of a package upgrade Operation In Progress
-     * @request GET:/pg_mgr/plugins/{plugin_id}/install/upgrade/{operation_id}
-     * @secure
-     */
-    pluginsInstallUpgradeDetail: (
-      pluginId: string,
-      operationId: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<OperationInProgressObject, ErrorMessage>({
-        path: `/pg_mgr/plugins/${pluginId}/install/upgrade/${operationId}`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `provd.pg_mgr.plugins.{plugin_id}.install.uninstall.create`
+   * @tags plugins
+   * @name PluginsInstallUninstallCreate
+   * @summary Uninstall a package
+   * @request POST:/pg_mgr/plugins/{plugin_id}/install/uninstall
+   * @secure
+   */
+  export namespace PluginsInstallUninstallCreate {
+    export type RequestParams = {
+      /** Plugin ID */
+      pluginId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = IdObject;
+    export type RequestHeaders = {};
+    export type ResponseBody = any;
+  }
 
-    /**
-     * @description **Required ACL:** `provd.pg_mgr.reload.create` This is mostly useful during plugin development, after changing the code of the plugin, instead of restarting the wazo-provd application
-     *
-     * @tags plugins
-     * @name ReloadCreate
-     * @summary Reload a plugin
-     * @request POST:/pg_mgr/reload
-     * @secure
-     */
-    reloadCreate: (body: IdObject, params: RequestParams = {}) =>
-      this.request<any, any>({
-        path: `/pg_mgr/reload`,
-        method: "POST",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
-  };
-  status = {
-    /**
-     * @description **Required ACL:** `provd.status.read`
-     *
-     * @tags status
-     * @name StatusList
-     * @summary Print infos about internal status of wazo-provd
-     * @request GET:/status
-     * @secure
-     */
-    statusList: (params: RequestParams = {}) =>
-      this.request<StatusSummary, any>({
-        path: `/status`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-  };
+  /**
+   * @description **Required ACL:** `provd.operation.delete` This does not cancel the underlying operation; it only deletes the monitor Every monitor that is created should be deleted, else they won't be freed by the process and they will accumulate, taking memory
+   * @tags plugins
+   * @name PluginsInstallUpgradeDelete
+   * @summary Delete the Operation In Progress
+   * @request DELETE:/pg_mgr/plugins/{plugin_id}/install/upgrade/{operation_id}
+   * @secure
+   */
+  export namespace PluginsInstallUpgradeDelete {
+    export type RequestParams = {
+      /** Operation In Progress ID */
+      operationId: string;
+      /** Plugin ID */
+      pluginId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = any;
+  }
+
+  /**
+   * @description **Required ACL:** `provd.operation.read`
+   * @tags plugins
+   * @name PluginsInstallUpgradeDetail
+   * @summary Get the status of a package upgrade Operation In Progress
+   * @request GET:/pg_mgr/plugins/{plugin_id}/install/upgrade/{operation_id}
+   * @secure
+   */
+  export namespace PluginsInstallUpgradeDetail {
+    export type RequestParams = {
+      /** Operation In Progress ID */
+      operationId: string;
+      /** Plugin ID */
+      pluginId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = OperationInProgressObject;
+  }
+
+  /**
+   * @description **Required ACL:** `provd.pg_mgr.reload.create` This is mostly useful during plugin development, after changing the code of the plugin, instead of restarting the wazo-provd application
+   * @tags plugins
+   * @name ReloadCreate
+   * @summary Reload a plugin
+   * @request POST:/pg_mgr/reload
+   * @secure
+   */
+  export namespace ReloadCreate {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = IdObject;
+    export type RequestHeaders = {};
+    export type ResponseBody = any;
+  }
+}
+
+export namespace Status {
+  /**
+   * @description **Required ACL:** `provd.status.read`
+   * @tags status
+   * @name StatusList
+   * @summary Print infos about internal status of wazo-provd
+   * @request GET:/status
+   * @secure
+   */
+  export namespace StatusList {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = StatusSummary;
+  }
 }

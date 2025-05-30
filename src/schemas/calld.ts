@@ -10,26 +10,6 @@
  * ---------------------------------------------------------------
  */
 
-/**
- * Behavior of the transfer. `attended` allows the initiator to talk to the recipient. `blind` does not.
- * @default "attended"
- */
-export enum TransferFlow {
-  Attended = "attended",
-  Blind = "blind",
-}
-
-export enum StatusValue {
-  Fail = "fail",
-  Ok = "ok",
-}
-
-/** @default "answer" */
-export enum RelocateCompletion {
-  Answer = "answer",
-  Api = "api",
-}
-
 export interface AdhocConference {
   /** The ID of the adhoc conference */
   conference_id?: string;
@@ -200,6 +180,45 @@ export interface CallRequestSource {
   user: string;
 }
 
+export interface CallsDtmfUpdateParams {
+  /** UUID of the application */
+  applicationUuid: string;
+  /** ID of the call */
+  callId: string;
+  /** Digits to send via DTMF. Must contain only `0-9*#`. */
+  digits: string;
+}
+
+export interface CallsHeldAnswerUpdateParams {
+  /** Call ID */
+  callId: string;
+  /** ID of the line of the user used to make the call. Default is the main line of the user. */
+  line_id?: number;
+  /** Unique identifier of the switchboard */
+  switchboardUuid: string;
+}
+
+export interface CallsListParams1 {
+  /** Filter calls by Stasis application, e.g. switchboard. */
+  application?: string;
+  /** Filter calls by Stasis application instance, e.g. switchboard-sales,green. Args must be separated by commas (,). `application_instance` is ignored if `application` is not set. */
+  application_instance?: string;
+  /**
+   * Should the list include results from sub-tenants?
+   * This option is only supported for the tenant `master`.
+   */
+  recurse?: boolean;
+}
+
+export interface CallsQueuedAnswerUpdateParams {
+  /** Call ID */
+  callId: string;
+  /** ID of the line of the user used to make the call. Default is the main line of the user. */
+  line_id?: number;
+  /** Unique identifier of the switchboard */
+  switchboardUuid: string;
+}
+
 export interface ComponentWithStatus {
   status?: StatusValue;
 }
@@ -220,6 +239,13 @@ export interface ConnectCallToUserRequest {
    * Omission leads to a default timeout of 30s.
    */
   timeout?: number;
+}
+
+export interface DtmfUpdateParams {
+  /** Call ID */
+  callId: string;
+  /** Digits to send via DTMF. Must contain only `0-9*#`. */
+  digits: string;
 }
 
 export interface EndpointLine {
@@ -303,6 +329,22 @@ export interface Fax {
   wait_time?: string;
 }
 
+export interface FaxesCreateParams {
+  /**
+   * Caller ID that will be presented to the recipient of the fax. Example: "my-name <+15551112222>"
+   * @default "Wazo Fax"
+   */
+  caller_id?: string;
+  /** Context of the recipient of the fax */
+  context: string;
+  /** Extension of the recipient of the fax */
+  extension: string;
+  /** Extension to compose before sending fax. Useful for fax in IVR */
+  ivr_extension?: string;
+  /** Time waiting before sending fax when destination has answered (in seconds) */
+  wait_time?: number;
+}
+
 export interface GreetingCopy {
   /** The destination name of the greeting */
   dest_greeting: string;
@@ -315,9 +357,57 @@ export interface LocationLine {
   line_id: number;
 }
 
+export interface MeCallsDtmfUpdateParams {
+  /** Call ID */
+  callId: string;
+  /** Digits to send via DTMF. Must contain only `0-9*#`. */
+  digits: string;
+}
+
+export interface MeCallsListParams {
+  /** Filter calls by Stasis application, e.g. switchboard. */
+  application?: string;
+  /** Filter calls by Stasis application instance, e.g. switchboard-sales,green. Args must be separated by commas (,). */
+  application_instance?: string;
+}
+
+export interface MeFaxesCreateParams {
+  /**
+   * Caller ID that will be presented to the recipient of the fax. Example: "my-name <+15551112222>"
+   * @default "Wazo Fax"
+   */
+  caller_id?: string;
+  /** Extension of the recipient of the fax */
+  extension: string;
+  /** Extension to compose before sending fax. Useful for fax in IVR */
+  ivr_extension?: string;
+  /** Time waiting before sending fax when destination has answered (in seconds) */
+  wait_time?: number;
+}
+
+export interface MeVoicemailsMessagesRecordingListParams {
+  /** Set to 1 to force download by browser */
+  download?: string;
+  /** The message's ID */
+  messageId: string;
+  /** The token's ID */
+  token?: string;
+}
+
 export interface MeetingStatus {
   /** Wether the meeting is full of not */
   full?: boolean;
+}
+
+export interface MessagesRecordingListParams {
+  /** Set to 1 to force download by browser */
+  download?: string;
+  /** The message's ID */
+  messageId: string;
+  /** The token's ID */
+  token?: string;
+  /** The voicemail's ID */
+  voicemailId: number;
 }
 
 /** Information needed to park the call */
@@ -474,6 +564,12 @@ export interface Relocate {
   uuid?: string;
 }
 
+/** @default "answer" */
+export enum RelocateCompletion {
+  Answer = "answer",
+  Api = "api",
+}
+
 export type RelocateCompletions = RelocateCompletion[];
 
 export interface RelocateList {
@@ -485,6 +581,11 @@ export interface StatusSummary {
   bus_consumer?: ComponentWithStatus;
   plugins?: PluginsStatus;
   service_token?: ComponentWithStatus;
+}
+
+export enum StatusValue {
+  Fail = "fail",
+  Ok = "ok",
 }
 
 export interface SwitchboardHeldCall {
@@ -534,6 +635,15 @@ export interface Transfer {
   status?: "starting" | "ringback" | "answered";
   /** Call ID of the call being transferred to someone else */
   transferred_call?: string;
+}
+
+/**
+ * Behavior of the transfer. `attended` allows the initiator to talk to the recipient. `blind` does not.
+ * @default "attended"
+ */
+export enum TransferFlow {
+  Attended = "attended",
+  Blind = "blind",
 }
 
 export interface TransferList {
@@ -665,2904 +775,2618 @@ export type VoicemailsStatus = ComponentWithStatus & {
   cache_items?: number;
 };
 
-export type QueryParamsType = Record<string | number, any>;
-export type ResponseFormat = keyof Omit<Body, "body" | "bodyUsed">;
+export namespace Applications {
+  /**
+   * @description **Required ACL:** `calld.applications.{application_uuid}.read`
+   * @tags applications
+   * @name ApplicationsDetail
+   * @summary Show an application
+   * @request GET:/applications/{application_uuid}
+   * @secure
+   */
+  export namespace ApplicationsDetail {
+    export type RequestParams = {
+      /** UUID of the application */
+      applicationUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = Application;
+  }
 
-export interface FullRequestParams extends Omit<RequestInit, "body"> {
-  /** set parameter to `true` for call `securityWorker` for this request */
-  secure?: boolean;
-  /** request path */
-  path: string;
-  /** content type of request body */
-  type?: ContentType;
-  /** query params */
-  query?: QueryParamsType;
-  /** format of response (i.e. response.json() -> format: "json") */
-  format?: ResponseFormat;
-  /** request body */
-  body?: unknown;
-  /** base url */
-  baseUrl?: string;
-  /** request cancellation token */
-  cancelToken?: CancelToken;
+  /**
+   * @description **Required ACL:** `calld.applications.{application_uuid}.calls.read`
+   * @tags applications
+   * @name CallsList
+   * @summary List calls from the application
+   * @request GET:/applications/{application_uuid}/calls
+   * @secure
+   */
+  export namespace CallsList {
+    export type RequestParams = {
+      /** UUID of the application */
+      applicationUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = ApplicationCalls;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.applications.{application_uuid}.calls.create`
+   * @tags applications
+   * @name CallsCreate
+   * @summary Make a new call to the application
+   * @request POST:/applications/{application_uuid}/calls
+   * @secure
+   */
+  export namespace CallsCreate {
+    export type RequestParams = {
+      /** UUID of the application */
+      applicationUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = ApplicationCallRequestToExten;
+    export type RequestHeaders = {};
+    export type ResponseBody = ApplicationCall;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.applications.{application_uuid}.calls.{call_id}.delete`
+   * @tags applications
+   * @name CallsDelete
+   * @summary Hangup a call from the application
+   * @request DELETE:/applications/{application_uuid}/calls/{call_id}
+   * @secure
+   */
+  export namespace CallsDelete {
+    export type RequestParams = {
+      /** UUID of the application */
+      applicationUuid: string;
+      /** ID of the call */
+      callId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.applications.{application_uuid}.calls.{call_id}.answer.update`
+   * @tags applications
+   * @name CallsAnswerUpdate
+   * @summary Answer a call
+   * @request PUT:/applications/{application_uuid}/calls/{call_id}/answer
+   * @secure
+   */
+  export namespace CallsAnswerUpdate {
+    export type RequestParams = {
+      /** UUID of the application */
+      applicationUuid: string;
+      /** ID of the call */
+      callId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.applications.{application_uuid}.calls.{call_id}.dtmf.update
+   * @tags applications
+   * @name CallsDtmfUpdate
+   * @summary Simulate a user pressing DTMF keys
+   * @request PUT:/applications/{application_uuid}/calls/{call_id}/dtmf
+   * @secure
+   */
+  export namespace CallsDtmfUpdate {
+    export type RequestParams = {
+      /** UUID of the application */
+      applicationUuid: string;
+      /** ID of the call */
+      callId: string;
+    };
+    export type RequestQuery = {
+      /** Digits to send via DTMF. Must contain only `0-9*#`. */
+      digits: string;
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.applications.{application_uuid}.calls.{call_id}.hold.start.update`
+   * @tags applications
+   * @name CallsHoldStartUpdate
+   * @summary Place a call on hold
+   * @request PUT:/applications/{application_uuid}/calls/{call_id}/hold/start
+   * @secure
+   */
+  export namespace CallsHoldStartUpdate {
+    export type RequestParams = {
+      /** UUID of the application */
+      applicationUuid: string;
+      /** ID of the call */
+      callId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.applications.{application_uuid}.calls.{call_id}.hold.stop.update
+   * @tags applications
+   * @name CallsHoldStopUpdate
+   * @summary Resume a call that has been placed on hold
+   * @request PUT:/applications/{application_uuid}/calls/{call_id}/hold/stop
+   * @secure
+   */
+  export namespace CallsHoldStopUpdate {
+    export type RequestParams = {
+      /** UUID of the application */
+      applicationUuid: string;
+      /** ID of the call */
+      callId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.applications.{application_uuid}.calls.{call_id}.moh.{moh_uuid}.stop.update
+   * @tags applications
+   * @name CallsMohStopUpdate
+   * @summary Stops playing a music on hold
+   * @request PUT:/applications/{application_uuid}/calls/{call_id}/moh/stop
+   * @secure
+   */
+  export namespace CallsMohStopUpdate {
+    export type RequestParams = {
+      /** UUID of the application */
+      applicationUuid: string;
+      /** ID of the call */
+      callId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.applications.{application_uuid}.calls.{call_id}.moh.{moh_uuid}.start.update` Starts playing a music on hold on a call. If the music on hold is interrupted for a playback or another action, the music on hold will not restart automatically after the interruption.
+   * @tags applications
+   * @name CallsMohStartUpdate
+   * @summary Starts playing a music on hold
+   * @request PUT:/applications/{application_uuid}/calls/{call_id}/moh/{moh_uuid}/start
+   * @secure
+   */
+  export namespace CallsMohStartUpdate {
+    export type RequestParams = {
+      /** UUID of the application */
+      applicationUuid: string;
+      /** ID of the call */
+      callId: string;
+      /** UUID of the music on hold */
+      mohUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.applications.{application_uuid}.calls.{call_id}.mute.start.update`
+   * @tags applications
+   * @name CallsMuteStartUpdate
+   * @summary Mute a call
+   * @request PUT:/applications/{application_uuid}/calls/{call_id}/mute/start
+   * @secure
+   */
+  export namespace CallsMuteStartUpdate {
+    export type RequestParams = {
+      /** UUID of the application */
+      applicationUuid: string;
+      /** ID of the call */
+      callId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.applications.{application_uuid}.calls.{call_id}.mute.stop.update`
+   * @tags applications
+   * @name CallsMuteStopUpdate
+   * @summary Unmute a call
+   * @request PUT:/applications/{application_uuid}/calls/{call_id}/mute/stop
+   * @secure
+   */
+  export namespace CallsMuteStopUpdate {
+    export type RequestParams = {
+      /** UUID of the application */
+      applicationUuid: string;
+      /** ID of the call */
+      callId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.applications.{application_uuid}.calls.{call_id}.playbacks.create` URI examples: * sound:tt-weasels * digits:4188001234 * number:321 * characters:abc * tone:ring * recording:my-recording
+   * @tags applications
+   * @name CallsPlaybacksCreate
+   * @summary Play file to the call
+   * @request POST:/applications/{application_uuid}/calls/{call_id}/playbacks
+   * @secure
+   */
+  export namespace CallsPlaybacksCreate {
+    export type RequestParams = {
+      /** UUID of the application */
+      applicationUuid: string;
+      /** ID of the call */
+      callId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = ApplicationPlayback;
+    export type RequestHeaders = {};
+    export type ResponseBody = ApplicationPlayback;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.applications.{application_uuid}.calls.{call_id}.progress.start.update` The progress ringing tone is the sound heard by a caller while the other party is ringing.
+   * @tags applications
+   * @name CallsProgressStartUpdate
+   * @summary Play the progress ringing tone
+   * @request PUT:/applications/{application_uuid}/calls/{call_id}/progress/start
+   * @secure
+   */
+  export namespace CallsProgressStartUpdate {
+    export type RequestParams = {
+      /** UUID of the application */
+      applicationUuid: string;
+      /** ID of the call */
+      callId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.applications.{application_uuid}.calls.{call_id}.progress.stop.update` The progress ringing tone is the sound heard by a caller while the other party is ringing. Limitation: this only works when the ringing tone is played by Wazo through audio media (e.g. when using `/progress` after `/answer`). If the phone is emitting the ringing tone directly to the user, then it cannot be stopped, and the response code will still be 204.
+   * @tags applications
+   * @name CallsProgressStopUpdate
+   * @summary Stop playing the progress ringing tone.
+   * @request PUT:/applications/{application_uuid}/calls/{call_id}/progress/stop
+   * @secure
+   */
+  export namespace CallsProgressStopUpdate {
+    export type RequestParams = {
+      /** UUID of the application */
+      applicationUuid: string;
+      /** ID of the call */
+      callId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.applications.{application_uuid}.calls.{call_id}.snoops.create` The whisper mode indicate which part of the snooped channel can hear the snooper. Given Alice calls Bob and Charles snoops on Bob * none: No one can hear the snooper * both: Alice and Bob can hear Charles * in: Alice can hear Charles * out: Bob can hear Charles
+   * @tags applications
+   * @name CallsSnoopsCreate
+   * @summary Start snooping on a call
+   * @request POST:/applications/{application_uuid}/calls/{call_id}/snoops
+   * @secure
+   */
+  export namespace CallsSnoopsCreate {
+    export type RequestParams = {
+      /** UUID of the application */
+      applicationUuid: string;
+      /** ID of the call */
+      callId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = ApplicationSnoop;
+    export type RequestHeaders = {};
+    export type ResponseBody = ApplicationSnoop;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.applications.{application_uuid}.nodes.read`
+   * @tags applications
+   * @name NodesList
+   * @summary List nodes from the application
+   * @request GET:/applications/{application_uuid}/nodes
+   * @secure
+   */
+  export namespace NodesList {
+    export type RequestParams = {
+      /** UUID of the application */
+      applicationUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = ApplicationNodes;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.applications.{application_uuid}.nodes.create`
+   * @tags applications
+   * @name NodesCreate
+   * @summary Make a new node and add calls
+   * @request POST:/applications/{application_uuid}/nodes
+   * @secure
+   */
+  export namespace NodesCreate {
+    export type RequestParams = {
+      /** UUID of the application */
+      applicationUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = ApplicationNodeRequest;
+    export type RequestHeaders = {};
+    export type ResponseBody = ApplicationNode;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.applications.{application_uuid}.nodes.{node_uuid}.delete` **Not implemented**
+   * @tags applications
+   * @name NodesDelete
+   * @summary Delete node and hangup all calls
+   * @request DELETE:/applications/{application_uuid}/nodes/{node_uuid}
+   * @secure
+   */
+  export namespace NodesDelete {
+    export type RequestParams = {
+      /** UUID of the application */
+      applicationUuid: string;
+      /** UUID of the node */
+      nodeUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.applications.{application_uuid}.nodes.{node_uuid}.read`
+   * @tags applications
+   * @name NodesDetail
+   * @summary Show a node
+   * @request GET:/applications/{application_uuid}/nodes/{node_uuid}
+   * @secure
+   */
+  export namespace NodesDetail {
+    export type RequestParams = {
+      /** UUID of the application */
+      applicationUuid: string;
+      /** UUID of the node */
+      nodeUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = ApplicationNode;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.applications.{application_uuid}.nodes.{node_uuid}.calls.create`
+   * @tags applications
+   * @name NodesCallsCreate
+   * @summary Make a new call to the node
+   * @request POST:/applications/{application_uuid}/nodes/{node_uuid}/calls
+   * @secure
+   */
+  export namespace NodesCallsCreate {
+    export type RequestParams = {
+      /** UUID of the application */
+      applicationUuid: string;
+      /** UUID of the node */
+      nodeUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = ApplicationCallRequestToExten;
+    export type RequestHeaders = {};
+    export type ResponseBody = ApplicationCall;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.applications.{application_uuid}.nodes.{node_uuid}.calls.user.create`
+   * @tags applications
+   * @name NodesCallsUserCreate
+   * @summary Initiate a call to a user and insert it in the node
+   * @request POST:/applications/{application_uuid}/nodes/{node_uuid}/calls/user
+   * @secure
+   */
+  export namespace NodesCallsUserCreate {
+    export type RequestParams = {
+      /** UUID of the application */
+      applicationUuid: string;
+      /** UUID of the node */
+      nodeUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = ApplicationCallRequestToUser;
+    export type RequestHeaders = {};
+    export type ResponseBody = ApplicationCall;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.applications.{application_uuid}.nodes.{node_uuid}.calls.{call_id}.delete`
+   * @tags applications
+   * @name NodesCallsDelete
+   * @summary Remove call from the node
+   * @request DELETE:/applications/{application_uuid}/nodes/{node_uuid}/calls/{call_id}
+   * @secure
+   */
+  export namespace NodesCallsDelete {
+    export type RequestParams = {
+      /** UUID of the application */
+      applicationUuid: string;
+      /** ID of the call */
+      callId: string;
+      /** UUID of the node */
+      nodeUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.applications.{application_uuid}.nodes.{node_uuid}.calls.{call_id}.update`
+   * @tags applications
+   * @name NodesCallsUpdate
+   * @summary Insert call to the node
+   * @request PUT:/applications/{application_uuid}/nodes/{node_uuid}/calls/{call_id}
+   * @secure
+   */
+  export namespace NodesCallsUpdate {
+    export type RequestParams = {
+      /** UUID of the application */
+      applicationUuid: string;
+      /** ID of the call */
+      callId: string;
+      /** UUID of the node */
+      nodeUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.applications.{application_uuid}.playbacks.{playback_uuid}.delete`
+   * @tags applications
+   * @name PlaybacksDelete
+   * @summary Stop and remove playback
+   * @request DELETE:/applications/{application_uuid}/playbacks/{playback_uuid}
+   * @secure
+   */
+  export namespace PlaybacksDelete {
+    export type RequestParams = {
+      /** UUID of the application */
+      applicationUuid: string;
+      /** ID of the playback */
+      playbackUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.applications.{application_uuid}.snoops.read`
+   * @tags applications
+   * @name SnoopsList
+   * @summary List active snoops
+   * @request GET:/applications/{application_uuid}/snoops
+   * @secure
+   */
+  export namespace SnoopsList {
+    export type RequestParams = {
+      /** UUID of the application */
+      applicationUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = ApplicationSnoops;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.applications.{application_uuid}.snoops.{snoop_uuid}.delete`
+   * @tags applications
+   * @name SnoopsDelete
+   * @summary Stop snooping
+   * @request DELETE:/applications/{application_uuid}/snoops/{snoop_uuid}
+   * @secure
+   */
+  export namespace SnoopsDelete {
+    export type RequestParams = {
+      /** UUID of the application */
+      applicationUuid: string;
+      /** UUID of the snoop */
+      snoopUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.applications.{application_uuid}.snoops.{snoop_uuid}.read`
+   * @tags applications
+   * @name SnoopsDetail
+   * @summary View snooping parameters
+   * @request GET:/applications/{application_uuid}/snoops/{snoop_uuid}
+   * @secure
+   */
+  export namespace SnoopsDetail {
+    export type RequestParams = {
+      /** UUID of the application */
+      applicationUuid: string;
+      /** UUID of the snoop */
+      snoopUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = ApplicationSnoop;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.applications.{application_uuid}.snoops.{snoop_uuid}.update`
+   * @tags applications
+   * @name SnoopsUpdate
+   * @summary Change snooping parameters
+   * @request PUT:/applications/{application_uuid}/snoops/{snoop_uuid}
+   * @secure
+   */
+  export namespace SnoopsUpdate {
+    export type RequestParams = {
+      /** UUID of the application */
+      applicationUuid: string;
+      /** UUID of the snoop */
+      snoopUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = ApplicationSnoopPut;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
 }
 
-export type RequestParams = Omit<
-  FullRequestParams,
-  "body" | "method" | "query" | "path"
->;
-
-export interface ApiConfig<SecurityDataType = unknown> {
-  baseUrl?: string;
-  baseApiParams?: Omit<RequestParams, "baseUrl" | "cancelToken" | "signal">;
-  securityWorker?: (
-    securityData: SecurityDataType | null,
-  ) => Promise<RequestParams | void> | RequestParams | void;
-  customFetch?: typeof fetch;
-}
-
-export interface HttpResponse<D extends unknown, E extends unknown = unknown>
-  extends Response {
-  data: D;
-  error: E;
-}
-
-type CancelToken = Symbol | string | number;
-
-export enum ContentType {
-  Json = "application/json",
-  FormData = "multipart/form-data",
-  UrlEncoded = "application/x-www-form-urlencoded",
-  Text = "text/plain",
-}
-
-export class HttpClient<SecurityDataType = unknown> {
-  public baseUrl: string = "/1.0";
-  private securityData: SecurityDataType | null = null;
-  private securityWorker?: ApiConfig<SecurityDataType>["securityWorker"];
-  private abortControllers = new Map<CancelToken, AbortController>();
-  private customFetch = (...fetchParams: Parameters<typeof fetch>) =>
-    fetch(...fetchParams);
-
-  private baseApiParams: RequestParams = {
-    credentials: "same-origin",
-    headers: {},
-    redirect: "follow",
-    referrerPolicy: "no-referrer",
-  };
-
-  constructor(apiConfig: ApiConfig<SecurityDataType> = {}) {
-    Object.assign(this, apiConfig);
-  }
-
-  public setSecurityData = (data: SecurityDataType | null) => {
-    this.securityData = data;
-  };
-
-  protected encodeQueryParam(key: string, value: any) {
-    const encodedKey = encodeURIComponent(key);
-    return `${encodedKey}=${encodeURIComponent(typeof value === "number" ? value : `${value}`)}`;
-  }
-
-  protected addQueryParam(query: QueryParamsType, key: string) {
-    return this.encodeQueryParam(key, query[key]);
-  }
-
-  protected addArrayQueryParam(query: QueryParamsType, key: string) {
-    const value = query[key];
-    return value.map((v: any) => this.encodeQueryParam(key, v)).join("&");
-  }
-
-  protected toQueryString(rawQuery?: QueryParamsType): string {
-    const query = rawQuery || {};
-    const keys = Object.keys(query).filter(
-      (key) => "undefined" !== typeof query[key],
-    );
-    return keys
-      .map((key) =>
-        Array.isArray(query[key])
-          ? this.addArrayQueryParam(query, key)
-          : this.addQueryParam(query, key),
-      )
-      .join("&");
-  }
-
-  protected addQueryParams(rawQuery?: QueryParamsType): string {
-    const queryString = this.toQueryString(rawQuery);
-    return queryString ? `?${queryString}` : "";
-  }
-
-  private contentFormatters: Record<ContentType, (input: any) => any> = {
-    [ContentType.Json]: (input: any) =>
-      input !== null && (typeof input === "object" || typeof input === "string")
-        ? JSON.stringify(input)
-        : input,
-    [ContentType.Text]: (input: any) =>
-      input !== null && typeof input !== "string"
-        ? JSON.stringify(input)
-        : input,
-    [ContentType.FormData]: (input: any) =>
-      Object.keys(input || {}).reduce((formData, key) => {
-        const property = input[key];
-        formData.append(
-          key,
-          property instanceof Blob
-            ? property
-            : typeof property === "object" && property !== null
-              ? JSON.stringify(property)
-              : `${property}`,
-        );
-        return formData;
-      }, new FormData()),
-    [ContentType.UrlEncoded]: (input: any) => this.toQueryString(input),
-  };
-
-  protected mergeRequestParams(
-    params1: RequestParams,
-    params2?: RequestParams,
-  ): RequestParams {
-    return {
-      ...this.baseApiParams,
-      ...params1,
-      ...(params2 || {}),
-      headers: {
-        ...(this.baseApiParams.headers || {}),
-        ...(params1.headers || {}),
-        ...((params2 && params2.headers) || {}),
-      },
+export namespace Calls {
+  /**
+   * @description **Required ACL:** `calld.calls.read`
+   * @tags calls
+   * @name CallsList
+   * @summary List calls
+   * @request GET:/calls
+   * @secure
+   */
+  export namespace CallsList {
+    export type RequestParams = {};
+    export type RequestQuery = {
+      /** Filter calls by Stasis application, e.g. switchboard. */
+      application?: string;
+      /** Filter calls by Stasis application instance, e.g. switchboard-sales,green. Args must be separated by commas (,). `application_instance` is ignored if `application` is not set. */
+      application_instance?: string;
+      /**
+       * Should the list include results from sub-tenants?
+       * This option is only supported for the tenant `master`.
+       */
+      recurse?: boolean;
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = {
+      items?: Call[];
     };
   }
 
-  protected createAbortSignal = (
-    cancelToken: CancelToken,
-  ): AbortSignal | undefined => {
-    if (this.abortControllers.has(cancelToken)) {
-      const abortController = this.abortControllers.get(cancelToken);
-      if (abortController) {
-        return abortController.signal;
-      }
-      return void 0;
-    }
+  /**
+   * @description **Required ACL:** `calld.calls.create` Create a new call from a phone to an extension.
+   * @tags calls
+   * @name CallsCreate
+   * @summary Make a new call
+   * @request POST:/calls
+   * @secure
+   */
+  export namespace CallsCreate {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = CallRequest;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = Call;
+  }
 
-    const abortController = new AbortController();
-    this.abortControllers.set(cancelToken, abortController);
-    return abortController.signal;
-  };
+  /**
+   * @description **Required ACL:** `calld.calls.{call_id}.delete`
+   * @tags calls
+   * @name CallsDelete
+   * @summary Hangup a call
+   * @request DELETE:/calls/{call_id}
+   * @secure
+   */
+  export namespace CallsDelete {
+    export type RequestParams = {
+      /** Call ID */
+      callId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = void;
+  }
 
-  public abortRequest = (cancelToken: CancelToken) => {
-    const abortController = this.abortControllers.get(cancelToken);
+  /**
+   * @description **Required ACL:** `calld.calls.{call_id}.read`
+   * @tags calls
+   * @name CallsDetail
+   * @summary Show a call
+   * @request GET:/calls/{call_id}
+   * @secure
+   */
+  export namespace CallsDetail {
+    export type RequestParams = {
+      /** Call ID */
+      callId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = Call;
+  }
 
-    if (abortController) {
-      abortController.abort();
-      this.abortControllers.delete(cancelToken);
-    }
-  };
+  /**
+   * @description **Required ACL:** `calld.calls.{call_id}.answer.update` This works **only** if the phone brand has a corresponding phoned plugin to handle the event.
+   * @tags calls
+   * @name AnswerUpdate
+   * @summary Answer a call
+   * @request PUT:/calls/{call_id}/answer
+   * @secure
+   */
+  export namespace AnswerUpdate {
+    export type RequestParams = {
+      /** Call ID */
+      callId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = void;
+  }
 
-  public request = async <T = any, E = any>({
-    body,
-    secure,
-    path,
-    type,
-    query,
-    format,
-    baseUrl,
-    cancelToken,
-    ...params
-  }: FullRequestParams): Promise<HttpResponse<T, E>> => {
-    const secureParams =
-      ((typeof secure === "boolean" ? secure : this.baseApiParams.secure) &&
-        this.securityWorker &&
-        (await this.securityWorker(this.securityData))) ||
-      {};
-    const requestParams = this.mergeRequestParams(params, secureParams);
-    const queryString = query && this.toQueryString(query);
-    const payloadFormatter = this.contentFormatters[type || ContentType.Json];
-    const responseFormat = format || requestParams.format;
+  /**
+   * @description **Required ACL:** `calld.calls.{call_id}.dtmf.update
+   * @tags calls
+   * @name DtmfUpdate
+   * @summary Simulate a user pressing DTMF keys
+   * @request PUT:/calls/{call_id}/dtmf
+   * @secure
+   */
+  export namespace DtmfUpdate {
+    export type RequestParams = {
+      /** Call ID */
+      callId: string;
+    };
+    export type RequestQuery = {
+      /** Digits to send via DTMF. Must contain only `0-9*#`. */
+      digits: string;
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = void;
+  }
 
-    return this.customFetch(
-      `${baseUrl || this.baseUrl || ""}${path}${queryString ? `?${queryString}` : ""}`,
-      {
-        ...requestParams,
-        headers: {
-          ...(requestParams.headers || {}),
-          ...(type && type !== ContentType.FormData
-            ? { "Content-Type": type }
-            : {}),
-        },
-        signal:
-          (cancelToken
-            ? this.createAbortSignal(cancelToken)
-            : requestParams.signal) || null,
-        body:
-          typeof body === "undefined" || body === null
-            ? null
-            : payloadFormatter(body),
-      },
-    ).then(async (response) => {
-      const r = response.clone() as HttpResponse<T, E>;
-      r.data = null as unknown as T;
-      r.error = null as unknown as E;
+  /**
+   * @description **Required ACL:** `calld.calls.{call_id}.hold.start.update` This works **only** if the phone brand has a corresponding phoned plugin to handle the event.
+   * @tags calls
+   * @name HoldStartUpdate
+   * @summary Hold a call
+   * @request PUT:/calls/{call_id}/hold/start
+   * @secure
+   */
+  export namespace HoldStartUpdate {
+    export type RequestParams = {
+      /** Call ID */
+      callId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = void;
+  }
 
-      const data = !responseFormat
-        ? r
-        : await response[responseFormat]()
-            .then((data) => {
-              if (r.ok) {
-                r.data = data;
-              } else {
-                r.error = data;
-              }
-              return r;
-            })
-            .catch((e) => {
-              r.error = e;
-              return r;
-            });
+  /**
+   * @description **Required ACL:** `calld.calls.{call_id}.hold.stop.update` This works **only** if the phone brand has a corresponding phoned plugin to handle the event.
+   * @tags calls
+   * @name HoldStopUpdate
+   * @summary Unhold a call
+   * @request PUT:/calls/{call_id}/hold/stop
+   * @secure
+   */
+  export namespace HoldStopUpdate {
+    export type RequestParams = {
+      /** Call ID */
+      callId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = void;
+  }
 
-      if (cancelToken) {
-        this.abortControllers.delete(cancelToken);
-      }
+  /**
+   * @description **Required ACL:** `calld.calls.{call_id}.mute.start.update`
+   * @tags calls
+   * @name MuteStartUpdate
+   * @summary Mute a call
+   * @request PUT:/calls/{call_id}/mute/start
+   * @secure
+   */
+  export namespace MuteStartUpdate {
+    export type RequestParams = {
+      /** Call ID */
+      callId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = void;
+  }
 
-      if (!response.ok) throw data;
-      return data;
-    });
-  };
+  /**
+   * @description **Required ACL:** `calld.calls.{call_id}.mute.stop.update`
+   * @tags calls
+   * @name MuteStopUpdate
+   * @summary Unmute a call
+   * @request PUT:/calls/{call_id}/mute/stop
+   * @secure
+   */
+  export namespace MuteStopUpdate {
+    export type RequestParams = {
+      /** Call ID */
+      callId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** calld.calls.{call_id}.park.update`. Use the `POST /calls` API to unpark the call.
+   * @tags calls, parking_lots
+   * @name ParkUpdate
+   * @summary Park a call
+   * @request PUT:/calls/{call_id}/park
+   * @secure
+   */
+  export namespace ParkUpdate {
+    export type RequestParams = {
+      /** Call ID */
+      callId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = ParkCallBody;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = ParkedCallInfo;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.calls.{call_id}.record.pause.update`
+   * @tags calls
+   * @name RecordPauseUpdate
+   * @summary Pause recording a call
+   * @request PUT:/calls/{call_id}/record/pause
+   * @secure
+   */
+  export namespace RecordPauseUpdate {
+    export type RequestParams = {
+      /** Call ID */
+      callId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.calls.{call_id}.record.resume.update`
+   * @tags calls
+   * @name RecordResumeUpdate
+   * @summary Resume recording a call
+   * @request PUT:/calls/{call_id}/record/resume
+   * @secure
+   */
+  export namespace RecordResumeUpdate {
+    export type RequestParams = {
+      /** Call ID */
+      callId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.calls.{call_id}.record.start.update`
+   * @tags calls
+   * @name RecordStartUpdate
+   * @summary Start recording a call
+   * @request PUT:/calls/{call_id}/record/start
+   * @secure
+   */
+  export namespace RecordStartUpdate {
+    export type RequestParams = {
+      /** Call ID */
+      callId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.calls.{call_id}.record.stop.update`
+   * @tags calls
+   * @name RecordStopUpdate
+   * @summary Stop recording a call
+   * @request PUT:/calls/{call_id}/record/stop
+   * @secure
+   */
+  export namespace RecordStopUpdate {
+    export type RequestParams = {
+      /** Call ID */
+      callId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.calls.{call_id}.user.{user_uuid}.update`
+   * @tags calls
+   * @name UserUpdate
+   * @summary Connect a call to a user
+   * @request PUT:/calls/{call_id}/user/{user_uuid}
+   * @secure
+   */
+  export namespace UserUpdate {
+    export type RequestParams = {
+      /** Call ID */
+      callId: string;
+      /** UUID of the user */
+      userUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = ConnectCallToUserRequest;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = Call;
+  }
 }
 
-/**
- * @title wazo-calld
- * @version 1.0.0
- * @baseUrl /1.0
- * @contact Wazo Dev Team <dev@wazo.community> (https://wazo-platform.org/)
- *
- * Control your calls from a REST API
- */
-export class Api<
-  SecurityDataType extends unknown,
-> extends HttpClient<SecurityDataType> {
-  applications = {
-    /**
-     * @description **Required ACL:** `calld.applications.{application_uuid}.read`
-     *
-     * @tags applications
-     * @name ApplicationsDetail
-     * @summary Show an application
-     * @request GET:/applications/{application_uuid}
-     * @secure
-     */
-    applicationsDetail: (applicationUuid: string, params: RequestParams = {}) =>
-      this.request<Application, Error>({
-        path: `/applications/${applicationUuid}`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.applications.{application_uuid}.calls.read`
-     *
-     * @tags applications
-     * @name CallsList
-     * @summary List calls from the application
-     * @request GET:/applications/{application_uuid}/calls
-     * @secure
-     */
-    callsList: (applicationUuid: string, params: RequestParams = {}) =>
-      this.request<ApplicationCalls, Error>({
-        path: `/applications/${applicationUuid}/calls`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.applications.{application_uuid}.calls.create`
-     *
-     * @tags applications
-     * @name CallsCreate
-     * @summary Make a new call to the application
-     * @request POST:/applications/{application_uuid}/calls
-     * @secure
-     */
-    callsCreate: (
-      applicationUuid: string,
-      body: ApplicationCallRequestToExten,
-      params: RequestParams = {},
-    ) =>
-      this.request<ApplicationCall, Error>({
-        path: `/applications/${applicationUuid}/calls`,
-        method: "POST",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.applications.{application_uuid}.calls.{call_id}.delete`
-     *
-     * @tags applications
-     * @name CallsDelete
-     * @summary Hangup a call from the application
-     * @request DELETE:/applications/{application_uuid}/calls/{call_id}
-     * @secure
-     */
-    callsDelete: (
-      applicationUuid: string,
-      callId: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/applications/${applicationUuid}/calls/${callId}`,
-        method: "DELETE",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.applications.{application_uuid}.calls.{call_id}.answer.update`
-     *
-     * @tags applications
-     * @name CallsAnswerUpdate
-     * @summary Answer a call
-     * @request PUT:/applications/{application_uuid}/calls/{call_id}/answer
-     * @secure
-     */
-    callsAnswerUpdate: (
-      applicationUuid: string,
-      callId: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/applications/${applicationUuid}/calls/${callId}/answer`,
-        method: "PUT",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.applications.{application_uuid}.calls.{call_id}.dtmf.update
-     *
-     * @tags applications
-     * @name CallsDtmfUpdate
-     * @summary Simulate a user pressing DTMF keys
-     * @request PUT:/applications/{application_uuid}/calls/{call_id}/dtmf
-     * @secure
-     */
-    callsDtmfUpdate: (
-      applicationUuid: string,
-      callId: string,
-      query: {
-        /** Digits to send via DTMF. Must contain only `0-9*#`. */
-        digits: string;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/applications/${applicationUuid}/calls/${callId}/dtmf`,
-        method: "PUT",
-        query: query,
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.applications.{application_uuid}.calls.{call_id}.hold.start.update`
-     *
-     * @tags applications
-     * @name CallsHoldStartUpdate
-     * @summary Place a call on hold
-     * @request PUT:/applications/{application_uuid}/calls/{call_id}/hold/start
-     * @secure
-     */
-    callsHoldStartUpdate: (
-      applicationUuid: string,
-      callId: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/applications/${applicationUuid}/calls/${callId}/hold/start`,
-        method: "PUT",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.applications.{application_uuid}.calls.{call_id}.hold.stop.update
-     *
-     * @tags applications
-     * @name CallsHoldStopUpdate
-     * @summary Resume a call that has been placed on hold
-     * @request PUT:/applications/{application_uuid}/calls/{call_id}/hold/stop
-     * @secure
-     */
-    callsHoldStopUpdate: (
-      applicationUuid: string,
-      callId: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/applications/${applicationUuid}/calls/${callId}/hold/stop`,
-        method: "PUT",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.applications.{application_uuid}.calls.{call_id}.moh.{moh_uuid}.stop.update
-     *
-     * @tags applications
-     * @name CallsMohStopUpdate
-     * @summary Stops playing a music on hold
-     * @request PUT:/applications/{application_uuid}/calls/{call_id}/moh/stop
-     * @secure
-     */
-    callsMohStopUpdate: (
-      applicationUuid: string,
-      callId: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/applications/${applicationUuid}/calls/${callId}/moh/stop`,
-        method: "PUT",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.applications.{application_uuid}.calls.{call_id}.moh.{moh_uuid}.start.update` Starts playing a music on hold on a call. If the music on hold is interrupted for a playback or another action, the music on hold will not restart automatically after the interruption.
-     *
-     * @tags applications
-     * @name CallsMohStartUpdate
-     * @summary Starts playing a music on hold
-     * @request PUT:/applications/{application_uuid}/calls/{call_id}/moh/{moh_uuid}/start
-     * @secure
-     */
-    callsMohStartUpdate: (
-      applicationUuid: string,
-      callId: string,
-      mohUuid: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/applications/${applicationUuid}/calls/${callId}/moh/${mohUuid}/start`,
-        method: "PUT",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.applications.{application_uuid}.calls.{call_id}.mute.start.update`
-     *
-     * @tags applications
-     * @name CallsMuteStartUpdate
-     * @summary Mute a call
-     * @request PUT:/applications/{application_uuid}/calls/{call_id}/mute/start
-     * @secure
-     */
-    callsMuteStartUpdate: (
-      applicationUuid: string,
-      callId: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/applications/${applicationUuid}/calls/${callId}/mute/start`,
-        method: "PUT",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.applications.{application_uuid}.calls.{call_id}.mute.stop.update`
-     *
-     * @tags applications
-     * @name CallsMuteStopUpdate
-     * @summary Unmute a call
-     * @request PUT:/applications/{application_uuid}/calls/{call_id}/mute/stop
-     * @secure
-     */
-    callsMuteStopUpdate: (
-      applicationUuid: string,
-      callId: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/applications/${applicationUuid}/calls/${callId}/mute/stop`,
-        method: "PUT",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.applications.{application_uuid}.calls.{call_id}.playbacks.create` URI examples: * sound:tt-weasels * digits:4188001234 * number:321 * characters:abc * tone:ring * recording:my-recording
-     *
-     * @tags applications
-     * @name CallsPlaybacksCreate
-     * @summary Play file to the call
-     * @request POST:/applications/{application_uuid}/calls/{call_id}/playbacks
-     * @secure
-     */
-    callsPlaybacksCreate: (
-      applicationUuid: string,
-      callId: string,
-      body: ApplicationPlayback,
-      params: RequestParams = {},
-    ) =>
-      this.request<ApplicationPlayback, Error>({
-        path: `/applications/${applicationUuid}/calls/${callId}/playbacks`,
-        method: "POST",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.applications.{application_uuid}.calls.{call_id}.progress.start.update` The progress ringing tone is the sound heard by a caller while the other party is ringing.
-     *
-     * @tags applications
-     * @name CallsProgressStartUpdate
-     * @summary Play the progress ringing tone
-     * @request PUT:/applications/{application_uuid}/calls/{call_id}/progress/start
-     * @secure
-     */
-    callsProgressStartUpdate: (
-      applicationUuid: string,
-      callId: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/applications/${applicationUuid}/calls/${callId}/progress/start`,
-        method: "PUT",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.applications.{application_uuid}.calls.{call_id}.progress.stop.update` The progress ringing tone is the sound heard by a caller while the other party is ringing. Limitation: this only works when the ringing tone is played by Wazo through audio media (e.g. when using `/progress` after `/answer`). If the phone is emitting the ringing tone directly to the user, then it cannot be stopped, and the response code will still be 204.
-     *
-     * @tags applications
-     * @name CallsProgressStopUpdate
-     * @summary Stop playing the progress ringing tone.
-     * @request PUT:/applications/{application_uuid}/calls/{call_id}/progress/stop
-     * @secure
-     */
-    callsProgressStopUpdate: (
-      applicationUuid: string,
-      callId: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/applications/${applicationUuid}/calls/${callId}/progress/stop`,
-        method: "PUT",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.applications.{application_uuid}.calls.{call_id}.snoops.create` The whisper mode indicate which part of the snooped channel can hear the snooper. Given Alice calls Bob and Charles snoops on Bob * none: No one can hear the snooper * both: Alice and Bob can hear Charles * in: Alice can hear Charles * out: Bob can hear Charles
-     *
-     * @tags applications
-     * @name CallsSnoopsCreate
-     * @summary Start snooping on a call
-     * @request POST:/applications/{application_uuid}/calls/{call_id}/snoops
-     * @secure
-     */
-    callsSnoopsCreate: (
-      applicationUuid: string,
-      callId: string,
-      body: ApplicationSnoop,
-      params: RequestParams = {},
-    ) =>
-      this.request<ApplicationSnoop, Error>({
-        path: `/applications/${applicationUuid}/calls/${callId}/snoops`,
-        method: "POST",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.applications.{application_uuid}.nodes.read`
-     *
-     * @tags applications
-     * @name NodesList
-     * @summary List nodes from the application
-     * @request GET:/applications/{application_uuid}/nodes
-     * @secure
-     */
-    nodesList: (applicationUuid: string, params: RequestParams = {}) =>
-      this.request<ApplicationNodes, Error>({
-        path: `/applications/${applicationUuid}/nodes`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.applications.{application_uuid}.nodes.create`
-     *
-     * @tags applications
-     * @name NodesCreate
-     * @summary Make a new node and add calls
-     * @request POST:/applications/{application_uuid}/nodes
-     * @secure
-     */
-    nodesCreate: (
-      applicationUuid: string,
-      body: ApplicationNodeRequest,
-      params: RequestParams = {},
-    ) =>
-      this.request<ApplicationNode, Error>({
-        path: `/applications/${applicationUuid}/nodes`,
-        method: "POST",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.applications.{application_uuid}.nodes.{node_uuid}.delete` **Not implemented**
-     *
-     * @tags applications
-     * @name NodesDelete
-     * @summary Delete node and hangup all calls
-     * @request DELETE:/applications/{application_uuid}/nodes/{node_uuid}
-     * @secure
-     */
-    nodesDelete: (
-      applicationUuid: string,
-      nodeUuid: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/applications/${applicationUuid}/nodes/${nodeUuid}`,
-        method: "DELETE",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.applications.{application_uuid}.nodes.{node_uuid}.read`
-     *
-     * @tags applications
-     * @name NodesDetail
-     * @summary Show a node
-     * @request GET:/applications/{application_uuid}/nodes/{node_uuid}
-     * @secure
-     */
-    nodesDetail: (
-      applicationUuid: string,
-      nodeUuid: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<ApplicationNode, Error>({
-        path: `/applications/${applicationUuid}/nodes/${nodeUuid}`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.applications.{application_uuid}.nodes.{node_uuid}.calls.create`
-     *
-     * @tags applications
-     * @name NodesCallsCreate
-     * @summary Make a new call to the node
-     * @request POST:/applications/{application_uuid}/nodes/{node_uuid}/calls
-     * @secure
-     */
-    nodesCallsCreate: (
-      applicationUuid: string,
-      nodeUuid: string,
-      body: ApplicationCallRequestToExten,
-      params: RequestParams = {},
-    ) =>
-      this.request<ApplicationCall, Error>({
-        path: `/applications/${applicationUuid}/nodes/${nodeUuid}/calls`,
-        method: "POST",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.applications.{application_uuid}.nodes.{node_uuid}.calls.user.create`
-     *
-     * @tags applications
-     * @name NodesCallsUserCreate
-     * @summary Initiate a call to a user and insert it in the node
-     * @request POST:/applications/{application_uuid}/nodes/{node_uuid}/calls/user
-     * @secure
-     */
-    nodesCallsUserCreate: (
-      applicationUuid: string,
-      nodeUuid: string,
-      body: ApplicationCallRequestToUser,
-      params: RequestParams = {},
-    ) =>
-      this.request<ApplicationCall, Error>({
-        path: `/applications/${applicationUuid}/nodes/${nodeUuid}/calls/user`,
-        method: "POST",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.applications.{application_uuid}.nodes.{node_uuid}.calls.{call_id}.delete`
-     *
-     * @tags applications
-     * @name NodesCallsDelete
-     * @summary Remove call from the node
-     * @request DELETE:/applications/{application_uuid}/nodes/{node_uuid}/calls/{call_id}
-     * @secure
-     */
-    nodesCallsDelete: (
-      applicationUuid: string,
-      nodeUuid: string,
-      callId: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/applications/${applicationUuid}/nodes/${nodeUuid}/calls/${callId}`,
-        method: "DELETE",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.applications.{application_uuid}.nodes.{node_uuid}.calls.{call_id}.update`
-     *
-     * @tags applications
-     * @name NodesCallsUpdate
-     * @summary Insert call to the node
-     * @request PUT:/applications/{application_uuid}/nodes/{node_uuid}/calls/{call_id}
-     * @secure
-     */
-    nodesCallsUpdate: (
-      applicationUuid: string,
-      nodeUuid: string,
-      callId: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/applications/${applicationUuid}/nodes/${nodeUuid}/calls/${callId}`,
-        method: "PUT",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.applications.{application_uuid}.playbacks.{playback_uuid}.delete`
-     *
-     * @tags applications
-     * @name PlaybacksDelete
-     * @summary Stop and remove playback
-     * @request DELETE:/applications/{application_uuid}/playbacks/{playback_uuid}
-     * @secure
-     */
-    playbacksDelete: (
-      applicationUuid: string,
-      playbackUuid: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/applications/${applicationUuid}/playbacks/${playbackUuid}`,
-        method: "DELETE",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.applications.{application_uuid}.snoops.read`
-     *
-     * @tags applications
-     * @name SnoopsList
-     * @summary List active snoops
-     * @request GET:/applications/{application_uuid}/snoops
-     * @secure
-     */
-    snoopsList: (applicationUuid: string, params: RequestParams = {}) =>
-      this.request<ApplicationSnoops, Error>({
-        path: `/applications/${applicationUuid}/snoops`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.applications.{application_uuid}.snoops.{snoop_uuid}.delete`
-     *
-     * @tags applications
-     * @name SnoopsDelete
-     * @summary Stop snooping
-     * @request DELETE:/applications/{application_uuid}/snoops/{snoop_uuid}
-     * @secure
-     */
-    snoopsDelete: (
-      applicationUuid: string,
-      snoopUuid: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/applications/${applicationUuid}/snoops/${snoopUuid}`,
-        method: "DELETE",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.applications.{application_uuid}.snoops.{snoop_uuid}.read`
-     *
-     * @tags applications
-     * @name SnoopsDetail
-     * @summary View snooping parameters
-     * @request GET:/applications/{application_uuid}/snoops/{snoop_uuid}
-     * @secure
-     */
-    snoopsDetail: (
-      applicationUuid: string,
-      snoopUuid: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<ApplicationSnoop, Error>({
-        path: `/applications/${applicationUuid}/snoops/${snoopUuid}`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.applications.{application_uuid}.snoops.{snoop_uuid}.update`
-     *
-     * @tags applications
-     * @name SnoopsUpdate
-     * @summary Change snooping parameters
-     * @request PUT:/applications/{application_uuid}/snoops/{snoop_uuid}
-     * @secure
-     */
-    snoopsUpdate: (
-      applicationUuid: string,
-      snoopUuid: string,
-      body: ApplicationSnoopPut,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/applications/${applicationUuid}/snoops/${snoopUuid}`,
-        method: "PUT",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
-  };
-  calls = {
-    /**
-     * @description **Required ACL:** `calld.calls.read`
-     *
-     * @tags calls
-     * @name CallsList
-     * @summary List calls
-     * @request GET:/calls
-     * @secure
-     */
-    callsList: (
-      query?: {
-        /** Filter calls by Stasis application, e.g. switchboard. */
-        application?: string;
-        /** Filter calls by Stasis application instance, e.g. switchboard-sales,green. Args must be separated by commas (,). `application_instance` is ignored if `application` is not set. */
-        application_instance?: string;
-        /**
-         * Should the list include results from sub-tenants?
-         * This option is only supported for the tenant `master`.
-         */
-        recurse?: boolean;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<
-        {
-          items?: Call[];
-        },
-        Error
-      >({
-        path: `/calls`,
-        method: "GET",
-        query: query,
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.calls.create` Create a new call from a phone to an extension.
-     *
-     * @tags calls
-     * @name CallsCreate
-     * @summary Make a new call
-     * @request POST:/calls
-     * @secure
-     */
-    callsCreate: (body: CallRequest, params: RequestParams = {}) =>
-      this.request<Call, Error>({
-        path: `/calls`,
-        method: "POST",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.calls.{call_id}.delete`
-     *
-     * @tags calls
-     * @name CallsDelete
-     * @summary Hangup a call
-     * @request DELETE:/calls/{call_id}
-     * @secure
-     */
-    callsDelete: (callId: string, params: RequestParams = {}) =>
-      this.request<void, Error>({
-        path: `/calls/${callId}`,
-        method: "DELETE",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.calls.{call_id}.read`
-     *
-     * @tags calls
-     * @name CallsDetail
-     * @summary Show a call
-     * @request GET:/calls/{call_id}
-     * @secure
-     */
-    callsDetail: (callId: string, params: RequestParams = {}) =>
-      this.request<Call, Error>({
-        path: `/calls/${callId}`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.calls.{call_id}.answer.update` This works **only** if the phone brand has a corresponding phoned plugin to handle the event.
-     *
-     * @tags calls
-     * @name AnswerUpdate
-     * @summary Answer a call
-     * @request PUT:/calls/{call_id}/answer
-     * @secure
-     */
-    answerUpdate: (callId: string, params: RequestParams = {}) =>
-      this.request<void, Error>({
-        path: `/calls/${callId}/answer`,
-        method: "PUT",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.calls.{call_id}.dtmf.update
-     *
-     * @tags calls
-     * @name DtmfUpdate
-     * @summary Simulate a user pressing DTMF keys
-     * @request PUT:/calls/{call_id}/dtmf
-     * @secure
-     */
-    dtmfUpdate: (
-      callId: string,
-      query: {
-        /** Digits to send via DTMF. Must contain only `0-9*#`. */
-        digits: string;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/calls/${callId}/dtmf`,
-        method: "PUT",
-        query: query,
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.calls.{call_id}.hold.start.update` This works **only** if the phone brand has a corresponding phoned plugin to handle the event.
-     *
-     * @tags calls
-     * @name HoldStartUpdate
-     * @summary Hold a call
-     * @request PUT:/calls/{call_id}/hold/start
-     * @secure
-     */
-    holdStartUpdate: (callId: string, params: RequestParams = {}) =>
-      this.request<void, Error>({
-        path: `/calls/${callId}/hold/start`,
-        method: "PUT",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.calls.{call_id}.hold.stop.update` This works **only** if the phone brand has a corresponding phoned plugin to handle the event.
-     *
-     * @tags calls
-     * @name HoldStopUpdate
-     * @summary Unhold a call
-     * @request PUT:/calls/{call_id}/hold/stop
-     * @secure
-     */
-    holdStopUpdate: (callId: string, params: RequestParams = {}) =>
-      this.request<void, Error>({
-        path: `/calls/${callId}/hold/stop`,
-        method: "PUT",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.calls.{call_id}.mute.start.update`
-     *
-     * @tags calls
-     * @name MuteStartUpdate
-     * @summary Mute a call
-     * @request PUT:/calls/{call_id}/mute/start
-     * @secure
-     */
-    muteStartUpdate: (callId: string, params: RequestParams = {}) =>
-      this.request<void, Error>({
-        path: `/calls/${callId}/mute/start`,
-        method: "PUT",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.calls.{call_id}.mute.stop.update`
-     *
-     * @tags calls
-     * @name MuteStopUpdate
-     * @summary Unmute a call
-     * @request PUT:/calls/{call_id}/mute/stop
-     * @secure
-     */
-    muteStopUpdate: (callId: string, params: RequestParams = {}) =>
-      this.request<void, Error>({
-        path: `/calls/${callId}/mute/stop`,
-        method: "PUT",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** calld.calls.{call_id}.park.update`. Use the `POST /calls` API to unpark the call.
-     *
-     * @tags calls, parking_lots
-     * @name ParkUpdate
-     * @summary Park a call
-     * @request PUT:/calls/{call_id}/park
-     * @secure
-     */
-    parkUpdate: (
-      callId: string,
-      park_call: ParkCallBody,
-      params: RequestParams = {},
-    ) =>
-      this.request<ParkedCallInfo, Error>({
-        path: `/calls/${callId}/park`,
-        method: "PUT",
-        body: park_call,
-        secure: true,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.calls.{call_id}.record.pause.update`
-     *
-     * @tags calls
-     * @name RecordPauseUpdate
-     * @summary Pause recording a call
-     * @request PUT:/calls/{call_id}/record/pause
-     * @secure
-     */
-    recordPauseUpdate: (callId: string, params: RequestParams = {}) =>
-      this.request<void, Error>({
-        path: `/calls/${callId}/record/pause`,
-        method: "PUT",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.calls.{call_id}.record.resume.update`
-     *
-     * @tags calls
-     * @name RecordResumeUpdate
-     * @summary Resume recording a call
-     * @request PUT:/calls/{call_id}/record/resume
-     * @secure
-     */
-    recordResumeUpdate: (callId: string, params: RequestParams = {}) =>
-      this.request<void, Error>({
-        path: `/calls/${callId}/record/resume`,
-        method: "PUT",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.calls.{call_id}.record.start.update`
-     *
-     * @tags calls
-     * @name RecordStartUpdate
-     * @summary Start recording a call
-     * @request PUT:/calls/{call_id}/record/start
-     * @secure
-     */
-    recordStartUpdate: (callId: string, params: RequestParams = {}) =>
-      this.request<void, Error>({
-        path: `/calls/${callId}/record/start`,
-        method: "PUT",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.calls.{call_id}.record.stop.update`
-     *
-     * @tags calls
-     * @name RecordStopUpdate
-     * @summary Stop recording a call
-     * @request PUT:/calls/{call_id}/record/stop
-     * @secure
-     */
-    recordStopUpdate: (callId: string, params: RequestParams = {}) =>
-      this.request<void, Error>({
-        path: `/calls/${callId}/record/stop`,
-        method: "PUT",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.calls.{call_id}.user.{user_uuid}.update`
-     *
-     * @tags calls
-     * @name UserUpdate
-     * @summary Connect a call to a user
-     * @request PUT:/calls/{call_id}/user/{user_uuid}
-     * @secure
-     */
-    userUpdate: (
-      callId: string,
-      userUuid: string,
-      body: ConnectCallToUserRequest,
-      params: RequestParams = {},
-    ) =>
-      this.request<Call, Error>({
-        path: `/calls/${callId}/user/${userUuid}`,
-        method: "PUT",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-  };
-  conferences = {
-    /**
-     * @description **Required ACL:** `calld.conferences.{conference_id}.participants.read`
-     *
-     * @tags conferences
-     * @name ParticipantsList
-     * @summary List participants of a conference
-     * @request GET:/conferences/{conference_id}/participants
-     * @secure
-     */
-    participantsList: (conferenceId: string, params: RequestParams = {}) =>
-      this.request<ParticipantList, Error>({
-        path: `/conferences/${conferenceId}/participants`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.conferences.{conference_id}.participants.{participant_id}.delete`
-     *
-     * @tags conferences
-     * @name ParticipantsDelete
-     * @summary Kick participant from a conference
-     * @request DELETE:/conferences/{conference_id}/participants/{participant_id}
-     * @secure
-     */
-    participantsDelete: (
-      conferenceId: string,
-      participantId: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/conferences/${conferenceId}/participants/${participantId}`,
-        method: "DELETE",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.conferences.{conference_id}.participants.{participant_id}.mute.update`
-     *
-     * @tags conferences
-     * @name ParticipantsMuteUpdate
-     * @summary Mute a participant in a conference
-     * @request PUT:/conferences/{conference_id}/participants/{participant_id}/mute
-     * @secure
-     */
-    participantsMuteUpdate: (
-      conferenceId: string,
-      participantId: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/conferences/${conferenceId}/participants/${participantId}/mute`,
-        method: "PUT",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.conferences.{conference_id}.participants.{participant_id}.unmute.update`
-     *
-     * @tags conferences
-     * @name ParticipantsUnmuteUpdate
-     * @summary Unmute a participant in a conference
-     * @request PUT:/conferences/{conference_id}/participants/{participant_id}/unmute
-     * @secure
-     */
-    participantsUnmuteUpdate: (
-      conferenceId: string,
-      participantId: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/conferences/${conferenceId}/participants/${participantId}/unmute`,
-        method: "PUT",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.conferences.{conference_id}.record.delete`
-     *
-     * @tags conferences
-     * @name RecordDelete
-     * @summary Stop recording a conference
-     * @request DELETE:/conferences/{conference_id}/record
-     * @secure
-     */
-    recordDelete: (conferenceId: string, params: RequestParams = {}) =>
-      this.request<void, Error>({
-        path: `/conferences/${conferenceId}/record`,
-        method: "DELETE",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.conferences.{conference_id}.record.create`
-     *
-     * @tags conferences
-     * @name RecordCreate
-     * @summary Record a conference
-     * @request POST:/conferences/{conference_id}/record
-     * @secure
-     */
-    recordCreate: (conferenceId: string, params: RequestParams = {}) =>
-      this.request<void, Error>({
-        path: `/conferences/${conferenceId}/record`,
-        method: "POST",
-        secure: true,
-        ...params,
-      }),
-  };
-  config = {
-    /**
-     * @description **Required ACL:** `calld.config.read`
-     *
-     * @tags config
-     * @name GetConfig
-     * @summary Show the current configuration
-     * @request GET:/config
-     * @secure
-     */
-    getConfig: (params: RequestParams = {}) =>
-      this.request<void, any>({
-        path: `/config`,
-        method: "GET",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.config.update` Changes are not persistent across service restart.
-     *
-     * @tags config
-     * @name PatchConfig
-     * @summary Update the current configuration.
-     * @request PATCH:/config
-     * @secure
-     */
-    patchConfig: (ConfigPatch: ConfigPatchItem[], params: RequestParams = {}) =>
-      this.request<void, void>({
-        path: `/config`,
-        method: "PATCH",
-        body: ConfigPatch,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
-  };
-  faxes = {
-    /**
-     * @description **Required ACL:** `calld.faxes.create`
-     *
-     * @tags faxes
-     * @name FaxesCreate
-     * @summary Send a fax
-     * @request POST:/faxes
-     * @secure
-     */
-    faxesCreate: (
-      query: {
-        /** Context of the recipient of the fax */
-        context: string;
-        /** Extension of the recipient of the fax */
-        extension: string;
-        /**
-         * Caller ID that will be presented to the recipient of the fax. Example: "my-name <+15551112222>"
-         * @default "Wazo Fax"
-         */
-        caller_id?: string;
-        /** Extension to compose before sending fax. Useful for fax in IVR */
-        ivr_extension?: string;
-        /** Time waiting before sending fax when destination has answered (in seconds) */
-        wait_time?: number;
-      },
-      fax_content: File,
-      params: RequestParams = {},
-    ) =>
-      this.request<Fax, Error>({
-        path: `/faxes`,
-        method: "POST",
-        query: query,
-        body: fax_content,
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-  };
-  guests = {
-    /**
-     * @description Returns the status of a meeting that should be visible to a guest.
-     *
-     * @tags meetings
-     * @name MeMeetingsStatusList
-     * @summary Get the status of a meeting
-     * @request GET:/guests/me/meetings/{meeting_uuid}/status
-     * @secure
-     */
-    meMeetingsStatusList: (meetingUuid: string, params: RequestParams = {}) =>
-      this.request<MeetingStatus, Error>({
-        path: `/guests/me/meetings/${meetingUuid}/status`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-  };
-  lines = {
-    /**
-     * @description **Required ACL:** `calld.lines.read` List the status of line endpoints that are configured on Asterisk Supported technologies: * SIP Lines with unsupported technologies will be listed but there status will be null
-     *
-     * @tags lines
-     * @name LinesList
-     * @summary List line endpoint statuses
-     * @request GET:/lines
-     * @secure
-     */
-    linesList: (params: RequestParams = {}) =>
-      this.request<EndpointLines, Error>({
-        path: `/lines`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-  };
-  meetings = {
-    /**
-     * @description **Required ACL:** `calld.meetings.{meeting_uuid}.participants.read`
-     *
-     * @tags meetings
-     * @name ParticipantsList
-     * @summary List participants of a meeting
-     * @request GET:/meetings/{meeting_uuid}/participants
-     * @secure
-     */
-    participantsList: (meetingUuid: string, params: RequestParams = {}) =>
-      this.request<ParticipantList, Error>({
-        path: `/meetings/${meetingUuid}/participants`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.meetings.{meeting_uuid}.participants.delete`
-     *
-     * @tags meetings
-     * @name ParticipantsDelete
-     * @summary Kick a participant from a meeting
-     * @request DELETE:/meetings/{meeting_uuid}/participants/{participant_id}
-     * @secure
-     */
-    participantsDelete: (
-      meetingUuid: string,
-      participantId: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/meetings/${meetingUuid}/participants/${participantId}`,
-        method: "DELETE",
-        secure: true,
-        ...params,
-      }),
-  };
-  parkinglots = {
-    /**
-     * @description **Required ACL:** `calld.parkings.read`
-     *
-     * @tags parking_lots
-     * @name ParkinglotsList
-     * @summary Retrieve the list of parkings and park calls
-     * @request GET:/parkinglots
-     * @secure
-     */
-    parkinglotsList: (params: RequestParams = {}) =>
-      this.request<
-        {
-          items?: ParkingLot[];
-        },
-        any
-      >({
-        path: `/parkinglots`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.parkings.{parking_id}.read`
-     *
-     * @tags parking_lots
-     * @name ParkinglotsDetail
-     * @summary Retrieve parked calls for parking
-     * @request GET:/parkinglots/{parking_id}
-     * @secure
-     */
-    parkinglotsDetail: (parkingId: string, params: RequestParams = {}) =>
-      this.request<ParkingLot, Error>({
-        path: `/parkinglots/${parkingId}`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-  };
-  status = {
-    /**
-     * @description **Required ACL:** `calld.status.read`
-     *
-     * @tags status
-     * @name StatusList
-     * @summary Print infos about internal status of wazo-calld
-     * @request GET:/status
-     * @secure
-     */
-    statusList: (params: RequestParams = {}) =>
-      this.request<StatusSummary, any>({
-        path: `/status`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-  };
-  switchboards = {
-    /**
-     * @description **Required ACL:** `calld.switchboards.{switchboard_uuid}.calls.held.read` **Warning:** This endpoint is still in development and may change in the future.
-     *
-     * @tags switchboards
-     * @name CallsHeldList
-     * @summary List calls held in the switchboard
-     * @request GET:/switchboards/{switchboard_uuid}/calls/held
-     * @secure
-     */
-    callsHeldList: (switchboardUuid: string, params: RequestParams = {}) =>
-      this.request<SwitchboardHeldCalls, Error>({
-        path: `/switchboards/${switchboardUuid}/calls/held`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.switchboards.{switchboard_uuid}.calls.held.{call_id}.update` **Warning:** This endpoint is still in development and may change in the future. This action will also hangup the previous call talking to the held call, if there was any.
-     *
-     * @tags switchboards
-     * @name CallsHeldUpdate
-     * @summary Put the specified call on hold in the switchboard
-     * @request PUT:/switchboards/{switchboard_uuid}/calls/held/{call_id}
-     * @secure
-     */
-    callsHeldUpdate: (
-      switchboardUuid: string,
-      callId: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/switchboards/${switchboardUuid}/calls/held/${callId}`,
-        method: "PUT",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.switchboards.{switchboard_uuid}.calls.held.{call_id}.answer.update` **Warning:** This endpoint is still in development and may change in the future.
-     *
-     * @tags switchboards
-     * @name CallsHeldAnswerUpdate
-     * @summary Answer the specified held call
-     * @request PUT:/switchboards/{switchboard_uuid}/calls/held/{call_id}/answer
-     * @secure
-     */
-    callsHeldAnswerUpdate: (
-      switchboardUuid: string,
-      callId: string,
-      query?: {
-        /** ID of the line of the user used to make the call. Default is the main line of the user. */
-        line_id?: number;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<CallID, Error>({
-        path: `/switchboards/${switchboardUuid}/calls/held/${callId}/answer`,
-        method: "PUT",
-        query: query,
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.switchboards.{switchboard_uuid}.calls.queued.read` **Warning:** This endpoint is still in development and may change in the future.
-     *
-     * @tags switchboards
-     * @name CallsQueuedList
-     * @summary List calls queued in the switchboard
-     * @request GET:/switchboards/{switchboard_uuid}/calls/queued
-     * @secure
-     */
-    callsQueuedList: (switchboardUuid: string, params: RequestParams = {}) =>
-      this.request<SwitchboardQueuedCalls, Error>({
-        path: `/switchboards/${switchboardUuid}/calls/queued`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.switchboards.{switchboard_uuid}.calls.queued.{call_id}.answer.update` **Warning:** This endpoint is still in development and may change in the future.
-     *
-     * @tags switchboards
-     * @name CallsQueuedAnswerUpdate
-     * @summary Answer the specified queued call
-     * @request PUT:/switchboards/{switchboard_uuid}/calls/queued/{call_id}/answer
-     * @secure
-     */
-    callsQueuedAnswerUpdate: (
-      switchboardUuid: string,
-      callId: string,
-      query?: {
-        /** ID of the line of the user used to make the call. Default is the main line of the user. */
-        line_id?: number;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<CallID, Error>({
-        path: `/switchboards/${switchboardUuid}/calls/queued/${callId}/answer`,
-        method: "PUT",
-        query: query,
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-  };
-  transfers = {
-    /**
-     * @description **Required ACL:** `calld.transfers.create` The only way to cancel the transfer from the initiator is to use `DELETE /transfers/<id>` (i.e. sending DTMF `*0` will not work).
-     *
-     * @tags transfers
-     * @name TransfersCreate
-     * @summary Initiate a transfer
-     * @request POST:/transfers
-     * @secure
-     */
-    transfersCreate: (body: TransferRequest, params: RequestParams = {}) =>
-      this.request<Transfer, Error>({
-        path: `/transfers`,
-        method: "POST",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.transfers.{transfer_id}.delete`
-     *
-     * @tags transfers
-     * @name TransfersDelete
-     * @summary Cancel a transfer
-     * @request DELETE:/transfers/{transfer_id}
-     * @secure
-     */
-    transfersDelete: (transferId: string, params: RequestParams = {}) =>
-      this.request<void, Error>({
-        path: `/transfers/${transferId}`,
-        method: "DELETE",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.transfers.{transfer_id}.read`
-     *
-     * @tags transfers
-     * @name TransfersDetail
-     * @summary Get details of a transfer
-     * @request GET:/transfers/{transfer_id}
-     * @secure
-     */
-    transfersDetail: (transferId: string, params: RequestParams = {}) =>
-      this.request<Transfer, Error>({
-        path: `/transfers/${transferId}`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.transfers.{transfer_id}.complete.update`
-     *
-     * @tags transfers
-     * @name CompleteUpdate
-     * @summary Complete a transfer
-     * @request PUT:/transfers/{transfer_id}/complete
-     * @secure
-     */
-    completeUpdate: (transferId: string, params: RequestParams = {}) =>
-      this.request<void, Error>({
-        path: `/transfers/${transferId}/complete`,
-        method: "PUT",
-        secure: true,
-        ...params,
-      }),
-  };
-  trunks = {
-    /**
-     * @description **Required ACL:** `calld.trunks.read` List the status of trunk endpoints that are configured on Asterisk Supported technologies: * SIP Trunks with unsupported technologies will be listed but there status will be null
-     *
-     * @tags trunks
-     * @name TrunksList
-     * @summary List trunk endpoint statuses
-     * @request GET:/trunks
-     * @secure
-     */
-    trunksList: (params: RequestParams = {}) =>
-      this.request<EndpointTrunks, Error>({
-        path: `/trunks`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-  };
-  users = {
-    /**
-     * @description **Required ACL:** `calld.users.me.calls.read`
-     *
-     * @tags calls, users
-     * @name MeCallsList
-     * @summary List calls of a user
-     * @request GET:/users/me/calls
-     * @secure
-     */
-    meCallsList: (
-      query?: {
-        /** Filter calls by Stasis application, e.g. switchboard. */
-        application?: string;
-        /** Filter calls by Stasis application instance, e.g. switchboard-sales,green. Args must be separated by commas (,). */
-        application_instance?: string;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<
-        {
-          items?: Call[];
-        },
-        Error
-      >({
-        path: `/users/me/calls`,
-        method: "GET",
-        query: query,
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.users.me.calls.create` The user originator of the call is determined from the authentication token.
-     *
-     * @tags calls, users
-     * @name MeCallsCreate
-     * @summary Make a new call from a user
-     * @request POST:/users/me/calls
-     * @secure
-     */
-    meCallsCreate: (body: UserCallRequest, params: RequestParams = {}) =>
-      this.request<Call, Error>({
-        path: `/users/me/calls`,
-        method: "POST",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.users.me.calls.{call_id}.delete` Only calls owned by the authenticated user may be hung up.
-     *
-     * @tags calls, users
-     * @name MeCallsDelete
-     * @summary Hangup a call from a user
-     * @request DELETE:/users/me/calls/{call_id}
-     * @secure
-     */
-    meCallsDelete: (callId: string, params: RequestParams = {}) =>
-      this.request<void, Error>({
-        path: `/users/me/calls/${callId}`,
-        method: "DELETE",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.users.me.calls.{call_id}.answer.update` Only calls owned by the authenticated user may be answered.
-     *
-     * @tags calls, users
-     * @name MeCallsAnswerUpdate
-     * @summary Answer a call from user
-     * @request PUT:/users/me/calls/{call_id}/answer
-     * @secure
-     */
-    meCallsAnswerUpdate: (callId: string, params: RequestParams = {}) =>
-      this.request<void, Error>({
-        path: `/users/me/calls/${callId}/answer`,
-        method: "PUT",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.users.me.calls.{call_id}.dtmf.update
-     *
-     * @tags calls, users
-     * @name MeCallsDtmfUpdate
-     * @summary Simulate a user pressing DTMF keys
-     * @request PUT:/users/me/calls/{call_id}/dtmf
-     * @secure
-     */
-    meCallsDtmfUpdate: (
-      callId: string,
-      query: {
-        /** Digits to send via DTMF. Must contain only `0-9*#`. */
-        digits: string;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/users/me/calls/${callId}/dtmf`,
-        method: "PUT",
-        query: query,
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.users.me.calls.{call_id}.hold.start.update` Only calls owned by the authenticated user may be held.
-     *
-     * @tags calls, users
-     * @name MeCallsHoldStartUpdate
-     * @summary Hold a call from user
-     * @request PUT:/users/me/calls/{call_id}/hold/start
-     * @secure
-     */
-    meCallsHoldStartUpdate: (callId: string, params: RequestParams = {}) =>
-      this.request<void, Error>({
-        path: `/users/me/calls/${callId}/hold/start`,
-        method: "PUT",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.users.me.calls.{call_id}.hold.stop.update` Only calls owned by the authenticated user may be unheld.
-     *
-     * @tags calls, users
-     * @name MeCallsHoldStopUpdate
-     * @summary Unhold a call from user
-     * @request PUT:/users/me/calls/{call_id}/hold/stop
-     * @secure
-     */
-    meCallsHoldStopUpdate: (callId: string, params: RequestParams = {}) =>
-      this.request<void, Error>({
-        path: `/users/me/calls/${callId}/hold/stop`,
-        method: "PUT",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.users.me.calls.{call_id}.mute.start.update` Only calls owned by the authenticated user may be mute.
-     *
-     * @tags calls, users
-     * @name MeCallsMuteStartUpdate
-     * @summary Mute a call from user
-     * @request PUT:/users/me/calls/{call_id}/mute/start
-     * @secure
-     */
-    meCallsMuteStartUpdate: (callId: string, params: RequestParams = {}) =>
-      this.request<void, Error>({
-        path: `/users/me/calls/${callId}/mute/start`,
-        method: "PUT",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.users.me.calls.{call_id}.mute.stop.update` Only calls owned by the authenticated user may be unmute.
-     *
-     * @tags calls, users
-     * @name MeCallsMuteStopUpdate
-     * @summary Unmute a call from user
-     * @request PUT:/users/me/calls/{call_id}/mute/stop
-     * @secure
-     */
-    meCallsMuteStopUpdate: (callId: string, params: RequestParams = {}) =>
-      this.request<void, Error>({
-        path: `/users/me/calls/${callId}/mute/stop`,
-        method: "PUT",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.users.me.calls.{call_id}.park.update` Use the `POST /users/me/calls` API to unpark the call.
-     *
-     * @tags calls, parking_lots, users
-     * @name MeCallsParkUpdate
-     * @summary Park the user's connected (talking to) call
-     * @request PUT:/users/me/calls/{call_id}/park
-     * @secure
-     */
-    meCallsParkUpdate: (
-      callId: string,
-      park_call: ParkCallBody,
-      params: RequestParams = {},
-    ) =>
-      this.request<ParkedCallInfo, Error>({
-        path: `/users/me/calls/${callId}/park`,
-        method: "PUT",
-        body: park_call,
-        secure: true,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.calls.{call_id}.record.pause.update`
-     *
-     * @tags calls, users
-     * @name MeCallsRecordPauseUpdate
-     * @summary Pause recording a call
-     * @request PUT:/users/me/calls/{call_id}/record/pause
-     * @secure
-     */
-    meCallsRecordPauseUpdate: (callId: string, params: RequestParams = {}) =>
-      this.request<void, Error>({
-        path: `/users/me/calls/${callId}/record/pause`,
-        method: "PUT",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.calls.{call_id}.record.resume.update`
-     *
-     * @tags calls, users
-     * @name MeCallsRecordResumeUpdate
-     * @summary Resume recording a call
-     * @request PUT:/users/me/calls/{call_id}/record/resume
-     * @secure
-     */
-    meCallsRecordResumeUpdate: (callId: string, params: RequestParams = {}) =>
-      this.request<void, Error>({
-        path: `/users/me/calls/${callId}/record/resume`,
-        method: "PUT",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.calls.{call_id}.record.start.update`
-     *
-     * @tags calls, users
-     * @name MeCallsRecordStartUpdate
-     * @summary Start recording a call
-     * @request PUT:/users/me/calls/{call_id}/record/start
-     * @secure
-     */
-    meCallsRecordStartUpdate: (callId: string, params: RequestParams = {}) =>
-      this.request<void, Error>({
-        path: `/users/me/calls/${callId}/record/start`,
-        method: "PUT",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.calls.{call_id}.record.stop.update`
-     *
-     * @tags calls, users
-     * @name MeCallsRecordStopUpdate
-     * @summary Stop recording a call
-     * @request PUT:/users/me/calls/{call_id}/record/stop
-     * @secure
-     */
-    meCallsRecordStopUpdate: (callId: string, params: RequestParams = {}) =>
-      this.request<void, Error>({
-        path: `/users/me/calls/${callId}/record/stop`,
-        method: "PUT",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.users.me.conferences.adhoc.create`. An adhoc conference allows a user to merge multiple calls in one conversation. It acts like a conference room, but has no dedicated extension. The user creating the adhoc conference acts as the owner of the conference and controls who enters or leaves the conference. The conference will be destroyed when the owner leaves the conference.
-     *
-     * @tags adhoc_conferences
-     * @name MeConferencesAdhocCreate
-     * @summary Create an adhoc conference
-     * @request POST:/users/me/conferences/adhoc
-     * @secure
-     */
-    meConferencesAdhocCreate: (
-      body: AdhocConferenceCreation,
-      params: RequestParams = {},
-    ) =>
-      this.request<AdhocConference, Error>({
-        path: `/users/me/conferences/adhoc`,
-        method: "POST",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.users.me.conferences.adhoc.delete`. All calls in the adhoc conference will be hungup.
-     *
-     * @tags adhoc_conferences
-     * @name MeConferencesAdhocDelete
-     * @summary Delete an adhoc conference
-     * @request DELETE:/users/me/conferences/adhoc/{conference_id}
-     * @secure
-     */
-    meConferencesAdhocDelete: (
-      conferenceId: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<AdhocConference, Error>({
-        path: `/users/me/conferences/adhoc/${conferenceId}`,
-        method: "DELETE",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.users.me.conferences.adhoc.participants.delete`
-     *
-     * @tags adhoc_conferences
-     * @name MeConferencesAdhocParticipantsDelete
-     * @summary Remove a participant from an adhoc conference
-     * @request DELETE:/users/me/conferences/adhoc/{conference_id}/participants/{call_id}
-     * @secure
-     */
-    meConferencesAdhocParticipantsDelete: (
-      conferenceId: string,
-      callId: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/users/me/conferences/adhoc/${conferenceId}/participants/${callId}`,
-        method: "DELETE",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.users.me.conferences.adhoc.participants.update`
-     *
-     * @tags adhoc_conferences
-     * @name MeConferencesAdhocParticipantsUpdate
-     * @summary Add a participant into an adhoc conference
-     * @request PUT:/users/me/conferences/adhoc/{conference_id}/participants/{call_id}
-     * @secure
-     */
-    meConferencesAdhocParticipantsUpdate: (
-      conferenceId: string,
-      callId: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/users/me/conferences/adhoc/${conferenceId}/participants/${callId}`,
-        method: "PUT",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.users.me.conferences.{conference_id}.participants.read`
-     *
-     * @tags conferences, users
-     * @name MeConferencesParticipantsList
-     * @summary List participants of a conference as a user
-     * @request GET:/users/me/conferences/{conference_id}/participants
-     * @secure
-     */
-    meConferencesParticipantsList: (
-      conferenceId: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<ParticipantList, Error>({
-        path: `/users/me/conferences/${conferenceId}/participants`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.users.me.faxes.create`
-     *
-     * @tags faxes
-     * @name MeFaxesCreate
-     * @summary Send a fax as the user detected from the token
-     * @request POST:/users/me/faxes
-     * @secure
-     */
-    meFaxesCreate: (
-      query: {
-        /** Extension of the recipient of the fax */
-        extension: string;
-        /**
-         * Caller ID that will be presented to the recipient of the fax. Example: "my-name <+15551112222>"
-         * @default "Wazo Fax"
-         */
-        caller_id?: string;
-        /** Extension to compose before sending fax. Useful for fax in IVR */
-        ivr_extension?: string;
-        /** Time waiting before sending fax when destination has answered (in seconds) */
-        wait_time?: number;
-      },
-      fax_content: File,
-      params: RequestParams = {},
-    ) =>
-      this.request<Fax, Error>({
-        path: `/users/me/faxes`,
-        method: "POST",
-        query: query,
-        body: fax_content,
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.users.me.meetings.{meeting_uuid}.participants.read`
-     *
-     * @tags meetings, users
-     * @name MeMeetingsParticipantsList
-     * @summary List participants of a meeting as a user
-     * @request GET:/users/me/meetings/{meeting_uuid}/participants
-     * @secure
-     */
-    meMeetingsParticipantsList: (
-      meetingUuid: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<ParticipantList, Error>({
-        path: `/users/me/meetings/${meetingUuid}/participants`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.users.me.meetings.participants.delete`
-     *
-     * @tags meetings, users
-     * @name MeMeetingsParticipantsDelete
-     * @summary Kick a participant from a meeting as a user
-     * @request DELETE:/users/me/meetings/{meeting_uuid}/participants/{participant_id}
-     * @secure
-     */
-    meMeetingsParticipantsDelete: (
-      meetingUuid: string,
-      participantId: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/users/me/meetings/${meetingUuid}/participants/${participantId}`,
-        method: "DELETE",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.users.me.relocates.read`
-     *
-     * @tags relocates, users
-     * @name MeRelocatesList
-     * @summary Get the relocates of the authenticated user
-     * @request GET:/users/me/relocates
-     * @secure
-     */
-    meRelocatesList: (params: RequestParams = {}) =>
-      this.request<RelocateList, Error>({
-        path: `/users/me/relocates`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.users.me.relocates.create`
-     *
-     * @tags relocates, users
-     * @name MeRelocatesCreate
-     * @summary Initiate a relocate from the authenticated user
-     * @request POST:/users/me/relocates
-     * @secure
-     */
-    meRelocatesCreate: (
-      body: UserRelocateRequest,
-      params: RequestParams = {},
-    ) =>
-      this.request<Relocate, Error>({
-        path: `/users/me/relocates`,
-        method: "POST",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.relocates.users.me.{relocate_uuid}.read`
-     *
-     * @tags relocates
-     * @name MeRelocatesDetail
-     * @summary Get details of a relocate
-     * @request GET:/users/me/relocates/{relocate_uuid}
-     * @secure
-     */
-    meRelocatesDetail: (relocateUuid: string, params: RequestParams = {}) =>
-      this.request<Relocate, Error>({
-        path: `/users/me/relocates/${relocateUuid}`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.users.me.relocates.{relocate_uuid}.cancel.update`
-     *
-     * @tags relocates, users
-     * @name MeRelocatesCancelUpdate
-     * @summary Cancel a relocate
-     * @request PUT:/users/me/relocates/{relocate_uuid}/cancel
-     * @secure
-     */
-    meRelocatesCancelUpdate: (
-      relocateUuid: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/users/me/relocates/${relocateUuid}/cancel`,
-        method: "PUT",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.users.me.relocates.{relocate_uuid}.complete.update`
-     *
-     * @tags relocates, users
-     * @name MeRelocatesCompleteUpdate
-     * @summary Complete a relocate
-     * @request PUT:/users/me/relocates/{relocate_uuid}/complete
-     * @secure
-     */
-    meRelocatesCompleteUpdate: (
-      relocateUuid: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/users/me/relocates/${relocateUuid}/complete`,
-        method: "PUT",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.users.me.transfers.read`
-     *
-     * @tags transfers, users
-     * @name MeTransfersList
-     * @summary Get the transfers of the authenticated user
-     * @request GET:/users/me/transfers
-     * @secure
-     */
-    meTransfersList: (params: RequestParams = {}) =>
-      this.request<TransferList, Error>({
-        path: `/users/me/transfers`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.users.me.transfers.create`
-     *
-     * @tags transfers, users
-     * @name MeTransfersCreate
-     * @summary Initiate a transfer from the authenticated user
-     * @request POST:/users/me/transfers
-     * @secure
-     */
-    meTransfersCreate: (
-      body: UserTransferRequest,
-      params: RequestParams = {},
-    ) =>
-      this.request<Transfer, Error>({
-        path: `/users/me/transfers`,
-        method: "POST",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.users.me.transfers.{transfer_id}.delete`
-     *
-     * @tags transfers, users
-     * @name MeTransfersDelete
-     * @summary Cancel a transfer
-     * @request DELETE:/users/me/transfers/{transfer_id}
-     * @secure
-     */
-    meTransfersDelete: (transferId: string, params: RequestParams = {}) =>
-      this.request<void, Error>({
-        path: `/users/me/transfers/${transferId}`,
-        method: "DELETE",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.users.me.transfers.{transfer_id}.complete.update`
-     *
-     * @tags transfers, users
-     * @name MeTransfersCompleteUpdate
-     * @summary Complete a transfer
-     * @request PUT:/users/me/transfers/{transfer_id}/complete
-     * @secure
-     */
-    meTransfersCompleteUpdate: (
-      transferId: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/users/me/transfers/${transferId}/complete`,
-        method: "PUT",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.users.me.voicemails.read`
-     *
-     * @tags users, voicemails
-     * @name MeVoicemailsList
-     * @summary Get details of the voicemail of the authenticated user
-     * @request GET:/users/me/voicemails
-     * @secure
-     */
-    meVoicemailsList: (params: RequestParams = {}) =>
-      this.request<Voicemail, Error>({
-        path: `/users/me/voicemails`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.users.me.voicemails.folders.{folder_id}.read`
-     *
-     * @tags users, voicemails
-     * @name MeVoicemailsFoldersDetail
-     * @summary Get details of a folder
-     * @request GET:/users/me/voicemails/folders/{folder_id}
-     * @secure
-     */
-    meVoicemailsFoldersDetail: (folderId: number, params: RequestParams = {}) =>
-      this.request<VoicemailFolder, Error>({
-        path: `/users/me/voicemails/folders/${folderId}`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.users.me.voicemails.greetings.{greeting}.delete`
-     *
-     * @tags users, voicemails
-     * @name MeVoicemailsGreetingsDelete
-     * @summary Delete a custom greeting
-     * @request DELETE:/users/me/voicemails/greetings/{greeting}
-     * @secure
-     */
-    meVoicemailsGreetingsDelete: (
-      greeting: "unavailable" | "busy" | "name",
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/users/me/voicemails/greetings/${greeting}`,
-        method: "DELETE",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.users.me.voicemails.greetings.{greeting}.read`
-     *
-     * @tags users, voicemails
-     * @name MeVoicemailsGreetingsDetail
-     * @summary Get a custom greeting
-     * @request GET:/users/me/voicemails/greetings/{greeting}
-     * @secure
-     */
-    meVoicemailsGreetingsDetail: (
-      greeting: "unavailable" | "busy" | "name",
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/users/me/voicemails/greetings/${greeting}`,
-        method: "GET",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.users.me.voicemails.greetings.{greeting}.read`
-     *
-     * @tags users, voicemails
-     * @name HeadUsers
-     * @summary Check if greeting exists
-     * @request HEAD:/users/me/voicemails/greetings/{greeting}
-     * @secure
-     */
-    headUsers: (
-      greeting: "unavailable" | "busy" | "name",
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/users/me/voicemails/greetings/${greeting}`,
-        method: "HEAD",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.users.me.voicemails.greetings.{greeting}.create`
-     *
-     * @tags users, voicemails
-     * @name MeVoicemailsGreetingsCreate
-     * @summary Create a custom greeting
-     * @request POST:/users/me/voicemails/greetings/{greeting}
-     * @secure
-     */
-    meVoicemailsGreetingsCreate: (
-      greeting: "unavailable" | "busy" | "name",
-      body: any,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/users/me/voicemails/greetings/${greeting}`,
-        method: "POST",
-        body: body,
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.users.me.voicemails.greetings.{greeting}.update`
-     *
-     * @tags users, voicemails
-     * @name MeVoicemailsGreetingsUpdate
-     * @summary Update a custom greeting
-     * @request PUT:/users/me/voicemails/greetings/{greeting}
-     * @secure
-     */
-    meVoicemailsGreetingsUpdate: (
-      greeting: "unavailable" | "busy" | "name",
-      body: any,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/users/me/voicemails/greetings/${greeting}`,
-        method: "PUT",
-        body: body,
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.users.me.voicemails.greetings.{greeting}.copy.create`
-     *
-     * @tags users, voicemails
-     * @name MeVoicemailsGreetingsCopyCreate
-     * @summary Copy a custom greeting
-     * @request POST:/users/me/voicemails/greetings/{greeting}/copy
-     * @secure
-     */
-    meVoicemailsGreetingsCopyCreate: (
-      greeting: "unavailable" | "busy" | "name",
-      body: GreetingCopy,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/users/me/voicemails/greetings/${greeting}/copy`,
-        method: "POST",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.users.me.voicemails.messages.{message_id}.delete`
-     *
-     * @tags users, voicemails
-     * @name MeVoicemailsMessagesDelete
-     * @summary Delete a mesage
-     * @request DELETE:/users/me/voicemails/messages/{message_id}
-     * @secure
-     */
-    meVoicemailsMessagesDelete: (
-      messageId: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/users/me/voicemails/messages/${messageId}`,
-        method: "DELETE",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.users.me.voicemails.messages.{message_id}.read`
-     *
-     * @tags users, voicemails
-     * @name MeVoicemailsMessagesDetail
-     * @summary Get a message
-     * @request GET:/users/me/voicemails/messages/{message_id}
-     * @secure
-     */
-    meVoicemailsMessagesDetail: (
-      messageId: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<VoicemailMessage, Error>({
-        path: `/users/me/voicemails/messages/${messageId}`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.users.me.voicemails.messages.{message_id}.update`
-     *
-     * @tags users, voicemails
-     * @name MeVoicemailsMessagesUpdate
-     * @summary Update a message
-     * @request PUT:/users/me/voicemails/messages/{message_id}
-     * @secure
-     */
-    meVoicemailsMessagesUpdate: (
-      messageId: string,
-      body: VoicemailMessageUpdate,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/users/me/voicemails/messages/${messageId}`,
-        method: "PUT",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.users.me.voicemails.messages.{message_id}.recording.read`
-     *
-     * @tags users, voicemails
-     * @name MeVoicemailsMessagesRecordingList
-     * @summary Get a message's recording
-     * @request GET:/users/me/voicemails/messages/{message_id}/recording
-     * @secure
-     */
-    meVoicemailsMessagesRecordingList: (
-      messageId: string,
-      query?: {
-        /** The token's ID */
-        token?: string;
-        /** Set to 1 to force download by browser */
-        download?: string;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/users/me/voicemails/messages/${messageId}/recording`,
-        method: "GET",
-        query: query,
-        secure: true,
-        ...params,
-      }),
-  };
-  voicemails = {
-    /**
-     * @description **Required ACL:** `calld.voicemails.{voicemail_id}.read`
-     *
-     * @tags voicemails
-     * @name VoicemailsDetail
-     * @summary Get details of a voicemail
-     * @request GET:/voicemails/{voicemail_id}
-     * @secure
-     */
-    voicemailsDetail: (voicemailId: number, params: RequestParams = {}) =>
-      this.request<Voicemail, Error>({
-        path: `/voicemails/${voicemailId}`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.voicemails.{voicemail_id}.folders.{folder_id}.read`
-     *
-     * @tags voicemails
-     * @name FoldersDetail
-     * @summary Get details of a folder
-     * @request GET:/voicemails/{voicemail_id}/folders/{folder_id}
-     * @secure
-     */
-    foldersDetail: (
-      voicemailId: number,
-      folderId: number,
-      params: RequestParams = {},
-    ) =>
-      this.request<VoicemailFolder, Error>({
-        path: `/voicemails/${voicemailId}/folders/${folderId}`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.voicemails.{voicemail_id}.greetings.{greeting}.delete`
-     *
-     * @tags voicemails
-     * @name GreetingsDelete
-     * @summary Delete a custom greeting
-     * @request DELETE:/voicemails/{voicemail_id}/greetings/{greeting}
-     * @secure
-     */
-    greetingsDelete: (
-      voicemailId: number,
-      greeting: "unavailable" | "busy" | "name",
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/voicemails/${voicemailId}/greetings/${greeting}`,
-        method: "DELETE",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.voicemails.{voicemail_id}.greetings.{greeting}.read`
-     *
-     * @tags voicemails
-     * @name GreetingsDetail
-     * @summary Get a custom greeting
-     * @request GET:/voicemails/{voicemail_id}/greetings/{greeting}
-     * @secure
-     */
-    greetingsDetail: (
-      voicemailId: number,
-      greeting: "unavailable" | "busy" | "name",
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/voicemails/${voicemailId}/greetings/${greeting}`,
-        method: "GET",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.voicemails.{voicemail_id}.greetings.{greeting}.read`
-     *
-     * @tags voicemails
-     * @name HeadVoicemails
-     * @summary Check if greeting exists
-     * @request HEAD:/voicemails/{voicemail_id}/greetings/{greeting}
-     * @secure
-     */
-    headVoicemails: (
-      voicemailId: number,
-      greeting: "unavailable" | "busy" | "name",
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/voicemails/${voicemailId}/greetings/${greeting}`,
-        method: "HEAD",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.voicemails.{voicemail_id}.greetings.{greeting}.create`
-     *
-     * @tags voicemails
-     * @name GreetingsCreate
-     * @summary Create a custom greeting
-     * @request POST:/voicemails/{voicemail_id}/greetings/{greeting}
-     * @secure
-     */
-    greetingsCreate: (
-      voicemailId: number,
-      greeting: "unavailable" | "busy" | "name",
-      body: any,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/voicemails/${voicemailId}/greetings/${greeting}`,
-        method: "POST",
-        body: body,
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.voicemails.{voicemail_id}.greetings.{greeting}.update`
-     *
-     * @tags voicemails
-     * @name GreetingsUpdate
-     * @summary Update a custom greeting
-     * @request PUT:/voicemails/{voicemail_id}/greetings/{greeting}
-     * @secure
-     */
-    greetingsUpdate: (
-      voicemailId: number,
-      greeting: "unavailable" | "busy" | "name",
-      body: any,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/voicemails/${voicemailId}/greetings/${greeting}`,
-        method: "PUT",
-        body: body,
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.voicemails.{voicemail_id}.greetings.{greeting}.copy.create`
-     *
-     * @tags voicemails
-     * @name GreetingsCopyCreate
-     * @summary Copy a custom greeting
-     * @request POST:/voicemails/{voicemail_id}/greetings/{greeting}/copy
-     * @secure
-     */
-    greetingsCopyCreate: (
-      voicemailId: number,
-      greeting: "unavailable" | "busy" | "name",
-      body: GreetingCopy,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/voicemails/${voicemailId}/greetings/${greeting}/copy`,
-        method: "POST",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.voicemails.{voicemail_id}.messages.{message_id}.delete`
-     *
-     * @tags voicemails
-     * @name MessagesDelete
-     * @summary Delete a mesage
-     * @request DELETE:/voicemails/{voicemail_id}/messages/{message_id}
-     * @secure
-     */
-    messagesDelete: (
-      voicemailId: number,
-      messageId: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/voicemails/${voicemailId}/messages/${messageId}`,
-        method: "DELETE",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.voicemails.{voicemail_id}.messages.{message_id}.read`
-     *
-     * @tags voicemails
-     * @name MessagesDetail
-     * @summary Get a message
-     * @request GET:/voicemails/{voicemail_id}/messages/{message_id}
-     * @secure
-     */
-    messagesDetail: (
-      voicemailId: number,
-      messageId: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<VoicemailMessage, Error>({
-        path: `/voicemails/${voicemailId}/messages/${messageId}`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.voicemails.{voicemail_id}.messages.{message_id}.update`
-     *
-     * @tags voicemails
-     * @name MessagesUpdate
-     * @summary Update a message
-     * @request PUT:/voicemails/{voicemail_id}/messages/{message_id}
-     * @secure
-     */
-    messagesUpdate: (
-      voicemailId: number,
-      messageId: string,
-      body: VoicemailMessageUpdate,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/voicemails/${voicemailId}/messages/${messageId}`,
-        method: "PUT",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `calld.voicemails.{voicemail_id}.messages.{message_id}.recording.read`
-     *
-     * @tags voicemails
-     * @name MessagesRecordingList
-     * @summary Get a message's recording
-     * @request GET:/voicemails/{voicemail_id}/messages/{message_id}/recording
-     * @secure
-     */
-    messagesRecordingList: (
-      voicemailId: number,
-      messageId: string,
-      query?: {
-        /** The token's ID */
-        token?: string;
-        /** Set to 1 to force download by browser */
-        download?: string;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/voicemails/${voicemailId}/messages/${messageId}/recording`,
-        method: "GET",
-        query: query,
-        secure: true,
-        ...params,
-      }),
-  };
+export namespace Conferences {
+  /**
+   * @description **Required ACL:** `calld.conferences.{conference_id}.participants.read`
+   * @tags conferences
+   * @name ParticipantsList
+   * @summary List participants of a conference
+   * @request GET:/conferences/{conference_id}/participants
+   * @secure
+   */
+  export namespace ParticipantsList {
+    export type RequestParams = {
+      /** Unique identifier of the conference */
+      conferenceId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = ParticipantList;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.conferences.{conference_id}.participants.{participant_id}.delete`
+   * @tags conferences
+   * @name ParticipantsDelete
+   * @summary Kick participant from a conference
+   * @request DELETE:/conferences/{conference_id}/participants/{participant_id}
+   * @secure
+   */
+  export namespace ParticipantsDelete {
+    export type RequestParams = {
+      /** Unique identifier of the conference */
+      conferenceId: string;
+      /** Unique identifier of the participant */
+      participantId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.conferences.{conference_id}.participants.{participant_id}.mute.update`
+   * @tags conferences
+   * @name ParticipantsMuteUpdate
+   * @summary Mute a participant in a conference
+   * @request PUT:/conferences/{conference_id}/participants/{participant_id}/mute
+   * @secure
+   */
+  export namespace ParticipantsMuteUpdate {
+    export type RequestParams = {
+      /** Unique identifier of the conference */
+      conferenceId: string;
+      /** Unique identifier of the participant */
+      participantId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.conferences.{conference_id}.participants.{participant_id}.unmute.update`
+   * @tags conferences
+   * @name ParticipantsUnmuteUpdate
+   * @summary Unmute a participant in a conference
+   * @request PUT:/conferences/{conference_id}/participants/{participant_id}/unmute
+   * @secure
+   */
+  export namespace ParticipantsUnmuteUpdate {
+    export type RequestParams = {
+      /** Unique identifier of the conference */
+      conferenceId: string;
+      /** Unique identifier of the participant */
+      participantId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.conferences.{conference_id}.record.delete`
+   * @tags conferences
+   * @name RecordDelete
+   * @summary Stop recording a conference
+   * @request DELETE:/conferences/{conference_id}/record
+   * @secure
+   */
+  export namespace RecordDelete {
+    export type RequestParams = {
+      /** Unique identifier of the conference */
+      conferenceId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.conferences.{conference_id}.record.create`
+   * @tags conferences
+   * @name RecordCreate
+   * @summary Record a conference
+   * @request POST:/conferences/{conference_id}/record
+   * @secure
+   */
+  export namespace RecordCreate {
+    export type RequestParams = {
+      /** Unique identifier of the conference */
+      conferenceId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+}
+
+export namespace Config {
+  /**
+   * @description **Required ACL:** `calld.config.read`
+   * @tags config
+   * @name GetConfig
+   * @summary Show the current configuration
+   * @request GET:/config
+   * @secure
+   */
+  export namespace GetConfig {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.config.update` Changes are not persistent across service restart.
+   * @tags config
+   * @name PatchConfig
+   * @summary Update the current configuration.
+   * @request PATCH:/config
+   * @secure
+   */
+  export namespace PatchConfig {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = ConfigPatchItem[];
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+}
+
+export namespace Faxes {
+  /**
+   * @description **Required ACL:** `calld.faxes.create`
+   * @tags faxes
+   * @name FaxesCreate
+   * @summary Send a fax
+   * @request POST:/faxes
+   * @secure
+   */
+  export namespace FaxesCreate {
+    export type RequestParams = {};
+    export type RequestQuery = {
+      /**
+       * Caller ID that will be presented to the recipient of the fax. Example: "my-name <+15551112222>"
+       * @default "Wazo Fax"
+       */
+      caller_id?: string;
+      /** Context of the recipient of the fax */
+      context: string;
+      /** Extension of the recipient of the fax */
+      extension: string;
+      /** Extension to compose before sending fax. Useful for fax in IVR */
+      ivr_extension?: string;
+      /** Time waiting before sending fax when destination has answered (in seconds) */
+      wait_time?: number;
+    };
+    export type RequestBody = File;
+    export type RequestHeaders = {};
+    export type ResponseBody = Fax;
+  }
+}
+
+export namespace Guests {
+  /**
+   * @description Returns the status of a meeting that should be visible to a guest.
+   * @tags meetings
+   * @name MeMeetingsStatusList
+   * @summary Get the status of a meeting
+   * @request GET:/guests/me/meetings/{meeting_uuid}/status
+   * @secure
+   */
+  export namespace MeMeetingsStatusList {
+    export type RequestParams = {
+      /** Unique identifier of the meeting */
+      meetingUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = MeetingStatus;
+  }
+}
+
+export namespace Lines {
+  /**
+   * @description **Required ACL:** `calld.lines.read` List the status of line endpoints that are configured on Asterisk Supported technologies: * SIP Lines with unsupported technologies will be listed but there status will be null
+   * @tags lines
+   * @name LinesList
+   * @summary List line endpoint statuses
+   * @request GET:/lines
+   * @secure
+   */
+  export namespace LinesList {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = EndpointLines;
+  }
+}
+
+export namespace Meetings {
+  /**
+   * @description **Required ACL:** `calld.meetings.{meeting_uuid}.participants.read`
+   * @tags meetings
+   * @name ParticipantsList
+   * @summary List participants of a meeting
+   * @request GET:/meetings/{meeting_uuid}/participants
+   * @secure
+   */
+  export namespace ParticipantsList {
+    export type RequestParams = {
+      /** Unique identifier of the meeting */
+      meetingUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = ParticipantList;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.meetings.{meeting_uuid}.participants.delete`
+   * @tags meetings
+   * @name ParticipantsDelete
+   * @summary Kick a participant from a meeting
+   * @request DELETE:/meetings/{meeting_uuid}/participants/{participant_id}
+   * @secure
+   */
+  export namespace ParticipantsDelete {
+    export type RequestParams = {
+      /** Unique identifier of the meeting */
+      meetingUuid: string;
+      /** Unique identifier of the participant */
+      participantId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+}
+
+export namespace Parkinglots {
+  /**
+   * @description **Required ACL:** `calld.parkings.read`
+   * @tags parking_lots
+   * @name ParkinglotsList
+   * @summary Retrieve the list of parkings and park calls
+   * @request GET:/parkinglots
+   * @secure
+   */
+  export namespace ParkinglotsList {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = {
+      items?: ParkingLot[];
+    };
+  }
+
+  /**
+   * @description **Required ACL:** `calld.parkings.{parking_id}.read`
+   * @tags parking_lots
+   * @name ParkinglotsDetail
+   * @summary Retrieve parked calls for parking
+   * @request GET:/parkinglots/{parking_id}
+   * @secure
+   */
+  export namespace ParkinglotsDetail {
+    export type RequestParams = {
+      /** Parking lot's ID */
+      parkingId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = ParkingLot;
+  }
+}
+
+export namespace Status {
+  /**
+   * @description **Required ACL:** `calld.status.read`
+   * @tags status
+   * @name StatusList
+   * @summary Print infos about internal status of wazo-calld
+   * @request GET:/status
+   * @secure
+   */
+  export namespace StatusList {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = StatusSummary;
+  }
+}
+
+export namespace Switchboards {
+  /**
+   * @description **Required ACL:** `calld.switchboards.{switchboard_uuid}.calls.held.read` **Warning:** This endpoint is still in development and may change in the future.
+   * @tags switchboards
+   * @name CallsHeldList
+   * @summary List calls held in the switchboard
+   * @request GET:/switchboards/{switchboard_uuid}/calls/held
+   * @secure
+   */
+  export namespace CallsHeldList {
+    export type RequestParams = {
+      /** Unique identifier of the switchboard */
+      switchboardUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = SwitchboardHeldCalls;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.switchboards.{switchboard_uuid}.calls.held.{call_id}.update` **Warning:** This endpoint is still in development and may change in the future. This action will also hangup the previous call talking to the held call, if there was any.
+   * @tags switchboards
+   * @name CallsHeldUpdate
+   * @summary Put the specified call on hold in the switchboard
+   * @request PUT:/switchboards/{switchboard_uuid}/calls/held/{call_id}
+   * @secure
+   */
+  export namespace CallsHeldUpdate {
+    export type RequestParams = {
+      /** Call ID */
+      callId: string;
+      /** Unique identifier of the switchboard */
+      switchboardUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.switchboards.{switchboard_uuid}.calls.held.{call_id}.answer.update` **Warning:** This endpoint is still in development and may change in the future.
+   * @tags switchboards
+   * @name CallsHeldAnswerUpdate
+   * @summary Answer the specified held call
+   * @request PUT:/switchboards/{switchboard_uuid}/calls/held/{call_id}/answer
+   * @secure
+   */
+  export namespace CallsHeldAnswerUpdate {
+    export type RequestParams = {
+      /** Call ID */
+      callId: string;
+      /** Unique identifier of the switchboard */
+      switchboardUuid: string;
+    };
+    export type RequestQuery = {
+      /** ID of the line of the user used to make the call. Default is the main line of the user. */
+      line_id?: number;
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = CallID;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.switchboards.{switchboard_uuid}.calls.queued.read` **Warning:** This endpoint is still in development and may change in the future.
+   * @tags switchboards
+   * @name CallsQueuedList
+   * @summary List calls queued in the switchboard
+   * @request GET:/switchboards/{switchboard_uuid}/calls/queued
+   * @secure
+   */
+  export namespace CallsQueuedList {
+    export type RequestParams = {
+      /** Unique identifier of the switchboard */
+      switchboardUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = SwitchboardQueuedCalls;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.switchboards.{switchboard_uuid}.calls.queued.{call_id}.answer.update` **Warning:** This endpoint is still in development and may change in the future.
+   * @tags switchboards
+   * @name CallsQueuedAnswerUpdate
+   * @summary Answer the specified queued call
+   * @request PUT:/switchboards/{switchboard_uuid}/calls/queued/{call_id}/answer
+   * @secure
+   */
+  export namespace CallsQueuedAnswerUpdate {
+    export type RequestParams = {
+      /** Call ID */
+      callId: string;
+      /** Unique identifier of the switchboard */
+      switchboardUuid: string;
+    };
+    export type RequestQuery = {
+      /** ID of the line of the user used to make the call. Default is the main line of the user. */
+      line_id?: number;
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = CallID;
+  }
+}
+
+export namespace Transfers {
+  /**
+   * @description **Required ACL:** `calld.transfers.create` The only way to cancel the transfer from the initiator is to use `DELETE /transfers/<id>` (i.e. sending DTMF `*0` will not work).
+   * @tags transfers
+   * @name TransfersCreate
+   * @summary Initiate a transfer
+   * @request POST:/transfers
+   * @secure
+   */
+  export namespace TransfersCreate {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = TransferRequest;
+    export type RequestHeaders = {};
+    export type ResponseBody = Transfer;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.transfers.{transfer_id}.delete`
+   * @tags transfers
+   * @name TransfersDelete
+   * @summary Cancel a transfer
+   * @request DELETE:/transfers/{transfer_id}
+   * @secure
+   */
+  export namespace TransfersDelete {
+    export type RequestParams = {
+      /** Unique identifier of the transfer */
+      transferId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.transfers.{transfer_id}.read`
+   * @tags transfers
+   * @name TransfersDetail
+   * @summary Get details of a transfer
+   * @request GET:/transfers/{transfer_id}
+   * @secure
+   */
+  export namespace TransfersDetail {
+    export type RequestParams = {
+      /** Unique identifier of the transfer */
+      transferId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = Transfer;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.transfers.{transfer_id}.complete.update`
+   * @tags transfers
+   * @name CompleteUpdate
+   * @summary Complete a transfer
+   * @request PUT:/transfers/{transfer_id}/complete
+   * @secure
+   */
+  export namespace CompleteUpdate {
+    export type RequestParams = {
+      /** Unique identifier of the transfer */
+      transferId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+}
+
+export namespace Trunks {
+  /**
+   * @description **Required ACL:** `calld.trunks.read` List the status of trunk endpoints that are configured on Asterisk Supported technologies: * SIP Trunks with unsupported technologies will be listed but there status will be null
+   * @tags trunks
+   * @name TrunksList
+   * @summary List trunk endpoint statuses
+   * @request GET:/trunks
+   * @secure
+   */
+  export namespace TrunksList {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = EndpointTrunks;
+  }
+}
+
+export namespace Users {
+  /**
+   * @description **Required ACL:** `calld.users.me.calls.read`
+   * @tags calls, users
+   * @name MeCallsList
+   * @summary List calls of a user
+   * @request GET:/users/me/calls
+   * @secure
+   */
+  export namespace MeCallsList {
+    export type RequestParams = {};
+    export type RequestQuery = {
+      /** Filter calls by Stasis application, e.g. switchboard. */
+      application?: string;
+      /** Filter calls by Stasis application instance, e.g. switchboard-sales,green. Args must be separated by commas (,). */
+      application_instance?: string;
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = {
+      items?: Call[];
+    };
+  }
+
+  /**
+   * @description **Required ACL:** `calld.users.me.calls.create` The user originator of the call is determined from the authentication token.
+   * @tags calls, users
+   * @name MeCallsCreate
+   * @summary Make a new call from a user
+   * @request POST:/users/me/calls
+   * @secure
+   */
+  export namespace MeCallsCreate {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = UserCallRequest;
+    export type RequestHeaders = {};
+    export type ResponseBody = Call;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.users.me.calls.{call_id}.delete` Only calls owned by the authenticated user may be hung up.
+   * @tags calls, users
+   * @name MeCallsDelete
+   * @summary Hangup a call from a user
+   * @request DELETE:/users/me/calls/{call_id}
+   * @secure
+   */
+  export namespace MeCallsDelete {
+    export type RequestParams = {
+      /** Call ID */
+      callId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.users.me.calls.{call_id}.answer.update` Only calls owned by the authenticated user may be answered.
+   * @tags calls, users
+   * @name MeCallsAnswerUpdate
+   * @summary Answer a call from user
+   * @request PUT:/users/me/calls/{call_id}/answer
+   * @secure
+   */
+  export namespace MeCallsAnswerUpdate {
+    export type RequestParams = {
+      /** Call ID */
+      callId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.users.me.calls.{call_id}.dtmf.update
+   * @tags calls, users
+   * @name MeCallsDtmfUpdate
+   * @summary Simulate a user pressing DTMF keys
+   * @request PUT:/users/me/calls/{call_id}/dtmf
+   * @secure
+   */
+  export namespace MeCallsDtmfUpdate {
+    export type RequestParams = {
+      /** Call ID */
+      callId: string;
+    };
+    export type RequestQuery = {
+      /** Digits to send via DTMF. Must contain only `0-9*#`. */
+      digits: string;
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.users.me.calls.{call_id}.hold.start.update` Only calls owned by the authenticated user may be held.
+   * @tags calls, users
+   * @name MeCallsHoldStartUpdate
+   * @summary Hold a call from user
+   * @request PUT:/users/me/calls/{call_id}/hold/start
+   * @secure
+   */
+  export namespace MeCallsHoldStartUpdate {
+    export type RequestParams = {
+      /** Call ID */
+      callId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.users.me.calls.{call_id}.hold.stop.update` Only calls owned by the authenticated user may be unheld.
+   * @tags calls, users
+   * @name MeCallsHoldStopUpdate
+   * @summary Unhold a call from user
+   * @request PUT:/users/me/calls/{call_id}/hold/stop
+   * @secure
+   */
+  export namespace MeCallsHoldStopUpdate {
+    export type RequestParams = {
+      /** Call ID */
+      callId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.users.me.calls.{call_id}.mute.start.update` Only calls owned by the authenticated user may be mute.
+   * @tags calls, users
+   * @name MeCallsMuteStartUpdate
+   * @summary Mute a call from user
+   * @request PUT:/users/me/calls/{call_id}/mute/start
+   * @secure
+   */
+  export namespace MeCallsMuteStartUpdate {
+    export type RequestParams = {
+      /** Call ID */
+      callId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.users.me.calls.{call_id}.mute.stop.update` Only calls owned by the authenticated user may be unmute.
+   * @tags calls, users
+   * @name MeCallsMuteStopUpdate
+   * @summary Unmute a call from user
+   * @request PUT:/users/me/calls/{call_id}/mute/stop
+   * @secure
+   */
+  export namespace MeCallsMuteStopUpdate {
+    export type RequestParams = {
+      /** Call ID */
+      callId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.users.me.calls.{call_id}.park.update` Use the `POST /users/me/calls` API to unpark the call.
+   * @tags calls, parking_lots, users
+   * @name MeCallsParkUpdate
+   * @summary Park the user's connected (talking to) call
+   * @request PUT:/users/me/calls/{call_id}/park
+   * @secure
+   */
+  export namespace MeCallsParkUpdate {
+    export type RequestParams = {
+      /** Call ID */
+      callId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = ParkCallBody;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = ParkedCallInfo;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.calls.{call_id}.record.pause.update`
+   * @tags calls, users
+   * @name MeCallsRecordPauseUpdate
+   * @summary Pause recording a call
+   * @request PUT:/users/me/calls/{call_id}/record/pause
+   * @secure
+   */
+  export namespace MeCallsRecordPauseUpdate {
+    export type RequestParams = {
+      /** Call ID */
+      callId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.calls.{call_id}.record.resume.update`
+   * @tags calls, users
+   * @name MeCallsRecordResumeUpdate
+   * @summary Resume recording a call
+   * @request PUT:/users/me/calls/{call_id}/record/resume
+   * @secure
+   */
+  export namespace MeCallsRecordResumeUpdate {
+    export type RequestParams = {
+      /** Call ID */
+      callId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.calls.{call_id}.record.start.update`
+   * @tags calls, users
+   * @name MeCallsRecordStartUpdate
+   * @summary Start recording a call
+   * @request PUT:/users/me/calls/{call_id}/record/start
+   * @secure
+   */
+  export namespace MeCallsRecordStartUpdate {
+    export type RequestParams = {
+      /** Call ID */
+      callId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.calls.{call_id}.record.stop.update`
+   * @tags calls, users
+   * @name MeCallsRecordStopUpdate
+   * @summary Stop recording a call
+   * @request PUT:/users/me/calls/{call_id}/record/stop
+   * @secure
+   */
+  export namespace MeCallsRecordStopUpdate {
+    export type RequestParams = {
+      /** Call ID */
+      callId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.users.me.conferences.adhoc.create`. An adhoc conference allows a user to merge multiple calls in one conversation. It acts like a conference room, but has no dedicated extension. The user creating the adhoc conference acts as the owner of the conference and controls who enters or leaves the conference. The conference will be destroyed when the owner leaves the conference.
+   * @tags adhoc_conferences
+   * @name MeConferencesAdhocCreate
+   * @summary Create an adhoc conference
+   * @request POST:/users/me/conferences/adhoc
+   * @secure
+   */
+  export namespace MeConferencesAdhocCreate {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = AdhocConferenceCreation;
+    export type RequestHeaders = {};
+    export type ResponseBody = AdhocConference;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.users.me.conferences.adhoc.delete`. All calls in the adhoc conference will be hungup.
+   * @tags adhoc_conferences
+   * @name MeConferencesAdhocDelete
+   * @summary Delete an adhoc conference
+   * @request DELETE:/users/me/conferences/adhoc/{conference_id}
+   * @secure
+   */
+  export namespace MeConferencesAdhocDelete {
+    export type RequestParams = {
+      /** ID of the adhoc conference */
+      conferenceId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = AdhocConference;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.users.me.conferences.adhoc.participants.delete`
+   * @tags adhoc_conferences
+   * @name MeConferencesAdhocParticipantsDelete
+   * @summary Remove a participant from an adhoc conference
+   * @request DELETE:/users/me/conferences/adhoc/{conference_id}/participants/{call_id}
+   * @secure
+   */
+  export namespace MeConferencesAdhocParticipantsDelete {
+    export type RequestParams = {
+      /** Call ID */
+      callId: string;
+      /** ID of the adhoc conference */
+      conferenceId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.users.me.conferences.adhoc.participants.update`
+   * @tags adhoc_conferences
+   * @name MeConferencesAdhocParticipantsUpdate
+   * @summary Add a participant into an adhoc conference
+   * @request PUT:/users/me/conferences/adhoc/{conference_id}/participants/{call_id}
+   * @secure
+   */
+  export namespace MeConferencesAdhocParticipantsUpdate {
+    export type RequestParams = {
+      /** Call ID */
+      callId: string;
+      /** ID of the adhoc conference */
+      conferenceId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.users.me.conferences.{conference_id}.participants.read`
+   * @tags conferences, users
+   * @name MeConferencesParticipantsList
+   * @summary List participants of a conference as a user
+   * @request GET:/users/me/conferences/{conference_id}/participants
+   * @secure
+   */
+  export namespace MeConferencesParticipantsList {
+    export type RequestParams = {
+      /** Unique identifier of the conference */
+      conferenceId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = ParticipantList;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.users.me.faxes.create`
+   * @tags faxes
+   * @name MeFaxesCreate
+   * @summary Send a fax as the user detected from the token
+   * @request POST:/users/me/faxes
+   * @secure
+   */
+  export namespace MeFaxesCreate {
+    export type RequestParams = {};
+    export type RequestQuery = {
+      /**
+       * Caller ID that will be presented to the recipient of the fax. Example: "my-name <+15551112222>"
+       * @default "Wazo Fax"
+       */
+      caller_id?: string;
+      /** Extension of the recipient of the fax */
+      extension: string;
+      /** Extension to compose before sending fax. Useful for fax in IVR */
+      ivr_extension?: string;
+      /** Time waiting before sending fax when destination has answered (in seconds) */
+      wait_time?: number;
+    };
+    export type RequestBody = File;
+    export type RequestHeaders = {};
+    export type ResponseBody = Fax;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.users.me.meetings.{meeting_uuid}.participants.read`
+   * @tags meetings, users
+   * @name MeMeetingsParticipantsList
+   * @summary List participants of a meeting as a user
+   * @request GET:/users/me/meetings/{meeting_uuid}/participants
+   * @secure
+   */
+  export namespace MeMeetingsParticipantsList {
+    export type RequestParams = {
+      /** Unique identifier of the meeting */
+      meetingUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = ParticipantList;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.users.me.meetings.participants.delete`
+   * @tags meetings, users
+   * @name MeMeetingsParticipantsDelete
+   * @summary Kick a participant from a meeting as a user
+   * @request DELETE:/users/me/meetings/{meeting_uuid}/participants/{participant_id}
+   * @secure
+   */
+  export namespace MeMeetingsParticipantsDelete {
+    export type RequestParams = {
+      /** Unique identifier of the meeting */
+      meetingUuid: string;
+      /** Unique identifier of the participant */
+      participantId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.users.me.relocates.read`
+   * @tags relocates, users
+   * @name MeRelocatesList
+   * @summary Get the relocates of the authenticated user
+   * @request GET:/users/me/relocates
+   * @secure
+   */
+  export namespace MeRelocatesList {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = RelocateList;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.users.me.relocates.create`
+   * @tags relocates, users
+   * @name MeRelocatesCreate
+   * @summary Initiate a relocate from the authenticated user
+   * @request POST:/users/me/relocates
+   * @secure
+   */
+  export namespace MeRelocatesCreate {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = UserRelocateRequest;
+    export type RequestHeaders = {};
+    export type ResponseBody = Relocate;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.relocates.users.me.{relocate_uuid}.read`
+   * @tags relocates
+   * @name MeRelocatesDetail
+   * @summary Get details of a relocate
+   * @request GET:/users/me/relocates/{relocate_uuid}
+   * @secure
+   */
+  export namespace MeRelocatesDetail {
+    export type RequestParams = {
+      /** Unique identifier of the relocate */
+      relocateUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = Relocate;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.users.me.relocates.{relocate_uuid}.cancel.update`
+   * @tags relocates, users
+   * @name MeRelocatesCancelUpdate
+   * @summary Cancel a relocate
+   * @request PUT:/users/me/relocates/{relocate_uuid}/cancel
+   * @secure
+   */
+  export namespace MeRelocatesCancelUpdate {
+    export type RequestParams = {
+      /** Unique identifier of the relocate */
+      relocateUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.users.me.relocates.{relocate_uuid}.complete.update`
+   * @tags relocates, users
+   * @name MeRelocatesCompleteUpdate
+   * @summary Complete a relocate
+   * @request PUT:/users/me/relocates/{relocate_uuid}/complete
+   * @secure
+   */
+  export namespace MeRelocatesCompleteUpdate {
+    export type RequestParams = {
+      /** Unique identifier of the relocate */
+      relocateUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.users.me.transfers.read`
+   * @tags transfers, users
+   * @name MeTransfersList
+   * @summary Get the transfers of the authenticated user
+   * @request GET:/users/me/transfers
+   * @secure
+   */
+  export namespace MeTransfersList {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = TransferList;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.users.me.transfers.create`
+   * @tags transfers, users
+   * @name MeTransfersCreate
+   * @summary Initiate a transfer from the authenticated user
+   * @request POST:/users/me/transfers
+   * @secure
+   */
+  export namespace MeTransfersCreate {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = UserTransferRequest;
+    export type RequestHeaders = {};
+    export type ResponseBody = Transfer;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.users.me.transfers.{transfer_id}.delete`
+   * @tags transfers, users
+   * @name MeTransfersDelete
+   * @summary Cancel a transfer
+   * @request DELETE:/users/me/transfers/{transfer_id}
+   * @secure
+   */
+  export namespace MeTransfersDelete {
+    export type RequestParams = {
+      /** Unique identifier of the transfer */
+      transferId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.users.me.transfers.{transfer_id}.complete.update`
+   * @tags transfers, users
+   * @name MeTransfersCompleteUpdate
+   * @summary Complete a transfer
+   * @request PUT:/users/me/transfers/{transfer_id}/complete
+   * @secure
+   */
+  export namespace MeTransfersCompleteUpdate {
+    export type RequestParams = {
+      /** Unique identifier of the transfer */
+      transferId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.users.me.voicemails.read`
+   * @tags users, voicemails
+   * @name MeVoicemailsList
+   * @summary Get details of the voicemail of the authenticated user
+   * @request GET:/users/me/voicemails
+   * @secure
+   */
+  export namespace MeVoicemailsList {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = Voicemail;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.users.me.voicemails.folders.{folder_id}.read`
+   * @tags users, voicemails
+   * @name MeVoicemailsFoldersDetail
+   * @summary Get details of a folder
+   * @request GET:/users/me/voicemails/folders/{folder_id}
+   * @secure
+   */
+  export namespace MeVoicemailsFoldersDetail {
+    export type RequestParams = {
+      /** The folder's ID */
+      folderId: number;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = VoicemailFolder;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.users.me.voicemails.greetings.{greeting}.delete`
+   * @tags users, voicemails
+   * @name MeVoicemailsGreetingsDelete
+   * @summary Delete a custom greeting
+   * @request DELETE:/users/me/voicemails/greetings/{greeting}
+   * @secure
+   */
+  export namespace MeVoicemailsGreetingsDelete {
+    export type RequestParams = {
+      /** The greeting */
+      greeting: "unavailable" | "busy" | "name";
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.users.me.voicemails.greetings.{greeting}.read`
+   * @tags users, voicemails
+   * @name MeVoicemailsGreetingsDetail
+   * @summary Get a custom greeting
+   * @request GET:/users/me/voicemails/greetings/{greeting}
+   * @secure
+   */
+  export namespace MeVoicemailsGreetingsDetail {
+    export type RequestParams = {
+      /** The greeting */
+      greeting: "unavailable" | "busy" | "name";
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.users.me.voicemails.greetings.{greeting}.read`
+   * @tags users, voicemails
+   * @name HeadUsers
+   * @summary Check if greeting exists
+   * @request HEAD:/users/me/voicemails/greetings/{greeting}
+   * @secure
+   */
+  export namespace HeadUsers {
+    export type RequestParams = {
+      /** The greeting */
+      greeting: "unavailable" | "busy" | "name";
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.users.me.voicemails.greetings.{greeting}.create`
+   * @tags users, voicemails
+   * @name MeVoicemailsGreetingsCreate
+   * @summary Create a custom greeting
+   * @request POST:/users/me/voicemails/greetings/{greeting}
+   * @secure
+   */
+  export namespace MeVoicemailsGreetingsCreate {
+    export type RequestParams = {
+      /** The greeting */
+      greeting: "unavailable" | "busy" | "name";
+    };
+    export type RequestQuery = {};
+    export type RequestBody = any;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.users.me.voicemails.greetings.{greeting}.update`
+   * @tags users, voicemails
+   * @name MeVoicemailsGreetingsUpdate
+   * @summary Update a custom greeting
+   * @request PUT:/users/me/voicemails/greetings/{greeting}
+   * @secure
+   */
+  export namespace MeVoicemailsGreetingsUpdate {
+    export type RequestParams = {
+      /** The greeting */
+      greeting: "unavailable" | "busy" | "name";
+    };
+    export type RequestQuery = {};
+    export type RequestBody = any;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.users.me.voicemails.greetings.{greeting}.copy.create`
+   * @tags users, voicemails
+   * @name MeVoicemailsGreetingsCopyCreate
+   * @summary Copy a custom greeting
+   * @request POST:/users/me/voicemails/greetings/{greeting}/copy
+   * @secure
+   */
+  export namespace MeVoicemailsGreetingsCopyCreate {
+    export type RequestParams = {
+      /** The greeting */
+      greeting: "unavailable" | "busy" | "name";
+    };
+    export type RequestQuery = {};
+    export type RequestBody = GreetingCopy;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.users.me.voicemails.messages.{message_id}.delete`
+   * @tags users, voicemails
+   * @name MeVoicemailsMessagesDelete
+   * @summary Delete a mesage
+   * @request DELETE:/users/me/voicemails/messages/{message_id}
+   * @secure
+   */
+  export namespace MeVoicemailsMessagesDelete {
+    export type RequestParams = {
+      /** The message's ID */
+      messageId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.users.me.voicemails.messages.{message_id}.read`
+   * @tags users, voicemails
+   * @name MeVoicemailsMessagesDetail
+   * @summary Get a message
+   * @request GET:/users/me/voicemails/messages/{message_id}
+   * @secure
+   */
+  export namespace MeVoicemailsMessagesDetail {
+    export type RequestParams = {
+      /** The message's ID */
+      messageId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = VoicemailMessage;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.users.me.voicemails.messages.{message_id}.update`
+   * @tags users, voicemails
+   * @name MeVoicemailsMessagesUpdate
+   * @summary Update a message
+   * @request PUT:/users/me/voicemails/messages/{message_id}
+   * @secure
+   */
+  export namespace MeVoicemailsMessagesUpdate {
+    export type RequestParams = {
+      /** The message's ID */
+      messageId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = VoicemailMessageUpdate;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.users.me.voicemails.messages.{message_id}.recording.read`
+   * @tags users, voicemails
+   * @name MeVoicemailsMessagesRecordingList
+   * @summary Get a message's recording
+   * @request GET:/users/me/voicemails/messages/{message_id}/recording
+   * @secure
+   */
+  export namespace MeVoicemailsMessagesRecordingList {
+    export type RequestParams = {
+      /** The message's ID */
+      messageId: string;
+    };
+    export type RequestQuery = {
+      /** Set to 1 to force download by browser */
+      download?: string;
+      /** The token's ID */
+      token?: string;
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+}
+
+export namespace Voicemails {
+  /**
+   * @description **Required ACL:** `calld.voicemails.{voicemail_id}.read`
+   * @tags voicemails
+   * @name VoicemailsDetail
+   * @summary Get details of a voicemail
+   * @request GET:/voicemails/{voicemail_id}
+   * @secure
+   */
+  export namespace VoicemailsDetail {
+    export type RequestParams = {
+      /** The voicemail's ID */
+      voicemailId: number;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = Voicemail;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.voicemails.{voicemail_id}.folders.{folder_id}.read`
+   * @tags voicemails
+   * @name FoldersDetail
+   * @summary Get details of a folder
+   * @request GET:/voicemails/{voicemail_id}/folders/{folder_id}
+   * @secure
+   */
+  export namespace FoldersDetail {
+    export type RequestParams = {
+      /** The folder's ID */
+      folderId: number;
+      /** The voicemail's ID */
+      voicemailId: number;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = VoicemailFolder;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.voicemails.{voicemail_id}.greetings.{greeting}.delete`
+   * @tags voicemails
+   * @name GreetingsDelete
+   * @summary Delete a custom greeting
+   * @request DELETE:/voicemails/{voicemail_id}/greetings/{greeting}
+   * @secure
+   */
+  export namespace GreetingsDelete {
+    export type RequestParams = {
+      /** The greeting */
+      greeting: "unavailable" | "busy" | "name";
+      /** The voicemail's ID */
+      voicemailId: number;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.voicemails.{voicemail_id}.greetings.{greeting}.read`
+   * @tags voicemails
+   * @name GreetingsDetail
+   * @summary Get a custom greeting
+   * @request GET:/voicemails/{voicemail_id}/greetings/{greeting}
+   * @secure
+   */
+  export namespace GreetingsDetail {
+    export type RequestParams = {
+      /** The greeting */
+      greeting: "unavailable" | "busy" | "name";
+      /** The voicemail's ID */
+      voicemailId: number;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.voicemails.{voicemail_id}.greetings.{greeting}.read`
+   * @tags voicemails
+   * @name HeadVoicemails
+   * @summary Check if greeting exists
+   * @request HEAD:/voicemails/{voicemail_id}/greetings/{greeting}
+   * @secure
+   */
+  export namespace HeadVoicemails {
+    export type RequestParams = {
+      /** The greeting */
+      greeting: "unavailable" | "busy" | "name";
+      /** The voicemail's ID */
+      voicemailId: number;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.voicemails.{voicemail_id}.greetings.{greeting}.create`
+   * @tags voicemails
+   * @name GreetingsCreate
+   * @summary Create a custom greeting
+   * @request POST:/voicemails/{voicemail_id}/greetings/{greeting}
+   * @secure
+   */
+  export namespace GreetingsCreate {
+    export type RequestParams = {
+      /** The greeting */
+      greeting: "unavailable" | "busy" | "name";
+      /** The voicemail's ID */
+      voicemailId: number;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = any;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.voicemails.{voicemail_id}.greetings.{greeting}.update`
+   * @tags voicemails
+   * @name GreetingsUpdate
+   * @summary Update a custom greeting
+   * @request PUT:/voicemails/{voicemail_id}/greetings/{greeting}
+   * @secure
+   */
+  export namespace GreetingsUpdate {
+    export type RequestParams = {
+      /** The greeting */
+      greeting: "unavailable" | "busy" | "name";
+      /** The voicemail's ID */
+      voicemailId: number;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = any;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.voicemails.{voicemail_id}.greetings.{greeting}.copy.create`
+   * @tags voicemails
+   * @name GreetingsCopyCreate
+   * @summary Copy a custom greeting
+   * @request POST:/voicemails/{voicemail_id}/greetings/{greeting}/copy
+   * @secure
+   */
+  export namespace GreetingsCopyCreate {
+    export type RequestParams = {
+      /** The greeting */
+      greeting: "unavailable" | "busy" | "name";
+      /** The voicemail's ID */
+      voicemailId: number;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = GreetingCopy;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.voicemails.{voicemail_id}.messages.{message_id}.delete`
+   * @tags voicemails
+   * @name MessagesDelete
+   * @summary Delete a mesage
+   * @request DELETE:/voicemails/{voicemail_id}/messages/{message_id}
+   * @secure
+   */
+  export namespace MessagesDelete {
+    export type RequestParams = {
+      /** The message's ID */
+      messageId: string;
+      /** The voicemail's ID */
+      voicemailId: number;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.voicemails.{voicemail_id}.messages.{message_id}.read`
+   * @tags voicemails
+   * @name MessagesDetail
+   * @summary Get a message
+   * @request GET:/voicemails/{voicemail_id}/messages/{message_id}
+   * @secure
+   */
+  export namespace MessagesDetail {
+    export type RequestParams = {
+      /** The message's ID */
+      messageId: string;
+      /** The voicemail's ID */
+      voicemailId: number;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = VoicemailMessage;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.voicemails.{voicemail_id}.messages.{message_id}.update`
+   * @tags voicemails
+   * @name MessagesUpdate
+   * @summary Update a message
+   * @request PUT:/voicemails/{voicemail_id}/messages/{message_id}
+   * @secure
+   */
+  export namespace MessagesUpdate {
+    export type RequestParams = {
+      /** The message's ID */
+      messageId: string;
+      /** The voicemail's ID */
+      voicemailId: number;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = VoicemailMessageUpdate;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+
+  /**
+   * @description **Required ACL:** `calld.voicemails.{voicemail_id}.messages.{message_id}.recording.read`
+   * @tags voicemails
+   * @name MessagesRecordingList
+   * @summary Get a message's recording
+   * @request GET:/voicemails/{voicemail_id}/messages/{message_id}/recording
+   * @secure
+   */
+  export namespace MessagesRecordingList {
+    export type RequestParams = {
+      /** The message's ID */
+      messageId: string;
+      /** The voicemail's ID */
+      voicemailId: number;
+    };
+    export type RequestQuery = {
+      /** Set to 1 to force download by browser */
+      download?: string;
+      /** The token's ID */
+      token?: string;
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
 }

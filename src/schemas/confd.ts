@@ -12,11 +12,6 @@
 
 
 
-    export enum StatusValue {
-  Fail = "fail",
-  Ok = "ok" 
- }
-
   /** Access feature */
   export interface AccessFeature {
     enabled?: boolean,
@@ -670,6 +665,32 @@
     pool_end?: string,
   /** The first IP address that can be allocated by DHCP */
     pool_start?: string,
+}
+
+    export interface DeleteSipTransportParams {
+  /**
+   * The UUID of the transport that should be associated to orphaned
+   * SIP configurations
+   */
+    fallback?: string,
+  /** The UUID of the transport */
+    transportUuid: string,
+}
+
+    export interface DeleteSoundsFilesParams {
+  /** Format of the sound */
+    format?: string,
+  /** Language of the sound */
+    language?: string,
+    soundCategory: string,
+    soundFilename: string,
+}
+
+    export interface DeleteUserParams {
+  /** Indicates if the resources related to the user must be deleted too. */
+    recursive?: boolean,
+  /** the user's ID or UUID */
+    userId: string,
 }
 
   /** DestinationApplication */
@@ -1398,6 +1419,98 @@
     tenant_uuid?: string,
 }
 
+    export interface GetEndpointSipParams {
+    sipUuid: string,
+  /**
+   * Different view of the SIP endpoint
+   * 
+   * The `default` view, when the argument is omitted, is to include only options that
+   * are defined on the specified endpoint.
+   * 
+   * The `merged` view includes all options from included templates.
+   */
+    view?: "merged",
+}
+
+    export interface GetRegistrarsParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
+}
+
+    export interface GetSoundsFilesParams {
+  /** Format of the sound */
+    format?: string,
+  /** Language of the sound */
+    language?: string,
+    soundCategory: string,
+    soundFilename: string,
+}
+
+    export interface GetUserExternalAppParams {
+  /** External App's name */
+    appName: string,
+  /**
+   * the user's UUID
+   * @format uuid
+   */
+    userUuid: string,
+  /**
+   * Different view of the external app endpoint
+   * 
+   * The `default` view, when the argument is omitted, is to return the user value for this
+   * external app
+   * 
+   * The `fallback` view return the user value for this external app, but if not found, will
+   * fallback to the tenant configured value
+   * 
+   * **WARNING**: Using fallback view on list will disabled all pagination and search features
+   */
+    view?: "fallback",
+}
+
+    export interface GetUserLineAssociatedEndpointsSipParams {
+    lineId: number,
+  /**
+   * the user's UUID
+   * @format uuid
+   */
+    userUuid: string,
+  /**
+   * Different view of the SIP endpoint
+   * 
+   * The `default` view, when the argument is omitted, is to include only options that
+   * are defined on the specified endpoint.
+   * 
+   * The `merged` view includes all options from included templates.
+   */
+    view?: "merged",
+}
+
+    export interface GetUserLineMainAssociatedEndpointsSipParams {
+  /**
+   * the user's UUID
+   * @format uuid
+   */
+    userUuid: string,
+  /**
+   * Different view of the SIP endpoint
+   * 
+   * The `default` view, when the argument is omitted, is to include only options that
+   * are defined on the specified endpoint.
+   * 
+   * The `merged` view includes all options from included templates.
+   */
+    view?: "merged",
+}
+
   /** Group */
   export type Group = (GroupRelationBase & {
   /** How the caller_id_name will be treated */
@@ -1900,6 +2013,882 @@
     rel?: string,
 }
 
+    export interface ListAccessFeaturesParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
+}
+
+    export interface ListAgentsParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
+}
+
+    export interface ListApplicationsParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
+}
+
+    export interface ListBlocklistNumbersParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** filter blocklisted numbers by a label string */
+    label?: string,
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** filter blocklisted numbers by a number string */
+    number?: string,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
+  /** filter blocklist numbers by the blocklist owner's uuid */
+    user_uuid?: string,
+}
+
+    export interface ListCallFiltersParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
+}
+
+    export interface ListCallPickupsParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
+}
+
+    export interface ListCallpermissionsParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
+}
+
+    export interface ListConferencesParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
+}
+
+    export interface ListContextsParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
+}
+
+    export interface ListContextsRangeParams {
+  /**
+   * Determines if the ranges are going to be split to display only ranges with available extensions.
+   * @default "available"
+   */
+    availability?: "available" | "all",
+  /** context's ID */
+    contextId: number,
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /** The extension range destination type */
+    rangeType: "user" | "group" | "queue" | "conference" | "incall",
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
+}
+
+    export interface ListDevicesParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
+}
+
+    export interface ListEndpointsCustomParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
+}
+
+    export interface ListEndpointsIaxParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
+}
+
+    export interface ListEndpointsSccpParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
+}
+
+    export interface ListEndpointsSipParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
+  /**
+   * Search filter for resource UUID, can be used to search multiple elements. Using a comma separated list of UUID
+   * @maxItems 20
+   * @minItems 1
+   * @uniqueItems true
+   */
+    uuid?: (string)[],
+}
+
+    export interface ListEndpointsSipTemplatesParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
+}
+
+    export interface ListExtensionsFeaturesParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
+}
+
+    export interface ListExtensionsParams {
+  /** Filter extensions by context name */
+    context?: string,
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** Filter extensions by exten number */
+    exten?: string,
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
+  /** Filter extensions of a certain type. Internal: Used for calling a line with an internal number (e.g. “1000@default”). Incall: Used for calling a line from the outside (e.g. “from-extern” with a DID) */
+    type?: "internal" | "incall",
+}
+
+    export interface ListExternalAppsParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
+}
+
+    export interface ListFuncKeyTemplateParams {
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
+}
+
+    export interface ListGroupsParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
+}
+
+    export interface ListHttpIngressesParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
+  /**
+   * Allows to fallback on master tenant config if the current tenant has no ingress set.
+   * When the `view` is omitted or the `default`value is passed, only the ingress of the current tenant is returned. This is useful for configuration API.
+   * For `fallback` view the API fallbacks to the master tenant ingress value. 
+   */
+    view?: "default" | "fallback",
+}
+
+    export interface ListIncallsParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
+  /** the user's ID */
+    user_id?: number,
+}
+
+    export interface ListIvrParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
+}
+
+    export interface ListLinesParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
+}
+
+    export interface ListMeetingsParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
+}
+
+    export interface ListMohParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
+}
+
+    export interface ListOutcallsParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
+}
+
+    export interface ListPagingsParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
+}
+
+    export interface ListParkingLotsParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
+}
+
+    export interface ListPhoneNumbersParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Only include the main phone number of the tenant */
+    main?: boolean,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
+  /** Only include shared phone numbers */
+    shared?: boolean,
+}
+
+    export interface ListQueuesParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
+}
+
+    export interface ListRegistersIaxParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
+}
+
+    export interface ListSchedulesParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
+}
+
+    export interface ListSipTransportsParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
+}
+
+    export interface ListSkillRulesParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
+}
+
+    export interface ListSkillsParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
+}
+
+    export interface ListSoundsParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
+}
+
+    export interface ListTenantsParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
+}
+
+    export interface ListTrunksParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
+}
+
+    export interface ListUnallocatedDevicesParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
+}
+
+    export interface ListUserBlocklistNumbersParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** filter blocklisted numbers by a label string */
+    label?: string,
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** filter blocklisted numbers by a number string */
+    number?: string,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
+  /**
+   * the user's UUID
+   * @format uuid
+   */
+    userUuid: string,
+}
+
+    export interface ListUserExternalAppsParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
+  /**
+   * the user's UUID
+   * @format uuid
+   */
+    userUuid: string,
+  /**
+   * Different view of the external app endpoint
+   * 
+   * The `default` view, when the argument is omitted, is to return the user value for this
+   * external app
+   * 
+   * The `fallback` view return the user value for this external app, but if not found, will
+   * fallback to the tenant configured value
+   * 
+   * **WARNING**: Using fallback view on list will disabled all pagination and search features
+   */
+    view?: "fallback",
+}
+
+    export interface ListUserMeetingsParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
+}
+
+    export interface ListUserParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
+  /**
+   * Search filter for resource UUID, can be used to search multiple elements. Using a comma separated list of UUID
+   * @maxItems 20
+   * @minItems 1
+   * @uniqueItems true
+   */
+    uuid?: (string)[],
+  /** Different view of the list of users. */
+    view?: "directory" | "summary",
+}
+
+    export interface ListUsersMeBlocklistNumbersParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** filter blocklisted numbers by a label string */
+    label?: string,
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** filter blocklisted numbers by a number string */
+    number?: string,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
+}
+
+    export interface ListVoicemailsParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
+}
+
   /** LiveReload */
   export interface LiveReload {
     enabled?: boolean,
@@ -1911,6 +2900,16 @@
     country?: string,
   /** UUID of the tenant */
     tenant_uuid?: string,
+}
+
+    export interface LookupUserBlocklistNumberParams {
+  /** E.164 number string to lookup(exact match) in the user's blocklist */
+    number_exact: string,
+  /**
+   * the user's UUID
+   * @format uuid
+   */
+    userUuid: string,
 }
 
     export interface Meeting {
@@ -2859,6 +3858,11 @@
     service_token?: ComponentWithStatus,
 }
 
+    export enum StatusValue {
+  Fail = "fail",
+  Ok = "ok" 
+ }
+
     export type Switchboard = ({
     name?: string,
     queue_music_on_hold?: string,
@@ -2900,6 +3904,24 @@
 
     export interface SwitchboardRelationMembers {
     members?: SwitchboardRelationMemberUsers,
+}
+
+    export interface SwitchboardsListParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
 }
 
     export interface Tenant {
@@ -2976,6 +3998,15 @@
   /** TrunksId */
   export interface TrunksId {
     trunks?: (TrunkId)[],
+}
+
+    export interface UpdateSoundsFilesParams {
+  /** Format of the sound */
+    format?: string,
+  /** Language of the sound */
+    language?: string,
+    soundCategory: string,
+    soundFilename: string,
 }
 
   /** User */
@@ -3634,2518 +4665,2786 @@
 
 
 
-export type QueryParamsType = Record<string | number, any>;
-export type ResponseFormat = keyof Omit<Body, "body" | "bodyUsed">;
-
-export interface FullRequestParams extends Omit<RequestInit, "body"> {
-  /** set parameter to `true` for call `securityWorker` for this request */
-  secure?: boolean;
-  /** request path */
-  path: string;
-  /** content type of request body */
-  type?: ContentType;
-  /** query params */
-  query?: QueryParamsType;
-  /** format of response (i.e. response.json() -> format: "json") */
-  format?: ResponseFormat;
-  /** request body */
-  body?: unknown;
-  /** base url */
-  baseUrl?: string;
-  /** request cancellation token */
-  cancelToken?: CancelToken;
-}
-
-export type RequestParams = Omit<FullRequestParams, "body" | "method" | "query" | "path">
 
 
-export interface ApiConfig<SecurityDataType = unknown> {
-    baseUrl?: string;
-    baseApiParams?: Omit<RequestParams, "baseUrl" | "cancelToken" | "signal">;
-    securityWorker?: (securityData: SecurityDataType | null) => Promise<RequestParams | void> | RequestParams | void;
-    customFetch?: typeof fetch;
-}
-
-export interface HttpResponse<D extends unknown, E extends unknown = unknown> extends Response {
-    data: D;
-    error: E;
-}
-
-type CancelToken = Symbol | string | number;
-
-export enum ContentType {
-    Json = "application/json",
-    FormData = "multipart/form-data",
-    UrlEncoded = "application/x-www-form-urlencoded",
-    Text = "text/plain",
-}
-
-export class HttpClient<SecurityDataType = unknown> {
-    public baseUrl: string = "/1.1";
-    private securityData: SecurityDataType | null = null;
-    private securityWorker?: ApiConfig<SecurityDataType>["securityWorker"];
-    private abortControllers = new Map<CancelToken, AbortController>();
-    private customFetch = (...fetchParams: Parameters<typeof fetch>) => fetch(...fetchParams);
-
-    private baseApiParams: RequestParams = {
-        credentials: 'same-origin',
-        headers: {},
-        redirect: 'follow',
-        referrerPolicy: 'no-referrer',
-    }
-
-    constructor(apiConfig: ApiConfig<SecurityDataType> = {}) {
-        Object.assign(this, apiConfig);
-    }
-
-    public setSecurityData = (data: SecurityDataType | null) => {
-        this.securityData = data;
-    }
-
-    protected encodeQueryParam(key: string, value: any) {
-        const encodedKey = encodeURIComponent(key);
-        return `${encodedKey}=${encodeURIComponent(typeof value === "number" ? value : `${value}`)}`;
-    }
-
-    protected addQueryParam(query: QueryParamsType, key: string) {
-        return this.encodeQueryParam(key, query[key]);
-    }
-
-    protected addArrayQueryParam(query: QueryParamsType, key: string) {
-        const value = query[key];
-        return value.map((v: any) => this.encodeQueryParam(key, v)).join("&");
-    }
-
-    protected toQueryString(rawQuery?: QueryParamsType): string {
-        const query = rawQuery || {};
-        const keys = Object.keys(query).filter((key) => "undefined" !== typeof query[key]);
-        return keys
-                .map((key) =>
-                    Array.isArray(query[key])
-                    ? this.addArrayQueryParam(query, key)
-                    : this.addQueryParam(query, key),
-                )
-                .join("&");
-    }
-
-    protected addQueryParams(rawQuery?: QueryParamsType): string {
-        const queryString = this.toQueryString(rawQuery);
-        return queryString ? `?${queryString}` : "";
-    }
-
-    private contentFormatters: Record<ContentType, (input: any) => any> = {
-        [ContentType.Json]: (input:any) => input !== null && (typeof input === "object" || typeof input === "string") ? JSON.stringify(input) : input,
-        [ContentType.Text]: (input:any) => input !== null && typeof input !== "string" ? JSON.stringify(input) : input,
-        [ContentType.FormData]: (input: any) =>
-            Object.keys(input || {}).reduce((formData, key) => {
-                const property = input[key];
-                formData.append(
-                    key,
-                    property instanceof Blob ?
-                        property :
-                    typeof property === "object" && property !== null ?
-                        JSON.stringify(property) :
-                    `${property}`
-                );
-                return formData;
-            }, new FormData()),
-        [ContentType.UrlEncoded]: (input: any) => this.toQueryString(input),
-    }
-
-    protected mergeRequestParams(params1: RequestParams, params2?: RequestParams): RequestParams {
-        return {
-            ...this.baseApiParams,
-            ...params1,
-            ...(params2 || {}),
-            headers: {
-                ...(this.baseApiParams.headers || {}),
-                ...(params1.headers || {}),
-                ...((params2 && params2.headers) || {}),
-            },
-        };
-    }
-
-    protected createAbortSignal = (cancelToken: CancelToken): AbortSignal | undefined => {
-        if (this.abortControllers.has(cancelToken)) {
-            const abortController = this.abortControllers.get(cancelToken);
-            if (abortController) {
-                return abortController.signal;
-            }
-            return void 0;
-        }
-
-        const abortController = new AbortController();
-        this.abortControllers.set(cancelToken, abortController);
-        return abortController.signal;
-    }
-
-    public abortRequest = (cancelToken: CancelToken) => {
-        const abortController = this.abortControllers.get(cancelToken)
-
-        if (abortController) {
-            abortController.abort();
-            this.abortControllers.delete(cancelToken);
-        }
-    }
-
-    public request = async <T = any, E = any>({
-        body,
-        secure,
-        path,
-        type,
-        query,
-        format,
-        baseUrl,
-        cancelToken,
-        ...params
-    }: FullRequestParams): Promise<HttpResponse<T, E>> => {
-        const secureParams = ((typeof secure === 'boolean' ? secure : this.baseApiParams.secure) && this.securityWorker && await this.securityWorker(this.securityData)) || {};
-        const requestParams = this.mergeRequestParams(params, secureParams);
-        const queryString = query && this.toQueryString(query);
-        const payloadFormatter = this.contentFormatters[type || ContentType.Json];
-        const responseFormat = format || requestParams.format;
-
-        return this.customFetch(
-        `${baseUrl || this.baseUrl || ""}${path}${queryString ? `?${queryString}` : ""}`,
-        {
-            ...requestParams,
-            headers: {
-            ...(requestParams.headers || {}),
-            ...(type && type !== ContentType.FormData ? { "Content-Type": type } : {}),
-            },
-            signal: (cancelToken ? this.createAbortSignal(cancelToken) : requestParams.signal) || null,
-            body: typeof body === "undefined" || body === null ? null : payloadFormatter(body),
-        }
-        ).then(async (response) => {
-            const r = response.clone() as HttpResponse<T, E>;
-            r.data = (null as unknown) as T;
-            r.error = (null as unknown) as E;
-
-            const data = !responseFormat ? r : await response[responseFormat]()
-                .then((data) => {
-                    if (r.ok) {
-                        r.data = data;
-                    } else {
-                        r.error = data;
-                    }
-                    return r;
-                })
-                .catch((e) => {
-                    r.error = e;
-                    return r;
-                });
-
-            if (cancelToken) {
-                this.abortControllers.delete(cancelToken);
-            }
-
-            if (!response.ok) throw data;
-            return data;
-        });
-    };
-}
-
-
-
+ 
+    export namespace AccessFeatures {
+        
 /**
-* @title wazo-confd
-* @version 1.1
-* @license GPL v3 (http://www.gnu.org/licenses/gpl.txt)
-* @baseUrl /1.1
-* @contact Wazo Dev Team <dev@wazo.community> (https://wazo-platform.org/)
-*  
-* Confd exposes an API for managing core resources on a Wazo server such as users, extensions, devices, voicemails, queues, etc. Resources can be associated together to provide additional functionality. For example: By associating a voicemail with a user, calls will automatically fallback on to the voicemail when the user cannot answer.
- * 
- * Implementation notes
- * ====================
- * 
- * Errors
- * ------
- * 
- * Responses containing errors will have a status code in the 400 or 500 class. A list of error messages will be returned in the body of the response as a JSON-encoded array:
- * 
- * ~~~
- * [
- *     "Input error - User not found",
- *     "Resource error - User not associated to a line"
- * ]
- * ~~~
- * 
- * 
- * Updating resources via PUT
- * --------------------------
- * 
- * When updating a resource, all fields become optional. In other words, only values that have been changed need to be sent to the server. Please note that this behavior may change in future versions of the API.
-*/
-export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType>  {
-
-
-
-  
-    accessFeatures = {
-  
-  /**
  * @description **Required ACL:** `confd.access_features.read`
- *
  * @tags access_features
  * @name ListAccessFeatures
  * @summary List access features
  * @request GET:/access_features
  * @secure
- */
-listAccessFeatures: (query?: {
-  /** Name of the field to use for sorting the list of items returned. */
-    order?: string,
+*/
+export namespace ListAccessFeatures {
+  export type RequestParams = {};
+  export type RequestQuery = {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
   /** Maximum number of items to return in the list */
     limit?: number,
   /** Number of items to skip over in the list. Useful for pagination. */
     offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 
-}, params: RequestParams = {}) =>
-    this.request<AccessFeatureItems, any>({
-        path: `/access_features`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = AccessFeatureItems;
+}
+        
+/**
  * @description **Required ACL:** `confd.access_features.create`
- *
  * @tags access_features
  * @name CreateAccessFeature
  * @summary Create access_feature
  * @request POST:/access_features
  * @secure
- */
-createAccessFeature: (body: AccessFeature, params: RequestParams = {}) =>
-    this.request<AccessFeature, Error>({
-        path: `/access_features`,
-        method: 'POST',
-                body: body,        secure: true,        type: ContentType.Json,        format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace CreateAccessFeature {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = AccessFeature;
+  export type RequestHeaders = {};
+  export type ResponseBody = AccessFeature;
+}
+        
+/**
  * @description **Required ACL:** `confd.access_features.{access_feature_id}.delete`
- *
  * @tags access_features
  * @name DeleteAccessFeature
  * @summary Delete access feature
  * @request DELETE:/access_features/{access_feature_id}
  * @secure
- */
-deleteAccessFeature: (accessFeatureId: number, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/access_features/${accessFeatureId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DeleteAccessFeature {
+  export type RequestParams = {
+  /** Access feature ID */
+    accessFeatureId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.access_features.{access_feature_id}.read`
- *
  * @tags access_features
  * @name GetAccessFeature
  * @summary Get access_feature
  * @request GET:/access_features/{access_feature_id}
  * @secure
- */
-getAccessFeature: (accessFeatureId: number, params: RequestParams = {}) =>
-    this.request<AccessFeature, Error>({
-        path: `/access_features/${accessFeatureId}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetAccessFeature {
+  export type RequestParams = {
+  /** Access feature ID */
+    accessFeatureId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = AccessFeature;
+}
+        
+/**
  * @description **Required ACL:** `confd.access_features.{access_feature_id}.update`
- *
  * @tags access_features
  * @name UpdateAccessFeature
  * @summary Update access_feature
  * @request PUT:/access_features/{access_feature_id}
  * @secure
- */
-updateAccessFeature: (accessFeatureId: number, body: AccessFeature, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/access_features/${accessFeatureId}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-    }
-    agents = {
-  
-  /**
+*/
+export namespace UpdateAccessFeature {
+  export type RequestParams = {
+  /** Access feature ID */
+    accessFeatureId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = AccessFeature;
+  export type RequestHeaders = {};
+  export type ResponseBody = any;
+}
+      }
+
+    export namespace Agents {
+        
+/**
  * @description **Required ACL:** `confd.agents.read`
- *
  * @tags agents
  * @name ListAgents
  * @summary List agents
  * @request GET:/agents
  * @secure
- */
-listAgents: (query?: {
-  /**
-   * Should the query include sub-tenants
-   * @default false
-   */
-    recurse?: boolean,
-  /** Name of the field to use for sorting the list of items returned. */
-    order?: string,
+*/
+export namespace ListAgents {
+  export type RequestParams = {};
+  export type RequestQuery = {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
   /** Maximum number of items to return in the list */
     limit?: number,
   /** Number of items to skip over in the list. Useful for pagination. */
     offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 
-}, params: RequestParams = {}) =>
-    this.request<AgentItems, any>({
-        path: `/agents`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = AgentItems;
+}
+        
+/**
  * @description **Required ACL:** `confd.agents.create`
- *
  * @tags agents
  * @name CreateAgent
  * @summary Create agent
  * @request POST:/agents
  * @secure
- */
-createAgent: (body: Agent, params: RequestParams = {}) =>
-    this.request<Agent, Error>({
-        path: `/agents`,
-        method: 'POST',
-                body: body,        secure: true,        type: ContentType.Json,        format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace CreateAgent {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = Agent;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = Agent;
+}
+        
+/**
  * @description **Required ACL:** `confd.agents.skills.read`
- *
  * @tags agents, skills
  * @name ListSkills
  * @summary List skill
  * @request GET:/agents/skills
  * @secure
- */
-listSkills: (query?: {
-  /**
-   * Should the query include sub-tenants
-   * @default false
-   */
-    recurse?: boolean,
-  /** Name of the field to use for sorting the list of items returned. */
-    order?: string,
+*/
+export namespace ListSkills {
+  export type RequestParams = {};
+  export type RequestQuery = {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
   /** Maximum number of items to return in the list */
     limit?: number,
   /** Number of items to skip over in the list. Useful for pagination. */
     offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 
-}, params: RequestParams = {}) =>
-    this.request<SkillItems, any>({
-        path: `/agents/skills`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = SkillItems;
+}
+        
+/**
  * @description **Required ACL:** `confd.agents.skills.create`
- *
  * @tags agents, skills
  * @name CreateSkill
  * @summary Create skill
  * @request POST:/agents/skills
  * @secure
- */
-createSkill: (body: Skill, params: RequestParams = {}) =>
-    this.request<Skill, Error>({
-        path: `/agents/skills`,
-        method: 'POST',
-                body: body,        secure: true,        type: ContentType.Json,        format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace CreateSkill {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = Skill;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = Skill;
+}
+        
+/**
  * @description **Required ACL:** `confd.agents.skills.{skill_id}.delete`
- *
  * @tags skills
  * @name DeleteSkill
  * @summary Delete skill
  * @request DELETE:/agents/skills/{skill_id}
  * @secure
- */
-deleteSkill: (skillId: number, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/agents/skills/${skillId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DeleteSkill {
+  export type RequestParams = {
+  /** Skill's ID */
+    skillId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.agents.skills.{skill_id}.read`
- *
  * @tags agents, skills
  * @name GetSkill
  * @summary Get skill
  * @request GET:/agents/skills/{skill_id}
  * @secure
- */
-getSkill: (skillId: number, params: RequestParams = {}) =>
-    this.request<Skill, Error>({
-        path: `/agents/skills/${skillId}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetSkill {
+  export type RequestParams = {
+  /** Skill's ID */
+    skillId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = Skill;
+}
+        
+/**
  * @description **Required ACL:** `confd.agents.skills.{skill_id}.update`
- *
  * @tags skills
  * @name UpdateSkill
  * @summary Update skill
  * @request PUT:/agents/skills/{skill_id}
  * @secure
- */
-updateSkill: (skillId: number, body: Skill, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/agents/skills/${skillId}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateSkill {
+  export type RequestParams = {
+  /** Skill's ID */
+    skillId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = Skill;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.agents.{agent_id}.delete`
- *
  * @tags agents
  * @name DeleteAgent
  * @summary Delete agent
  * @request DELETE:/agents/{agent_id}
  * @secure
- */
-deleteAgent: (agentId: number, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/agents/${agentId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DeleteAgent {
+  export type RequestParams = {
+  /** Agent’s ID */
+    agentId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.agents.{agent_id}.read`
- *
  * @tags agents
  * @name GetAgent
  * @summary Get agent
  * @request GET:/agents/{agent_id}
  * @secure
- */
-getAgent: (agentId: number, params: RequestParams = {}) =>
-    this.request<Agent, Error>({
-        path: `/agents/${agentId}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetAgent {
+  export type RequestParams = {
+  /** Agent’s ID */
+    agentId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = Agent;
+}
+        
+/**
  * @description **Required ACL:** `confd.agents.{agent_id}.update`
- *
  * @tags agents
  * @name UpdateAgent
  * @summary Update agent
  * @request PUT:/agents/{agent_id}
  * @secure
- */
-updateAgent: (agentId: number, body: Agent, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/agents/${agentId}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateAgent {
+  export type RequestParams = {
+  /** Agent’s ID */
+    agentId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = Agent;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.agents.{agent_id}.skills.{skill_id}.delete`
- *
  * @tags skills, agents
  * @name DissociateAgentSkill
  * @summary Dissociate agent and skill
  * @request DELETE:/agents/{agent_id}/skills/{skill_id}
  * @secure
- */
-dissociateAgentSkill: (agentId: number, skillId: number, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/agents/${agentId}/skills/${skillId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DissociateAgentSkill {
+  export type RequestParams = {
+  /** Agent’s ID */
+    agentId: number,
+  /** Skill's ID */
+    skillId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.agents.{agent_id}.skills.{skill_id}.update`
- *
  * @tags skills, agents
  * @name AssociateAgentSkill
  * @summary Associate agent and skill
  * @request PUT:/agents/{agent_id}/skills/{skill_id}
  * @secure
- */
-associateAgentSkill: (agentId: number, skillId: number, body: AgentSkill, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/agents/${agentId}/skills/${skillId}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-    }
-    applications = {
-  
-  /**
+*/
+export namespace AssociateAgentSkill {
+  export type RequestParams = {
+  /** Agent’s ID */
+    agentId: number,
+  /** Skill's ID */
+    skillId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = AgentSkill;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = void;
+}
+      }
+
+    export namespace Applications {
+        
+/**
  * @description **Required ACL:** `confd.applications.read`
- *
  * @tags applications
  * @name ListApplications
  * @summary List application
  * @request GET:/applications
  * @secure
- */
-listApplications: (query?: {
-  /**
-   * Should the query include sub-tenants
-   * @default false
-   */
-    recurse?: boolean,
-  /** Name of the field to use for sorting the list of items returned. */
-    order?: string,
+*/
+export namespace ListApplications {
+  export type RequestParams = {};
+  export type RequestQuery = {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
   /** Maximum number of items to return in the list */
     limit?: number,
   /** Number of items to skip over in the list. Useful for pagination. */
     offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 
-}, params: RequestParams = {}) =>
-    this.request<ApplicationItems, any>({
-        path: `/applications`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = ApplicationItems;
+}
+        
+/**
  * @description **Required ACL:** `confd.applications.create`
- *
  * @tags applications
  * @name CreateApplication
  * @summary Create application
  * @request POST:/applications
  * @secure
- */
-createApplication: (body: Application, params: RequestParams = {}) =>
-    this.request<Application, Error>({
-        path: `/applications`,
-        method: 'POST',
-                body: body,        secure: true,        type: ContentType.Json,        format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace CreateApplication {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = Application;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = Application;
+}
+        
+/**
  * @description **Required ACL:** `confd.applications.{application_uuid}.delete`
- *
  * @tags applications
  * @name DeleteApplication
  * @summary Delete application
  * @request DELETE:/applications/{application_uuid}
  * @secure
- */
-deleteApplication: (applicationUuid: number, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/applications/${applicationUuid}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DeleteApplication {
+  export type RequestParams = {
+  /** Application's UUID */
+    applicationUuid: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.applications.{application_uuid}.read`
- *
  * @tags applications
  * @name GetApplication
  * @summary Get application
  * @request GET:/applications/{application_uuid}
  * @secure
- */
-getApplication: (applicationUuid: number, params: RequestParams = {}) =>
-    this.request<Application, Error>({
-        path: `/applications/${applicationUuid}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetApplication {
+  export type RequestParams = {
+  /** Application's UUID */
+    applicationUuid: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = Application;
+}
+        
+/**
  * @description **Required ACL:** `confd.applications.{application_uuid}.update`
- *
  * @tags applications
  * @name UpdateApplication
  * @summary Update application
  * @request PUT:/applications/{application_uuid}
  * @secure
- */
-updateApplication: (applicationUuid: number, body: Application, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/applications/${applicationUuid}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-    }
-    asterisk = {
-  
-  /**
+*/
+export namespace UpdateApplication {
+  export type RequestParams = {
+  /** Application's UUID */
+    applicationUuid: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = Application;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+      }
+
+    export namespace Asterisk {
+        
+/**
  * @description **Required ACL:** `confd.asterisk.confbridge.wazo_default_bridge.read`
- *
  * @tags asterisk, conferences
  * @name ListAsteriskConfbridgeWazoDefaultBridge
  * @summary List ConfBridge wazo_default_bridge options
  * @request GET:/asterisk/confbridge/wazo_default_bridge
  * @secure
- */
-listAsteriskConfbridgeWazoDefaultBridge: (params: RequestParams = {}) =>
-    this.request<ConfBridgeConfiguration, any>({
-        path: `/asterisk/confbridge/wazo_default_bridge`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace ListAsteriskConfbridgeWazoDefaultBridge {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = ConfBridgeConfiguration;
+}
+        
+/**
  * @description **Required ACL:** `confd.asterisk.confbridge.wazo_default_bridge.update` **WARNING** This endpoint restore to default value or delete all fields that are not defined. All available configuration options are listed in the [sample](https://raw.githubusercontent.com/asterisk/asterisk/master/configs/samples/confbridge.conf.sample) Asterisk configuration file.
- *
  * @tags asterisk, conferences
  * @name UpdateAsteriskConfbridgeWazoDefaultBridge
  * @summary Update ConfBridge wazo_default_bridge option
  * @request PUT:/asterisk/confbridge/wazo_default_bridge
  * @secure
- */
-updateAsteriskConfbridgeWazoDefaultBridge: (body: ConfBridgeConfiguration, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/asterisk/confbridge/wazo_default_bridge`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateAsteriskConfbridgeWazoDefaultBridge {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = ConfBridgeConfiguration;
+  export type RequestHeaders = {};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.asterisk.confbridge.wazo_default_user.read`
- *
  * @tags asterisk, conferences
  * @name ListAsteriskConfbridgeWazoDefaultUser
  * @summary List ConfBridge wazo_default_user options
  * @request GET:/asterisk/confbridge/wazo_default_user
  * @secure
- */
-listAsteriskConfbridgeWazoDefaultUser: (params: RequestParams = {}) =>
-    this.request<ConfBridgeConfiguration, any>({
-        path: `/asterisk/confbridge/wazo_default_user`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace ListAsteriskConfbridgeWazoDefaultUser {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = ConfBridgeConfiguration;
+}
+        
+/**
  * @description **Required ACL:** `confd.asterisk.confbridge.wazo_default_user.update` **WARNING** This endpoint restore to default value or delete all fields that are not defined. All available configuration options are listed in the [sample](https://raw.githubusercontent.com/asterisk/asterisk/master/configs/samples/confbridge.conf.sample) Asterisk configuration file.
- *
  * @tags asterisk, conferences
  * @name UpdateAsteriskConfbridgeWazoDefaultUser
  * @summary Update ConfBridge wazo_default_user option
  * @request PUT:/asterisk/confbridge/wazo_default_user
  * @secure
- */
-updateAsteriskConfbridgeWazoDefaultUser: (body: ConfBridgeConfiguration, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/asterisk/confbridge/wazo_default_user`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateAsteriskConfbridgeWazoDefaultUser {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = ConfBridgeConfiguration;
+  export type RequestHeaders = {};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.asterisk.features.applicationmap.read`
- *
  * @tags asterisk
  * @name ListAsteriskFeaturesApplicationmap
  * @summary List Features applicationmap options
  * @request GET:/asterisk/features/applicationmap
  * @secure
- */
-listAsteriskFeaturesApplicationmap: (params: RequestParams = {}) =>
-    this.request<FeaturesConfiguration, any>({
-        path: `/asterisk/features/applicationmap`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace ListAsteriskFeaturesApplicationmap {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = FeaturesConfiguration;
+}
+        
+/**
  * @description **Required ACL:** `confd.asterisk.features.applicationmap.update` **WARNING** This endpoint restore to default value or delete all fields that are not defined.
- *
  * @tags asterisk
  * @name UpdateAsteriskFeaturesApplicationmap
  * @summary Update Features applicationmap option
  * @request PUT:/asterisk/features/applicationmap
  * @secure
- */
-updateAsteriskFeaturesApplicationmap: (body: FeaturesConfiguration, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/asterisk/features/applicationmap`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateAsteriskFeaturesApplicationmap {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = FeaturesConfiguration;
+  export type RequestHeaders = {};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.asterisk.features.featuremap.read`
- *
  * @tags asterisk
  * @name ListAsteriskFeaturesFeaturemap
  * @summary List Features featuremap options
  * @request GET:/asterisk/features/featuremap
  * @secure
- */
-listAsteriskFeaturesFeaturemap: (params: RequestParams = {}) =>
-    this.request<FeaturesConfiguration, any>({
-        path: `/asterisk/features/featuremap`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace ListAsteriskFeaturesFeaturemap {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = FeaturesConfiguration;
+}
+        
+/**
  * @description **Required ACL:** `confd.asterisk.features.featuremap.update` **WARNING** This endpoint restore to default value or delete all fields that are not defined.
- *
  * @tags asterisk
  * @name UpdateAsteriskFeaturesFeaturemap
  * @summary Update Features featuremap option
  * @request PUT:/asterisk/features/featuremap
  * @secure
- */
-updateAsteriskFeaturesFeaturemap: (body: FeaturesConfiguration, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/asterisk/features/featuremap`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateAsteriskFeaturesFeaturemap {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = FeaturesConfiguration;
+  export type RequestHeaders = {};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.asterisk.features.general.read`
- *
  * @tags asterisk
  * @name ListAsteriskFeaturesGeneral
  * @summary List Features general options
  * @request GET:/asterisk/features/general
  * @secure
- */
-listAsteriskFeaturesGeneral: (params: RequestParams = {}) =>
-    this.request<FeaturesConfiguration, any>({
-        path: `/asterisk/features/general`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace ListAsteriskFeaturesGeneral {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = FeaturesConfiguration;
+}
+        
+/**
  * @description **Required ACL:** `confd.asterisk.features.general.update` **WARNING** This endpoint restore to default value or delete all fields that are not defined.
- *
  * @tags asterisk
  * @name UpdateAsteriskFeaturesGeneral
  * @summary Update Features general option
  * @request PUT:/asterisk/features/general
  * @secure
- */
-updateAsteriskFeaturesGeneral: (body: FeaturesConfiguration, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/asterisk/features/general`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateAsteriskFeaturesGeneral {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = FeaturesConfiguration;
+  export type RequestHeaders = {};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.asterisk.hep.general.read`
- *
  * @tags asterisk
  * @name ListAsteriskHepGeneral
  * @summary List HEP general options
  * @request GET:/asterisk/hep/general
  * @secure
- */
-listAsteriskHepGeneral: (params: RequestParams = {}) =>
-    this.request<HEPConfiguration, any>({
-        path: `/asterisk/hep/general`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace ListAsteriskHepGeneral {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = HEPConfiguration;
+}
+        
+/**
  * @description **Required ACL:** `confd.asterisk.hep.general.update` **WARNING** This endpoint restore to default value or delete all fields that are not defined.
- *
  * @tags asterisk
  * @name UpdateAsteriskHepGeneral
  * @summary Update HEP general option
  * @request PUT:/asterisk/hep/general
  * @secure
- */
-updateAsteriskHepGeneral: (body: HEPConfiguration, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/asterisk/hep/general`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateAsteriskHepGeneral {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = HEPConfiguration;
+  export type RequestHeaders = {};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.asterisk.iax.callnumberlimits.read`
- *
  * @tags asterisk, iax
  * @name ListAsteriskIaxCallnumberlimits
  * @summary List IAX callnumberlimits options
  * @request GET:/asterisk/iax/callnumberlimits
  * @secure
- */
-listAsteriskIaxCallnumberlimits: (params: RequestParams = {}) =>
-    this.request<IAXCallNumberLimitss, any>({
-        path: `/asterisk/iax/callnumberlimits`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace ListAsteriskIaxCallnumberlimits {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = IAXCallNumberLimitss;
+}
+        
+/**
  * @description **Required ACL:** `confd.asterisk.iax.callnumberlimits.update` **WARNING** This endpoint restore to default value or delete all fields that are not defined.
- *
  * @tags asterisk, iax
  * @name UpdateAsteriskIaxCallnumberlimits
  * @summary Update IAX callnumberlimits option
  * @request PUT:/asterisk/iax/callnumberlimits
  * @secure
- */
-updateAsteriskIaxCallnumberlimits: (body: IAXCallNumberLimitss, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/asterisk/iax/callnumberlimits`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateAsteriskIaxCallnumberlimits {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = IAXCallNumberLimitss;
+  export type RequestHeaders = {};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.asterisk.iax.general.read`
- *
  * @tags asterisk
  * @name ListAsteriskIaxGeneral
  * @summary List IAX general options
  * @request GET:/asterisk/iax/general
  * @secure
- */
-listAsteriskIaxGeneral: (params: RequestParams = {}) =>
-    this.request<IAXGeneral, any>({
-        path: `/asterisk/iax/general`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace ListAsteriskIaxGeneral {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = IAXGeneral;
+}
+        
+/**
  * @description **Required ACL:** `confd.asterisk.iax.general.update` **WARNING** This endpoint restore to default value or delete all fields that are not defined.
- *
  * @tags asterisk
  * @name UpdateAsteriskIaxGeneral
  * @summary Update IAX general option
  * @request PUT:/asterisk/iax/general
  * @secure
- */
-updateAsteriskIaxGeneral: (body: IAXGeneral, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/asterisk/iax/general`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateAsteriskIaxGeneral {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = IAXGeneral;
+  export type RequestHeaders = {};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:**: `confd.asterisk.pjsip.doc.read` List all available configuration options for PJSIP, those values are used to validate to content of POST and PUT requests.
- *
  * @tags asterisk, sip
  * @name ShowPjsipDoc
  * @summary List all PJSIP configuration options
  * @request GET:/asterisk/pjsip/doc
  * @secure
- */
-showPjsipDoc: (params: RequestParams = {}) =>
-    this.request<PJSIPConfigurationOptions, Error>({
-        path: `/asterisk/pjsip/doc`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace ShowPjsipDoc {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = PJSIPConfigurationOptions;
+}
+        
+/**
  * @description **Required ACL:** `confd.asterisk.pjsip.global.read`
- *
  * @tags asterisk, sip
  * @name ListAsteriskPjsipGlobal
  * @summary List of PJSIP options for the `global` section
  * @request GET:/asterisk/pjsip/global
  * @secure
- */
-listAsteriskPjsipGlobal: (params: RequestParams = {}) =>
-    this.request<PJSIPGlobal, any>({
-        path: `/asterisk/pjsip/global`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace ListAsteriskPjsipGlobal {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = PJSIPGlobal;
+}
+        
+/**
  * @description **Required ACL:** `confd.asterisk.pjsip.global.update` The PJSIP global configuration is shared among all tenants of an instance. **WARNING** This endpoint restore to default value or delete all fields that are not defined.
- *
  * @tags sip, asterisk
  * @name UpdateAsteriskPjsipGlobal
  * @summary Update PJSIP section options
  * @request PUT:/asterisk/pjsip/global
  * @secure
- */
-updateAsteriskPjsipGlobal: (body: PJSIPGlobal, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/asterisk/pjsip/global`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateAsteriskPjsipGlobal {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = PJSIPGlobal;
+  export type RequestHeaders = {};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.asterisk.pjsip.system.read`
- *
  * @tags asterisk, sip
  * @name ListAsteriskPjsipSystem
  * @summary List of PJSIP options for the `system` section
  * @request GET:/asterisk/pjsip/system
  * @secure
- */
-listAsteriskPjsipSystem: (params: RequestParams = {}) =>
-    this.request<PJSIPSystem, any>({
-        path: `/asterisk/pjsip/system`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace ListAsteriskPjsipSystem {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = PJSIPSystem;
+}
+        
+/**
  * @description **Required ACL:** `confd.asterisk.pjsip.system.update` The PJSIP system configuration is shared among all tenants of an instance. **WARNING** This endpoint restore to default value or delete all fields that are not defined.
- *
  * @tags sip, asterisk
  * @name UpdateAsteriskPjsipSystem
  * @summary Update PJSIP section options
  * @request PUT:/asterisk/pjsip/system
  * @secure
- */
-updateAsteriskPjsipSystem: (body: PJSIPSystem, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/asterisk/pjsip/system`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateAsteriskPjsipSystem {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = PJSIPSystem;
+  export type RequestHeaders = {};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.asterisk.queue.general.read`
- *
  * @tags asterisk
  * @name ListAsteriskQueueGeneral
  * @summary List Queue general options
  * @request GET:/asterisk/queues/general
  * @secure
- */
-listAsteriskQueueGeneral: (params: RequestParams = {}) =>
-    this.request<QueueGeneral, any>({
-        path: `/asterisk/queues/general`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace ListAsteriskQueueGeneral {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = QueueGeneral;
+}
+        
+/**
  * @description **Required ACL:** `confd.asterisk.queue.general.update` **WARNING** This endpoint restore to default value or delete all fields that are not defined.
- *
  * @tags asterisk
  * @name UpdateAsteriskQueueGeneral
  * @summary Update Queue general option
  * @request PUT:/asterisk/queues/general
  * @secure
- */
-updateAsteriskQueueGeneral: (body: QueueGeneral, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/asterisk/queues/general`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateAsteriskQueueGeneral {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = QueueGeneral;
+  export type RequestHeaders = {};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.asterisk.rtp.general.read`
- *
  * @tags asterisk
  * @name ListAsteriskRtpGeneral
  * @summary List RTP general options
  * @request GET:/asterisk/rtp/general
  * @secure
- */
-listAsteriskRtpGeneral: (params: RequestParams = {}) =>
-    this.request<RTPConfiguration, any>({
-        path: `/asterisk/rtp/general`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace ListAsteriskRtpGeneral {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = RTPConfiguration;
+}
+        
+/**
  * @description **Required ACL:** `confd.asterisk.rtp.general.update` **WARNING** This endpoint restore to default value or delete all fields that are not defined.
- *
  * @tags asterisk
  * @name UpdateAsteriskRtpGeneral
  * @summary Update RTP general option
  * @request PUT:/asterisk/rtp/general
  * @secure
- */
-updateAsteriskRtpGeneral: (body: RTPConfiguration, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/asterisk/rtp/general`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateAsteriskRtpGeneral {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = RTPConfiguration;
+  export type RequestHeaders = {};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.asterisk.rtp.ice_host_candidates.read`
- *
  * @tags asterisk
  * @name ListAsteriskRtpIceHostCandidates
  * @summary List RTP ice_host_candidates options
  * @request GET:/asterisk/rtp/ice_host_candidates
  * @secure
- */
-listAsteriskRtpIceHostCandidates: (params: RequestParams = {}) =>
-    this.request<RTPConfiguration, any>({
-        path: `/asterisk/rtp/ice_host_candidates`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace ListAsteriskRtpIceHostCandidates {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = RTPConfiguration;
+}
+        
+/**
  * @description **Required ACL:** `confd.asterisk.rtp.ice_host_candidates.update` **WARNING** This endpoint restore to default value or delete all fields that are not defined.
- *
  * @tags asterisk
  * @name UpdateAsteriskRtpIceHostCandidates
  * @summary Update RTP ice_host_candidates option
  * @request PUT:/asterisk/rtp/ice_host_candidates
  * @secure
- */
-updateAsteriskRtpIceHostCandidates: (body: RTPConfiguration, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/asterisk/rtp/ice_host_candidates`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateAsteriskRtpIceHostCandidates {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = RTPConfiguration;
+  export type RequestHeaders = {};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.asterisk.sccp.general.read`
- *
  * @tags asterisk, sccp
  * @name ListAsteriskSccpGeneral
  * @summary List SCCP general options
  * @request GET:/asterisk/sccp/general
  * @secure
- */
-listAsteriskSccpGeneral: (params: RequestParams = {}) =>
-    this.request<SCCPGeneral, any>({
-        path: `/asterisk/sccp/general`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace ListAsteriskSccpGeneral {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = SCCPGeneral;
+}
+        
+/**
  * @description **Required ACL:** `confd.asterisk.sccp.general.update` **WARNING** This endpoint restore to default value or delete all fields that are not defined.
- *
  * @tags asterisk, sccp
  * @name UpdateAsteriskSccpGeneral
  * @summary Update SCCP general option
  * @request PUT:/asterisk/sccp/general
  * @secure
- */
-updateAsteriskSccpGeneral: (body: SCCPGeneral, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/asterisk/sccp/general`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateAsteriskSccpGeneral {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = SCCPGeneral;
+  export type RequestHeaders = {};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.asterisk.voicemail.general.read`
- *
  * @tags asterisk
  * @name ListAsteriskVoicemailGeneral
  * @summary List Voicemail general options
  * @request GET:/asterisk/voicemail/general
  * @secure
- */
-listAsteriskVoicemailGeneral: (params: RequestParams = {}) =>
-    this.request<VoicemailGeneral, any>({
-        path: `/asterisk/voicemail/general`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace ListAsteriskVoicemailGeneral {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = VoicemailGeneral;
+}
+        
+/**
  * @description **Required ACL:** `confd.asterisk.voicemail.general.update` **WARNING** This endpoint restore to default value or delete all fields that are not defined.
- *
  * @tags asterisk
  * @name UpdateAsteriskVoicemailGeneral
  * @summary Update Voicemail general option
  * @request PUT:/asterisk/voicemail/general
  * @secure
- */
-updateAsteriskVoicemailGeneral: (body: VoicemailGeneral, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/asterisk/voicemail/general`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateAsteriskVoicemailGeneral {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = VoicemailGeneral;
+  export type RequestHeaders = {};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.asterisk.voicemail.zonemessages.read`
- *
  * @tags asterisk, voicemails
  * @name ListAsteriskVoicemailZonemessages
  * @summary List Voicemail zonemessages options
  * @request GET:/asterisk/voicemail/zonemessages
  * @secure
- */
-listAsteriskVoicemailZonemessages: (params: RequestParams = {}) =>
-    this.request<VoicemailZoneMessages, any>({
-        path: `/asterisk/voicemail/zonemessages`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace ListAsteriskVoicemailZonemessages {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = VoicemailZoneMessages;
+}
+        
+/**
  * @description **Required ACL:** `confd.asterisk.voicemail.zonemessages.update` **WARNING** This endpoint restore to default value or delete all fields that are not defined.
- *
  * @tags asterisk, voicemails
  * @name UpdateAsteriskVoicemailZonemessages
  * @summary Update Voicemail zonemessages option
  * @request PUT:/asterisk/voicemail/zonemessages
  * @secure
- */
-updateAsteriskVoicemailZonemessages: (body: VoicemailZoneMessages, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/asterisk/voicemail/zonemessages`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-    }
-    callfilters = {
-  
-  /**
+*/
+export namespace UpdateAsteriskVoicemailZonemessages {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = VoicemailZoneMessages;
+  export type RequestHeaders = {};
+  export type ResponseBody = any;
+}
+      }
+
+    export namespace Callfilters {
+        
+/**
  * @description **Required ACL:** `confd.callfilters.read`
- *
  * @tags callfilters
  * @name ListCallFilters
  * @summary List call filters
  * @request GET:/callfilters
  * @secure
- */
-listCallFilters: (query?: {
-  /**
-   * Should the query include sub-tenants
-   * @default false
-   */
-    recurse?: boolean,
-  /** Name of the field to use for sorting the list of items returned. */
-    order?: string,
+*/
+export namespace ListCallFilters {
+  export type RequestParams = {};
+  export type RequestQuery = {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
   /** Maximum number of items to return in the list */
     limit?: number,
   /** Number of items to skip over in the list. Useful for pagination. */
     offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 
-}, params: RequestParams = {}) =>
-    this.request<CallFilterItems, any>({
-        path: `/callfilters`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = CallFilterItems;
+}
+        
+/**
  * @description **Required ACL:** `confd.callfilters.create`
- *
  * @tags callfilters
  * @name CreateCallfilter
  * @summary Create call filter
  * @request POST:/callfilters
  * @secure
- */
-createCallfilter: (body: CallFilter, params: RequestParams = {}) =>
-    this.request<CallFilter, Error>({
-        path: `/callfilters`,
-        method: 'POST',
-                body: body,        secure: true,        type: ContentType.Json,        format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace CreateCallfilter {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = CallFilter;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = CallFilter;
+}
+        
+/**
  * @description **Required ACL:** `confd.callfilters.{callfilter_id}.delete` . The call filter will also be removed from all users, groups, incoming calls and outgoing calls.
- *
  * @tags callfilters
  * @name DeleteCallfilter
  * @summary Delete call filter
  * @request DELETE:/callfilters/{callfilter_id}
  * @secure
- */
-deleteCallfilter: (callfilterId: number, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/callfilters/${callfilterId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DeleteCallfilter {
+  export type RequestParams = {
+  /** Call Filter's ID */
+    callfilterId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.callfilters.{callfilter_id}.read`
- *
  * @tags callfilters
  * @name GetCallfilter
  * @summary Get call filter
  * @request GET:/callfilters/{callfilter_id}
  * @secure
- */
-getCallfilter: (callfilterId: number, params: RequestParams = {}) =>
-    this.request<CallFilter, Error>({
-        path: `/callfilters/${callfilterId}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetCallfilter {
+  export type RequestParams = {
+  /** Call Filter's ID */
+    callfilterId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = CallFilter;
+}
+        
+/**
  * @description **Required ACL:** `confd.callfilters.{callfilter_id}.update`
- *
  * @tags callfilters
  * @name UpdateCallfilter
  * @summary Update call filter
  * @request PUT:/callfilters/{callfilter_id}
  * @secure
- */
-updateCallfilter: (callfilterId: number, body: CallFilter, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/callfilters/${callfilterId}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateCallfilter {
+  export type RequestParams = {
+  /** Call Filter's ID */
+    callfilterId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = CallFilter;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.callfilters.{callfilter_id}.fallbacks.read`
- *
  * @tags callfilters
  * @name GetCallFilterFallback
  * @summary List all fallbacks for call filter
  * @request GET:/callfilters/{callfilter_id}/fallbacks
  * @secure
- */
-getCallFilterFallback: (callfilterId: number, params: RequestParams = {}) =>
-    this.request<CallFilterFallbacks, any>({
-        path: `/callfilters/${callfilterId}/fallbacks`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetCallFilterFallback {
+  export type RequestParams = {
+  /** Call Filter's ID */
+    callfilterId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = CallFilterFallbacks;
+}
+        
+/**
  * @description **Required ACL:** `confd.callfilters.{callfilter_id}.fallbacks.update` **WARNING** This endpoint delete all fields that are not defined.
- *
  * @tags callfilters
  * @name UpdateCallFilterFallback
  * @summary Update call filter's fallbacks
  * @request PUT:/callfilters/{callfilter_id}/fallbacks
  * @secure
- */
-updateCallFilterFallback: (callfilterId: number, body: CallFilterFallbacks, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/callfilters/${callfilterId}/fallbacks`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateCallFilterFallback {
+  export type RequestParams = {
+  /** Call Filter's ID */
+    callfilterId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = CallFilterFallbacks;
+  export type RequestHeaders = {};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.callfilters.{callfilter_id}.recipients.users.update` **WARNING** This endpoint remove all recipients which are not defined.
- *
  * @tags callfilters, users
  * @name UpdateCallFilterCallerUsers
  * @summary Update call filter and recipients
  * @request PUT:/callfilters/{callfilter_id}/recipients/users
  * @secure
- */
-updateCallFilterCallerUsers: (callfilterId: number, body: CallFilterRecipientUsersUuid, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/callfilters/${callfilterId}/recipients/users`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateCallFilterCallerUsers {
+  export type RequestParams = {
+  /** Call Filter's ID */
+    callfilterId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = CallFilterRecipientUsersUuid;
+  export type RequestHeaders = {};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.callfilters.{callfilter_id}.surrogates.users.update` **WARNING** This endpoint remove all surrogates which are not defined.
- *
  * @tags callfilters, users
  * @name UpdateCallFilterMemberUsers
  * @summary Update call filter and surrogates
  * @request PUT:/callfilters/{callfilter_id}/surrogates/users
  * @secure
- */
-updateCallFilterMemberUsers: (callfilterId: number, body: UsersUuid, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/callfilters/${callfilterId}/surrogates/users`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-    }
-    callpermissions = {
-  
-  /**
+*/
+export namespace UpdateCallFilterMemberUsers {
+  export type RequestParams = {
+  /** Call Filter's ID */
+    callfilterId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = UsersUuid;
+  export type RequestHeaders = {};
+  export type ResponseBody = void;
+}
+      }
+
+    export namespace Callpermissions {
+        
+/**
  * @description **Required ACL:** `confd.callpermissions.read`
- *
  * @tags callpermissions
  * @name ListCallpermissions
  * @summary List call permissions
  * @request GET:/callpermissions
  * @secure
- */
-listCallpermissions: (query?: {
-  /**
-   * Should the query include sub-tenants
-   * @default false
-   */
-    recurse?: boolean,
-  /** Name of the field to use for sorting the list of items returned. */
-    order?: string,
+*/
+export namespace ListCallpermissions {
+  export type RequestParams = {};
+  export type RequestQuery = {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
   /** Maximum number of items to return in the list */
     limit?: number,
   /** Number of items to skip over in the list. Useful for pagination. */
     offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 
-}, params: RequestParams = {}) =>
-    this.request<CallPermissionItems, any>({
-        path: `/callpermissions`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = CallPermissionItems;
+}
+        
+/**
  * @description **Required ACL:** `confd.callpermissions.create`
- *
  * @tags callpermissions
  * @name CreateCallpermission
  * @summary Create call permission
  * @request POST:/callpermissions
  * @secure
- */
-createCallpermission: (body: CallPermission, params: RequestParams = {}) =>
-    this.request<CallPermission, Error>({
-        path: `/callpermissions`,
-        method: 'POST',
-                body: body,        secure: true,        type: ContentType.Json,        format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace CreateCallpermission {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = CallPermission;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = CallPermission;
+}
+        
+/**
  * @description **Required ACL:** `confd.callpermissions.{callpermission_id}.delete` . The call permission will also be removed from all users, groups, incoming calls and outgoing calls.
- *
  * @tags callpermissions
  * @name DeleteCallpermission
  * @summary Delete call permission
  * @request DELETE:/callpermissions/{callpermission_id}
  * @secure
- */
-deleteCallpermission: (callpermissionId: number, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/callpermissions/${callpermissionId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DeleteCallpermission {
+  export type RequestParams = {
+  /** Call Permission's ID */
+    callpermissionId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.callpermissions.{callpermission_id}.read`
- *
  * @tags callpermissions
  * @name GetCallpermission
  * @summary Get call permission
  * @request GET:/callpermissions/{callpermission_id}
  * @secure
- */
-getCallpermission: (callpermissionId: number, params: RequestParams = {}) =>
-    this.request<CallPermission, Error>({
-        path: `/callpermissions/${callpermissionId}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetCallpermission {
+  export type RequestParams = {
+  /** Call Permission's ID */
+    callpermissionId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = CallPermission;
+}
+        
+/**
  * @description **Required ACL:** `confd.callpermissions.{callpermission_id}.update`
- *
  * @tags callpermissions
  * @name UpdateCallpermission
  * @summary Update call permission
  * @request PUT:/callpermissions/{callpermission_id}
  * @secure
- */
-updateCallpermission: (callpermissionId: number, body: CallPermission, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/callpermissions/${callpermissionId}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-    }
-    callpickups = {
-  
-  /**
+*/
+export namespace UpdateCallpermission {
+  export type RequestParams = {
+  /** Call Permission's ID */
+    callpermissionId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = CallPermission;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+      }
+
+    export namespace Callpickups {
+        
+/**
  * @description **Required ACL:** `confd.callpickups.read`
- *
  * @tags callpickups
  * @name ListCallPickups
  * @summary List call pickups
  * @request GET:/callpickups
  * @secure
- */
-listCallPickups: (query?: {
-  /**
-   * Should the query include sub-tenants
-   * @default false
-   */
-    recurse?: boolean,
-  /** Name of the field to use for sorting the list of items returned. */
-    order?: string,
+*/
+export namespace ListCallPickups {
+  export type RequestParams = {};
+  export type RequestQuery = {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
   /** Maximum number of items to return in the list */
     limit?: number,
   /** Number of items to skip over in the list. Useful for pagination. */
     offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 
-}, params: RequestParams = {}) =>
-    this.request<CallPickupItems, any>({
-        path: `/callpickups`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = CallPickupItems;
+}
+        
+/**
  * @description **Required ACL:** `confd.callpickups.create`
- *
  * @tags callpickups
  * @name CreateCallpickup
  * @summary Create call pickup
  * @request POST:/callpickups
  * @secure
- */
-createCallpickup: (body: CallPickup, params: RequestParams = {}) =>
-    this.request<CallPickup, Error>({
-        path: `/callpickups`,
-        method: 'POST',
-                body: body,        secure: true,        type: ContentType.Json,        format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace CreateCallpickup {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = CallPickup;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = CallPickup;
+}
+        
+/**
  * @description **Required ACL:** `confd.callpickups.{callpickup_id}.delete`
- *
  * @tags callpickups
  * @name DeleteCallpickup
  * @summary Delete call pickup
  * @request DELETE:/callpickups/{callpickup_id}
  * @secure
- */
-deleteCallpickup: (callpickupId: number, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/callpickups/${callpickupId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DeleteCallpickup {
+  export type RequestParams = {
+  /** Call Pickup's ID */
+    callpickupId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.callpickups.{callpickup_id}.read`
- *
  * @tags callpickups
  * @name GetCallpickup
  * @summary Get call pickup
  * @request GET:/callpickups/{callpickup_id}
  * @secure
- */
-getCallpickup: (callpickupId: number, params: RequestParams = {}) =>
-    this.request<CallPickup, Error>({
-        path: `/callpickups/${callpickupId}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetCallpickup {
+  export type RequestParams = {
+  /** Call Pickup's ID */
+    callpickupId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = CallPickup;
+}
+        
+/**
  * @description **Required ACL:** `confd.callpickups.{callpickup_id}.update`
- *
  * @tags callpickups
  * @name UpdateCallpickup
  * @summary Update call pickup
  * @request PUT:/callpickups/{callpickup_id}
  * @secure
- */
-updateCallpickup: (callpickupId: number, body: CallPickup, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/callpickups/${callpickupId}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateCallpickup {
+  export type RequestParams = {
+  /** Call Pickup's ID */
+    callpickupId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = CallPickup;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.callpickups.{callpickup_id}.interceptors.groups.update` **WARNING** This endpoint remove all interceptors which are not defined.
- *
  * @tags callpickups, groups
  * @name UpdateCallPickupInterceptorGroups
  * @summary Update call pickup and interceptors
  * @request PUT:/callpickups/{callpickup_id}/interceptors/groups
  * @secure
- */
-updateCallPickupInterceptorGroups: (callpickupId: number, body: GroupsID, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/callpickups/${callpickupId}/interceptors/groups`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateCallPickupInterceptorGroups {
+  export type RequestParams = {
+  /** Call Pickup's ID */
+    callpickupId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = GroupsID;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.callpickups.{callpickup_id}.interceptors.users.update` **WARNING** This endpoint remove all interceptors which are not defined.
- *
  * @tags callpickups, users
  * @name UpdateCallPickupInterceptorUsers
  * @summary Update call pickup and interceptors
  * @request PUT:/callpickups/{callpickup_id}/interceptors/users
  * @secure
- */
-updateCallPickupInterceptorUsers: (callpickupId: number, body: UsersUuid, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/callpickups/${callpickupId}/interceptors/users`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateCallPickupInterceptorUsers {
+  export type RequestParams = {
+  /** Call Pickup's ID */
+    callpickupId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = UsersUuid;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.callpickups.{callpickup_id}.targets.groups.update` **WARNING** This endpoint remove all targets which are not defined.
- *
  * @tags callpickups, groups
  * @name UpdateCallPickupTargetGroups
  * @summary Update call pickup and targets
  * @request PUT:/callpickups/{callpickup_id}/targets/groups
  * @secure
- */
-updateCallPickupTargetGroups: (callpickupId: number, body: GroupsID, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/callpickups/${callpickupId}/targets/groups`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateCallPickupTargetGroups {
+  export type RequestParams = {
+  /** Call Pickup's ID */
+    callpickupId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = GroupsID;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.callpickups.{callpickup_id}.targets.users.update` **WARNING** This endpoint remove all targets which are not defined.
- *
  * @tags callpickups, users
  * @name UpdateCallPickupTargetUsers
  * @summary Update call pickup and targets
  * @request PUT:/callpickups/{callpickup_id}/targets/users
  * @secure
- */
-updateCallPickupTargetUsers: (callpickupId: number, body: UsersUuid, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/callpickups/${callpickupId}/targets/users`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-    }
-    conferences = {
-  
-  /**
+*/
+export namespace UpdateCallPickupTargetUsers {
+  export type RequestParams = {
+  /** Call Pickup's ID */
+    callpickupId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = UsersUuid;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = void;
+}
+      }
+
+    export namespace Conferences {
+        
+/**
  * @description **Required ACL:** `confd.conferences.read`
- *
  * @tags conferences
  * @name ListConferences
  * @summary List conference
  * @request GET:/conferences
  * @secure
- */
-listConferences: (query?: {
-  /**
-   * Should the query include sub-tenants
-   * @default false
-   */
-    recurse?: boolean,
-  /** Name of the field to use for sorting the list of items returned. */
-    order?: string,
+*/
+export namespace ListConferences {
+  export type RequestParams = {};
+  export type RequestQuery = {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
   /** Maximum number of items to return in the list */
     limit?: number,
   /** Number of items to skip over in the list. Useful for pagination. */
     offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 
-}, params: RequestParams = {}) =>
-    this.request<ConferenceItems, any>({
-        path: `/conferences`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = ConferenceItems;
+}
+        
+/**
  * @description **Required ACL:** `confd.conferences.create` All conferences have the same menu. Please consult the asterisk [documentation](https://raw.githubusercontent.com/asterisk/asterisk/master/configs/samples/confbridge.conf.sample) for definitions: ``` * = playback_and_continue 1 = toggle_mute 4 = decrease_listening_volume 5 = reset_listening_volume 6 = increase_listening_volume 7 = decrease_talking_volume 8 = reset_talking_volume 9 = increase_talking_volume ``` And the following options are added to the admin user: ``` 2 = admin_toggle_conference_lock 3 = admin_kick_last 0 = admin_toggle_mute_participants' ```
- *
  * @tags conferences
  * @name CreateConference
  * @summary Create conference
  * @request POST:/conferences
  * @secure
- */
-createConference: (body: Conference, params: RequestParams = {}) =>
-    this.request<Conference, Error>({
-        path: `/conferences`,
-        method: 'POST',
-                body: body,        secure: true,        type: ContentType.Json,        format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace CreateConference {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = Conference;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = Conference;
+}
+        
+/**
  * @description **Required ACL:** `confd.conferences.{conference_id}.delete`
- *
  * @tags conferences
  * @name DeleteConference
  * @summary Delete conference
  * @request DELETE:/conferences/{conference_id}
  * @secure
- */
-deleteConference: (conferenceId: number, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/conferences/${conferenceId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DeleteConference {
+  export type RequestParams = {
+  /** Conference's ID */
+    conferenceId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.conferences.{conference_id}.read`
- *
  * @tags conferences
  * @name GetConference
  * @summary Get conference
  * @request GET:/conferences/{conference_id}
  * @secure
- */
-getConference: (conferenceId: number, params: RequestParams = {}) =>
-    this.request<Conference, Error>({
-        path: `/conferences/${conferenceId}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetConference {
+  export type RequestParams = {
+  /** Conference's ID */
+    conferenceId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = Conference;
+}
+        
+/**
  * @description **Required ACL:** `confd.conferences.{conference_id}.update`
- *
  * @tags conferences
  * @name UpdateConference
  * @summary Update conference
  * @request PUT:/conferences/{conference_id}
  * @secure
- */
-updateConference: (conferenceId: number, body: Conference, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/conferences/${conferenceId}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateConference {
+  export type RequestParams = {
+  /** Conference's ID */
+    conferenceId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = Conference;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.conferences.{conference_id}.extensions.{extension_id}.delete`
- *
  * @tags conferences, extensions
  * @name DissociateConferenceExtension
  * @summary Dissociate conference and extension
  * @request DELETE:/conferences/{conference_id}/extensions/{extension_id}
  * @secure
- */
-dissociateConferenceExtension: (conferenceId: number, extensionId: number, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/conferences/${conferenceId}/extensions/${extensionId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DissociateConferenceExtension {
+  export type RequestParams = {
+  /** Conference's ID */
+    conferenceId: number,
+    extensionId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.conferences.{conference_id}.extensions.{extension_id}.update`
- *
  * @tags conferences, extensions
  * @name AssociateConferenceExtension
  * @summary Associate conference and extension
  * @request PUT:/conferences/{conference_id}/extensions/{extension_id}
  * @secure
- */
-associateConferenceExtension: (conferenceId: number, extensionId: number, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/conferences/${conferenceId}/extensions/${extensionId}`,
-        method: 'PUT',
-                        secure: true,                        ...params,
-    }),
-    }
-    configuration = {
-  
-  /**
+*/
+export namespace AssociateConferenceExtension {
+  export type RequestParams = {
+  /** Conference's ID */
+    conferenceId: number,
+    extensionId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = void;
+}
+      }
+
+    export namespace Configuration {
+        
+/**
  * @description **Required ACL:** `confd.configuration.live_reload.read`
- *
  * @tags configuration
  * @name GetConfiguration
  * @summary Get live reload status
  * @request GET:/configuration/live_reload
  * @secure
- */
-getConfiguration: (params: RequestParams = {}) =>
-    this.request<LiveReload, any>({
-        path: `/configuration/live_reload`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetConfiguration {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = LiveReload;
+}
+        
+/**
  * @description **Required ACL:** `confd.configuration.live_reload.update`
- *
  * @tags configuration
  * @name UpdateConfiguration
  * @summary Update live reload status
  * @request PUT:/configuration/live_reload
  * @secure
- */
-updateConfiguration: (body: LiveReload, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/configuration/live_reload`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-    }
-    contexts = {
-  
-  /**
+*/
+export namespace UpdateConfiguration {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = LiveReload;
+  export type RequestHeaders = {};
+  export type ResponseBody = any;
+}
+      }
+
+    export namespace Contexts {
+        
+/**
  * @description **Required ACL:** `confd.contexts.read`
- *
  * @tags contexts
  * @name ListContexts
  * @summary List contexts
  * @request GET:/contexts
  * @secure
- */
-listContexts: (query?: {
-  /**
-   * Should the query include sub-tenants
-   * @default false
-   */
-    recurse?: boolean,
-  /** Name of the field to use for sorting the list of items returned. */
-    order?: string,
+*/
+export namespace ListContexts {
+  export type RequestParams = {};
+  export type RequestQuery = {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
   /** Maximum number of items to return in the list */
     limit?: number,
   /** Number of items to skip over in the list. Useful for pagination. */
     offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 
-}, params: RequestParams = {}) =>
-    this.request<ContextItems, any>({
-        path: `/contexts`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = ContextItems;
+}
+        
+/**
  * @description **Required ACL:** `confd.contexts.create`
- *
  * @tags contexts
  * @name CreateContext
  * @summary Create context
  * @request POST:/contexts
  * @secure
- */
-createContext: (body: Context, params: RequestParams = {}) =>
-    this.request<Context, Error>({
-        path: `/contexts`,
-        method: 'POST',
-                body: body,        secure: true,        type: ContentType.Json,        format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace CreateContext {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = Context;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = Context;
+}
+        
+/**
  * @description **Required ACL:** `confd.contexts.{context_id}.delete`
- *
  * @tags contexts
  * @name DeleteContext
  * @summary Delete context
  * @request DELETE:/contexts/{context_id}
  * @secure
- */
-deleteContext: (contextId: number, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/contexts/${contextId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DeleteContext {
+  export type RequestParams = {
+  /** context's ID */
+    contextId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.contexts.{context_id}.read`
- *
  * @tags contexts
  * @name GetContext
  * @summary Get context
  * @request GET:/contexts/{context_id}
  * @secure
- */
-getContext: (contextId: number, params: RequestParams = {}) =>
-    this.request<Context, Error>({
-        path: `/contexts/${contextId}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetContext {
+  export type RequestParams = {
+  /** context's ID */
+    contextId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = Context;
+}
+        
+/**
  * @description **Required ACL:** `confd.contexts.{context_id}.update`
- *
  * @tags contexts
  * @name UpdateContext
  * @summary Update context
  * @request PUT:/contexts/{context_id}
  * @secure
- */
-updateContext: (contextId: number, body: Context, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/contexts/${contextId}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateContext {
+  export type RequestParams = {
+  /** context's ID */
+    contextId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = Context;
+  export type RequestHeaders = {};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.contexts.{context_id}.contexts.update`
- *
  * @tags contexts
  * @name AssociateContextContexts
  * @summary Include contexts inside context
  * @request PUT:/contexts/{context_id}/contexts
  * @secure
- */
-associateContextContexts: (contextId: number, body: ContextsId, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/contexts/${contextId}/contexts`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace AssociateContextContexts {
+  export type RequestParams = {
+  /** context's ID */
+    contextId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = ContextsId;
+  export type RequestHeaders = {};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.contexts.{context_id}.ranges.{range_type}.read` List the extension range for a given context and resource type. When filtering using the `availability=available` query string the range will be split into multiple sub-ranges to only contain extension numbers that are available. If a given extension exists but is not assigned to any resource it will still be considered to be unavailable and therefore will not be included in the list of available extension
- *
  * @tags contexts
  * @name ListContextsRange
  * @summary List contexts range
  * @request GET:/contexts/{context_id}/ranges/{range_type}
  * @secure
- */
-listContextsRange: (rangeType: "user" | "group" | "queue" | "conference" | "incall", contextId: number, query?: {
-  /** Name of the field to use for sorting the list of items returned. */
-    order?: string,
-  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
-    direction?: "asc" | "desc",
-  /** Maximum number of items to return in the list */
-    limit?: number,
-  /** Number of items to skip over in the list. Useful for pagination. */
-    offset?: number,
-  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
-    search?: string,
+*/
+export namespace ListContextsRange {
+  export type RequestParams = {
+  /** context's ID */
+    contextId: number,
+  /** The extension range destination type */
+    rangeType: "user" | "group" | "queue" | "conference" | "incall",
+
+};
+  export type RequestQuery = {
   /**
    * Determines if the ranges are going to be split to display only ranges with available extensions.
    * @default "available"
    */
     availability?: "available" | "all",
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
 
-}, params: RequestParams = {}) =>
-    this.request<ContextRangeItems, Error>({
-        path: `/contexts/${contextId}/ranges/${rangeType}`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-    }
-    devices = {
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = ContextRangeItems;
+}
+      }
+
+    export namespace Devices {
+        
+/**
  * @description **Required ACL:** `confd.devices.read`
- *
  * @tags devices
  * @name ListDevices
  * @summary List devices
  * @request GET:/devices
  * @secure
- */
-listDevices: (query?: {
-  /**
-   * Should the query include sub-tenants
-   * @default false
-   */
-    recurse?: boolean,
-  /** Name of the field to use for sorting the list of items returned. */
-    order?: string,
+*/
+export namespace ListDevices {
+  export type RequestParams = {};
+  export type RequestQuery = {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
   /** Maximum number of items to return in the list */
     limit?: number,
   /** Number of items to skip over in the list. Useful for pagination. */
     offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 
-}, params: RequestParams = {}) =>
-    this.request<DeviceItems, Error>({
-        path: `/devices`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = DeviceItems;
+}
+        
+/**
  * @description **Required ACL:** `confd.devices.create`
- *
  * @tags devices
  * @name CreateDevice
  * @summary Create device
  * @request POST:/devices
  * @secure
- */
-createDevice: (body: Device, params: RequestParams = {}) =>
-    this.request<Device, Error>({
-        path: `/devices`,
-        method: 'POST',
-                body: body,        secure: true,        type: ContentType.Json,        format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace CreateDevice {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = Device;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = Device;
+}
+        
+/**
  * @description **Required ACL:** `confd.devices.unallocated.read`
- *
  * @tags devices
  * @name ListUnallocatedDevices
  * @summary List unallocated devices
  * @request GET:/devices/unallocated
  * @secure
- */
-listUnallocatedDevices: (query?: {
-  /** Name of the field to use for sorting the list of items returned. */
-    order?: string,
+*/
+export namespace ListUnallocatedDevices {
+  export type RequestParams = {};
+  export type RequestQuery = {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
   /** Maximum number of items to return in the list */
     limit?: number,
   /** Number of items to skip over in the list. Useful for pagination. */
     offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 
-}, params: RequestParams = {}) =>
-    this.request<DeviceItems, Error>({
-        path: `/devices/unallocated`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = DeviceItems;
+}
+        
+/**
  * @description **Required ACL:** `confd.devices.unallocated.{device_id}.update`
- *
  * @tags devices
  * @name AssignUnallocatedDeviceTenant
  * @summary Assign unallocated device tenant
  * @request PUT:/devices/unallocated/{device_id}
  * @secure
- */
-assignUnallocatedDeviceTenant: (deviceId: string, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/devices/unallocated/${deviceId}`,
-        method: 'PUT',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace AssignUnallocatedDeviceTenant {
+  export type RequestParams = {
+  /** Device's ID */
+    deviceId: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.devices.{device_id}.delete` A device can not be deleted if it is linked to a line. You must dissociate the line and the device first.
- *
  * @tags devices
  * @name DeleteDevice
  * @summary Delete device
  * @request DELETE:/devices/{device_id}
  * @secure
- */
-deleteDevice: (deviceId: string, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/devices/${deviceId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DeleteDevice {
+  export type RequestParams = {
+  /** Device's ID */
+    deviceId: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.devices.{device_id}.read`
- *
  * @tags devices
  * @name GetDevice
  * @summary Get device
  * @request GET:/devices/{device_id}
  * @secure
- */
-getDevice: (deviceId: string, params: RequestParams = {}) =>
-    this.request<Device, Error>({
-        path: `/devices/${deviceId}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetDevice {
+  export type RequestParams = {
+  /** Device's ID */
+    deviceId: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = Device;
+}
+        
+/**
  * @description **Required ACL:** `confd.devices.{device_id}.update`
- *
  * @tags devices
  * @name UpdateDevice
  * @summary Update device
  * @request PUT:/devices/{device_id}
  * @secure
- */
-updateDevice: (deviceId: string, body: Device, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/devices/${deviceId}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateDevice {
+  export type RequestParams = {
+  /** Device's ID */
+    deviceId: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = Device;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.devices.{device_id}.autoprov.read` Resets a device into ‘autoprov’ mode. Once in autoprov, a device can be reprovisionned using another provisioning code. The device’s configuration will be lost when reset to autoprov mode.
- *
  * @tags devices
  * @name ResetDeviceAutoprov
  * @summary Reset device to autoprov
  * @request GET:/devices/{device_id}/autoprov
  * @secure
- */
-resetDeviceAutoprov: (deviceId: string, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/devices/${deviceId}/autoprov`,
-        method: 'GET',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace ResetDeviceAutoprov {
+  export type RequestParams = {
+  /** Device's ID */
+    deviceId: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.devices.{device_id}.lines.read`
- *
  * @tags lines, devices
  * @name GetDeviceLineAssociation
  * @summary List lines associated to device
  * @request GET:/devices/{device_id}/lines
  * @secure
- */
-getDeviceLineAssociation: (deviceId: string, params: RequestParams = {}) =>
-    this.request<LineDeviceItems, Error>({
-        path: `/devices/${deviceId}/lines`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetDeviceLineAssociation {
+  export type RequestParams = {
+  /** Device's ID */
+    deviceId: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = LineDeviceItems;
+}
+        
+/**
  * @description **Required ACL:** `confd.devices.{device_id}.synchronize.read` Synchronize a device’s configuration. Used when a configuration has been modified and the changes need to be sent to the device.
- *
  * @tags devices
  * @name SynchronizeDevice
  * @summary Synchronize device
  * @request GET:/devices/{device_id}/synchronize
  * @secure
- */
-synchronizeDevice: (deviceId: string, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/devices/${deviceId}/synchronize`,
-        method: 'GET',
-                        secure: true,                        ...params,
-    }),
-    }
-    dhcp = {
-  
-  /**
+*/
+export namespace SynchronizeDevice {
+  export type RequestParams = {
+  /** Device's ID */
+    deviceId: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = void;
+}
+      }
+
+    export namespace Dhcp {
+        
+/**
  * @description **Required ACL:** `confd.dhcp.read`
- *
  * @tags dhcp
  * @name GetDhcp
  * @summary Get DHCP configuration
  * @request GET:/dhcp
  * @secure
- */
-getDhcp: (params: RequestParams = {}) =>
-    this.request<DHCP, any>({
-        path: `/dhcp`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetDhcp {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = DHCP;
+}
+        
+/**
  * @description **Required ACL:** `confd.dhcp.update`
- *
  * @tags dhcp
  * @name UpdateDhcp
  * @summary Update DHCP configuration
  * @request PUT:/dhcp
  * @secure
- */
-updateDhcp: (body: DHCP, params: RequestParams = {}) =>
-    this.request<any, any>({
-        path: `/dhcp`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-    }
-    emails = {
-  
-  /**
+*/
+export namespace UpdateDhcp {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = DHCP;
+  export type RequestHeaders = {};
+  export type ResponseBody = any;
+}
+      }
+
+    export namespace Emails {
+        
+/**
  * @description **Required ACL:** `confd.emails.read`
- *
  * @tags emails
  * @name GetEmailsConfig
  * @summary Get e-mail configuration
  * @request GET:/emails
  * @secure
- */
-getEmailsConfig: (params: RequestParams = {}) =>
-    this.request<EmailConfig, any>({
-        path: `/emails`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetEmailsConfig {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = EmailConfig;
+}
+        
+/**
  * @description **Required ACL:** `confd.emails.update` **WARNING** This endpoint restore to default value or delete all fields that are not defined.
- *
  * @tags emails
  * @name UpdateEmailsConfig
  * @summary Update e-mail configuration
  * @request PUT:/emails
  * @secure
- */
-updateEmailsConfig: (body: EmailConfig, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/emails`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-    }
-    endpoints = {
-  
-  /**
+*/
+export namespace UpdateEmailsConfig {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = EmailConfig;
+  export type RequestHeaders = {};
+  export type ResponseBody = any;
+}
+      }
+
+    export namespace Endpoints {
+        
+/**
  * @description **Required ACL:** `confd.endpoints.custom.read`
- *
  * @tags endpoints, custom
  * @name ListEndpointsCustom
  * @summary List Custom endpoints
  * @request GET:/endpoints/custom
  * @secure
- */
-listEndpointsCustom: (query?: {
-  /**
-   * Should the query include sub-tenants
-   * @default false
-   */
-    recurse?: boolean,
-  /** Name of the field to use for sorting the list of items returned. */
-    order?: string,
+*/
+export namespace ListEndpointsCustom {
+  export type RequestParams = {};
+  export type RequestQuery = {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
   /** Maximum number of items to return in the list */
     limit?: number,
   /** Number of items to skip over in the list. Useful for pagination. */
     offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 
-}, params: RequestParams = {}) =>
-    this.request<EndpointCustomItems, any>({
-        path: `/endpoints/custom`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = EndpointCustomItems;
+}
+        
+/**
  * @description **Required ACL:** `confd.endpoints.custom.create`
- *
  * @tags endpoints, custom
  * @name CreateEndpointCustom
  * @summary Create Custom endpoint
  * @request POST:/endpoints/custom
  * @secure
- */
-createEndpointCustom: (body: EndpointCustom, params: RequestParams = {}) =>
-    this.request<EndpointCustom, Error>({
-        path: `/endpoints/custom`,
-        method: 'POST',
-                body: body,        secure: true,        type: ContentType.Json,        format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace CreateEndpointCustom {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = EndpointCustom;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = EndpointCustom;
+}
+        
+/**
  * @description **Required ACL:** `confd.endpoints.custom.{custom_id}.delete`
- *
  * @tags endpoints, custom
  * @name DeleteEndpointCustom
  * @summary Delete Custom Endpoint
  * @request DELETE:/endpoints/custom/{custom_id}
  * @secure
- */
-deleteEndpointCustom: (customId: number, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/endpoints/custom/${customId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DeleteEndpointCustom {
+  export type RequestParams = {
+    customId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.endpoints.custom.{custom_id}.read`
- *
  * @tags endpoints, custom
  * @name GetEndpointCustom
  * @summary Get Custom Endpoint
  * @request GET:/endpoints/custom/{custom_id}
  * @secure
- */
-getEndpointCustom: (customId: number, params: RequestParams = {}) =>
-    this.request<EndpointCustom, Error>({
-        path: `/endpoints/custom/${customId}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetEndpointCustom {
+  export type RequestParams = {
+    customId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = EndpointCustom;
+}
+        
+/**
  * @description **Required ACL:** `confd.endpoints.custom.{custom_id}.update`
- *
  * @tags endpoints, custom
  * @name UpdateEndpointCustom
  * @summary Update Custom Endpoint
  * @request PUT:/endpoints/custom/{custom_id}
  * @secure
- */
-updateEndpointCustom: (customId: number, body: EndpointCustom, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/endpoints/custom/${customId}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateEndpointCustom {
+  export type RequestParams = {
+    customId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = EndpointCustom;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.endpoints.iax.read`
- *
  * @tags endpoints, iax
  * @name ListEndpointsIax
  * @summary List IAX endpoints
  * @request GET:/endpoints/iax
  * @secure
- */
-listEndpointsIax: (query?: {
-  /**
-   * Should the query include sub-tenants
-   * @default false
-   */
-    recurse?: boolean,
-  /** Name of the field to use for sorting the list of items returned. */
-    order?: string,
+*/
+export namespace ListEndpointsIax {
+  export type RequestParams = {};
+  export type RequestQuery = {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
   /** Maximum number of items to return in the list */
     limit?: number,
   /** Number of items to skip over in the list. Useful for pagination. */
     offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 
-}, params: RequestParams = {}) =>
-    this.request<EndpointIAXItems, any>({
-        path: `/endpoints/iax`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = EndpointIAXItems;
+}
+        
+/**
  * @description **Required ACL:** `confd.endpoints.iax.create`
- *
  * @tags endpoints, iax
  * @name CreateEndpointIax
  * @summary Create IAX endpoint
  * @request POST:/endpoints/iax
  * @secure
- */
-createEndpointIax: (body: EndpointIAX, params: RequestParams = {}) =>
-    this.request<EndpointIAX, Error>({
-        path: `/endpoints/iax`,
-        method: 'POST',
-                body: body,        secure: true,        type: ContentType.Json,        format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace CreateEndpointIax {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = EndpointIAX;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = EndpointIAX;
+}
+        
+/**
  * @description **Required ACL:** `confd.endpoints.iax.{iax_id}.delete`
- *
  * @tags endpoints, iax
  * @name DeleteEndpointIax
  * @summary Delete IAX Endpoint
  * @request DELETE:/endpoints/iax/{iax_id}
  * @secure
- */
-deleteEndpointIax: (iaxId: number, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/endpoints/iax/${iaxId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DeleteEndpointIax {
+  export type RequestParams = {
+    iaxId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.endpoints.iax.{iax_id}.read`
- *
  * @tags endpoints, iax
  * @name GetEndpointIax
  * @summary Get IAX Endpoint
  * @request GET:/endpoints/iax/{iax_id}
  * @secure
- */
-getEndpointIax: (iaxId: number, params: RequestParams = {}) =>
-    this.request<EndpointIAX, Error>({
-        path: `/endpoints/iax/${iaxId}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetEndpointIax {
+  export type RequestParams = {
+    iaxId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = EndpointIAX;
+}
+        
+/**
  * @description **Required ACL:** `confd.endpoints.iax.{iax_id}.update`
- *
  * @tags endpoints, iax
  * @name UpdateEndpointIax
  * @summary Update IAX Endpoint
  * @request PUT:/endpoints/iax/{iax_id}
  * @secure
- */
-updateEndpointIax: (iaxId: number, body: EndpointIAX, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/endpoints/iax/${iaxId}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateEndpointIax {
+  export type RequestParams = {
+    iaxId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = EndpointIAX;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.endpoints.sccp.read`
- *
  * @tags endpoints, sccp
  * @name ListEndpointsSccp
  * @summary List SCCP endpoints
  * @request GET:/endpoints/sccp
  * @secure
- */
-listEndpointsSccp: (query?: {
-  /**
-   * Should the query include sub-tenants
-   * @default false
-   */
-    recurse?: boolean,
-  /** Name of the field to use for sorting the list of items returned. */
-    order?: string,
+*/
+export namespace ListEndpointsSccp {
+  export type RequestParams = {};
+  export type RequestQuery = {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
   /** Maximum number of items to return in the list */
     limit?: number,
   /** Number of items to skip over in the list. Useful for pagination. */
     offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 
-}, params: RequestParams = {}) =>
-    this.request<EndpointSccpItems, any>({
-        path: `/endpoints/sccp`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = EndpointSccpItems;
+}
+        
+/**
  * @description **Required ACL:** `confd.endpoints.sccp.create`
- *
  * @tags endpoints, sccp
  * @name CreateEndpointSccp
  * @summary Create SCCP endpoint
  * @request POST:/endpoints/sccp
  * @secure
- */
-createEndpointSccp: (body: EndpointSccp, params: RequestParams = {}) =>
-    this.request<EndpointSccp, Error>({
-        path: `/endpoints/sccp`,
-        method: 'POST',
-                body: body,        secure: true,        type: ContentType.Json,        format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace CreateEndpointSccp {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = EndpointSccp;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = EndpointSccp;
+}
+        
+/**
  * @description **Required ACL:** `confd.endpoints.sccp.{sccp_id}.delete`
- *
  * @tags endpoints, sccp
  * @name DeleteEndpointSccp
  * @summary Delete SCCP Endpoint
  * @request DELETE:/endpoints/sccp/{sccp_id}
  * @secure
- */
-deleteEndpointSccp: (sccpId: number, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/endpoints/sccp/${sccpId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DeleteEndpointSccp {
+  export type RequestParams = {
+    sccpId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.endpoints.sccp.{sccp_id}.read`
- *
  * @tags endpoints, sccp
  * @name GetEndpointSccp
  * @summary Get SCCP Endpoint
  * @request GET:/endpoints/sccp/{sccp_id}
  * @secure
- */
-getEndpointSccp: (sccpId: number, params: RequestParams = {}) =>
-    this.request<EndpointSccp, Error>({
-        path: `/endpoints/sccp/${sccpId}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetEndpointSccp {
+  export type RequestParams = {
+    sccpId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = EndpointSccp;
+}
+        
+/**
  * @description **Required ACL:** `confd.endpoints.sccp.{sccp_id}.update`
- *
  * @tags endpoints, sccp
  * @name UpdateEndpointSccp
  * @summary Update SCCP Endpoint
  * @request PUT:/endpoints/sccp/{sccp_id}
  * @secure
- */
-updateEndpointSccp: (sccpId: number, body: EndpointSccp, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/endpoints/sccp/${sccpId}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateEndpointSccp {
+  export type RequestParams = {
+    sccpId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = EndpointSccp;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.endpoints.sip.read` List all SIP configurations, each individual configuration includes only fields that it defines. Inherited fields from the templates or default values are not returned here.
- *
  * @tags endpoints, sip
  * @name ListEndpointsSip
  * @summary List SIP endpoints
  * @request GET:/endpoints/sip
  * @secure
- */
-listEndpointsSip: (query?: {
-  /**
-   * Should the query include sub-tenants
-   * @default false
-   */
-    recurse?: boolean,
-  /** Name of the field to use for sorting the list of items returned. */
-    order?: string,
+*/
+export namespace ListEndpointsSip {
+  export type RequestParams = {};
+  export type RequestQuery = {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
   /** Maximum number of items to return in the list */
     limit?: number,
   /** Number of items to skip over in the list. Useful for pagination. */
     offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
   /**
@@ -6156,152 +7455,199 @@ listEndpointsSip: (query?: {
    */
     uuid?: (string)[],
 
-}, params: RequestParams = {}) =>
-    this.request<EndpointSIPItems, any>({
-        path: `/endpoints/sip`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = EndpointSIPItems;
+}
+        
+/**
  * @description **Required ACL:** `confd.endpoints.sip.create` Create a new SIP endpoint. This endpoint can inherit from other endpoints, only modify fields that have to be modified.
- *
  * @tags endpoints, sip
  * @name CreateEndpointSip
  * @summary Create a SIP endpoint
  * @request POST:/endpoints/sip
  * @secure
- */
-createEndpointSip: (body: EndpointSIP, params: RequestParams = {}) =>
-    this.request<EndpointSIP, Error>({
-        path: `/endpoints/sip`,
-        method: 'POST',
-                body: body,        secure: true,        type: ContentType.Json,        format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace CreateEndpointSip {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = EndpointSIP;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = EndpointSIP;
+}
+        
+/**
  * @description **Required ACL:** `confd.endpoints.sip.templates.read` List all SIP configuration templates, each individual configuration includes only fields that it defines. Inherited fields from the templates or default values are not returned here.
- *
  * @tags endpoints, sip
  * @name ListEndpointsSipTemplates
  * @summary List SIP endpoints templates
  * @request GET:/endpoints/sip/templates
  * @secure
- */
-listEndpointsSipTemplates: (query?: {
-  /**
-   * Should the query include sub-tenants
-   * @default false
-   */
-    recurse?: boolean,
-  /** Name of the field to use for sorting the list of items returned. */
-    order?: string,
+*/
+export namespace ListEndpointsSipTemplates {
+  export type RequestParams = {};
+  export type RequestQuery = {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
   /** Maximum number of items to return in the list */
     limit?: number,
   /** Number of items to skip over in the list. Useful for pagination. */
     offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 
-}, params: RequestParams = {}) =>
-    this.request<EndpointSIPItems, any>({
-        path: `/endpoints/sip/templates`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = EndpointSIPItems;
+}
+        
+/**
  * @description **Required ACL:** `confd.endpoints.sip.templates.create` Create a new SIP endpoint configuration template. This endpoint can inherit from other templates, only modify fields that have to be modified.
- *
  * @tags endpoints, sip
  * @name CreateEndpointSipTemplate
  * @summary Create a SIP endpoint template
  * @request POST:/endpoints/sip/templates
  * @secure
- */
-createEndpointSipTemplate: (body: EndpointSIP, params: RequestParams = {}) =>
-    this.request<EndpointSIP, Error>({
-        path: `/endpoints/sip/templates`,
-        method: 'POST',
-                body: body,        secure: true,        type: ContentType.Json,        format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace CreateEndpointSipTemplate {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = EndpointSIP;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = EndpointSIP;
+}
+        
+/**
  * @description **Required ACL:** `confd.endpoints.sip.templates.{template_uuid}.delete`
- *
  * @tags endpoints, sip
  * @name DeleteEndpointSipTemplate
  * @summary Delete SIP Endpoint Template
  * @request DELETE:/endpoints/sip/templates/{template_uuid}
  * @secure
- */
-deleteEndpointSipTemplate: (templateUuid: string, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/endpoints/sip/templates/${templateUuid}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DeleteEndpointSipTemplate {
+  export type RequestParams = {
+    templateUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.endpoints.sip.templates.{template_uuid}.read`
- *
  * @tags sip, endpoints
  * @name GetEndpointSipTemplate
  * @summary Get SIP Endpoint template
  * @request GET:/endpoints/sip/templates/{template_uuid}
  * @secure
- */
-getEndpointSipTemplate: (templateUuid: string, params: RequestParams = {}) =>
-    this.request<EndpointSIP, Error>({
-        path: `/endpoints/sip/templates/${templateUuid}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetEndpointSipTemplate {
+  export type RequestParams = {
+    templateUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = EndpointSIP;
+}
+        
+/**
  * @description **Required ACL:** `confd.endpoints.sip.templates.{template_uuid}.update`
- *
  * @tags endpoints, sip
  * @name UpdateEndpointSipTemplate
  * @summary Update SIP Endpoint Template
  * @request PUT:/endpoints/sip/templates/{template_uuid}
  * @secure
- */
-updateEndpointSipTemplate: (templateUuid: string, body: EndpointSIP, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/endpoints/sip/templates/${templateUuid}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateEndpointSipTemplate {
+  export type RequestParams = {
+    templateUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = EndpointSIP;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.endpoints.sip.{sip_uuid}.delete`
- *
  * @tags endpoints, sip
  * @name DeleteEndpointSip
  * @summary Delete SIP Endpoint
  * @request DELETE:/endpoints/sip/{sip_uuid}
  * @secure
- */
-deleteEndpointSip: (sipUuid: string, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/endpoints/sip/${sipUuid}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DeleteEndpointSip {
+  export type RequestParams = {
+    sipUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.endpoints.sip.{sip_uuid}.read`
- *
  * @tags sip, endpoints
  * @name GetEndpointSip
  * @summary Get SIP Endpoint
  * @request GET:/endpoints/sip/{sip_uuid}
  * @secure
- */
-getEndpointSip: (sipUuid: string, query?: {
+*/
+export namespace GetEndpointSip {
+  export type RequestParams = {
+    sipUuid: string,
+
+};
+  export type RequestQuery = {
   /**
    * Different view of the SIP endpoint
    * 
@@ -6312,1019 +7658,1339 @@ getEndpointSip: (sipUuid: string, query?: {
    */
     view?: "merged",
 
-}, params: RequestParams = {}) =>
-    this.request<EndpointSIP, Error>({
-        path: `/endpoints/sip/${sipUuid}`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = EndpointSIP;
+}
+        
+/**
  * @description **Required ACL:** `confd.endpoints.sip.{sip_uuid}.update`
- *
  * @tags endpoints, sip
  * @name UpdateEndpointSip
  * @summary Update SIP Endpoint
  * @request PUT:/endpoints/sip/{sip_uuid}
  * @secure
- */
-updateEndpointSip: (sipUuid: string, body: EndpointSIP, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/endpoints/sip/${sipUuid}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-    }
-    extensions = {
-  
-  /**
+*/
+export namespace UpdateEndpointSip {
+  export type RequestParams = {
+    sipUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = EndpointSIP;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+      }
+
+    export namespace Extensions {
+        
+/**
  * @description **Required ACL:** `confd.extensions.read`
- *
  * @tags extensions
  * @name ListExtensions
  * @summary List extensions
  * @request GET:/extensions
  * @secure
- */
-listExtensions: (query?: {
+*/
+export namespace ListExtensions {
+  export type RequestParams = {};
+  export type RequestQuery = {
+  /** Filter extensions by context name */
+    context?: string,
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** Filter extensions by exten number */
+    exten?: string,
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
   /**
    * Should the query include sub-tenants
    * @default false
    */
     recurse?: boolean,
-  /** Name of the field to use for sorting the list of items returned. */
-    order?: string,
-  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
-    direction?: "asc" | "desc",
-  /** Maximum number of items to return in the list */
-    limit?: number,
-  /** Number of items to skip over in the list. Useful for pagination. */
-    offset?: number,
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
   /** Filter extensions of a certain type. Internal: Used for calling a line with an internal number (e.g. “1000@default”). Incall: Used for calling a line from the outside (e.g. “from-extern” with a DID) */
     type?: "internal" | "incall",
-  /** Filter extensions by exten number */
-    exten?: string,
-  /** Filter extensions by context name */
-    context?: string,
 
-}, params: RequestParams = {}) =>
-    this.request<ExtensionItems, any>({
-        path: `/extensions`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = ExtensionItems;
+}
+        
+/**
  * @description **Required ACL:** `confd.extensions.create` The extension number must be included in one of the extension ranges for the given context.
- *
  * @tags extensions
  * @name CreateExtension
  * @summary Create extension
  * @request POST:/extensions
  * @secure
- */
-createExtension: (body: Extension, params: RequestParams = {}) =>
-    this.request<Extension, Error>({
-        path: `/extensions`,
-        method: 'POST',
-                body: body,        secure: true,        type: ContentType.Json,        format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace CreateExtension {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = Extension;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = Extension;
+}
+        
+/**
  * @description **Required ACL:** `confd.extensions.features.read`
- *
  * @tags extensions
  * @name ListExtensionsFeatures
  * @summary List extensions features
  * @request GET:/extensions/features
  * @secure
- */
-listExtensionsFeatures: (query?: {
-  /** Name of the field to use for sorting the list of items returned. */
-    order?: string,
+*/
+export namespace ListExtensionsFeatures {
+  export type RequestParams = {};
+  export type RequestQuery = {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
   /** Maximum number of items to return in the list */
     limit?: number,
   /** Number of items to skip over in the list. Useful for pagination. */
     offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 
-}, params: RequestParams = {}) =>
-    this.request<ExtensionFeatureItems, any>({
-        path: `/extensions/features`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = ExtensionFeatureItems;
+}
+        
+/**
  * @description **Required ACL:** `confd.extensions.features.{extension_uuid}.read`
- *
  * @tags extensions
  * @name GetExtensionFeature
  * @summary Get extension feature
  * @request GET:/extensions/features/{extension_uuid}
  * @secure
- */
-getExtensionFeature: (extensionUuid: string, params: RequestParams = {}) =>
-    this.request<ExtensionFeature, Error>({
-        path: `/extensions/features/${extensionUuid}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetExtensionFeature {
+  export type RequestParams = {
+    extensionUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = ExtensionFeature;
+}
+        
+/**
  * @description **Required ACL:** `confd.extensions.features.{extension_uuid}.update`
- *
  * @tags extensions
  * @name UpdateExtensionFeature
  * @summary Update extension
  * @request PUT:/extensions/features/{extension_uuid}
  * @secure
- */
-updateExtensionFeature: (extensionUuid: string, body: ExtensionFeature, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/extensions/features/${extensionUuid}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateExtensionFeature {
+  export type RequestParams = {
+    extensionUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = ExtensionFeature;
+  export type RequestHeaders = {};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.extensions.{extension_id}.delete` An extension can not be deleted if it is associated to a line. You must delete the association first.
- *
  * @tags extensions
  * @name DeleteExtension
  * @summary Delete extension
  * @request DELETE:/extensions/{extension_id}
  * @secure
- */
-deleteExtension: (extensionId: number, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/extensions/${extensionId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DeleteExtension {
+  export type RequestParams = {
+    extensionId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.extensions.{extension_id}.read`
- *
  * @tags extensions
  * @name GetExtension
  * @summary Get extension
  * @request GET:/extensions/{extension_id}
  * @secure
- */
-getExtension: (extensionId: number, params: RequestParams = {}) =>
-    this.request<Extension, Error>({
-        path: `/extensions/${extensionId}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetExtension {
+  export type RequestParams = {
+    extensionId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = Extension;
+}
+        
+/**
  * @description **Required ACL:** `confd.extensions.{extension_id}.update` The new extension number must be included in one of the extension ranges for the new context.
- *
  * @tags extensions
  * @name UpdateExtension
  * @summary Update extension
  * @request PUT:/extensions/{extension_id}
  * @secure
- */
-updateExtension: (extensionId: number, body: Extension, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/extensions/${extensionId}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-    }
-    external = {
-  
-  /**
+*/
+export namespace UpdateExtension {
+  export type RequestParams = {
+    extensionId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = Extension;
+  export type RequestHeaders = {};
+  export type ResponseBody = any;
+}
+      }
+
+    export namespace External {
+        
+/**
  * @description **Required ACL:** `confd.external.apps.read`
- *
  * @tags external_apps
  * @name ListExternalApps
  * @summary List external apps
  * @request GET:/external/apps
  * @secure
- */
-listExternalApps: (query?: {
-  /**
-   * Should the query include sub-tenants
-   * @default false
-   */
-    recurse?: boolean,
-  /** Name of the field to use for sorting the list of items returned. */
-    order?: string,
+*/
+export namespace ListExternalApps {
+  export type RequestParams = {};
+  export type RequestQuery = {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
   /** Maximum number of items to return in the list */
     limit?: number,
   /** Number of items to skip over in the list. Useful for pagination. */
     offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 
-}, params: RequestParams = {}) =>
-    this.request<ExternalAppItems, any>({
-        path: `/external/apps`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = ExternalAppItems;
+}
+        
+/**
  * @description **Required ACL:** `confd.external.apps.{app_name}.delete`
- *
  * @tags external_apps
  * @name DeleteExternalApp
  * @summary Delete external app
  * @request DELETE:/external/apps/{app_name}
  * @secure
- */
-deleteExternalApp: (appName: string, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/external/apps/${appName}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DeleteExternalApp {
+  export type RequestParams = {
+  /** External App's name */
+    appName: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.external.apps.{app_name}.read`
- *
  * @tags external_apps
  * @name GetExternalApp
  * @summary Get external app
  * @request GET:/external/apps/{app_name}
  * @secure
- */
-getExternalApp: (appName: string, params: RequestParams = {}) =>
-    this.request<ExternalApp, Error>({
-        path: `/external/apps/${appName}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetExternalApp {
+  export type RequestParams = {
+  /** External App's name */
+    appName: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = ExternalApp;
+}
+        
+/**
  * @description **Required ACL:** `confd.external.apps.{app_name}.create`
- *
  * @tags external_apps
  * @name CreateExternalApp
  * @summary Create external app
  * @request POST:/external/apps/{app_name}
  * @secure
- */
-createExternalApp: (appName: string, body: ExternalApp, params: RequestParams = {}) =>
-    this.request<ExternalApp, Error>({
-        path: `/external/apps/${appName}`,
-        method: 'POST',
-                body: body,        secure: true,        type: ContentType.Json,        format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace CreateExternalApp {
+  export type RequestParams = {
+  /** External App's name */
+    appName: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = ExternalApp;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = ExternalApp;
+}
+        
+/**
  * @description **Required ACL:** `confd.external.apps.{app_name}.update`
- *
  * @tags external_apps
  * @name UpdateExternalApp
  * @summary Update external app
  * @request PUT:/external/apps/{app_name}
  * @secure
- */
-updateExternalApp: (appName: string, body: ExternalApp, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/external/apps/${appName}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-    }
-    funckeys = {
-  
-  /**
+*/
+export namespace UpdateExternalApp {
+  export type RequestParams = {
+  /** External App's name */
+    appName: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = ExternalApp;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+      }
+
+    export namespace Funckeys {
+        
+/**
  * @description **Required ACL:** `confd.funckeys.destinations.read`
- *
  * @tags funckeys
  * @name ListFuncKeyDestinations
  * @summary List of possible func key destinations and their parameters
  * @request GET:/funckeys/destinations
  * @secure
- */
-listFuncKeyDestinations: (params: RequestParams = {}) =>
-    this.request<FuncKeyDestinationItems, any>({
-        path: `/funckeys/destinations`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace ListFuncKeyDestinations {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = FuncKeyDestinationItems;
+}
+        
+/**
  * @description **Required ACL:** `confd.funckeys.templates.read`
- *
  * @tags funckeys
  * @name ListFuncKeyTemplate
  * @summary List a func key template
  * @request GET:/funckeys/templates
  * @secure
- */
-listFuncKeyTemplate: (query?: {
+*/
+export namespace ListFuncKeyTemplate {
+  export type RequestParams = {};
+  export type RequestQuery = {
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
   /**
    * Should the query include sub-tenants
    * @default false
    */
     recurse?: boolean,
-  /** Number of items to skip over in the list. Useful for pagination. */
-    offset?: number,
-  /** Maximum number of items to return in the list */
-    limit?: number,
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 
-}, params: RequestParams = {}) =>
-    this.request<FuncKeyTemplate, Error>({
-        path: `/funckeys/templates`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = FuncKeyTemplate;
+}
+        
+/**
  * @description **Required ACL:** `confd.funckeys.templates.create`
- *
  * @tags funckeys
  * @name CreateFuncKeyTemplate
  * @summary Create a template of func keys
  * @request POST:/funckeys/templates
  * @secure
- */
-createFuncKeyTemplate: (body: FuncKeyTemplate, params: RequestParams = {}) =>
-    this.request<FuncKeyTemplate, Error>({
-        path: `/funckeys/templates`,
-        method: 'POST',
-                body: body,        secure: true,        type: ContentType.Json,        format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace CreateFuncKeyTemplate {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = FuncKeyTemplate;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = FuncKeyTemplate;
+}
+        
+/**
  * @description **Required ACL:** `confd.funckeys.templates.{template_id}.delete`
- *
  * @tags funckeys
  * @name DeleteFuncKeyTemplate
  * @summary Delete func key template
  * @request DELETE:/funckeys/templates/{template_id}
  * @secure
- */
-deleteFuncKeyTemplate: (templateId: number, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/funckeys/templates/${templateId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DeleteFuncKeyTemplate {
+  export type RequestParams = {
+    templateId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.funckeys.templates.{template_id}.read`
- *
  * @tags funckeys
  * @name GetFuncKeyTemplate
  * @summary Get a func key template
  * @request GET:/funckeys/templates/{template_id}
  * @secure
- */
-getFuncKeyTemplate: (templateId: number, params: RequestParams = {}) =>
-    this.request<FuncKeyTemplate, Error>({
-        path: `/funckeys/templates/${templateId}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetFuncKeyTemplate {
+  export type RequestParams = {
+    templateId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = FuncKeyTemplate;
+}
+        
+/**
  * @description **Required ACL:** `confd.funckeys.templates.{template_id}.update` **WARNING** This endpoint restore to default value or delete all fields that are not defined.
- *
  * @tags funckeys
  * @name UpdateFuncKeyTemplate
  * @summary Update a func key template
  * @request PUT:/funckeys/templates/{template_id}
  * @secure
- */
-updateFuncKeyTemplate: (templateId: number, body: FuncKeyTemplate, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/funckeys/templates/${templateId}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateFuncKeyTemplate {
+  export type RequestParams = {
+    templateId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = FuncKeyTemplate;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.funckeys.templates.{template_id}.users.read`
- *
  * @tags funckeys, users
  * @name ListFuncKeyTemplateUserAssociations
  * @summary List users associated to template
  * @request GET:/funckeys/templates/{template_id}/users
  * @secure
- */
-listFuncKeyTemplateUserAssociations: (templateId: number, params: RequestParams = {}) =>
-    this.request<UserFuncKeyTemplate, Error>({
-        path: `/funckeys/templates/${templateId}/users`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace ListFuncKeyTemplateUserAssociations {
+  export type RequestParams = {
+    templateId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = UserFuncKeyTemplate;
+}
+        
+/**
  * @description **Required ACL:** `confd.funckeys.templates.{template_id}.{position}.delete`
- *
  * @tags funckeys
  * @name DeleteFuncKey
  * @summary Remove func key from template
  * @request DELETE:/funckeys/templates/{template_id}/{position}
  * @secure
- */
-deleteFuncKey: (templateId: number, position: number, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/funckeys/templates/${templateId}/${position}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DeleteFuncKey {
+  export type RequestParams = {
+  /** position of the funckey */
+    position: number,
+    templateId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.funckeys.templates.{template_id}.{position}.read`
- *
  * @tags funckeys
  * @name GetFuncKey
  * @summary Get a func key inside template
  * @request GET:/funckeys/templates/{template_id}/{position}
  * @secure
- */
-getFuncKey: (templateId: number, position: number, params: RequestParams = {}) =>
-    this.request<FuncKey, Error>({
-        path: `/funckeys/templates/${templateId}/${position}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetFuncKey {
+  export type RequestParams = {
+  /** position of the funckey */
+    position: number,
+    templateId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = FuncKey;
+}
+        
+/**
  * @description **Required ACL:** `confd.funckeys.templates.{template_id}.{position}.update`
- *
  * @tags funckeys
  * @name UpdateFuncKey
  * @summary Add/Replace a func key in a template
  * @request PUT:/funckeys/templates/{template_id}/{position}
  * @secure
- */
-updateFuncKey: (templateId: number, position: number, body: FuncKey, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/funckeys/templates/${templateId}/${position}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-    }
-    groups = {
-  
-  /**
+*/
+export namespace UpdateFuncKey {
+  export type RequestParams = {
+  /** position of the funckey */
+    position: number,
+    templateId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = FuncKey;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+      }
+
+    export namespace Groups {
+        
+/**
  * @description **Required ACL:** `confd.groups.read`
- *
  * @tags groups
  * @name ListGroups
  * @summary List groups
  * @request GET:/groups
  * @secure
- */
-listGroups: (query?: {
-  /**
-   * Should the query include sub-tenants
-   * @default false
-   */
-    recurse?: boolean,
-  /** Name of the field to use for sorting the list of items returned. */
-    order?: string,
+*/
+export namespace ListGroups {
+  export type RequestParams = {};
+  export type RequestQuery = {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
   /** Maximum number of items to return in the list */
     limit?: number,
   /** Number of items to skip over in the list. Useful for pagination. */
     offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 
-}, params: RequestParams = {}) =>
-    this.request<GroupItems, any>({
-        path: `/groups`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = GroupItems;
+}
+        
+/**
  * @description **Required ACL:** `confd.groups.create`
- *
  * @tags groups
  * @name CreateGroup
  * @summary Create group
  * @request POST:/groups
  * @secure
- */
-createGroup: (body: Group, params: RequestParams = {}) =>
-    this.request<Group, Error>({
-        path: `/groups`,
-        method: 'POST',
-                body: body,        secure: true,        type: ContentType.Json,        format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace CreateGroup {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = Group;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = Group;
+}
+        
+/**
  * @description **Required ACL:** `confd.groups.{group_uuid}.delete`
- *
  * @tags groups
  * @name DeleteGroup
  * @summary Delete group
  * @request DELETE:/groups/{group_uuid}
  * @secure
- */
-deleteGroup: (groupUuid: string, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/groups/${groupUuid}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DeleteGroup {
+  export type RequestParams = {
+  /** the group's UUID */
+    groupUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.groups.{group_uuid}.read`
- *
  * @tags groups
  * @name GetGroup
  * @summary Get group
  * @request GET:/groups/{group_uuid}
  * @secure
- */
-getGroup: (groupUuid: string, params: RequestParams = {}) =>
-    this.request<Group, Error>({
-        path: `/groups/${groupUuid}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetGroup {
+  export type RequestParams = {
+  /** the group's UUID */
+    groupUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = Group;
+}
+        
+/**
  * @description **Required ACL:** `confd.groups.{group_uuid}.update`
- *
  * @tags groups
  * @name UpdateGroup
  * @summary Update group
  * @request PUT:/groups/{group_uuid}
  * @secure
- */
-updateGroup: (groupUuid: string, body: Group, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/groups/${groupUuid}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateGroup {
+  export type RequestParams = {
+  /** the group's UUID */
+    groupUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = Group;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.groups.{group_uuid}.callpermissions.{call_permission_id}.delete`
- *
  * @tags groups, callpermissions
  * @name DissociateGroupCallpermission
  * @summary Dissociate group and call permission
  * @request DELETE:/groups/{group_uuid}/callpermissions/{callpermission_id}
  * @secure
- */
-dissociateGroupCallpermission: (groupUuid: string, callpermissionId: number, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/groups/${groupUuid}/callpermissions/${callpermissionId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DissociateGroupCallpermission {
+  export type RequestParams = {
+  /** Call Permission's ID */
+    callpermissionId: number,
+  /** the group's UUID */
+    groupUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.groups.{group_uuid}.callpermissions.{call_permission_id}.update`
- *
  * @tags groups, callpermissions
  * @name AssociateGroupCallpermission
  * @summary Associate group and call permission
  * @request PUT:/groups/{group_uuid}/callpermissions/{callpermission_id}
  * @secure
- */
-associateGroupCallpermission: (groupUuid: string, callpermissionId: number, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/groups/${groupUuid}/callpermissions/${callpermissionId}`,
-        method: 'PUT',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace AssociateGroupCallpermission {
+  export type RequestParams = {
+  /** Call Permission's ID */
+    callpermissionId: number,
+  /** the group's UUID */
+    groupUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.groups.{group_uuid}.extensions.{extension_id}.delete`
- *
  * @tags groups, extensions
  * @name DissociateGroupExtension
  * @summary Dissociate group and extension
  * @request DELETE:/groups/{group_uuid}/extensions/{extension_id}
  * @secure
- */
-dissociateGroupExtension: (groupUuid: string, extensionId: number, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/groups/${groupUuid}/extensions/${extensionId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DissociateGroupExtension {
+  export type RequestParams = {
+    extensionId: number,
+  /** the group's UUID */
+    groupUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.groups.{group_uuid}.extensions.{extension_id}.update`
- *
  * @tags groups, extensions
  * @name AssociateGroupExtension
  * @summary Associate group and extension
  * @request PUT:/groups/{group_uuid}/extensions/{extension_id}
  * @secure
- */
-associateGroupExtension: (groupUuid: string, extensionId: number, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/groups/${groupUuid}/extensions/${extensionId}`,
-        method: 'PUT',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace AssociateGroupExtension {
+  export type RequestParams = {
+    extensionId: number,
+  /** the group's UUID */
+    groupUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.groups.{group_uuid}.fallbacks.read`
- *
  * @tags groups
  * @name GetGroupFallback
  * @summary List all fallbacks for group
  * @request GET:/groups/{group_uuid}/fallbacks
  * @secure
- */
-getGroupFallback: (groupUuid: string, params: RequestParams = {}) =>
-    this.request<GroupFallbacks, any>({
-        path: `/groups/${groupUuid}/fallbacks`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetGroupFallback {
+  export type RequestParams = {
+  /** the group's UUID */
+    groupUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = GroupFallbacks;
+}
+        
+/**
  * @description **Required ACL:** `confd.groups.{group_uuid}.fallbacks.update` **WARNING** This endpoint delete all fields that are not defined.
- *
  * @tags groups
  * @name UpdateGroupFallback
  * @summary Update group's fallbacks
  * @request PUT:/groups/{group_uuid}/fallbacks
  * @secure
- */
-updateGroupFallback: (groupUuid: string, body: GroupFallbacks, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/groups/${groupUuid}/fallbacks`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateGroupFallback {
+  export type RequestParams = {
+  /** the group's UUID */
+    groupUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = GroupFallbacks;
+  export type RequestHeaders = {};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.groups.{group_uuid}.members.extensions.update` **WARNING** This endpoint remove all members which are not defined.
- *
  * @tags groups
  * @name UpdateGroupMemberExtensions
  * @summary Update group and extensions
  * @request PUT:/groups/{group_uuid}/members/extensions
  * @secure
- */
-updateGroupMemberExtensions: (groupUuid: string, body: GroupMemberExtensions, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/groups/${groupUuid}/members/extensions`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateGroupMemberExtensions {
+  export type RequestParams = {
+  /** the group's UUID */
+    groupUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = GroupMemberExtensions;
+  export type RequestHeaders = {};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.groups.{group_uuid}.members.users.update` **WARNING** This endpoint remove all members which are not defined.
- *
  * @tags groups, users
  * @name UpdateGroupMemberUsers
  * @summary Update group and users
  * @request PUT:/groups/{group_uuid}/members/users
  * @secure
- */
-updateGroupMemberUsers: (groupUuid: string, body: GroupMemberUsers, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/groups/${groupUuid}/members/users`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateGroupMemberUsers {
+  export type RequestParams = {
+  /** the group's UUID */
+    groupUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = GroupMemberUsers;
+  export type RequestHeaders = {};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.groups.{group_uuid}.schedules.{schedule_id}.delete`
- *
  * @tags groups, schedules
  * @name DissociateGroupSchedule
  * @summary Dissociate group and schedule
  * @request DELETE:/groups/{group_uuid}/schedules/{schedule_id}
  * @secure
- */
-dissociateGroupSchedule: (groupUuid: string, scheduleId: number, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/groups/${groupUuid}/schedules/${scheduleId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DissociateGroupSchedule {
+  export type RequestParams = {
+  /** the group's UUID */
+    groupUuid: string,
+  /** Schedule's ID */
+    scheduleId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.groups.{group_uuid}.schedules.{schedule_id}.update`
- *
  * @tags groups, schedules
  * @name AssociateGroupSchedule
  * @summary Associate group and schedule
  * @request PUT:/groups/{group_uuid}/schedules/{schedule_id}
  * @secure
- */
-associateGroupSchedule: (groupUuid: string, scheduleId: number, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/groups/${groupUuid}/schedules/${scheduleId}`,
-        method: 'PUT',
-                        secure: true,                        ...params,
-    }),
-    }
-    guests = {
-  
-  /**
+*/
+export namespace AssociateGroupSchedule {
+  export type RequestParams = {
+  /** the group's UUID */
+    groupUuid: string,
+  /** Schedule's ID */
+    scheduleId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = void;
+}
+      }
+
+    export namespace Guests {
+        
+/**
  * @description **Required ACL:** none
- *
  * @tags meetings, guests
  * @name GetGuestMeeting
  * @summary Get one guest meeting
  * @request GET:/guests/me/meetings/{meeting_uuid}
  * @secure
- */
-getGuestMeeting: (meetingUuid: string, params: RequestParams = {}) =>
-    this.request<Meeting, any>({
-        path: `/guests/me/meetings/${meetingUuid}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetGuestMeeting {
+  export type RequestParams = {
+  /** Meeting UUID */
+    meetingUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = Meeting;
+}
+        
+/**
  * @description **Required ACL:** none. A single meeting only accepts a maximum amount of 128 authorizations. Authorizations are valid for 24h.
- *
  * @tags meeting_authorizations, meetings, guests
  * @name CreateGuestMeetingAuthorization
  * @summary Request guest authorization to enter a meeting
  * @request POST:/guests/{guest_uuid}/meetings/{meeting_uuid}/authorizations
  * @secure
- */
-createGuestMeetingAuthorization: (guestUuid: string, meetingUuid: string, body: MeetingAuthorizationRequest, params: RequestParams = {}) =>
-    this.request<MeetingAuthorization, Error>({
-        path: `/guests/${guestUuid}/meetings/${meetingUuid}/authorizations`,
-        method: 'POST',
-                body: body,        secure: true,        type: ContentType.Json,        format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace CreateGuestMeetingAuthorization {
+  export type RequestParams = {
+  /** Guest UUID. It must be generated by the guest. */
+    guestUuid: string,
+  /** Meeting UUID */
+    meetingUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = MeetingAuthorizationRequest;
+  export type RequestHeaders = {};
+  export type ResponseBody = MeetingAuthorization;
+}
+        
+/**
  * @description **Required ACL:** none
- *
  * @tags meeting_authorizations, meetings, guests
  * @name GetGuestMeetingAuthorization
  * @summary Read the guest authorization to enter a meeting
  * @request GET:/guests/{guest_uuid}/meetings/{meeting_uuid}/authorizations/{authorization_uuid}
  * @secure
- */
-getGuestMeetingAuthorization: (guestUuid: string, meetingUuid: string, authorizationUuid: string, params: RequestParams = {}) =>
-    this.request<MeetingAuthorization, Error>({
-        path: `/guests/${guestUuid}/meetings/${meetingUuid}/authorizations/${authorizationUuid}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-    }
-    ha = {
-  
-  /**
+*/
+export namespace GetGuestMeetingAuthorization {
+  export type RequestParams = {
+  /** Authorization UUID */
+    authorizationUuid: string,
+  /** Guest UUID. It must be generated by the guest. */
+    guestUuid: string,
+  /** Meeting UUID */
+    meetingUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = MeetingAuthorization;
+}
+      }
+
+    export namespace Ha {
+        
+/**
  * @description **Required ACL:** `confd.ha.read`
- *
  * @tags ha
  * @name GetHa
  * @summary Get High Availability configuration
  * @request GET:/ha
  * @secure
- */
-getHa: (params: RequestParams = {}) =>
-    this.request<HA, any>({
-        path: `/ha`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetHa {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = HA;
+}
+        
+/**
  * @description **Required ACL:** `confd.ha.update`
- *
  * @tags ha
  * @name UpdateHa
  * @summary Update High Availability configuration
  * @request PUT:/ha
  * @secure
- */
-updateHa: (body: HA, params: RequestParams = {}) =>
-    this.request<any, any>({
-        path: `/ha`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-    }
-    incalls = {
-  
-  /**
+*/
+export namespace UpdateHa {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = HA;
+  export type RequestHeaders = {};
+  export type ResponseBody = any;
+}
+      }
+
+    export namespace Incalls {
+        
+/**
  * @description **Required ACL:** `confd.incalls.read`
- *
  * @tags incalls
  * @name ListIncalls
  * @summary List incoming calls
  * @request GET:/incalls
  * @secure
- */
-listIncalls: (query?: {
-  /**
-   * Should the query include sub-tenants
-   * @default false
-   */
-    recurse?: boolean,
-  /** Name of the field to use for sorting the list of items returned. */
-    order?: string,
+*/
+export namespace ListIncalls {
+  export type RequestParams = {};
+  export type RequestQuery = {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
   /** Maximum number of items to return in the list */
     limit?: number,
   /** Number of items to skip over in the list. Useful for pagination. */
     offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
   /** the user's ID */
     user_id?: number,
 
-}, params: RequestParams = {}) =>
-    this.request<IncallItems, any>({
-        path: `/incalls`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = IncallItems;
+}
+        
+/**
  * @description **Required ACL:** `confd.incalls.create`
- *
  * @tags incalls
  * @name CreateIncall
  * @summary Create incoming call
  * @request POST:/incalls
  * @secure
- */
-createIncall: (body: Incall, params: RequestParams = {}) =>
-    this.request<Incall, Error>({
-        path: `/incalls`,
-        method: 'POST',
-                body: body,        secure: true,        type: ContentType.Json,        format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace CreateIncall {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = Incall;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = Incall;
+}
+        
+/**
  * @description **Required ACL:** `confd.incalls.{incall_id}.delete`
- *
  * @tags incalls
  * @name DeleteIncall
  * @summary Delete incoming call
  * @request DELETE:/incalls/{incall_id}
  * @secure
- */
-deleteIncall: (incallId: number, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/incalls/${incallId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DeleteIncall {
+  export type RequestParams = {
+  /** Incoming call's ID */
+    incallId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.incalls.{incall_id}.read`
- *
  * @tags incalls
  * @name GetIncall
  * @summary Get incoming call
  * @request GET:/incalls/{incall_id}
  * @secure
- */
-getIncall: (incallId: number, params: RequestParams = {}) =>
-    this.request<Incall, Error>({
-        path: `/incalls/${incallId}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetIncall {
+  export type RequestParams = {
+  /** Incoming call's ID */
+    incallId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = Incall;
+}
+        
+/**
  * @description **Required ACL:** `confd.incalls.{incall_id}.update`
- *
  * @tags incalls
  * @name UpdateIncall
  * @summary Update incoming call
  * @request PUT:/incalls/{incall_id}
  * @secure
- */
-updateIncall: (incallId: number, body: Incall, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/incalls/${incallId}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateIncall {
+  export type RequestParams = {
+  /** Incoming call's ID */
+    incallId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = Incall;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.incalls.{incall_id}.extensions.{extension_id}.delete`
- *
  * @tags incalls, extensions
  * @name DissociateIncallExtension
  * @summary Dissociate incall and extension
  * @request DELETE:/incalls/{incall_id}/extensions/{extension_id}
  * @secure
- */
-dissociateIncallExtension: (incallId: number, extensionId: number, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/incalls/${incallId}/extensions/${extensionId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DissociateIncallExtension {
+  export type RequestParams = {
+    extensionId: number,
+  /** Incoming call's ID */
+    incallId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.incalls.{incall_id}.extensions.{extension_id}.update`
- *
  * @tags incalls, extensions
  * @name AssociateIncallExtension
  * @summary Associate incall and extension
  * @request PUT:/incalls/{incall_id}/extensions/{extension_id}
  * @secure
- */
-associateIncallExtension: (incallId: number, extensionId: number, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/incalls/${incallId}/extensions/${extensionId}`,
-        method: 'PUT',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace AssociateIncallExtension {
+  export type RequestParams = {
+    extensionId: number,
+  /** Incoming call's ID */
+    incallId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.incalls.{incall_id}.schedules.{schedule_id}.delete`
- *
  * @tags incalls, schedules
  * @name DissociateIncallSchedule
  * @summary Dissociate incall and schedule
  * @request DELETE:/incalls/{incall_id}/schedules/{schedule_id}
  * @secure
- */
-dissociateIncallSchedule: (incallId: number, scheduleId: number, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/incalls/${incallId}/schedules/${scheduleId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DissociateIncallSchedule {
+  export type RequestParams = {
+  /** Incoming call's ID */
+    incallId: number,
+  /** Schedule's ID */
+    scheduleId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.incalls.{incall_id}.schedules.{schedule_id}.update`
- *
  * @tags incalls, schedules
  * @name AssociateIncallSchedule
  * @summary Associate incall and schedule
  * @request PUT:/incalls/{incall_id}/schedules/{schedule_id}
  * @secure
- */
-associateIncallSchedule: (incallId: number, scheduleId: number, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/incalls/${incallId}/schedules/${scheduleId}`,
-        method: 'PUT',
-                        secure: true,                        ...params,
-    }),
-    }
-    infos = {
-  
-  /**
+*/
+export namespace AssociateIncallSchedule {
+  export type RequestParams = {
+  /** Incoming call's ID */
+    incallId: number,
+  /** Schedule's ID */
+    scheduleId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = void;
+}
+      }
+
+    export namespace Infos {
+        
+/**
  * @description **Required ACL:** `confd.infos.read`
- *
  * @tags infos
  * @name GetInfos
  * @summary Get server info
  * @request GET:/infos
  * @secure
- */
-getInfos: (params: RequestParams = {}) =>
-    this.request<Info, any>({
-        path: `/infos`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-    }
-    ingresses = {
-  
-  /**
+*/
+export namespace GetInfos {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = Info;
+}
+      }
+
+    export namespace Ingresses {
+        
+/**
  * @description **Required ACL:** `confd.ingresses.http.read`
- *
  * @tags ingresses
  * @name ListHttpIngresses
  * @summary List HTTP ingresses
  * @request GET:/ingresses/http
  * @secure
- */
-listHttpIngresses: (query?: {
-  /**
-   * Should the query include sub-tenants
-   * @default false
-   */
-    recurse?: boolean,
-  /** Name of the field to use for sorting the list of items returned. */
-    order?: string,
+*/
+export namespace ListHttpIngresses {
+  export type RequestParams = {};
+  export type RequestQuery = {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
   /** Maximum number of items to return in the list */
     limit?: number,
   /** Number of items to skip over in the list. Useful for pagination. */
     offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
   /**
@@ -7334,2930 +9000,3851 @@ listHttpIngresses: (query?: {
    */
     view?: "default" | "fallback",
 
-}, params: RequestParams = {}) =>
-    this.request<HTTPIngressItems, any>({
-        path: `/ingresses/http`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = HTTPIngressItems;
+}
+        
+/**
  * @description **Required ACL:** `confd.ingresses.http.create`
- *
  * @tags ingresses
  * @name CreateHttpIngress
  * @summary Create HTTP Ingress
  * @request POST:/ingresses/http
  * @secure
- */
-createHttpIngress: (body: HTTPIngressRequest, params: RequestParams = {}) =>
-    this.request<HTTPIngress, Error>({
-        path: `/ingresses/http`,
-        method: 'POST',
-                body: body,        secure: true,        type: ContentType.Json,        format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace CreateHttpIngress {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = HTTPIngressRequest;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = HTTPIngress;
+}
+        
+/**
  * @description **Required ACL:** `confd.ingresses.http.{http_ingress_uuid}.delete`
- *
  * @tags ingresses
  * @name DeleteHttpIngress
  * @summary Delete HTTP ingress
  * @request DELETE:/ingresses/http/{http_ingress_uuid}
  * @secure
- */
-deleteHttpIngress: (httpIngressUuid: string, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/ingresses/http/${httpIngressUuid}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DeleteHttpIngress {
+  export type RequestParams = {
+    httpIngressUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.ingresses.http.{http_ingress_uuid}.read`
- *
  * @tags ingresses
  * @name GetHttpIngress
  * @summary Get HTTP ingress
  * @request GET:/ingresses/http/{http_ingress_uuid}
  * @secure
- */
-getHttpIngress: (httpIngressUuid: string, params: RequestParams = {}) =>
-    this.request<HTTPIngress, Error>({
-        path: `/ingresses/http/${httpIngressUuid}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetHttpIngress {
+  export type RequestParams = {
+    httpIngressUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = HTTPIngress;
+}
+        
+/**
  * @description **Required ACL:** `confd.ingresses.http.{http_ingress_uuid}.update`
- *
  * @tags ingresses
  * @name UpdateHttpIngress
  * @summary Update HTTP ingress
  * @request PUT:/ingresses/http/{http_ingress_uuid}
  * @secure
- */
-updateHttpIngress: (httpIngressUuid: string, body: HTTPIngressRequest, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/ingresses/http/${httpIngressUuid}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-    }
-    ivr = {
-  
-  /**
+*/
+export namespace UpdateHttpIngress {
+  export type RequestParams = {
+    httpIngressUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = HTTPIngressRequest;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+      }
+
+    export namespace Ivr {
+        
+/**
  * @description **Required ACL:** `confd.ivr.read`
- *
  * @tags ivr
  * @name ListIvr
  * @summary List IVR
  * @request GET:/ivr
  * @secure
- */
-listIvr: (query?: {
-  /**
-   * Should the query include sub-tenants
-   * @default false
-   */
-    recurse?: boolean,
-  /** Name of the field to use for sorting the list of items returned. */
-    order?: string,
+*/
+export namespace ListIvr {
+  export type RequestParams = {};
+  export type RequestQuery = {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
   /** Maximum number of items to return in the list */
     limit?: number,
   /** Number of items to skip over in the list. Useful for pagination. */
     offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 
-}, params: RequestParams = {}) =>
-    this.request<IvrItems, any>({
-        path: `/ivr`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = IvrItems;
+}
+        
+/**
  * @description **Required ACL:** `confd.ivr.create`
- *
  * @tags ivr
  * @name CreateIvr
  * @summary Create IVR
  * @request POST:/ivr
  * @secure
- */
-createIvr: (body: Ivr, params: RequestParams = {}) =>
-    this.request<Ivr, Error>({
-        path: `/ivr`,
-        method: 'POST',
-                body: body,        secure: true,        type: ContentType.Json,        format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace CreateIvr {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = Ivr;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = Ivr;
+}
+        
+/**
  * @description **Required ACL:** `confd.ivr.{ivr_id}.delete`
- *
  * @tags ivr
  * @name DeleteIvr
  * @summary Delete IVR
  * @request DELETE:/ivr/{ivr_id}
  * @secure
- */
-deleteIvr: (ivrId: number, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/ivr/${ivrId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DeleteIvr {
+  export type RequestParams = {
+  /** IVR's ID */
+    ivrId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.ivr.{ivr_id}.read`
- *
  * @tags ivr
  * @name GetIvr
  * @summary Get IVR
  * @request GET:/ivr/{ivr_id}
  * @secure
- */
-getIvr: (ivrId: number, params: RequestParams = {}) =>
-    this.request<Ivr, Error>({
-        path: `/ivr/${ivrId}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetIvr {
+  export type RequestParams = {
+  /** IVR's ID */
+    ivrId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = Ivr;
+}
+        
+/**
  * @description **Required ACL:** `confd.ivr.{ivr_id}.update`
- *
  * @tags ivr
  * @name UpdateIvr
  * @summary Update IVR
  * @request PUT:/ivr/{ivr_id}
  * @secure
- */
-updateIvr: (ivrId: number, body: Ivr, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/ivr/${ivrId}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-    }
-    lines = {
-  
-  /**
+*/
+export namespace UpdateIvr {
+  export type RequestParams = {
+  /** IVR's ID */
+    ivrId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = Ivr;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+      }
+
+    export namespace Lines {
+        
+/**
  * @description **Required ACL:** `confd.lines.read`
- *
  * @tags lines
  * @name ListLines
  * @summary List lines
  * @request GET:/lines
  * @secure
- */
-listLines: (query?: {
-  /**
-   * Should the query include sub-tenants
-   * @default false
-   */
-    recurse?: boolean,
-  /** Name of the field to use for sorting the list of items returned. */
-    order?: string,
+*/
+export namespace ListLines {
+  export type RequestParams = {};
+  export type RequestQuery = {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
   /** Maximum number of items to return in the list */
     limit?: number,
   /** Number of items to skip over in the list. Useful for pagination. */
     offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 
-}, params: RequestParams = {}) =>
-    this.request<LineItems, any>({
-        path: `/lines`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = LineItems;
+}
+        
+/**
  * @description **Required ACL:** `confd.lines.create` When creating a line with an extension or a SIP endpoint as part of it's body, the line's context will be used as a default for the endpoint and context if ommited.
- *
  * @tags lines
  * @name CreateLine
  * @summary Create line
  * @request POST:/lines
  * @secure
- */
-createLine: (body: LineCreate, params: RequestParams = {}) =>
-    this.request<LineView, Error>({
-        path: `/lines`,
-        method: 'POST',
-                body: body,        secure: true,        type: ContentType.Json,        format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace CreateLine {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = LineCreate;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = LineView;
+}
+        
+/**
  * @description **Required ACL:** `confd.lines.{line_id}.delete` **Disclaimer**: if `recursive=true`, the line is deleted, all their associations with any related resources are removed.
- *
  * @tags lines
  * @name DeleteLine
  * @summary Delete line
  * @request DELETE:/lines/{line_id}
  * @secure
- */
-deleteLine: (lineId: number, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/lines/${lineId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DeleteLine {
+  export type RequestParams = {
+    lineId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.lines.{line_id}.read`
- *
  * @tags lines
  * @name GetLine
  * @summary Get line
  * @request GET:/lines/{line_id}
  * @secure
- */
-getLine: (lineId: number, params: RequestParams = {}) =>
-    this.request<LineView, Error>({
-        path: `/lines/${lineId}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetLine {
+  export type RequestParams = {
+    lineId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = LineView;
+}
+        
+/**
  * @description **Required ACL:** `confd.lines.{line_id}.update`
- *
  * @tags lines
  * @name UpdateLine
  * @summary Update line
  * @request PUT:/lines/{line_id}
  * @secure
- */
-updateLine: (lineId: number, body: Line, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/lines/${lineId}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateLine {
+  export type RequestParams = {
+    lineId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = Line;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.lines.{line_id}.applications.{application_uuid}.delete`
- *
  * @tags lines, applications
  * @name DissociateLineApplication
  * @summary Dissociate line and application
  * @request DELETE:/lines/{line_id}/applications/{application_uuid}
  * @secure
- */
-dissociateLineApplication: (lineId: number, applicationUuid: number, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/lines/${lineId}/applications/${applicationUuid}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DissociateLineApplication {
+  export type RequestParams = {
+  /** Application's UUID */
+    applicationUuid: number,
+    lineId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description '**Required ACL:** `confd.lines.{line_id}.applications.{application_uuid}.update`' **WARNING**: Association will disable the effect of the line `context` field
- *
  * @tags lines, applications
  * @name AssociateLineApplication
  * @summary Associate line and application
  * @request PUT:/lines/{line_id}/applications/{application_uuid}
  * @secure
- */
-associateLineApplication: (lineId: number, applicationUuid: number, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/lines/${lineId}/applications/${applicationUuid}`,
-        method: 'PUT',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace AssociateLineApplication {
+  export type RequestParams = {
+  /** Application's UUID */
+    applicationUuid: number,
+    lineId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.lines.{line_id}.devices.read`
- *
  * @tags lines, devices
  * @name GetLineDevice
  * @summary Get Device associated to Line
  * @request GET:/lines/{line_id}/devices
  * @secure
- */
-getLineDevice: (lineId: number, params: RequestParams = {}) =>
-    this.request<LineDevice, Error>({
-        path: `/lines/${lineId}/devices`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetLineDevice {
+  export type RequestParams = {
+    lineId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = LineDevice;
+}
+        
+/**
  * @description **Required ACL:** `confd.lines.{line_id}.devices.{device_id}.delete`
- *
  * @tags lines, devices
  * @name DissociateLineDevice
  * @summary Dissociate line and device
  * @request DELETE:/lines/{line_id}/devices/{device_id}
  * @secure
- */
-dissociateLineDevice: (lineId: number, deviceId: string, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/lines/${lineId}/devices/${deviceId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DissociateLineDevice {
+  export type RequestParams = {
+  /** Device's ID */
+    deviceId: string,
+    lineId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.lines.{line_id}.devices.{device_id}.update`
- *
  * @tags lines, devices
  * @name AssociateLineDevice
  * @summary Associate line and device
  * @request PUT:/lines/{line_id}/devices/{device_id}
  * @secure
- */
-associateLineDevice: (lineId: number, deviceId: string, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/lines/${lineId}/devices/${deviceId}`,
-        method: 'PUT',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace AssociateLineDevice {
+  export type RequestParams = {
+  /** Device's ID */
+    deviceId: string,
+    lineId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.lines.{line_id}.endpoints.custom.{custom_id}.delete`
- *
  * @tags lines, endpoints, custom
  * @name DissociateLineEndpointCustom
  * @summary Dissociate line and Custom endpoint
  * @request DELETE:/lines/{line_id}/endpoints/custom/{custom_id}
  * @secure
- */
-dissociateLineEndpointCustom: (lineId: number, customId: number, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/lines/${lineId}/endpoints/custom/${customId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DissociateLineEndpointCustom {
+  export type RequestParams = {
+    customId: number,
+    lineId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.lines.{line_id}.endpoints.custom.{custom_id}.update`
- *
  * @tags lines, endpoints, custom
  * @name AssociateLineEndpointCustom
  * @summary Associate line and Custom endpoint
  * @request PUT:/lines/{line_id}/endpoints/custom/{custom_id}
  * @secure
- */
-associateLineEndpointCustom: (lineId: number, customId: number, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/lines/${lineId}/endpoints/custom/${customId}`,
-        method: 'PUT',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace AssociateLineEndpointCustom {
+  export type RequestParams = {
+    customId: number,
+    lineId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.lines.{line_id}.endpoints.sccp.{sccp_id}.delete`
- *
  * @tags lines, endpoints, sccp
  * @name DissociateLineEndpointSccp
  * @summary Dissociate line and SCCP endpoint
  * @request DELETE:/lines/{line_id}/endpoints/sccp/{sccp_id}
  * @secure
- */
-dissociateLineEndpointSccp: (lineId: number, sccpId: number, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/lines/${lineId}/endpoints/sccp/${sccpId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DissociateLineEndpointSccp {
+  export type RequestParams = {
+    lineId: number,
+    sccpId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.lines.{line_id}.endpoints.sccp.{sccp_id}.update`
- *
  * @tags lines, endpoints, sccp
  * @name AssociateLineEndpointSccp
  * @summary Associate line and SCCP endpoint
  * @request PUT:/lines/{line_id}/endpoints/sccp/{sccp_id}
  * @secure
- */
-associateLineEndpointSccp: (lineId: number, sccpId: number, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/lines/${lineId}/endpoints/sccp/${sccpId}`,
-        method: 'PUT',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace AssociateLineEndpointSccp {
+  export type RequestParams = {
+    lineId: number,
+    sccpId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.lines.{line_id}.endpoints.sip.{sip_uuid}.delete`
- *
  * @tags lines, endpoints, sip
  * @name DissociateLineEndpointSip
  * @summary Dissociate line and SIP endpoint
  * @request DELETE:/lines/{line_id}/endpoints/sip/{sip_uuid}
  * @secure
- */
-dissociateLineEndpointSip: (lineId: number, sipUuid: string, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/lines/${lineId}/endpoints/sip/${sipUuid}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DissociateLineEndpointSip {
+  export type RequestParams = {
+    lineId: number,
+    sipUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.lines.{line_id}.endpoints.sip.{sip_uuid}.update`
- *
  * @tags lines, endpoints, sip
  * @name AssociateLineEndpointSip
  * @summary Associate line and SIP endpoint
  * @request PUT:/lines/{line_id}/endpoints/sip/{sip_uuid}
  * @secure
- */
-associateLineEndpointSip: (lineId: number, sipUuid: string, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/lines/${lineId}/endpoints/sip/${sipUuid}`,
-        method: 'PUT',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace AssociateLineEndpointSip {
+  export type RequestParams = {
+    lineId: number,
+    sipUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.lines.{line_id}.extensions.create` The extension number must be included in one of the extension ranges for the given context.
- *
  * @tags extensions, lines
  * @name CreateLineExtension
  * @summary Create extension
  * @request POST:/lines/{line_id}/extensions
  * @secure
- */
-createLineExtension: (lineId: number, body: Extension, params: RequestParams = {}) =>
-    this.request<Extension, Error | NotFoundError>({
-        path: `/lines/${lineId}/extensions`,
-        method: 'POST',
-                body: body,        secure: true,        type: ContentType.Json,        format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace CreateLineExtension {
+  export type RequestParams = {
+    lineId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = Extension;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = Extension;
+}
+        
+/**
  * @description **Required ACL:** `confd.lines.{line_id}.extensions.{extension_id}.delete` Any devices that are attached to a line must be removed before dissociating an extension from its line. A device can be dissociated by resetting it to autoprov mode.
- *
  * @tags lines, extensions
  * @name DissociateLineExtension
  * @summary Dissociate line and extension
  * @request DELETE:/lines/{line_id}/extensions/{extension_id}
  * @secure
- */
-dissociateLineExtension: (lineId: number, extensionId: number, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/lines/${lineId}/extensions/${extensionId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DissociateLineExtension {
+  export type RequestParams = {
+    extensionId: number,
+    lineId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.lines.{line_id}.extensions.{extension_id}.update` Because of technical limitations, a line can only have a single ‘internal’ extension associated (i.e. an extension with a context of type ‘internal’)
- *
  * @tags lines, extensions
  * @name AssociateLineExtension
  * @summary Associate line and extension
  * @request PUT:/lines/{line_id}/extensions/{extension_id}
  * @secure
- */
-associateLineExtension: (lineId: number, extensionId: number, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/lines/${lineId}/extensions/${extensionId}`,
-        method: 'PUT',
-                        secure: true,                        ...params,
-    }),
-    }
-    localization = {
-  
-  /**
+*/
+export namespace AssociateLineExtension {
+  export type RequestParams = {
+    extensionId: number,
+    lineId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = void;
+}
+      }
+
+    export namespace Localization {
+        
+/**
  * @description **Required ACL:** `confd.localization.read`
- *
  * @tags localization
  * @name GetLocalization
  * @summary Get localization configuration
  * @request GET:/localization
  * @secure
- */
-getLocalization: (params: RequestParams = {}) =>
-    this.request<Localization, any>({
-        path: `/localization`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetLocalization {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = Localization;
+}
+        
+/**
  * @description **Required ACL:** `confd.localization.update`
- *
  * @tags localization
  * @name UpdateLocalization
  * @summary Update localization configuration
  * @request PUT:/localization
  * @secure
- */
-updateLocalization: (body: Localization, params: RequestParams = {}) =>
-    this.request<any, any>({
-        path: `/localization`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-    }
-    meetings = {
-  
-  /**
+*/
+export namespace UpdateLocalization {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = Localization;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+      }
+
+    export namespace Meetings {
+        
+/**
  * @description **Required ACL:** `confd.meetings.read`
- *
  * @tags meetings
  * @name ListMeetings
  * @summary List meetings
  * @request GET:/meetings
  * @secure
- */
-listMeetings: (query?: {
-  /**
-   * Should the query include sub-tenants
-   * @default false
-   */
-    recurse?: boolean,
-  /** Name of the field to use for sorting the list of items returned. */
-    order?: string,
+*/
+export namespace ListMeetings {
+  export type RequestParams = {};
+  export type RequestQuery = {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
   /** Maximum number of items to return in the list */
     limit?: number,
   /** Number of items to skip over in the list. Useful for pagination. */
     offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 
-}, params: RequestParams = {}) =>
-    this.request<MeetingItems, any>({
-        path: `/meetings`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = MeetingItems;
+}
+        
+/**
  * @description **Required ACL:** `confd.meetings.create`
- *
  * @tags meetings
  * @name CreateMeeting
  * @summary Create meeting
  * @request POST:/meetings
  * @secure
- */
-createMeeting: (body: MeetingRequest, params: RequestParams = {}) =>
-    this.request<Meeting, Error>({
-        path: `/meetings`,
-        method: 'POST',
-                body: body,        secure: true,        type: ContentType.Json,        format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace CreateMeeting {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = MeetingRequest;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = Meeting;
+}
+        
+/**
  * @description **Required ACL:** `confd.meetings.{meeting_uuid}.delete`, Deleting a meeting will hangup all current participants.
- *
  * @tags meetings
  * @name DeleteMeeting
  * @summary Delete meeting
  * @request DELETE:/meetings/{meeting_uuid}
  * @secure
- */
-deleteMeeting: (meetingUuid: string, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/meetings/${meetingUuid}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DeleteMeeting {
+  export type RequestParams = {
+  /** Meeting UUID */
+    meetingUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.meetings.{meeting_uuid}.read`
- *
  * @tags meetings
  * @name GetMeeting
  * @summary Get meeting
  * @request GET:/meetings/{meeting_uuid}
  * @secure
- */
-getMeeting: (meetingUuid: string, params: RequestParams = {}) =>
-    this.request<Meeting, Error>({
-        path: `/meetings/${meetingUuid}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetMeeting {
+  export type RequestParams = {
+  /** Meeting UUID */
+    meetingUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = Meeting;
+}
+        
+/**
  * @description **Required ACL:** `confd.meetings.{meeting_uuid}.update`
- *
  * @tags meetings
  * @name UpdateMeeting
  * @summary Update meeting
  * @request PUT:/meetings/{meeting_uuid}
  * @secure
- */
-updateMeeting: (meetingUuid: string, body: MeetingRequest, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/meetings/${meetingUuid}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-    }
-    moh = {
-  
-  /**
+*/
+export namespace UpdateMeeting {
+  export type RequestParams = {
+  /** Meeting UUID */
+    meetingUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = MeetingRequest;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+      }
+
+    export namespace Moh {
+        
+/**
  * @description **Required ACL:** `confd.moh.read`
- *
  * @tags moh
  * @name ListMoh
  * @summary List MOH classes
  * @request GET:/moh
  * @secure
- */
-listMoh: (query?: {
-  /**
-   * Should the query include sub-tenants
-   * @default false
-   */
-    recurse?: boolean,
-  /** Name of the field to use for sorting the list of items returned. */
-    order?: string,
+*/
+export namespace ListMoh {
+  export type RequestParams = {};
+  export type RequestQuery = {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
   /** Maximum number of items to return in the list */
     limit?: number,
   /** Number of items to skip over in the list. Useful for pagination. */
     offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 
-}, params: RequestParams = {}) =>
-    this.request<MohItems, any>({
-        path: `/moh`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = MohItems;
+}
+        
+/**
  * @description **Required ACL:** `confd.moh.create`
- *
  * @tags moh
  * @name CreateMoh
  * @summary Create MOH class
  * @request POST:/moh
  * @secure
- */
-createMoh: (body: Moh, params: RequestParams = {}) =>
-    this.request<Moh, Error>({
-        path: `/moh`,
-        method: 'POST',
-                body: body,        secure: true,        type: ContentType.Json,        format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace CreateMoh {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = Moh;
+  export type RequestHeaders = {};
+  export type ResponseBody = Moh;
+}
+        
+/**
  * @description **Required ACL:** `confd.moh.{moh_uuid}.delete` Delete the MOH class and associated audio files.
- *
  * @tags moh
  * @name DeleteMoh
  * @summary Delete MOH class
  * @request DELETE:/moh/{moh_uuid}
  * @secure
- */
-deleteMoh: (mohUuid: string, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/moh/${mohUuid}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DeleteMoh {
+  export type RequestParams = {
+    mohUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.moh.{moh_uuid}.read`
- *
  * @tags moh
  * @name GetMoh
  * @summary Get MOH class
  * @request GET:/moh/{moh_uuid}
  * @secure
- */
-getMoh: (mohUuid: string, params: RequestParams = {}) =>
-    this.request<Moh, Error>({
-        path: `/moh/${mohUuid}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetMoh {
+  export type RequestParams = {
+    mohUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = Moh;
+}
+        
+/**
  * @description **Required ACL:** `confd.moh.{moh_uuid}.update`
- *
  * @tags moh
  * @name UpdateMoh
  * @summary Update MOH class
  * @request PUT:/moh/{moh_uuid}
  * @secure
- */
-updateMoh: (mohUuid: string, body: Moh, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/moh/${mohUuid}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateMoh {
+  export type RequestParams = {
+    mohUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = Moh;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.moh.{moh_uuid}.files.{moh_filename}.delete`
- *
  * @tags moh
  * @name DeleteMohFiles
  * @summary Delete audio file
  * @request DELETE:/moh/{moh_uuid}/files/{moh_filename}
  * @secure
- */
-deleteMohFiles: (mohUuid: string, mohFilename: string, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/moh/${mohUuid}/files/${mohFilename}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DeleteMohFiles {
+  export type RequestParams = {
+    mohFilename: string,
+    mohUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.moh.{moh_uuid}.files.{moh_filename}.read`
- *
  * @tags moh
  * @name GetMohFiles
  * @summary Get audio file
  * @request GET:/moh/{moh_uuid}/files/{moh_filename}
  * @secure
- */
-getMohFiles: (mohUuid: string, mohFilename: string, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/moh/${mohUuid}/files/${mohFilename}`,
-        method: 'GET',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetMohFiles {
+  export type RequestParams = {
+    mohFilename: string,
+    mohUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.moh.{moh_uuid}.files.{moh_filename}.update`
- *
  * @tags moh
  * @name UpdateMohFiles
  * @summary Add or update audio file
  * @request PUT:/moh/{moh_uuid}/files/{moh_filename}
  * @secure
- */
-updateMohFiles: (mohUuid: string, mohFilename: string, body: any, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/moh/${mohUuid}/files/${mohFilename}`,
-        method: 'PUT',
-                body: body,        secure: true,                        ...params,
-    }),
-    }
-    outcalls = {
-  
-  /**
+*/
+export namespace UpdateMohFiles {
+  export type RequestParams = {
+    mohFilename: string,
+    mohUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = any;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+      }
+
+    export namespace Outcalls {
+        
+/**
  * @description **Required ACL:** `confd.outcalls.read`
- *
  * @tags outcalls
  * @name ListOutcalls
  * @summary List outgoing calls
  * @request GET:/outcalls
  * @secure
- */
-listOutcalls: (query?: {
-  /**
-   * Should the query include sub-tenants
-   * @default false
-   */
-    recurse?: boolean,
-  /** Name of the field to use for sorting the list of items returned. */
-    order?: string,
+*/
+export namespace ListOutcalls {
+  export type RequestParams = {};
+  export type RequestQuery = {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
   /** Maximum number of items to return in the list */
     limit?: number,
   /** Number of items to skip over in the list. Useful for pagination. */
     offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 
-}, params: RequestParams = {}) =>
-    this.request<OutcallItems, any>({
-        path: `/outcalls`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = OutcallItems;
+}
+        
+/**
  * @description **Required ACL:** `confd.outcalls.create`
- *
  * @tags outcalls
  * @name CreateOutcall
  * @summary Create outgoing call
  * @request POST:/outcalls
  * @secure
- */
-createOutcall: (body: Outcall, params: RequestParams = {}) =>
-    this.request<Outcall, Error>({
-        path: `/outcalls`,
-        method: 'POST',
-                body: body,        secure: true,        type: ContentType.Json,        format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace CreateOutcall {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = Outcall;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = Outcall;
+}
+        
+/**
  * @description **Required ACL:** `confd.outcalls.{outcall_id}.delete`
- *
  * @tags outcalls
  * @name DeleteOutcall
  * @summary Delete outgoing call
  * @request DELETE:/outcalls/{outcall_id}
  * @secure
- */
-deleteOutcall: (outcallId: number, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/outcalls/${outcallId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DeleteOutcall {
+  export type RequestParams = {
+  /** Outgoing call's ID */
+    outcallId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.outcalls.{outcall_id}.read`
- *
  * @tags outcalls
  * @name GetOutcall
  * @summary Get outgoing call
  * @request GET:/outcalls/{outcall_id}
  * @secure
- */
-getOutcall: (outcallId: number, params: RequestParams = {}) =>
-    this.request<Outcall, Error>({
-        path: `/outcalls/${outcallId}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetOutcall {
+  export type RequestParams = {
+  /** Outgoing call's ID */
+    outcallId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = Outcall;
+}
+        
+/**
  * @description **Required ACL:** `confd.outcalls.{outcall_id}.update`
- *
  * @tags outcalls
  * @name UpdateOutcall
  * @summary Update outgoing call
  * @request PUT:/outcalls/{outcall_id}
  * @secure
- */
-updateOutcall: (outcallId: number, body: Outcall, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/outcalls/${outcallId}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateOutcall {
+  export type RequestParams = {
+  /** Outgoing call's ID */
+    outcallId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = Outcall;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.outcalls.{outcall_id}.callpermissions.{call_permission_id}.delete`
- *
  * @tags outcalls, callpermissions
  * @name DissociateOutcallCallpermission
  * @summary Dissociate outcall and call permission
  * @request DELETE:/outcalls/{outcall_id}/callpermissions/{callpermission_id}
  * @secure
- */
-dissociateOutcallCallpermission: (outcallId: number, callpermissionId: number, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/outcalls/${outcallId}/callpermissions/${callpermissionId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DissociateOutcallCallpermission {
+  export type RequestParams = {
+  /** Call Permission's ID */
+    callpermissionId: number,
+  /** Outgoing call's ID */
+    outcallId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.outcalls.{outcall_id}.callpermissions.{call_permission_id}.update`
- *
  * @tags outcalls, callpermissions
  * @name AssociateOutcallCallpermission
  * @summary Associate outcall and call permission
  * @request PUT:/outcalls/{outcall_id}/callpermissions/{callpermission_id}
  * @secure
- */
-associateOutcallCallpermission: (outcallId: number, callpermissionId: number, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/outcalls/${outcallId}/callpermissions/${callpermissionId}`,
-        method: 'PUT',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace AssociateOutcallCallpermission {
+  export type RequestParams = {
+  /** Call Permission's ID */
+    callpermissionId: number,
+  /** Outgoing call's ID */
+    outcallId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.outcalls.{outcall_id}.extensions.{extension_id}.delete`
- *
  * @tags outcalls, extensions
  * @name DissociateOutcallExtension
  * @summary Dissociate outcall and extension
  * @request DELETE:/outcalls/{outcall_id}/extensions/{extension_id}
  * @secure
- */
-dissociateOutcallExtension: (outcallId: number, extensionId: number, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/outcalls/${outcallId}/extensions/${extensionId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DissociateOutcallExtension {
+  export type RequestParams = {
+    extensionId: number,
+  /** Outgoing call's ID */
+    outcallId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.outcalls.{outcall_id}.extensions.{extension_id}.update`
- *
  * @tags outcalls, extensions
  * @name AssociateOutcallExtension
  * @summary Associate outcall and extension
  * @request PUT:/outcalls/{outcall_id}/extensions/{extension_id}
  * @secure
- */
-associateOutcallExtension: (outcallId: number, extensionId: number, body: OutcallExtension, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/outcalls/${outcallId}/extensions/${extensionId}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace AssociateOutcallExtension {
+  export type RequestParams = {
+    extensionId: number,
+  /** Outgoing call's ID */
+    outcallId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = OutcallExtension;
+  export type RequestHeaders = {};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.outcalls.{outcall_id}.schedules.{schedule_id}.delete`
- *
  * @tags outcalls, schedules
  * @name DissociateOutcallSchedule
  * @summary Dissociate outcall and schedule
  * @request DELETE:/outcalls/{outcall_id}/schedules/{schedule_id}
  * @secure
- */
-dissociateOutcallSchedule: (outcallId: number, scheduleId: number, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/outcalls/${outcallId}/schedules/${scheduleId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DissociateOutcallSchedule {
+  export type RequestParams = {
+  /** Outgoing call's ID */
+    outcallId: number,
+  /** Schedule's ID */
+    scheduleId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.outcalls.{outcall_id}.schedules.{schedule_id}.update`
- *
  * @tags outcalls, schedules
  * @name AssociateOutcallSchedule
  * @summary Associate outcall and schedule
  * @request PUT:/outcalls/{outcall_id}/schedules/{schedule_id}
  * @secure
- */
-associateOutcallSchedule: (outcallId: number, scheduleId: number, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/outcalls/${outcallId}/schedules/${scheduleId}`,
-        method: 'PUT',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace AssociateOutcallSchedule {
+  export type RequestParams = {
+  /** Outgoing call's ID */
+    outcallId: number,
+  /** Schedule's ID */
+    scheduleId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.outcalls.{outcall_id}.trunks.update`
- *
  * @tags outcalls, trunks
  * @name AssociateOutcallTrunks
  * @summary Associate outcall and trunks
  * @request PUT:/outcalls/{outcall_id}/trunks
  * @secure
- */
-associateOutcallTrunks: (outcallId: number, body: TrunksId, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/outcalls/${outcallId}/trunks`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-    }
-    pagings = {
-  
-  /**
+*/
+export namespace AssociateOutcallTrunks {
+  export type RequestParams = {
+  /** Outgoing call's ID */
+    outcallId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = TrunksId;
+  export type RequestHeaders = {};
+  export type ResponseBody = void;
+}
+      }
+
+    export namespace Pagings {
+        
+/**
  * @description **Required ACL:** `confd.pagings.read`
- *
  * @tags pagings
  * @name ListPagings
  * @summary List paging
  * @request GET:/pagings
  * @secure
- */
-listPagings: (query?: {
-  /**
-   * Should the query include sub-tenants
-   * @default false
-   */
-    recurse?: boolean,
-  /** Name of the field to use for sorting the list of items returned. */
-    order?: string,
+*/
+export namespace ListPagings {
+  export type RequestParams = {};
+  export type RequestQuery = {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
   /** Maximum number of items to return in the list */
     limit?: number,
   /** Number of items to skip over in the list. Useful for pagination. */
     offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 
-}, params: RequestParams = {}) =>
-    this.request<PagingItems, any>({
-        path: `/pagings`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = PagingItems;
+}
+        
+/**
  * @description **Required ACL:** `confd.pagings.create`
- *
  * @tags pagings
  * @name CreatePaging
  * @summary Create paging
  * @request POST:/pagings
  * @secure
- */
-createPaging: (body: Paging, params: RequestParams = {}) =>
-    this.request<Paging, Error>({
-        path: `/pagings`,
-        method: 'POST',
-                body: body,        secure: true,        type: ContentType.Json,        format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace CreatePaging {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = Paging;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = Paging;
+}
+        
+/**
  * @description **Required ACL:** `confd.pagings.{paging_id}.delete`
- *
  * @tags pagings
  * @name DeletePaging
  * @summary Delete paging
  * @request DELETE:/pagings/{paging_id}
  * @secure
- */
-deletePaging: (pagingId: number, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/pagings/${pagingId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DeletePaging {
+  export type RequestParams = {
+  /** Paging's ID */
+    pagingId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.pagings.{paging_id}.read`
- *
  * @tags pagings
  * @name GetPaging
  * @summary Get paging
  * @request GET:/pagings/{paging_id}
  * @secure
- */
-getPaging: (pagingId: number, params: RequestParams = {}) =>
-    this.request<Paging, Error>({
-        path: `/pagings/${pagingId}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetPaging {
+  export type RequestParams = {
+  /** Paging's ID */
+    pagingId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = Paging;
+}
+        
+/**
  * @description **Required ACL:** `confd.pagings.{paging_id}.update`
- *
  * @tags pagings
  * @name UpdatePaging
  * @summary Update paging
  * @request PUT:/pagings/{paging_id}
  * @secure
- */
-updatePaging: (pagingId: number, body: Paging, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/pagings/${pagingId}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdatePaging {
+  export type RequestParams = {
+  /** Paging's ID */
+    pagingId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = Paging;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.pagings.{paging_id}.callers.users.update` **WARNING** This endpoint remove all callers which are not defined.
- *
  * @tags pagings, users
  * @name UpdatePagingCallerUsers
  * @summary Update paging and callers
  * @request PUT:/pagings/{paging_id}/callers/users
  * @secure
- */
-updatePagingCallerUsers: (pagingId: number, body: UsersUuid, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/pagings/${pagingId}/callers/users`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdatePagingCallerUsers {
+  export type RequestParams = {
+  /** Paging's ID */
+    pagingId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = UsersUuid;
+  export type RequestHeaders = {};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.pagings.{paging_id}.members.users.update` **WARNING** This endpoint remove all members which are not defined.
- *
  * @tags pagings, users
  * @name UpdatePagingMemberUsers
  * @summary Update paging and members
  * @request PUT:/pagings/{paging_id}/members/users
  * @secure
- */
-updatePagingMemberUsers: (pagingId: number, body: UsersUuid, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/pagings/${pagingId}/members/users`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-    }
-    parkinglots = {
-  
-  /**
+*/
+export namespace UpdatePagingMemberUsers {
+  export type RequestParams = {
+  /** Paging's ID */
+    pagingId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = UsersUuid;
+  export type RequestHeaders = {};
+  export type ResponseBody = void;
+}
+      }
+
+    export namespace Parkinglots {
+        
+/**
  * @description **Required ACL:** `confd.parkinglots.read`
- *
  * @tags parking_lots
  * @name ListParkingLots
  * @summary List parking lots
  * @request GET:/parkinglots
  * @secure
- */
-listParkingLots: (query?: {
-  /**
-   * Should the query include sub-tenants
-   * @default false
-   */
-    recurse?: boolean,
-  /** Name of the field to use for sorting the list of items returned. */
-    order?: string,
+*/
+export namespace ListParkingLots {
+  export type RequestParams = {};
+  export type RequestQuery = {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
   /** Maximum number of items to return in the list */
     limit?: number,
   /** Number of items to skip over in the list. Useful for pagination. */
     offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 
-}, params: RequestParams = {}) =>
-    this.request<ParkingLotItems, any>({
-        path: `/parkinglots`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = ParkingLotItems;
+}
+        
+/**
  * @description **Required ACL:** `confd.parkinglots.create`
- *
  * @tags parking_lots
  * @name CreateParkingLot
  * @summary Create parking lot
  * @request POST:/parkinglots
  * @secure
- */
-createParkingLot: (body: ParkingLot, params: RequestParams = {}) =>
-    this.request<ParkingLot, Error>({
-        path: `/parkinglots`,
-        method: 'POST',
-                body: body,        secure: true,        type: ContentType.Json,        format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace CreateParkingLot {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = ParkingLot;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = ParkingLot;
+}
+        
+/**
  * @description **Required ACL:** `confd.parkinglots.{parking_lot_id}.delete`
- *
  * @tags parking_lots
  * @name DeleteParkingLot
  * @summary Delete parking lot
  * @request DELETE:/parkinglots/{parking_lot_id}
  * @secure
- */
-deleteParkingLot: (parkingLotId: number, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/parkinglots/${parkingLotId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DeleteParkingLot {
+  export type RequestParams = {
+  /** Parking Lot's ID */
+    parkingLotId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.parkinglots.{parking_lot_id}.read`
- *
  * @tags parking_lots
  * @name GetParkingLot
  * @summary Get parking lot
  * @request GET:/parkinglots/{parking_lot_id}
  * @secure
- */
-getParkingLot: (parkingLotId: number, params: RequestParams = {}) =>
-    this.request<ParkingLot, Error>({
-        path: `/parkinglots/${parkingLotId}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetParkingLot {
+  export type RequestParams = {
+  /** Parking Lot's ID */
+    parkingLotId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = ParkingLot;
+}
+        
+/**
  * @description **Required ACL:** `confd.parkinglots.{parking_lot_id}.update`
- *
  * @tags parking_lots
  * @name UpdateParkingLot
  * @summary Update parking lot
  * @request PUT:/parkinglots/{parking_lot_id}
  * @secure
- */
-updateParkingLot: (parkingLotId: number, body: ParkingLot, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/parkinglots/${parkingLotId}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateParkingLot {
+  export type RequestParams = {
+  /** Parking Lot's ID */
+    parkingLotId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = ParkingLot;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.parkinglots.{parking_lot_id}.extensions.{extension_id}.delete`
- *
  * @tags parking_lots, extensions
  * @name DissociateParkingLotExtension
  * @summary Dissociate parking lot and extension
  * @request DELETE:/parkinglots/{parking_lot_id}/extensions/{extension_id}
  * @secure
- */
-dissociateParkingLotExtension: (parkingLotId: number, extensionId: number, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/parkinglots/${parkingLotId}/extensions/${extensionId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DissociateParkingLotExtension {
+  export type RequestParams = {
+    extensionId: number,
+  /** Parking Lot's ID */
+    parkingLotId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.parkinglots.{parking_lot_id}.extensions.{extension_id}.update`
- *
  * @tags parking_lots, extensions
  * @name AssociateParkingLotExtension
  * @summary Associate parking_lot and extension
  * @request PUT:/parkinglots/{parking_lot_id}/extensions/{extension_id}
  * @secure
- */
-associateParkingLotExtension: (parkingLotId: number, extensionId: number, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/parkinglots/${parkingLotId}/extensions/${extensionId}`,
-        method: 'PUT',
-                        secure: true,                        ...params,
-    }),
-    }
-    phoneNumbers = {
-  
-  /**
+*/
+export namespace AssociateParkingLotExtension {
+  export type RequestParams = {
+    extensionId: number,
+  /** Parking Lot's ID */
+    parkingLotId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = void;
+}
+      }
+
+    export namespace PhoneNumbers {
+        
+/**
  * @description **Required ACL:** `confd.phone-numbers.read`
- *
  * @tags phone-numbers
  * @name ListPhoneNumbers
  * @summary List phone numbers
  * @request GET:/phone-numbers
  * @secure
- */
-listPhoneNumbers: (query?: {
+*/
+export namespace ListPhoneNumbers {
+  export type RequestParams = {};
+  export type RequestQuery = {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Only include the main phone number of the tenant */
+    main?: boolean,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
   /**
    * Should the query include sub-tenants
    * @default false
    */
     recurse?: boolean,
-  /** Name of the field to use for sorting the list of items returned. */
-    order?: string,
-  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
-    direction?: "asc" | "desc",
-  /** Maximum number of items to return in the list */
-    limit?: number,
-  /** Number of items to skip over in the list. Useful for pagination. */
-    offset?: number,
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
   /** Only include shared phone numbers */
     shared?: boolean,
-  /** Only include the main phone number of the tenant */
-    main?: boolean,
 
-}, params: RequestParams = {}) =>
-    this.request<PhoneNumberItems, any>({
-        path: `/phone-numbers`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = PhoneNumberItems;
+}
+        
+/**
  * @description **Required ACL:** `confd.phone-numbers.create`
- *
  * @tags phone-numbers
  * @name CreatePhoneNumber
  * @summary Add a new phone number
  * @request POST:/phone-numbers
  * @secure
- */
-createPhoneNumber: (body: PhoneNumber, params: RequestParams = {}) =>
-    this.request<PhoneNumber, Error>({
-        path: `/phone-numbers`,
-        method: 'POST',
-                body: body,        secure: true,        type: ContentType.Json,        format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace CreatePhoneNumber {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = PhoneNumber;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = PhoneNumber;
+}
+        
+/**
  * @description **Required ACL:** `confd.phone-numbers.main.read`
- *
  * @tags phone-numbers
  * @name GetPhoneNumberMain
  * @summary Get main phone number
  * @request GET:/phone-numbers/main
  * @secure
- */
-getPhoneNumberMain: (params: RequestParams = {}) =>
-    this.request<PhoneNumber, NotFoundError>({
-        path: `/phone-numbers/main`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetPhoneNumberMain {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = PhoneNumber;
+}
+        
+/**
  * @description **Required ACL:** `confd.phone-numbers.main.update`
- *
  * @tags phone-numbers
  * @name SetPhoneNumberMain
  * @summary set the 'main' phone number for the tenant
  * @request PUT:/phone-numbers/main
  * @secure
- */
-setPhoneNumberMain: (body: {
+*/
+export namespace SetPhoneNumberMain {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = {
   /**
    * UUID of the phone number to set as main
    * @example "b5bcc98c-10cf-4a68-bf3d-802fb5170911"
    */
     phone_number_uuid: string,
 
-}, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/phone-numbers/main`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+};
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.phone-numbers.create`
- *
  * @tags phone-numbers
  * @name CreatePhoneNumbersRange
  * @summary Add a range of phone numbers
  * @request POST:/phone-numbers/ranges
  * @secure
- */
-createPhoneNumbersRange: (body: PhoneNumberRange, params: RequestParams = {}) =>
-    this.request<PhoneNumberRangeResponse, Error>({
-        path: `/phone-numbers/ranges`,
-        method: 'POST',
-                body: body,        secure: true,        type: ContentType.Json,        format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace CreatePhoneNumbersRange {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = PhoneNumberRange;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = PhoneNumberRangeResponse;
+}
+        
+/**
  * @description **Required ACL:** `confd.phone-numbers.{phone_number_uuid}.delete`
- *
  * @tags phone-numbers
  * @name DeletePhoneNumber
  * @summary Delete Phone Number
  * @request DELETE:/phone-numbers/{phone_number_uuid}
  * @secure
- */
-deletePhoneNumber: (phoneNumberUuid: string, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/phone-numbers/${phoneNumberUuid}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DeletePhoneNumber {
+  export type RequestParams = {
+  /** UUID of the phone number */
+    phoneNumberUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.phone-numbers.{phone_number_uuid}.read`
- *
  * @tags phone-numbers
  * @name GetPhoneNumber
  * @summary Get phone number
  * @request GET:/phone-numbers/{phone_number_uuid}
  * @secure
- */
-getPhoneNumber: (phoneNumberUuid: string, params: RequestParams = {}) =>
-    this.request<PhoneNumber, Error>({
-        path: `/phone-numbers/${phoneNumberUuid}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetPhoneNumber {
+  export type RequestParams = {
+  /** UUID of the phone number */
+    phoneNumberUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = PhoneNumber;
+}
+        
+/**
  * @description **Required ACL:** `confd.phone-numbers.{phone_number_uuid}.update`
- *
  * @tags phone-numbers
  * @name UpdatePhoneNumbers
  * @summary Update Phone Number
  * @request PUT:/phone-numbers/{phone_number_uuid}
  * @secure
- */
-updatePhoneNumbers: (phoneNumberUuid: string, body: PhoneNumberItems, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/phone-numbers/${phoneNumberUuid}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-    }
-    provisioning = {
-  
-  /**
+*/
+export namespace UpdatePhoneNumbers {
+  export type RequestParams = {
+  /** UUID of the phone number */
+    phoneNumberUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = PhoneNumberItems;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+      }
+
+    export namespace Provisioning {
+        
+/**
  * @description **Required ACL:** `confd.provisioning.networking.read`
- *
  * @tags provisioning
  * @name GetProvisioningNetworking
  * @summary Get Provisioning Networking configuration
  * @request GET:/provisioning/networking
  * @secure
- */
-getProvisioningNetworking: (params: RequestParams = {}) =>
-    this.request<ProvisioningNetworking, any>({
-        path: `/provisioning/networking`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetProvisioningNetworking {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = ProvisioningNetworking;
+}
+        
+/**
  * @description **Required ACL:** `confd.provisioning.networking.update`
- *
  * @tags provisioning
  * @name UpdateProvisioningNetworking
  * @summary Update Provisioning Networking configuration
  * @request PUT:/provisioning/networking
  * @secure
- */
-updateProvisioningNetworking: (body: ProvisioningNetworking, params: RequestParams = {}) =>
-    this.request<any, any>({
-        path: `/provisioning/networking`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-    }
-    queues = {
-  
-  /**
+*/
+export namespace UpdateProvisioningNetworking {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = ProvisioningNetworking;
+  export type RequestHeaders = {};
+  export type ResponseBody = any;
+}
+      }
+
+    export namespace Queues {
+        
+/**
  * @description **Required ACL:** `confd.queues.read`
- *
  * @tags queues
  * @name ListQueues
  * @summary List queues
  * @request GET:/queues
  * @secure
- */
-listQueues: (query?: {
-  /**
-   * Should the query include sub-tenants
-   * @default false
-   */
-    recurse?: boolean,
-  /** Name of the field to use for sorting the list of items returned. */
-    order?: string,
+*/
+export namespace ListQueues {
+  export type RequestParams = {};
+  export type RequestQuery = {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
   /** Maximum number of items to return in the list */
     limit?: number,
   /** Number of items to skip over in the list. Useful for pagination. */
     offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 
-}, params: RequestParams = {}) =>
-    this.request<QueueItems, any>({
-        path: `/queues`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = QueueItems;
+}
+        
+/**
  * @description **Required ACL:** `confd.queues.create`
- *
  * @tags queues
  * @name CreateQueue
  * @summary Create queue
  * @request POST:/queues
  * @secure
- */
-createQueue: (body: Queue, params: RequestParams = {}) =>
-    this.request<Queue, Error>({
-        path: `/queues`,
-        method: 'POST',
-                body: body,        secure: true,        type: ContentType.Json,        format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace CreateQueue {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = Queue;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = Queue;
+}
+        
+/**
  * @description **Required ACL:** `confd.queues.skillrules.read`
- *
  * @tags queues, skills
  * @name ListSkillRules
  * @summary List skill rule
  * @request GET:/queues/skillrules
  * @secure
- */
-listSkillRules: (query?: {
-  /**
-   * Should the query include sub-tenants
-   * @default false
-   */
-    recurse?: boolean,
-  /** Name of the field to use for sorting the list of items returned. */
-    order?: string,
+*/
+export namespace ListSkillRules {
+  export type RequestParams = {};
+  export type RequestQuery = {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
   /** Maximum number of items to return in the list */
     limit?: number,
   /** Number of items to skip over in the list. Useful for pagination. */
     offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 
-}, params: RequestParams = {}) =>
-    this.request<SkillRuleItems, any>({
-        path: `/queues/skillrules`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = SkillRuleItems;
+}
+        
+/**
  * @description **Required ACL:** `confd.queues.skillrules.create`
- *
  * @tags queues, skills
  * @name CreateSkillRule
  * @summary Create skill rule
  * @request POST:/queues/skillrules
  * @secure
- */
-createSkillRule: (body: SkillRule, params: RequestParams = {}) =>
-    this.request<SkillRule, Error>({
-        path: `/queues/skillrules`,
-        method: 'POST',
-                body: body,        secure: true,        type: ContentType.Json,        format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace CreateSkillRule {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = SkillRule;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = SkillRule;
+}
+        
+/**
  * @description **Required ACL:** `confd.queues.skillrules.{skillrule_id}.delete`
- *
  * @tags queues, skills
  * @name DeleteSkillRule
  * @summary Delete skill rule
  * @request DELETE:/queues/skillrules/{skillrule_id}
  * @secure
- */
-deleteSkillRule: (skillruleId: number, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/queues/skillrules/${skillruleId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DeleteSkillRule {
+  export type RequestParams = {
+  /** Skill's ID */
+    skillruleId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.queues.skillrules.{skillrule_id}.read`
- *
  * @tags queues, skills
  * @name GetSkillRule
  * @summary Get skill rule
  * @request GET:/queues/skillrules/{skillrule_id}
  * @secure
- */
-getSkillRule: (skillruleId: number, params: RequestParams = {}) =>
-    this.request<SkillRule, Error>({
-        path: `/queues/skillrules/${skillruleId}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetSkillRule {
+  export type RequestParams = {
+  /** Skill's ID */
+    skillruleId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = SkillRule;
+}
+        
+/**
  * @description **Required ACL:** `confd.queues.skillrules.{skillrule_id}.update`
- *
  * @tags queues, skills
  * @name UpdateSkillRule
  * @summary Update skill rule
  * @request PUT:/queues/skillrules/{skillrule_id}
  * @secure
- */
-updateSkillRule: (skillruleId: number, body: SkillRule, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/queues/skillrules/${skillruleId}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateSkillRule {
+  export type RequestParams = {
+  /** Skill's ID */
+    skillruleId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = SkillRule;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.queues.{queue_id}.delete`
- *
  * @tags queues
  * @name DeleteQueue
  * @summary Delete queue
  * @request DELETE:/queues/{queue_id}
  * @secure
- */
-deleteQueue: (queueId: number, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/queues/${queueId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DeleteQueue {
+  export type RequestParams = {
+  /** queue's ID */
+    queueId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.queues.{queue_id}.read`
- *
  * @tags queues
  * @name GetQueue
  * @summary Get queue
  * @request GET:/queues/{queue_id}
  * @secure
- */
-getQueue: (queueId: number, params: RequestParams = {}) =>
-    this.request<Queue, Error>({
-        path: `/queues/${queueId}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetQueue {
+  export type RequestParams = {
+  /** queue's ID */
+    queueId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = Queue;
+}
+        
+/**
  * @description **Required ACL:** `confd.queues.{queue_id}.update`
- *
  * @tags queues
  * @name UpdateQueue
  * @summary Update queue
  * @request PUT:/queues/{queue_id}
  * @secure
- */
-updateQueue: (queueId: number, body: Queue, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/queues/${queueId}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateQueue {
+  export type RequestParams = {
+  /** queue's ID */
+    queueId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = Queue;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.queues.{queue_id}.extensions.{extension_id}.delete`
- *
  * @tags queues, extensions
  * @name DissociateQueueExtension
  * @summary Dissociate queue and extension
  * @request DELETE:/queues/{queue_id}/extensions/{extension_id}
  * @secure
- */
-dissociateQueueExtension: (queueId: number, extensionId: number, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/queues/${queueId}/extensions/${extensionId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DissociateQueueExtension {
+  export type RequestParams = {
+    extensionId: number,
+  /** queue's ID */
+    queueId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.queues.{queue_id}.extensions.{extension_id}.update`
- *
  * @tags queues, extensions
  * @name AssociateQueueExtension
  * @summary Associate queue and extension
  * @request PUT:/queues/{queue_id}/extensions/{extension_id}
  * @secure
- */
-associateQueueExtension: (queueId: number, extensionId: number, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/queues/${queueId}/extensions/${extensionId}`,
-        method: 'PUT',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace AssociateQueueExtension {
+  export type RequestParams = {
+    extensionId: number,
+  /** queue's ID */
+    queueId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.queues.{queue_id}.fallbacks.read`
- *
  * @tags queues
  * @name GetQueueFallback
  * @summary List all fallbacks for queue
  * @request GET:/queues/{queue_id}/fallbacks
  * @secure
- */
-getQueueFallback: (queueId: number, params: RequestParams = {}) =>
-    this.request<QueueFallbacks, any>({
-        path: `/queues/${queueId}/fallbacks`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetQueueFallback {
+  export type RequestParams = {
+  /** queue's ID */
+    queueId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = QueueFallbacks;
+}
+        
+/**
  * @description **Required ACL:** `confd.queues.{queue_id}.fallbacks.update` **WARNING** This endpoint delete all fields that are not defined.
- *
  * @tags queues
  * @name UpdateQueueFallback
  * @summary Update queue's fallbacks
  * @request PUT:/queues/{queue_id}/fallbacks
  * @secure
- */
-updateQueueFallback: (queueId: number, body: QueueFallbacks, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/queues/${queueId}/fallbacks`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateQueueFallback {
+  export type RequestParams = {
+  /** queue's ID */
+    queueId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = QueueFallbacks;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.queues.{queue_id}.members.agents.{agent_id}.delete`
- *
  * @tags agents, queues
  * @name DissociateAgentQueue
  * @summary Dissociate agent and queue
  * @request DELETE:/queues/{queue_id}/members/agents/{agent_id}
  * @secure
- */
-dissociateAgentQueue: (queueId: number, agentId: number, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/queues/${queueId}/members/agents/${agentId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DissociateAgentQueue {
+  export type RequestParams = {
+  /** Agent’s ID */
+    agentId: number,
+  /** queue's ID */
+    queueId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.queues.{queue_id}.members.agents.{agent_id}.update`
- *
  * @tags agents, queues
  * @name UpdateAgentQueueAssociation
  * @summary Update Agent-Queue association
  * @request PUT:/queues/{queue_id}/members/agents/{agent_id}
  * @secure
- */
-updateAgentQueueAssociation: (queueId: number, agentId: number, body: QueueMemberAgent, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/queues/${queueId}/members/agents/${agentId}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateAgentQueueAssociation {
+  export type RequestParams = {
+  /** Agent’s ID */
+    agentId: number,
+  /** queue's ID */
+    queueId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = QueueMemberAgent;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.queues.{queue_id}.members.users.{user_id}.delete`
- *
  * @tags queues, users
  * @name DissociateUserQueue
  * @summary Dissociate user and queue
  * @request DELETE:/queues/{queue_id}/members/users/{user_id}
  * @secure
- */
-dissociateUserQueue: (queueId: number, userId: string, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/queues/${queueId}/members/users/${userId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DissociateUserQueue {
+  export type RequestParams = {
+  /** queue's ID */
+    queueId: number,
+  /** the user's ID or UUID */
+    userId: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.queues.{queue_id}.members.users.{user_id}.update`
- *
  * @tags queues, users
  * @name UpdateUserQueueAssociation
  * @summary Update User-Queue association
  * @request PUT:/queues/{queue_id}/members/users/{user_id}
  * @secure
- */
-updateUserQueueAssociation: (queueId: number, userId: string, body: QueueMemberUser, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/queues/${queueId}/members/users/${userId}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateUserQueueAssociation {
+  export type RequestParams = {
+  /** queue's ID */
+    queueId: number,
+  /** the user's ID or UUID */
+    userId: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = QueueMemberUser;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.queues.{queue_id}.schedules.{schedule_id}.delete`
- *
  * @tags queues, schedules
  * @name DissociateQueueSchedule
  * @summary Dissociate queue and schedule
  * @request DELETE:/queues/{queue_id}/schedules/{schedule_id}
  * @secure
- */
-dissociateQueueSchedule: (queueId: number, scheduleId: number, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/queues/${queueId}/schedules/${scheduleId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DissociateQueueSchedule {
+  export type RequestParams = {
+  /** queue's ID */
+    queueId: number,
+  /** Schedule's ID */
+    scheduleId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.queues.{queue_id}.schedules.{schedule_id}.update`
- *
  * @tags queues, schedules
  * @name AssociateQueueSchedule
  * @summary Associate queue and schedule
  * @request PUT:/queues/{queue_id}/schedules/{schedule_id}
  * @secure
- */
-associateQueueSchedule: (queueId: number, scheduleId: number, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/queues/${queueId}/schedules/${scheduleId}`,
-        method: 'PUT',
-                        secure: true,                        ...params,
-    }),
-    }
-    recordings = {
-  
-  /**
+*/
+export namespace AssociateQueueSchedule {
+  export type RequestParams = {
+  /** queue's ID */
+    queueId: number,
+  /** Schedule's ID */
+    scheduleId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = void;
+}
+      }
+
+    export namespace Recordings {
+        
+/**
  * @description **Required ACL:** `confd.recordings.announcements.read`
- *
  * @tags recordings-announcements
  * @name GetRecordingsAnnouncements
  * @summary Get announcements configuration
  * @request GET:/recordings/announcements
  * @secure
- */
-getRecordingsAnnouncements: (params: RequestParams = {}) =>
-    this.request<RecordingsAnnouncements, any>({
-        path: `/recordings/announcements`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetRecordingsAnnouncements {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = RecordingsAnnouncements;
+}
+        
+/**
  * @description **Required ACL:** `confd.recordings.announcements.update`
- *
  * @tags recordings-announcements
  * @name UpdateRecordingsAnnouncements
  * @summary Update recordings announcements configuration
  * @request PUT:/recordings/announcements
  * @secure
- */
-updateRecordingsAnnouncements: (body: RecordingsAnnouncements, params: RequestParams = {}) =>
-    this.request<any, any>({
-        path: `/recordings/announcements`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-    }
-    registers = {
-  
-  /**
+*/
+export namespace UpdateRecordingsAnnouncements {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = RecordingsAnnouncements;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+      }
+
+    export namespace Registers {
+        
+/**
  * @description **Required ACL:** `confd.registers.iax.read`
- *
  * @tags registers, iax
  * @name ListRegistersIax
  * @summary List registers iax
  * @request GET:/registers/iax
  * @secure
- */
-listRegistersIax: (query?: {
-  /** Name of the field to use for sorting the list of items returned. */
-    order?: string,
+*/
+export namespace ListRegistersIax {
+  export type RequestParams = {};
+  export type RequestQuery = {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
   /** Maximum number of items to return in the list */
     limit?: number,
   /** Number of items to skip over in the list. Useful for pagination. */
     offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 
-}, params: RequestParams = {}) =>
-    this.request<RegisterIAXItems, any>({
-        path: `/registers/iax`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = RegisterIAXItems;
+}
+        
+/**
  * @description **Required ACL:** `confd.registers.iax.create`
- *
  * @tags registers, iax
  * @name CreateRegisterIax
  * @summary Create register_iax
  * @request POST:/registers/iax
  * @secure
- */
-createRegisterIax: (body: RegisterIAX, params: RequestParams = {}) =>
-    this.request<RegisterIAX, Error>({
-        path: `/registers/iax`,
-        method: 'POST',
-                body: body,        secure: true,        type: ContentType.Json,        format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace CreateRegisterIax {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = RegisterIAX;
+  export type RequestHeaders = {};
+  export type ResponseBody = RegisterIAX;
+}
+        
+/**
  * @description **Required ACL:** `confd.registers.iax.{register_iax_id}.delete`
- *
  * @tags registers, iax
  * @name DeleteRegisterIax
  * @summary Delete register IAX
  * @request DELETE:/registers/iax/{register_iax_id}
  * @secure
- */
-deleteRegisterIax: (registerIaxId: number, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/registers/iax/${registerIaxId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DeleteRegisterIax {
+  export type RequestParams = {
+  /** Register IAX's ID */
+    registerIaxId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.registers.iax.{register_iax_id}.read`
- *
  * @tags registers, iax
  * @name GetRegisterIax
  * @summary Get register IAX
  * @request GET:/registers/iax/{register_iax_id}
  * @secure
- */
-getRegisterIax: (registerIaxId: number, params: RequestParams = {}) =>
-    this.request<RegisterIAX, Error>({
-        path: `/registers/iax/${registerIaxId}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetRegisterIax {
+  export type RequestParams = {
+  /** Register IAX's ID */
+    registerIaxId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = RegisterIAX;
+}
+        
+/**
  * @description **Required ACL:** `confd.registers.iax.{register_iax_id}.update`
- *
  * @tags registers, iax
  * @name UpdateRegisterIax
  * @summary Update register IAX
  * @request PUT:/registers/iax/{register_iax_id}
  * @secure
- */
-updateRegisterIax: (registerIaxId: number, body: RegisterIAX, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/registers/iax/${registerIaxId}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-    }
-    registrars = {
-  
-  /**
+*/
+export namespace UpdateRegisterIax {
+  export type RequestParams = {
+  /** Register IAX's ID */
+    registerIaxId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = RegisterIAX;
+  export type RequestHeaders = {};
+  export type ResponseBody = any;
+}
+      }
+
+    export namespace Registrars {
+        
+/**
  * @description **Required ACL:** `confd.registrars.read`
- *
  * @tags registrars
  * @name GetRegistrars
  * @summary Get registrars
  * @request GET:/registrars
  * @secure
- */
-getRegistrars: (query?: {
-  /** Name of the field to use for sorting the list of items returned. */
-    order?: string,
+*/
+export namespace GetRegistrars {
+  export type RequestParams = {};
+  export type RequestQuery = {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
   /** Maximum number of items to return in the list */
     limit?: number,
   /** Number of items to skip over in the list. Useful for pagination. */
     offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 
-}, params: RequestParams = {}) =>
-    this.request<RegistrarItems, any>({
-        path: `/registrars`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = RegistrarItems;
+}
+        
+/**
  * @description **Required ACL:** `confd.registrars.create`
- *
  * @tags registrars
  * @name CreateRegistrar
  * @summary Create registrar
  * @request POST:/registrars
  * @secure
- */
-createRegistrar: (body: Registrar, params: RequestParams = {}) =>
-    this.request<Registrar, Error>({
-        path: `/registrars`,
-        method: 'POST',
-                body: body,        secure: true,        type: ContentType.Json,        format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace CreateRegistrar {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = Registrar;
+  export type RequestHeaders = {};
+  export type ResponseBody = Registrar;
+}
+        
+/**
  * @description **Required ACL:** `confd.registrars.{registrar_id}.delete`
- *
  * @tags registrars
  * @name DeleteRegistrar
  * @summary Delete registrar
  * @request DELETE:/registrars/{registrar_id}
  * @secure
- */
-deleteRegistrar: (registrarId: string, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/registrars/${registrarId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DeleteRegistrar {
+  export type RequestParams = {
+  /** Registrar ID */
+    registrarId: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.registrars.{registrar_id}.read`
- *
  * @tags registrars
  * @name GetRegistrar
  * @summary Get registrar
  * @request GET:/registrars/{registrar_id}
  * @secure
- */
-getRegistrar: (registrarId: string, params: RequestParams = {}) =>
-    this.request<Registrar, Error>({
-        path: `/registrars/${registrarId}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetRegistrar {
+  export type RequestParams = {
+  /** Registrar ID */
+    registrarId: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = Registrar;
+}
+        
+/**
  * @description **Required ACL:** `confd.registrars.{registrar_id}.update`
- *
  * @tags registrars
  * @name UpdateRegistrar
  * @summary Update registrar
  * @request PUT:/registrars/{registrar_id}
  * @secure
- */
-updateRegistrar: (registrarId: string, body: Registrar, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/registrars/${registrarId}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-    }
-    schedules = {
-  
-  /**
+*/
+export namespace UpdateRegistrar {
+  export type RequestParams = {
+  /** Registrar ID */
+    registrarId: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = Registrar;
+  export type RequestHeaders = {};
+  export type ResponseBody = any;
+}
+      }
+
+    export namespace Schedules {
+        
+/**
  * @description **Required ACL:** `confd.schedules.read`
- *
  * @tags schedules
  * @name ListSchedules
  * @summary List schedule
  * @request GET:/schedules
  * @secure
- */
-listSchedules: (query?: {
+*/
+export namespace ListSchedules {
+  export type RequestParams = {};
+  export type RequestQuery = {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
   /**
    * Should the query include sub-tenants
    * @default false
    */
     recurse?: boolean,
-  /** Name of the field to use for sorting the list of items returned. */
-    order?: string,
-  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
-    direction?: "asc" | "desc",
-  /** Maximum number of items to return in the list */
-    limit?: number,
-  /** Number of items to skip over in the list. Useful for pagination. */
-    offset?: number,
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 
-}, params: RequestParams = {}) =>
-    this.request<ScheduleItems, any>({
-        path: `/schedules`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = ScheduleItems;
+}
+        
+/**
  * @description **Required ACL:** `confd.schedules.create`
- *
  * @tags schedules
  * @name CreateSchedule
  * @summary Create schedule
  * @request POST:/schedules
  * @secure
- */
-createSchedule: (body: Schedule, params: RequestParams = {}) =>
-    this.request<Schedule, Error>({
-        path: `/schedules`,
-        method: 'POST',
-                body: body,        secure: true,        type: ContentType.Json,        format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace CreateSchedule {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = Schedule;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = Schedule;
+}
+        
+/**
  * @description **Required ACL:** `confd.schedules.{schedule_id}.delete`
- *
  * @tags schedules
  * @name DeleteSchedule
  * @summary Delete schedule
  * @request DELETE:/schedules/{schedule_id}
  * @secure
- */
-deleteSchedule: (scheduleId: number, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/schedules/${scheduleId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DeleteSchedule {
+  export type RequestParams = {
+  /** Schedule's ID */
+    scheduleId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.schedules.{schedule_id}.read`
- *
  * @tags schedules
  * @name GetSchedule
  * @summary Get schedule
  * @request GET:/schedules/{schedule_id}
  * @secure
- */
-getSchedule: (scheduleId: number, params: RequestParams = {}) =>
-    this.request<Schedule, Error>({
-        path: `/schedules/${scheduleId}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetSchedule {
+  export type RequestParams = {
+  /** Schedule's ID */
+    scheduleId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = Schedule;
+}
+        
+/**
  * @description **Required ACL:** `confd.schedules.{schedule_id}.update`
- *
  * @tags schedules
  * @name UpdateSchedule
  * @summary Update schedule
  * @request PUT:/schedules/{schedule_id}
  * @secure
- */
-updateSchedule: (scheduleId: number, body: Schedule, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/schedules/${scheduleId}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-    }
-    sip = {
-  
-  /**
+*/
+export namespace UpdateSchedule {
+  export type RequestParams = {
+  /** Schedule's ID */
+    scheduleId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = Schedule;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+      }
+
+    export namespace Sip {
+        
+/**
  * @description **Required ACL:** `confd.sip.transports.read`
- *
  * @tags sip
  * @name ListSipTransports
  * @summary List all configured SIP transports
  * @request GET:/sip/transports
  * @secure
- */
-listSipTransports: (query?: {
-  /** Name of the field to use for sorting the list of items returned. */
-    order?: string,
+*/
+export namespace ListSipTransports {
+  export type RequestParams = {};
+  export type RequestQuery = {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
   /** Maximum number of items to return in the list */
     limit?: number,
   /** Number of items to skip over in the list. Useful for pagination. */
     offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 
-}, params: RequestParams = {}) =>
-    this.request<SIPTransportItems, any>({
-        path: `/sip/transports`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = SIPTransportItems;
+}
+        
+/**
  * @description **Required ACL:** `confd.sip.transports.create` Transports are shared between all tenants and should be readable to the tenants' administrators. There should always be atleast one transport configured on the system.
- *
  * @tags sip
  * @name CreateSipTransport
  * @summary Create SIP transport
  * @request POST:/sip/transports
  * @secure
- */
-createSipTransport: (body: SIPTransport, params: RequestParams = {}) =>
-    this.request<SIPTransport, Error>({
-        path: `/sip/transports`,
-        method: 'POST',
-                body: body,        secure: true,        type: ContentType.Json,        format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace CreateSipTransport {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = SIPTransport;
+  export type RequestHeaders = {};
+  export type ResponseBody = SIPTransport;
+}
+        
+/**
  * @description **Required ACL:** `confd.sip.transports.{transport_uuid}.delete` Deletes a transport, all associated configuration will be assigned to the `fallback` transport.
- *
  * @tags sip
  * @name DeleteSipTransport
  * @summary Delete SIP transport
  * @request DELETE:/sip/transports/{transport_uuid}
  * @secure
- */
-deleteSipTransport: (transportUuid: string, query?: {
+*/
+export namespace DeleteSipTransport {
+  export type RequestParams = {
+  /** The UUID of the transport */
+    transportUuid: string,
+
+};
+  export type RequestQuery = {
   /**
    * The UUID of the transport that should be associated to orphaned
    * SIP configurations
    */
     fallback?: string,
 
-}, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/sip/transports/${transportUuid}`,
-        method: 'DELETE',
-        query: query,                secure: true,                        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL**: `confd.sip.transports.{transport_uuid}.read`
- *
  * @tags sip
  * @name GetSipTransport
  * @summary Get SIP transport
  * @request GET:/sip/transports/{transport_uuid}
  * @secure
- */
-getSipTransport: (transportUuid: string, params: RequestParams = {}) =>
-    this.request<SIPTransport, Error>({
-        path: `/sip/transports/${transportUuid}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetSipTransport {
+  export type RequestParams = {
+  /** The UUID of the transport */
+    transportUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = SIPTransport;
+}
+        
+/**
  * @description **Required ACL**: `confd.sip.transports.{transport_uuid}.update`
- *
  * @tags sip
  * @name UpdateSipTransport
  * @summary Update SIP transport
  * @request PUT:/sip/transports/{transport_uuid}
  * @secure
- */
-updateSipTransport: (transportUuid: string, body: SIPTransport, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/sip/transports/${transportUuid}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-    }
-    sounds = {
-  
-  /**
+*/
+export namespace UpdateSipTransport {
+  export type RequestParams = {
+  /** The UUID of the transport */
+    transportUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = SIPTransport;
+  export type RequestHeaders = {};
+  export type ResponseBody = any;
+}
+      }
+
+    export namespace Sounds {
+        
+/**
  * @description **Required ACL:** `confd.sounds.read`
- *
  * @tags sounds
  * @name ListSounds
  * @summary List sound categories
  * @request GET:/sounds
  * @secure
- */
-listSounds: (query?: {
-  /**
-   * Should the query include sub-tenants
-   * @default false
-   */
-    recurse?: boolean,
-  /** Name of the field to use for sorting the list of items returned. */
-    order?: string,
+*/
+export namespace ListSounds {
+  export type RequestParams = {};
+  export type RequestQuery = {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
   /** Maximum number of items to return in the list */
     limit?: number,
   /** Number of items to skip over in the list. Useful for pagination. */
     offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 
-}, params: RequestParams = {}) =>
-    this.request<SoundItems, any>({
-        path: `/sounds`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = SoundItems;
+}
+        
+/**
  * @description **Required ACL:** `confd.sounds.create`
- *
  * @tags sounds
  * @name CreateSounds
  * @summary Create sound category
  * @request POST:/sounds
  * @secure
- */
-createSounds: (body: Sound, params: RequestParams = {}) =>
-    this.request<Sound, Error>({
-        path: `/sounds`,
-        method: 'POST',
-                body: body,        secure: true,        type: ContentType.Json,        format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace CreateSounds {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = Sound;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = Sound;
+}
+        
+/**
  * @description **Required ACL:** `confd.sounds.languages.read`
- *
  * @tags sounds
  * @name ListSoundsLanguages
  * @summary List all languages for sounds
  * @request GET:/sounds/languages
  * @secure
- */
-listSoundsLanguages: (params: RequestParams = {}) =>
-    this.request<SoundLanguageItems, any>({
-        path: `/sounds/languages`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace ListSoundsLanguages {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = SoundLanguageItems;
+}
+        
+/**
  * @description **Required ACL:** `confd.sounds.{sound_category}.delete` Delete the sound category and associated audio files.
- *
  * @tags sounds
  * @name DeleteSounds
  * @summary Delete sound category
  * @request DELETE:/sounds/{sound_category}
  * @secure
- */
-deleteSounds: (soundCategory: string, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/sounds/${soundCategory}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DeleteSounds {
+  export type RequestParams = {
+    soundCategory: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.sounds.{sound_category}.read`
- *
  * @tags sounds
  * @name GetSounds
  * @summary Get sound category
  * @request GET:/sounds/{sound_category}
  * @secure
- */
-getSounds: (soundCategory: string, params: RequestParams = {}) =>
-    this.request<Sound, Error>({
-        path: `/sounds/${soundCategory}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetSounds {
+  export type RequestParams = {
+    soundCategory: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = Sound;
+}
+        
+/**
  * @description **Required ACL:** `confd.sounds.{sound_category}.files.{sound_filename}.delete`
- *
  * @tags sounds
  * @name DeleteSoundsFiles
  * @summary Delete audio file
  * @request DELETE:/sounds/{sound_category}/files/{sound_filename}
  * @secure
- */
-deleteSoundsFiles: (soundCategory: string, soundFilename: string, query?: {
-  /** Language of the sound */
-    language?: string,
+*/
+export namespace DeleteSoundsFiles {
+  export type RequestParams = {
+    soundCategory: string,
+    soundFilename: string,
+
+};
+  export type RequestQuery = {
   /** Format of the sound */
     format?: string,
+  /** Language of the sound */
+    language?: string,
 
-}, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/sounds/${soundCategory}/files/${soundFilename}`,
-        method: 'DELETE',
-        query: query,                secure: true,                        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.sounds.{sound_category}.files.{sound_filename}.read`
- *
  * @tags sounds
  * @name GetSoundsFiles
  * @summary Get audio file
  * @request GET:/sounds/{sound_category}/files/{sound_filename}
  * @secure
- */
-getSoundsFiles: (soundCategory: string, soundFilename: string, query?: {
-  /** Language of the sound */
-    language?: string,
+*/
+export namespace GetSoundsFiles {
+  export type RequestParams = {
+    soundCategory: string,
+    soundFilename: string,
+
+};
+  export type RequestQuery = {
   /** Format of the sound */
     format?: string,
+  /** Language of the sound */
+    language?: string,
 
-}, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/sounds/${soundCategory}/files/${soundFilename}`,
-        method: 'GET',
-        query: query,                secure: true,                        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.sounds.{sound_category}.files.{sound_filename}.update`
- *
  * @tags sounds
  * @name UpdateSoundsFiles
  * @summary Add or update audio file
  * @request PUT:/sounds/{sound_category}/files/{sound_filename}
  * @secure
- */
-updateSoundsFiles: (soundCategory: string, soundFilename: string, body: any, query?: {
-  /** Language of the sound */
-    language?: string,
+*/
+export namespace UpdateSoundsFiles {
+  export type RequestParams = {
+    soundCategory: string,
+    soundFilename: string,
+
+};
+  export type RequestQuery = {
   /** Format of the sound */
     format?: string,
+  /** Language of the sound */
+    language?: string,
 
-}, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/sounds/${soundCategory}/files/${soundFilename}`,
-        method: 'PUT',
-        query: query,        body: body,        secure: true,                        ...params,
-    }),
-    }
-    status = {
-  
-  /**
+};
+  export type RequestBody = any;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+      }
+
+    export namespace Status {
+        
+/**
  * @description **Required ACL:** `confd.status.read`
- *
  * @tags status
  * @name StatusList
  * @summary Provides internal status of wazo-confd`
  * @request GET:/status
  * @secure
- */
-statusList: (params: RequestParams = {}) =>
-    this.request<StatusSummary, any>({
-        path: `/status`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-    }
-    switchboards = {
-  
-  /**
+*/
+export namespace StatusList {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = StatusSummary;
+}
+      }
+
+    export namespace Switchboards {
+        
+/**
  * @description **Required ACL:** `confd.switchboards.read`
- *
  * @tags switchboards
  * @name SwitchboardsList
  * @summary List switchboards
  * @request GET:/switchboards
  * @secure
- */
-switchboardsList: (query?: {
-  /**
-   * Should the query include sub-tenants
-   * @default false
-   */
-    recurse?: boolean,
-  /** Name of the field to use for sorting the list of items returned. */
-    order?: string,
+*/
+export namespace SwitchboardsList {
+  export type RequestParams = {};
+  export type RequestQuery = {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
   /** Maximum number of items to return in the list */
     limit?: number,
   /** Number of items to skip over in the list. Useful for pagination. */
     offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 
-}, params: RequestParams = {}) =>
-    this.request<{
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = {
     items?: (Switchboard)[],
 
-}, any>({
-        path: `/switchboards`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+}
+        
+/**
  * @description **Required ACL:** `confd.switchboards.create`
- *
  * @tags switchboards
  * @name SwitchboardsCreate
  * @summary Create a switchboard
  * @request POST:/switchboards
  * @secure
- */
-switchboardsCreate: (body: Switchboard, params: RequestParams = {}) =>
-    this.request<Switchboard, Error>({
-        path: `/switchboards`,
-        method: 'POST',
-                body: body,        secure: true,        type: ContentType.Json,        format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace SwitchboardsCreate {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = Switchboard;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = Switchboard;
+}
+        
+/**
  * @description **Required ACL:** `confd.switchboards.{switchboard_uuid}.delete`
- *
  * @tags switchboards
  * @name SwitchboardsDelete
  * @summary Delete a switchboard
  * @request DELETE:/switchboards/{switchboard_uuid}
  * @secure
- */
-switchboardsDelete: (switchboardUuid: string, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/switchboards/${switchboardUuid}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace SwitchboardsDelete {
+  export type RequestParams = {
+    switchboardUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.switchboards.{switchboard_uuid}.read`
- *
  * @tags switchboards
  * @name SwitchboardsDetail
  * @summary Get a switchboard
  * @request GET:/switchboards/{switchboard_uuid}
  * @secure
- */
-switchboardsDetail: (switchboardUuid: string, params: RequestParams = {}) =>
-    this.request<Switchboard, Error>({
-        path: `/switchboards/${switchboardUuid}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace SwitchboardsDetail {
+  export type RequestParams = {
+    switchboardUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = Switchboard;
+}
+        
+/**
  * @description **Required ACL:** `confd.switchboards.{switchboard_uuid}.update`
- *
  * @tags switchboards
  * @name SwitchboardsUpdate
  * @summary Update a switchboard
  * @request PUT:/switchboards/{switchboard_uuid}
  * @secure
- */
-switchboardsUpdate: (switchboardUuid: string, body: Switchboard, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/switchboards/${switchboardUuid}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace SwitchboardsUpdate {
+  export type RequestParams = {
+    switchboardUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = Switchboard;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.switchboards.{switchboard_uuid}.fallbacks.read`
- *
  * @tags switchboards
  * @name GetSwitchboardFallback
  * @summary List all fallbacks for switchboard
  * @request GET:/switchboards/{switchboard_uuid}/fallbacks
  * @secure
- */
-getSwitchboardFallback: (switchboardUuid: string, params: RequestParams = {}) =>
-    this.request<SwitchboardFallbacks, any>({
-        path: `/switchboards/${switchboardUuid}/fallbacks`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetSwitchboardFallback {
+  export type RequestParams = {
+    switchboardUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = SwitchboardFallbacks;
+}
+        
+/**
  * @description **Required ACL:** `confd.switchboards.{switchboard_uuid}.fallbacks.update` **WARNING** This endpoint delete all fields that are not defined.
- *
  * @tags switchboards
  * @name UpdateSwitchboardFallback
  * @summary Update switchboard's fallbacks
  * @request PUT:/switchboards/{switchboard_uuid}/fallbacks
  * @secure
- */
-updateSwitchboardFallback: (switchboardUuid: string, body: SwitchboardFallbacks, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/switchboards/${switchboardUuid}/fallbacks`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateSwitchboardFallback {
+  export type RequestParams = {
+    switchboardUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = SwitchboardFallbacks;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.switchboards.{switchboard_uuid}.members.users.update` **WARNING** This endpoint removes all members which are not defined.
- *
  * @tags switchboards, users
  * @name UpdateSwitchboardMemberUsers
  * @summary Update switchboard and members
  * @request PUT:/switchboards/{switchboard_uuid}/members/users
  * @secure
- */
-updateSwitchboardMemberUsers: (switchboardUuid: string, body: UsersUuid, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/switchboards/${switchboardUuid}/members/users`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-    }
-    tenants = {
-  
-  /**
+*/
+export namespace UpdateSwitchboardMemberUsers {
+  export type RequestParams = {
+    switchboardUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = UsersUuid;
+  export type RequestHeaders = {};
+  export type ResponseBody = void;
+}
+      }
+
+    export namespace Tenants {
+        
+/**
  * @description **Required ACL**: `confd.tenants.read`
- *
  * @tags tenants
  * @name ListTenants
  * @summary List tenants
  * @request GET:/tenants
  * @secure
- */
-listTenants: (query?: {
-  /**
-   * Should the query include sub-tenants
-   * @default false
-   */
-    recurse?: boolean,
-  /** Name of the field to use for sorting the list of items returned. */
-    order?: string,
+*/
+export namespace ListTenants {
+  export type RequestParams = {};
+  export type RequestQuery = {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
   /** Maximum number of items to return in the list */
     limit?: number,
   /** Number of items to skip over in the list. Useful for pagination. */
     offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 
-}, params: RequestParams = {}) =>
-    this.request<TenantItems, any>({
-        path: `/tenants`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = TenantItems;
+}
+        
+/**
  * @description **Required ACL:** `confd.tenants.{tenant_uuid}.read`
- *
  * @tags tenants
  * @name GetTenant
  * @summary Get tenant
  * @request GET:/tenants/{tenant_uuid}
  * @secure
- */
-getTenant: (tenantUuid: string, params: RequestParams = {}) =>
-    this.request<Tenant, Error>({
-        path: `/tenants/${tenantUuid}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-    }
-    timezones = {
-  
-  /**
+*/
+export namespace GetTenant {
+  export type RequestParams = {
+  /** Resource UUID */
+    tenantUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = Tenant;
+}
+      }
+
+    export namespace Timezones {
+        
+/**
  * @description **Required ACL:** `confd.timezones.read`
- *
  * @tags timezones
  * @name ListTimezones
  * @summary List all available timezones
  * @request GET:/timezones
  * @secure
- */
-listTimezones: (params: RequestParams = {}) =>
-    this.request<TimezoneItems, any>({
-        path: `/timezones`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-    }
-    trunks = {
-  
-  /**
+*/
+export namespace ListTimezones {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = TimezoneItems;
+}
+      }
+
+    export namespace Trunks {
+        
+/**
  * @description **Required ACL:** `confd.trunks.read`
- *
  * @tags trunks
  * @name ListTrunks
  * @summary List trunks
  * @request GET:/trunks
  * @secure
- */
-listTrunks: (query?: {
-  /**
-   * Should the query include sub-tenants
-   * @default false
-   */
-    recurse?: boolean,
-  /** Name of the field to use for sorting the list of items returned. */
-    order?: string,
+*/
+export namespace ListTrunks {
+  export type RequestParams = {};
+  export type RequestQuery = {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
   /** Maximum number of items to return in the list */
     limit?: number,
   /** Number of items to skip over in the list. Useful for pagination. */
     offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 
-}, params: RequestParams = {}) =>
-    this.request<TrunkItems, any>({
-        path: `/trunks`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = TrunkItems;
+}
+        
+/**
  * @description **Required ACL:** `confd.trunks.create`
- *
  * @tags trunks
  * @name CreateTrunk
  * @summary Create trunk
  * @request POST:/trunks
  * @secure
- */
-createTrunk: (body: Trunk, params: RequestParams = {}) =>
-    this.request<Trunk, Error>({
-        path: `/trunks`,
-        method: 'POST',
-                body: body,        secure: true,        type: ContentType.Json,        format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace CreateTrunk {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = Trunk;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = Trunk;
+}
+        
+/**
  * @description **Required ACL:** `confd.trunks.{trunk_id}.delete`
- *
  * @tags trunks
  * @name DeleteTrunk
  * @summary Delete trunk
  * @request DELETE:/trunks/{trunk_id}
  * @secure
- */
-deleteTrunk: (trunkId: number, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/trunks/${trunkId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DeleteTrunk {
+  export type RequestParams = {
+  /** Trunk's ID */
+    trunkId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.trunks.{trunk_id}.read`
- *
  * @tags trunks
  * @name GetTrunk
  * @summary Get trunk
  * @request GET:/trunks/{trunk_id}
  * @secure
- */
-getTrunk: (trunkId: number, params: RequestParams = {}) =>
-    this.request<Trunk, Error>({
-        path: `/trunks/${trunkId}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetTrunk {
+  export type RequestParams = {
+  /** Trunk's ID */
+    trunkId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = Trunk;
+}
+        
+/**
  * @description **Required ACL:** `confd.trunks.{trunk_id}.update`
- *
  * @tags trunks
  * @name UpdateTrunk
  * @summary Update trunk
  * @request PUT:/trunks/{trunk_id}
  * @secure
- */
-updateTrunk: (trunkId: number, body: Trunk, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/trunks/${trunkId}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateTrunk {
+  export type RequestParams = {
+  /** Trunk's ID */
+    trunkId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = Trunk;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.trunks.{trunk_id}.endpoints.custom.{custom_id}.delete`
- *
  * @tags trunks, endpoints, custom
  * @name DissociateTrunkEndpointCustom
  * @summary Dissociate trunk and Custom endpoint
  * @request DELETE:/trunks/{trunk_id}/endpoints/custom/{custom_id}
  * @secure
- */
-dissociateTrunkEndpointCustom: (trunkId: number, customId: number, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/trunks/${trunkId}/endpoints/custom/${customId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DissociateTrunkEndpointCustom {
+  export type RequestParams = {
+    customId: number,
+  /** Trunk's ID */
+    trunkId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.trunks.{trunk_id}.endpoints.custom.{custom_id}.update`
- *
  * @tags trunks, endpoints, custom
  * @name AssociateTrunkEndpointCustom
  * @summary Associate trunk and Custom endpoint
  * @request PUT:/trunks/{trunk_id}/endpoints/custom/{custom_id}
  * @secure
- */
-associateTrunkEndpointCustom: (trunkId: number, customId: number, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/trunks/${trunkId}/endpoints/custom/${customId}`,
-        method: 'PUT',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace AssociateTrunkEndpointCustom {
+  export type RequestParams = {
+    customId: number,
+  /** Trunk's ID */
+    trunkId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.trunks.{trunk_id}.endpoints.iax.{iax_id}.delete`
- *
  * @tags trunks, endpoints, iax
  * @name DissociateTrunkEndpointIax
  * @summary Dissociate trunk and IAX endpoint
  * @request DELETE:/trunks/{trunk_id}/endpoints/iax/{iax_id}
  * @secure
- */
-dissociateTrunkEndpointIax: (trunkId: number, iaxId: number, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/trunks/${trunkId}/endpoints/iax/${iaxId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DissociateTrunkEndpointIax {
+  export type RequestParams = {
+    iaxId: number,
+  /** Trunk's ID */
+    trunkId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.trunks.{trunk_id}.endpoints.iax.{iax_id}.update`
- *
  * @tags trunks, endpoints, iax
  * @name AssociateTrunkEndpointIax
  * @summary Associate trunk and IAX endpoint
  * @request PUT:/trunks/{trunk_id}/endpoints/iax/{iax_id}
  * @secure
- */
-associateTrunkEndpointIax: (trunkId: number, iaxId: number, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/trunks/${trunkId}/endpoints/iax/${iaxId}`,
-        method: 'PUT',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace AssociateTrunkEndpointIax {
+  export type RequestParams = {
+    iaxId: number,
+  /** Trunk's ID */
+    trunkId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.trunks.{trunk_id}.endpoints.sip.{sip_uuid}.delete`
- *
  * @tags trunks, endpoints, sip
  * @name DissociateTrunkEndpointSip
  * @summary Dissociate trunk and SIP endpoint
  * @request DELETE:/trunks/{trunk_id}/endpoints/sip/{sip_uuid}
  * @secure
- */
-dissociateTrunkEndpointSip: (trunkId: number, sipUuid: string, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/trunks/${trunkId}/endpoints/sip/${sipUuid}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DissociateTrunkEndpointSip {
+  export type RequestParams = {
+    sipUuid: string,
+  /** Trunk's ID */
+    trunkId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.trunks.{trunk_id}.endpoints.sip.{sip_uuid}.update`
- *
  * @tags trunks, endpoints, sip
  * @name AssociateTrunkEndpointSip
  * @summary Associate trunk and SIP endpoint
  * @request PUT:/trunks/{trunk_id}/endpoints/sip/{sip_uuid}
  * @secure
- */
-associateTrunkEndpointSip: (trunkId: number, sipUuid: string, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/trunks/${trunkId}/endpoints/sip/${sipUuid}`,
-        method: 'PUT',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace AssociateTrunkEndpointSip {
+  export type RequestParams = {
+    sipUuid: string,
+  /** Trunk's ID */
+    trunkId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.trunks.{trunk_id}.registers.iax.{iax_id}.delete`
- *
  * @tags trunks, registers, iax
  * @name DissociateTrunkRegisterIax
  * @summary Dissociate trunk and IAX register
  * @request DELETE:/trunks/{trunk_id}/registers/iax/{iax_id}
  * @secure
- */
-dissociateTrunkRegisterIax: (trunkId: number, iaxId: number, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/trunks/${trunkId}/registers/iax/${iaxId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DissociateTrunkRegisterIax {
+  export type RequestParams = {
+    iaxId: number,
+  /** Trunk's ID */
+    trunkId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.trunks.{trunk_id}.registers.iax.{iax_id}.update`
- *
  * @tags trunks, registers, iax
  * @name AssociateTrunkRegisterIax
  * @summary Associate trunk and IAX register
  * @request PUT:/trunks/{trunk_id}/registers/iax/{iax_id}
  * @secure
- */
-associateTrunkRegisterIax: (trunkId: number, iaxId: number, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/trunks/${trunkId}/registers/iax/${iaxId}`,
-        method: 'PUT',
-                        secure: true,                        ...params,
-    }),
-    }
-    user = {
-  
-  /**
+*/
+export namespace AssociateTrunkRegisterIax {
+  export type RequestParams = {
+    iaxId: number,
+  /** Trunk's ID */
+    trunkId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = void;
+}
+      }
+
+    export namespace User {
+        
+/**
  * @description **Required ACL:** confd.users.me.meetings.{meeting_uuid}.authorizations.read
- *
  * @tags meeting_authorizations, meetings, users
  * @name ListUserMeetingAuthorizations
  * @summary List all guest authorization requests of a meeting
  * @request GET:/user/me/meetings/{meeting_uuid}/authorizations
  * @secure
- */
-listUserMeetingAuthorizations: (meetingUuid: string, params: RequestParams = {}) =>
-    this.request<MeetingAuthorizationItems, Error>({
-        path: `/user/me/meetings/${meetingUuid}/authorizations`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace ListUserMeetingAuthorizations {
+  export type RequestParams = {
+  /** Meeting UUID */
+    meetingUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = MeetingAuthorizationItems;
+}
+        
+/**
  * @description **Required ACL:** confd.users.me.meetings.{meeting_uuid}.authorizations.{authorization_uuid}.accept.update
- *
  * @tags meeting_authorizations, meetings, users
  * @name PutUserMeetingAuthorizationAccept
  * @summary Accept a guest authorization request
  * @request PUT:/user/me/meetings/{meeting_uuid}/authorizations/{authorization_uuid}/accept
  * @secure
- */
-putUserMeetingAuthorizationAccept: (meetingUuid: string, authorizationUuid: string, params: RequestParams = {}) =>
-    this.request<MeetingAuthorization, Error>({
-        path: `/user/me/meetings/${meetingUuid}/authorizations/${authorizationUuid}/accept`,
-        method: 'PUT',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace PutUserMeetingAuthorizationAccept {
+  export type RequestParams = {
+  /** Authorization UUID */
+    authorizationUuid: string,
+  /** Meeting UUID */
+    meetingUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = MeetingAuthorization;
+}
+        
+/**
  * @description **Required ACL:** confd.users.me.meetings.{meeting_uuid}.authorizations.{authorization_uuid}.reject.update
- *
  * @tags meeting_authorizations, meetings, users
  * @name PutUserMeetingAuthorizationReject
  * @summary Reject a guest authorization request
  * @request PUT:/user/me/meetings/{meeting_uuid}/authorizations/{authorization_uuid}/reject
  * @secure
- */
-putUserMeetingAuthorizationReject: (meetingUuid: string, authorizationUuid: string, params: RequestParams = {}) =>
-    this.request<MeetingAuthorization, Error>({
-        path: `/user/me/meetings/${meetingUuid}/authorizations/${authorizationUuid}/reject`,
-        method: 'PUT',
-                        secure: true,                format: "json",        ...params,
-    }),
-    }
-    users = {
-  
-  /**
+*/
+export namespace PutUserMeetingAuthorizationReject {
+  export type RequestParams = {
+  /** Authorization UUID */
+    authorizationUuid: string,
+  /** Meeting UUID */
+    meetingUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = MeetingAuthorization;
+}
+      }
+
+    export namespace Users {
+        
+/**
  * @description **Required ACL:** `confd.users.read`
- *
  * @tags users
  * @name ListUser
  * @summary List users
  * @request GET:/users
  * @secure
- */
-listUser: (query?: {
-  /**
-   * Should the query include sub-tenants
-   * @default false
-   */
-    recurse?: boolean,
-  /** Name of the field to use for sorting the list of items returned. */
-    order?: string,
+*/
+export namespace ListUser {
+  export type RequestParams = {};
+  export type RequestQuery = {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
   /** Maximum number of items to return in the list */
     limit?: number,
   /** Number of items to skip over in the list. Useful for pagination. */
     offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
-  /** Different view of the list of users. */
-    view?: "directory" | "summary",
   /**
    * Search filter for resource UUID, can be used to search multiple elements. Using a comma separated list of UUID
    * @maxItems 20
@@ -10265,1040 +12852,1440 @@ listUser: (query?: {
    * @uniqueItems true
    */
     uuid?: (string)[],
+  /** Different view of the list of users. */
+    view?: "directory" | "summary",
 
-}, params: RequestParams = {}) =>
-    this.request<UserItems, any>({
-        path: `/users`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = UserItems;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.create`
- *
  * @tags users
  * @name CreateUser
  * @summary Create user
  * @request POST:/users
  * @secure
- */
-createUser: (body: UserPost, params: RequestParams = {}) =>
-    this.request<UserPostResponse, Error>({
-        path: `/users`,
-        method: 'POST',
-                body: body,        secure: true,        type: ContentType.Json,        format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace CreateUser {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = UserPost;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = UserPostResponse;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.blocklist.read`
- *
  * @tags blocklist
  * @name ListBlocklistNumbers
  * @summary List all blocklisted numbers in tenant
  * @request GET:/users/blocklist/numbers
  * @secure
- */
-listBlocklistNumbers: (query?: {
+*/
+export namespace ListBlocklistNumbers {
+  export type RequestParams = {};
+  export type RequestQuery = {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+    direction?: "asc" | "desc",
+  /** filter blocklisted numbers by a label string */
+    label?: string,
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** filter blocklisted numbers by a number string */
+    number?: string,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
   /**
    * Should the query include sub-tenants
    * @default false
    */
     recurse?: boolean,
-  /** Name of the field to use for sorting the list of items returned. */
-    order?: string,
-  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
-    direction?: "asc" | "desc",
-  /** Maximum number of items to return in the list */
-    limit?: number,
-  /** Number of items to skip over in the list. Useful for pagination. */
-    offset?: number,
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
   /** filter blocklist numbers by the blocklist owner's uuid */
     user_uuid?: string,
-  /** filter blocklisted numbers by a number string */
-    number?: string,
-  /** filter blocklisted numbers by a label string */
-    label?: string,
 
-}, params: RequestParams = {}) =>
-    this.request<BlocklistNumbersListResponse, Error>({
-        path: `/users/blocklist/numbers`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = BlocklistNumbersListResponse;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.blocklist.read`
- *
  * @tags blocklist
  * @name GetBlocklistNumber
  * @summary Get blocklist number by uuid
  * @request GET:/users/blocklist/numbers/{blocklist_number_uuid}
  * @secure
- */
-getBlocklistNumber: (blocklistNumberUuid: string, params: RequestParams = {}) =>
-    this.request<BlocklistNumber, Error>({
-        path: `/users/blocklist/numbers/${blocklistNumberUuid}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
+*/
+export namespace GetBlocklistNumber {
+  export type RequestParams = {
   /**
+   * UUID of the blocklisted number
+   * @format uuid
+   */
+    blocklistNumberUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = BlocklistNumber;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.export.read` CSV field list available at https://wazo-platform.org/uc-doc/administration/users/csv_import
- *
  * @tags users
  * @name ExportUsersCsv
  * @summary Mass export users and associated resources
  * @request GET:/users/export
  * @secure
- */
-exportUsersCsv: (params: RequestParams = {}) =>
-    this.request<UserExport, any>({
-        path: `/users/export`,
-        method: 'GET',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace ExportUsersCsv {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = UserExport;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.import.create` CSV field list available at https://wazo-platform.org/uc-doc/administration/users/csv_import
- *
  * @tags users
  * @name ImportUsersCsv
  * @summary Mass import users and associated resources
  * @request POST:/users/import
  * @secure
- */
-importUsersCsv: (body: UserExport, params: RequestParams = {}) =>
-    this.request<UserImport, UserImportError>({
-        path: `/users/import`,
-        method: 'POST',
-                body: body,        secure: true,        type: ContentType.Text,        format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace ImportUsersCsv {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = UserExport;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = UserImport;
+}
+        
+/**
  * @description ** This endpoint is disabled.** **Required ACL:** `confd.users.import.update` CSV field list available at https://wazo-platform.org/uc-doc/administration/users/csv_import This resource has been disabled since it creates invalid configurations
- *
  * @tags users
  * @name UpdateUsersCsv
  * @summary **Disabled!** Mass import users and associated resources
  * @request PUT:/users/import
  * @secure
- */
-updateUsersCsv: (body: UserExport, params: RequestParams = {}) =>
-    this.request<UserUpdate, UserImportError | void>({
-        path: `/users/import`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Text,        format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateUsersCsv {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = UserExport;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = UserUpdate;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.me.blocklist.read`
- *
  * @tags blocklist
  * @name ListUsersMeBlocklistNumbers
  * @summary List blocklist numbers of current user
  * @request GET:/users/me/blocklist/numbers
  * @secure
- */
-listUsersMeBlocklistNumbers: (query?: {
-  /** Name of the field to use for sorting the list of items returned. */
-    order?: string,
+*/
+export namespace ListUsersMeBlocklistNumbers {
+  export type RequestParams = {};
+  export type RequestQuery = {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
-  /** Maximum number of items to return in the list */
-    limit?: number,
-  /** Number of items to skip over in the list. Useful for pagination. */
-    offset?: number,
-  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
-    search?: string,
-  /** filter blocklisted numbers by a number string */
-    number?: string,
   /** filter blocklisted numbers by a label string */
     label?: string,
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** filter blocklisted numbers by a number string */
+    number?: string,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
 
-}, params: RequestParams = {}) =>
-    this.request<UserBlocklistNumbersListResponse, any>({
-        path: `/users/me/blocklist/numbers`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = UserBlocklistNumbersListResponse;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.me.blocklist.create`
- *
  * @tags blocklist
  * @name CreateUsersMeBlocklistNumber
  * @summary Add a new blocklist number
  * @request POST:/users/me/blocklist/numbers
  * @secure
- */
-createUsersMeBlocklistNumber: (body: UserBlocklistNumber, params: RequestParams = {}) =>
-    this.request<UserBlocklistNumber, Error>({
-        path: `/users/me/blocklist/numbers`,
-        method: 'POST',
-                body: body,        secure: true,        type: ContentType.Json,        format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace CreateUsersMeBlocklistNumber {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = UserBlocklistNumber;
+  export type RequestHeaders = {};
+  export type ResponseBody = UserBlocklistNumber;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.me.blocklist.delete`
- *
  * @tags blocklist
  * @name DeleteUsersMeBlocklistNumber
  * @summary Delete a single blocklisted number by uuid
  * @request DELETE:/users/me/blocklist/numbers/{blocklist_number_uuid}
  * @secure
- */
-deleteUsersMeBlocklistNumber: (blocklistNumberUuid: string, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/users/me/blocklist/numbers/${blocklistNumberUuid}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
+*/
+export namespace DeleteUsersMeBlocklistNumber {
+  export type RequestParams = {
   /**
+   * UUID of the blocklisted number
+   * @format uuid
+   */
+    blocklistNumberUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.me.blocklist.read`
- *
  * @tags blocklist
  * @name GetUsersMeBlocklistNumber
  * @summary Get blocklist number by uuid
  * @request GET:/users/me/blocklist/numbers/{blocklist_number_uuid}
  * @secure
- */
-getUsersMeBlocklistNumber: (blocklistNumberUuid: string, params: RequestParams = {}) =>
-    this.request<UserBlocklistNumber, Error>({
-        path: `/users/me/blocklist/numbers/${blocklistNumberUuid}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
+*/
+export namespace GetUsersMeBlocklistNumber {
+  export type RequestParams = {
   /**
+   * UUID of the blocklisted number
+   * @format uuid
+   */
+    blocklistNumberUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = UserBlocklistNumber;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.me.blocklist.update`
- *
  * @tags blocklist
  * @name UpdateUsersMeBlocklistNumber
  * @summary Update a single blocklisted number by uuid
  * @request PUT:/users/me/blocklist/numbers/{blocklist_number_uuid}
  * @secure
- */
-updateUsersMeBlocklistNumber: (blocklistNumberUuid: string, blocklist_number_resource: UserBlocklistNumber, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/users/me/blocklist/numbers/${blocklistNumberUuid}`,
-        method: 'PUT',
-                body: blocklist_number_resource,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
+*/
+export namespace UpdateUsersMeBlocklistNumber {
+  export type RequestParams = {
   /**
+   * UUID of the blocklisted number
+   * @format uuid
+   */
+    blocklistNumberUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = UserBlocklistNumber;
+  export type RequestHeaders = {};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.me.meetings.read`
- *
  * @tags meetings, users
  * @name ListUserMeetings
  * @summary List user meetings
  * @request GET:/users/me/meetings
  * @secure
- */
-listUserMeetings: (query?: {
-  /**
-   * Should the query include sub-tenants
-   * @default false
-   */
-    recurse?: boolean,
-  /** Name of the field to use for sorting the list of items returned. */
-    order?: string,
+*/
+export namespace ListUserMeetings {
+  export type RequestParams = {};
+  export type RequestQuery = {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
   /** Maximum number of items to return in the list */
     limit?: number,
   /** Number of items to skip over in the list. Useful for pagination. */
     offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 
-}, params: RequestParams = {}) =>
-    this.request<MeetingItems, any>({
-        path: `/users/me/meetings`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = MeetingItems;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.me.meetings.create`
- *
  * @tags meetings, users
  * @name CreateUserMeeting
  * @summary Create user meeting
  * @request POST:/users/me/meetings
  * @secure
- */
-createUserMeeting: (body: MeetingUserRequest, params: RequestParams = {}) =>
-    this.request<Meeting, Error>({
-        path: `/users/me/meetings`,
-        method: 'POST',
-                body: body,        secure: true,        type: ContentType.Json,        format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace CreateUserMeeting {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = MeetingUserRequest;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = Meeting;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.me.meetings.{meeting_uuid}.delete`
- *
  * @tags meetings, users
  * @name DeleteUserMeeting
  * @summary Delete one of the meetings of the current user
  * @request DELETE:/users/me/meetings/{meeting_uuid}
  * @secure
- */
-deleteUserMeeting: (meetingUuid: string, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/users/me/meetings/${meetingUuid}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DeleteUserMeeting {
+  export type RequestParams = {
+  /** Meeting UUID */
+    meetingUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.me.meetings.{meeting_uuid}.read`
- *
  * @tags meetings, users
  * @name GetUserMeeting
  * @summary Get one of the meetings of the current user
  * @request GET:/users/me/meetings/{meeting_uuid}
  * @secure
- */
-getUserMeeting: (meetingUuid: string, params: RequestParams = {}) =>
-    this.request<Meeting, Error>({
-        path: `/users/me/meetings/${meetingUuid}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetUserMeeting {
+  export type RequestParams = {
+  /** Meeting UUID */
+    meetingUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = Meeting;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.me.meetings.{meeting_uuid}.update`
- *
  * @tags meetings, users
  * @name UpdateUserMeeting
  * @summary Update one of the meetings of the current user
  * @request PUT:/users/me/meetings/{meeting_uuid}
  * @secure
- */
-updateUserMeeting: (meetingUuid: string, body: MeetingRequest, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/users/me/meetings/${meetingUuid}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateUserMeeting {
+  export type RequestParams = {
+  /** Meeting UUID */
+    meetingUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = MeetingRequest;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** confd.users.me.meetings.{meeting_uuid}.authorizations.{authorization_uuid}.read
- *
  * @tags meeting_authorizations, meetings, guests
  * @name DeleteUserMeetingAuthorization
  * @summary Delete the guest authorization to enter a meeting
  * @request DELETE:/users/me/meetings/{meeting_uuid}/authorizations/{authorization_uuid}
  * @secure
- */
-deleteUserMeetingAuthorization: (guestUuid: string, meetingUuid: string, authorizationUuid: string, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/users/me/meetings/${meetingUuid}/authorizations/${authorizationUuid}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DeleteUserMeetingAuthorization {
+  export type RequestParams = {
+  /** Authorization UUID */
+    authorizationUuid: string,
+  /** Guest UUID. It must be generated by the guest. */
+    guestUuid: string,
+  /** Meeting UUID */
+    meetingUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** confd.users.me.meetings.{meeting_uuid}.authorizations.{authorization_uuid}.read
- *
  * @tags meeting_authorizations, meetings, guests
  * @name GetUserMeetingAuthorization
  * @summary Read the guest authorization to enter a meeting
  * @request GET:/users/me/meetings/{meeting_uuid}/authorizations/{authorization_uuid}
  * @secure
- */
-getUserMeetingAuthorization: (guestUuid: string, meetingUuid: string, authorizationUuid: string, params: RequestParams = {}) =>
-    this.request<MeetingAuthorization, Error>({
-        path: `/users/me/meetings/${meetingUuid}/authorizations/${authorizationUuid}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetUserMeetingAuthorization {
+  export type RequestParams = {
+  /** Authorization UUID */
+    authorizationUuid: string,
+  /** Guest UUID. It must be generated by the guest. */
+    guestUuid: string,
+  /** Meeting UUID */
+    meetingUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = MeetingAuthorization;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.subscriptions.read`
- *
  * @tags users
  * @name GetUsersSubscriptions
  * @summary Get user subscription
  * @request GET:/users/subscriptions
  * @secure
- */
-getUsersSubscriptions: (params: RequestParams = {}) =>
-    this.request<UserSubscriptionItems, any>({
-        path: `/users/subscriptions`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetUsersSubscriptions {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = UserSubscriptionItems;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.{user_id}.delete` A user can not be deleted if he is associated to a line or a voicemail. Any line or voicemail attached to the user must be dissociated first. The user will also be removed from all queues, groups or other Wazo entities whom he is member. **Disclaimer**: if `recursive=true`, the user is deleted, all their associations with any related resources are removed, and some resources (lines, extensions, incalls and auth user) are deleted too.
- *
  * @tags users
  * @name DeleteUser
  * @summary Delete user
  * @request DELETE:/users/{user_id}
  * @secure
- */
-deleteUser: (userId: string, query?: {
+*/
+export namespace DeleteUser {
+  export type RequestParams = {
+  /** the user's ID or UUID */
+    userId: string,
+
+};
+  export type RequestQuery = {
   /** Indicates if the resources related to the user must be deleted too. */
     recursive?: boolean,
 
-}, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/users/${userId}`,
-        method: 'DELETE',
-        query: query,                secure: true,                        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.{user_id}.read`
- *
  * @tags users
  * @name GetUser
  * @summary Get user
  * @request GET:/users/{user_id}
  * @secure
- */
-getUser: (userId: string, params: RequestParams = {}) =>
-    this.request<User, Error>({
-        path: `/users/${userId}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetUser {
+  export type RequestParams = {
+  /** the user's ID or UUID */
+    userId: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = User;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.{user_id}.read`
- *
  * @tags users
  * @name HeadUser
  * @summary Check if user exists
  * @request HEAD:/users/{user_id}
  * @secure
- */
-headUser: (userId: string, params: RequestParams = {}) =>
-    this.request<void, void>({
-        path: `/users/${userId}`,
-        method: 'HEAD',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace HeadUser {
+  export type RequestParams = {
+  /** the user's ID or UUID */
+    userId: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.{user_id}.update` If the firstname or the lastname is modified, the name of associated voicemail is also updated.
- *
  * @tags users
  * @name UpdateUser
  * @summary Update user
  * @request PUT:/users/{user_id}
  * @secure
- */
-updateUser: (userId: string, body: User, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/users/${userId}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateUser {
+  export type RequestParams = {
+  /** the user's ID or UUID */
+    userId: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = User;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.{user_id}.agents.delete`
- *
  * @tags users, agents
  * @name DissociateUserAgent
  * @summary Dissociate user and agent
  * @request DELETE:/users/{user_id}/agents
  * @secure
- */
-dissociateUserAgent: (userId: string, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/users/${userId}/agents`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DissociateUserAgent {
+  export type RequestParams = {
+  /** the user's ID or UUID */
+    userId: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.{user_id}.agents.{agent_id}.update`
- *
  * @tags users, agents
  * @name AssociateUserAgent
  * @summary Associate user and agent
  * @request PUT:/users/{user_id}/agents/{agent_id}
  * @secure
- */
-associateUserAgent: (userId: string, agentId: number, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/users/${userId}/agents/${agentId}`,
-        method: 'PUT',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace AssociateUserAgent {
+  export type RequestParams = {
+  /** Agent’s ID */
+    agentId: number,
+  /** the user's ID or UUID */
+    userId: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.{user_id}.callerids.outgoing.read`
- *
  * @tags users
  * @name ListUserCalleridOutgoing
  * @summary List user's outgoing callerids
  * @request GET:/users/{user_id}/callerids/outgoing
  * @secure
- */
-listUserCalleridOutgoing: (userId: string, params: RequestParams = {}) =>
-    this.request<UserCallerIDItems, any>({
-        path: `/users/${userId}/callerids/outgoing`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace ListUserCalleridOutgoing {
+  export type RequestParams = {
+  /** the user's ID or UUID */
+    userId: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = UserCallerIDItems;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.{user_id}.callpermissions.{call_permission_id}.delete`
- *
  * @tags users, callpermissions
  * @name DissociateUserCallpermission
  * @summary Dissociate user and call permission
  * @request DELETE:/users/{user_id}/callpermissions/{callpermission_id}
  * @secure
- */
-dissociateUserCallpermission: (userId: string, callpermissionId: number, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/users/${userId}/callpermissions/${callpermissionId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DissociateUserCallpermission {
+  export type RequestParams = {
+  /** Call Permission's ID */
+    callpermissionId: number,
+  /** the user's ID or UUID */
+    userId: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.{user_id}.callpermissions.{call_permission_id}.update`
- *
  * @tags users, callpermissions
  * @name AssociateUserCallpermission
  * @summary Associate user and call permission
  * @request PUT:/users/{user_id}/callpermissions/{callpermission_id}
  * @secure
- */
-associateUserCallpermission: (userId: string, callpermissionId: number, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/users/${userId}/callpermissions/${callpermissionId}`,
-        method: 'PUT',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace AssociateUserCallpermission {
+  export type RequestParams = {
+  /** Call Permission's ID */
+    callpermissionId: number,
+  /** the user's ID or UUID */
+    userId: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.{user_id}.fallbacks.read`
- *
  * @tags users
  * @name GetUserFallback
  * @summary List all fallbacks for user
  * @request GET:/users/{user_id}/fallbacks
  * @secure
- */
-getUserFallback: (userId: string, params: RequestParams = {}) =>
-    this.request<UserFallbacks, any>({
-        path: `/users/${userId}/fallbacks`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetUserFallback {
+  export type RequestParams = {
+  /** the user's ID or UUID */
+    userId: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = UserFallbacks;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.{user_id}.fallbacks.update` **WARNING** This endpoint delete all fields that are not defined.
- *
  * @tags users
  * @name UpdateUserFallback
  * @summary Update user's fallbacks
  * @request PUT:/users/{user_id}/fallbacks
  * @secure
- */
-updateUserFallback: (userId: string, body: UserFallbacks, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/users/${userId}/fallbacks`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateUserFallback {
+  export type RequestParams = {
+  /** the user's ID or UUID */
+    userId: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = UserFallbacks;
+  export type RequestHeaders = {};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.{user_id}.forwards.read`
- *
  * @tags forwards, users
  * @name ListUserForwards
  * @summary List forwards for a user
  * @request GET:/users/{user_id}/forwards
  * @secure
- */
-listUserForwards: (userId: string, params: RequestParams = {}) =>
-    this.request<UserForwards, any>({
-        path: `/users/${userId}/forwards`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace ListUserForwards {
+  export type RequestParams = {
+  /** the user's ID or UUID */
+    userId: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = UserForwards;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.{user_id}.forwards.update`
- *
  * @tags forwards, users
  * @name UpdateUserForwards
  * @summary Update all forwards for a user
  * @request PUT:/users/{user_id}/forwards
  * @secure
- */
-updateUserForwards: (userId: string, body: UserForwards, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/users/${userId}/forwards`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateUserForwards {
+  export type RequestParams = {
+  /** the user's ID or UUID */
+    userId: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = UserForwards;
+  export type RequestHeaders = {};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.{user_id}.forwards.{forward_name}.read`
- *
  * @tags forwards, users
  * @name GetUserForward
  * @summary Get forward for a user
  * @request GET:/users/{user_id}/forwards/{forward_name}
  * @secure
- */
-getUserForward: (userId: string, forwardName: "busy" | "noanswer" | "unconditional", params: RequestParams = {}) =>
-    this.request<UserForward, any>({
-        path: `/users/${userId}/forwards/${forwardName}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetUserForward {
+  export type RequestParams = {
+  /** the forward name */
+    forwardName: "busy" | "noanswer" | "unconditional",
+  /** the user's ID or UUID */
+    userId: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = UserForward;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.{user_id}.forwards.{forward_name}.update`
- *
  * @tags forwards, users
  * @name UpdateUserForward
  * @summary Update a forward for a user
  * @request PUT:/users/{user_id}/forwards/{forward_name}
  * @secure
- */
-updateUserForward: (userId: string, forwardName: "busy" | "noanswer" | "unconditional", body: UserForward, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/users/${userId}/forwards/${forwardName}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateUserForward {
+  export type RequestParams = {
+  /** the forward name */
+    forwardName: "busy" | "noanswer" | "unconditional",
+  /** the user's ID or UUID */
+    userId: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = UserForward;
+  export type RequestHeaders = {};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.{user_id}.funckeys.read`
- *
  * @tags funckeys, users
  * @name ListUserFuncKeys
  * @summary List func keys for a user
  * @request GET:/users/{user_id}/funckeys
  * @secure
- */
-listUserFuncKeys: (userId: string, params: RequestParams = {}) =>
-    this.request<FuncKeyTemplate, any>({
-        path: `/users/${userId}/funckeys`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace ListUserFuncKeys {
+  export type RequestParams = {
+  /** the user's ID or UUID */
+    userId: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = FuncKeyTemplate;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.{user_id}.funckeys.update` **WARNING** This endpoint restore to default value or delete all fields that are not defined.
- *
  * @tags funckeys, users
  * @name UpdateUserFuncKeys
  * @summary Update func keys for a user
  * @request PUT:/users/{user_id}/funckeys
  * @secure
- */
-updateUserFuncKeys: (userId: string, body: FuncKeyTemplate, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/users/${userId}/funckeys`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateUserFuncKeys {
+  export type RequestParams = {
+  /** the user's ID or UUID */
+    userId: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = FuncKeyTemplate;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.{user_id}.funckeys.templates.read`
- *
  * @tags funckeys, users
  * @name ListUserFuncKeyTemplateAssociations
  * @summary List funckey templates associated to user
  * @request GET:/users/{user_id}/funckeys/templates
  * @secure
- */
-listUserFuncKeyTemplateAssociations: (userId: string, params: RequestParams = {}) =>
-    this.request<UserFuncKeyTemplate, Error>({
-        path: `/users/${userId}/funckeys/templates`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace ListUserFuncKeyTemplateAssociations {
+  export type RequestParams = {
+  /** the user's ID or UUID */
+    userId: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = UserFuncKeyTemplate;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.{user_id}.funckeys.templates.{template_id}.delete`
- *
  * @tags funckeys, users
  * @name DissociateUserFuncKeyTemplate
  * @summary Dissociate a func key template to a user
  * @request DELETE:/users/{user_id}/funckeys/templates/{template_id}
  * @secure
- */
-dissociateUserFuncKeyTemplate: (userId: string, templateId: number, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/users/${userId}/funckeys/templates/${templateId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DissociateUserFuncKeyTemplate {
+  export type RequestParams = {
+    templateId: number,
+  /** the user's ID or UUID */
+    userId: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.{user_id}.funckeys.templates.{template_id}.update`
- *
  * @tags funckeys, users
  * @name AssociateUserFuncKeyTemplate
  * @summary Associate a func key template to a user
  * @request PUT:/users/{user_id}/funckeys/templates/{template_id}
  * @secure
- */
-associateUserFuncKeyTemplate: (userId: string, templateId: number, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/users/${userId}/funckeys/templates/${templateId}`,
-        method: 'PUT',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace AssociateUserFuncKeyTemplate {
+  export type RequestParams = {
+    templateId: number,
+  /** the user's ID or UUID */
+    userId: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.{user_id}.funckeys.{position}.delete`
- *
  * @tags funckeys, users
  * @name DeleteUserFuncKey
  * @summary Remove func key for user
  * @request DELETE:/users/{user_id}/funckeys/{position}
  * @secure
- */
-deleteUserFuncKey: (userId: string, position: number, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/users/${userId}/funckeys/${position}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DeleteUserFuncKey {
+  export type RequestParams = {
+  /** position of the funckey */
+    position: number,
+  /** the user's ID or UUID */
+    userId: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.{user_id}.funckeys.{position}.read`
- *
  * @tags funckeys, users
  * @name GetUserFuncKey
  * @summary Get a func key for a user
  * @request GET:/users/{user_id}/funckeys/{position}
  * @secure
- */
-getUserFuncKey: (userId: string, position: number, params: RequestParams = {}) =>
-    this.request<FuncKey, Error>({
-        path: `/users/${userId}/funckeys/${position}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetUserFuncKey {
+  export type RequestParams = {
+  /** position of the funckey */
+    position: number,
+  /** the user's ID or UUID */
+    userId: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = FuncKey;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.{user_id}.funckeys.{position}.update`
- *
  * @tags funckeys, users
  * @name UpdateUserFuncKey
  * @summary Add/Replace a func key for a user
  * @request PUT:/users/{user_id}/funckeys/{position}
  * @secure
- */
-updateUserFuncKey: (userId: string, position: number, body: FuncKey, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/users/${userId}/funckeys/${position}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateUserFuncKey {
+  export type RequestParams = {
+  /** position of the funckey */
+    position: number,
+  /** the user's ID or UUID */
+    userId: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = FuncKey;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.{user_id}.groups` **WARNING** This endpoint remove all groups which are not defined.
- *
  * @tags groups, users
  * @name UpdateUserGroups
  * @summary Update user and groups
  * @request PUT:/users/{user_id}/groups
  * @secure
- */
-updateUserGroups: (userId: string, body: UserGroupsID, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/users/${userId}/groups`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateUserGroups {
+  export type RequestParams = {
+  /** the user's ID or UUID */
+    userId: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = UserGroupsID;
+  export type RequestHeaders = {};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.{user_id}.lines.update`
- *
  * @tags users, lines
  * @name AssociateUserLines
  * @summary Associate user and lines
  * @request PUT:/users/{user_id}/lines
  * @secure
- */
-associateUserLines: (userId: string, body: LinesID, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/users/${userId}/lines`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace AssociateUserLines {
+  export type RequestParams = {
+  /** the user's ID or UUID */
+    userId: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = LinesID;
+  export type RequestHeaders = {};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.{user_id}.lines.{line_id}.delete` Any devices that are attached the line must be removed before dissociating a user from its line. A device can be dissociated be resetting it to autoprov mode.
- *
  * @tags users, lines
  * @name DissociateUserLine
  * @summary Dissociate user and line
  * @request DELETE:/users/{user_id}/lines/{line_id}
  * @secure
- */
-dissociateUserLine: (userId: string, lineId: number, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/users/${userId}/lines/${lineId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DissociateUserLine {
+  export type RequestParams = {
+    lineId: number,
+  /** the user's ID or UUID */
+    userId: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.{user_id}.lines.{line_id}.update`
- *
  * @tags users, lines
  * @name AssociateUserLine
  * @summary Associate user and line
  * @request PUT:/users/{user_id}/lines/{line_id}
  * @secure
- */
-associateUserLine: (userId: string, lineId: number, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/users/${userId}/lines/${lineId}`,
-        method: 'PUT',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace AssociateUserLine {
+  export type RequestParams = {
+    lineId: number,
+  /** the user's ID or UUID */
+    userId: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.{user_id}.schedules.{schedule_id}.delete`
- *
  * @tags users, schedules
  * @name DissociateUserSchedule
  * @summary Dissociate user and schedule
  * @request DELETE:/users/{user_id}/schedules/{schedule_id}
  * @secure
- */
-dissociateUserSchedule: (userId: string, scheduleId: number, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/users/${userId}/schedules/${scheduleId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DissociateUserSchedule {
+  export type RequestParams = {
+  /** Schedule's ID */
+    scheduleId: number,
+  /** the user's ID or UUID */
+    userId: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.{user_id}.schedules.{schedule_id}.update`
- *
  * @tags users, schedules
  * @name AssociateUserSchedule
  * @summary Associate user and schedule
  * @request PUT:/users/{user_id}/schedules/{schedule_id}
  * @secure
- */
-associateUserSchedule: (userId: string, scheduleId: number, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/users/${userId}/schedules/${scheduleId}`,
-        method: 'PUT',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace AssociateUserSchedule {
+  export type RequestParams = {
+  /** Schedule's ID */
+    scheduleId: number,
+  /** the user's ID or UUID */
+    userId: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.{user_id}.services.read`
- *
  * @tags users
  * @name GetUserServices
  * @summary Get status of all user's services
  * @request GET:/users/{user_id}/services
  * @secure
- */
-getUserServices: (userId: string, params: RequestParams = {}) =>
-    this.request<UserServices, Error>({
-        path: `/users/${userId}/services`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetUserServices {
+  export type RequestParams = {
+  /** the user's ID or UUID */
+    userId: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = UserServices;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.{user_id}.services.update`
- *
  * @tags users
  * @name UpdateUserServices
  * @summary Update all services for a user
  * @request PUT:/users/{user_id}/services
  * @secure
- */
-updateUserServices: (userId: string, body: UserServices, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/users/${userId}/services`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateUserServices {
+  export type RequestParams = {
+  /** the user's ID or UUID */
+    userId: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = UserServices;
+  export type RequestHeaders = {};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.{user_id}.services.{service}.read`
- *
  * @tags users
  * @name GetUserService
  * @summary Get status of service
  * @request GET:/users/{user_id}/services/{service_name}
  * @secure
- */
-getUserService: (userId: string, serviceName: "dnd" | "incallfilter", params: RequestParams = {}) =>
-    this.request<UserService, Error>({
-        path: `/users/${userId}/services/${serviceName}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetUserService {
+  export type RequestParams = {
+  /** the service name */
+    serviceName: "dnd" | "incallfilter",
+  /** the user's ID or UUID */
+    userId: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = UserService;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.{user_id}.services.{service}.update`
- *
  * @tags users
  * @name UpdateUserService
  * @summary Enable/Disable service for a user
  * @request PUT:/users/{user_id}/services/{service_name}
  * @secure
- */
-updateUserService: (userId: string, serviceName: "dnd" | "incallfilter", body: UserService, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/users/${userId}/services/${serviceName}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
-  /**
+*/
+export namespace UpdateUserService {
+  export type RequestParams = {
+  /** the service name */
+    serviceName: "dnd" | "incallfilter",
+  /** the user's ID or UUID */
+    userId: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = UserService;
+  export type RequestHeaders = {};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.{user_id}.voicemails.delete`
- *
  * @tags users, voicemails
  * @name DissociateUserVoicemail
  * @summary Dissociate user and voicemail
  * @request DELETE:/users/{user_id}/voicemails
  * @secure
- */
-dissociateUserVoicemail: (userId: string, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/users/${userId}/voicemails`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DissociateUserVoicemail {
+  export type RequestParams = {
+  /** the user's ID or UUID */
+    userId: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.{user_id}.voicemails.read`
- *
  * @tags users, voicemails
  * @name GetUserVoicemail
  * @summary Get user voicemails
  * @request GET:/users/{user_id}/voicemails
  * @secure
- */
-getUserVoicemail: (userId: string, params: RequestParams = {}) =>
-    this.request<VoicemailItems, Error>({
-        path: `/users/${userId}/voicemails`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetUserVoicemail {
+  export type RequestParams = {
+  /** the user's ID or UUID */
+    userId: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = VoicemailItems;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.{user_id}.voicemails.create`
- *
  * @tags users, voicemails
  * @name CreateUserVoicemail
  * @summary Create user voicemail
  * @request POST:/users/{user_id}/voicemails
  * @secure
- */
-createUserVoicemail: (userId: string, body: Voicemail, params: RequestParams = {}) =>
-    this.request<Voicemail, Error | NotFoundError>({
-        path: `/users/${userId}/voicemails`,
-        method: 'POST',
-                body: body,        secure: true,        type: ContentType.Json,        format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace CreateUserVoicemail {
+  export type RequestParams = {
+  /** the user's ID or UUID */
+    userId: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = Voicemail;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = Voicemail;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.{user_id}.voicemails.{voicemail_id}.update`
- *
  * @tags users, voicemails
  * @name AssociateUserVoicemail
  * @summary Associate user and voicemail
  * @request PUT:/users/{user_id}/voicemails/{voicemail_id}
  * @secure
- */
-associateUserVoicemail: (userId: string, voicemailId: number, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/users/${userId}/voicemails/${voicemailId}`,
-        method: 'PUT',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace AssociateUserVoicemail {
+  export type RequestParams = {
+  /** the user's ID or UUID */
+    userId: string,
+    voicemailId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.{user_uuid}.blocklist.read`
- *
  * @tags blocklist
  * @name ListUserBlocklistNumbers
  * @summary List blocklisted numbers of a user
  * @request GET:/users/{user_uuid}/blocklist/numbers
  * @secure
- */
-listUserBlocklistNumbers: (userUuid: string, query?: {
-  /** Name of the field to use for sorting the list of items returned. */
-    order?: string,
+*/
+export namespace ListUserBlocklistNumbers {
+  export type RequestParams = {
+  /**
+   * the user's UUID
+   * @format uuid
+   */
+    userUuid: string,
+
+};
+  export type RequestQuery = {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
-  /** Maximum number of items to return in the list */
-    limit?: number,
-  /** Number of items to skip over in the list. Useful for pagination. */
-    offset?: number,
-  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
-    search?: string,
-  /** filter blocklisted numbers by a number string */
-    number?: string,
   /** filter blocklisted numbers by a label string */
     label?: string,
+  /** Maximum number of items to return in the list */
+    limit?: number,
+  /** filter blocklisted numbers by a number string */
+    number?: string,
+  /** Number of items to skip over in the list. Useful for pagination. */
+    offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+    search?: string,
 
-}, params: RequestParams = {}) =>
-    this.request<BlocklistNumbersListResponse, Error>({
-        path: `/users/${userUuid}/blocklist/numbers`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = BlocklistNumbersListResponse;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.{user_uuid}.blocklist.read`
- *
  * @tags blocklist
  * @name LookupUserBlocklistNumber
  * @summary Check if a number is part of a user's blocklist
  * @request HEAD:/users/{user_uuid}/blocklist/numbers
  * @secure
- */
-lookupUserBlocklistNumber: (userUuid: string, query: {
+*/
+export namespace LookupUserBlocklistNumber {
+  export type RequestParams = {
+  /**
+   * the user's UUID
+   * @format uuid
+   */
+    userUuid: string,
+
+};
+  export type RequestQuery = {
   /** E.164 number string to lookup(exact match) in the user's blocklist */
     number_exact: string,
 
-}, params: RequestParams = {}) =>
-    this.request<void, Error>({
-        path: `/users/${userUuid}/blocklist/numbers`,
-        method: 'HEAD',
-        query: query,                secure: true,                        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = void;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.{user_uuid}.external.apps.read`
- *
  * @tags external_apps, users
  * @name ListUserExternalApps
  * @summary List user external apps
  * @request GET:/users/{user_uuid}/external/apps
  * @secure
- */
-listUserExternalApps: (userUuid: string, query?: {
-  /** Name of the field to use for sorting the list of items returned. */
-    order?: string,
+*/
+export namespace ListUserExternalApps {
+  export type RequestParams = {
+  /**
+   * the user's UUID
+   * @format uuid
+   */
+    userUuid: string,
+
+};
+  export type RequestQuery = {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
   /** Maximum number of items to return in the list */
     limit?: number,
   /** Number of items to skip over in the list. Useful for pagination. */
     offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
   /**
@@ -11314,39 +14301,65 @@ listUserExternalApps: (userUuid: string, query?: {
    */
     view?: "fallback",
 
-}, params: RequestParams = {}) =>
-    this.request<UserExternalAppItems, any>({
-        path: `/users/${userUuid}/external/apps`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = UserExternalAppItems;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.{user_uuid}.external.apps.{app_name}.delete`
- *
  * @tags external_apps, users
  * @name DeleteUserExternalApp
  * @summary Delete user external app
  * @request DELETE:/users/{user_uuid}/external/apps/{app_name}
  * @secure
- */
-deleteUserExternalApp: (userUuid: string, appName: string, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/users/${userUuid}/external/apps/${appName}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
+*/
+export namespace DeleteUserExternalApp {
+  export type RequestParams = {
+  /** External App's name */
+    appName: string,
   /**
+   * the user's UUID
+   * @format uuid
+   */
+    userUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.{user_uuid}.external.apps.{app_name}.read`
- *
  * @tags external_apps, users
  * @name GetUserExternalApp
  * @summary Get user external app
  * @request GET:/users/{user_uuid}/external/apps/{app_name}
  * @secure
- */
-getUserExternalApp: (userUuid: string, appName: string, query?: {
+*/
+export namespace GetUserExternalApp {
+  export type RequestParams = {
+  /** External App's name */
+    appName: string,
+  /**
+   * the user's UUID
+   * @format uuid
+   */
+    userUuid: string,
+
+};
+  export type RequestQuery = {
   /**
    * Different view of the external app endpoint
    * 
@@ -11360,55 +14373,92 @@ getUserExternalApp: (userUuid: string, appName: string, query?: {
    */
     view?: "fallback",
 
-}, params: RequestParams = {}) =>
-    this.request<UserExternalApp, Error>({
-        path: `/users/${userUuid}/external/apps/${appName}`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = UserExternalApp;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.{user_uuid}.external.apps.{app_name}.create`
- *
  * @tags external_apps, users
  * @name CreateUserExternalApp
  * @summary Create user external app
  * @request POST:/users/{user_uuid}/external/apps/{app_name}
  * @secure
- */
-createUserExternalApp: (userUuid: string, appName: string, body: UserExternalApp, params: RequestParams = {}) =>
-    this.request<UserExternalApp, Error>({
-        path: `/users/${userUuid}/external/apps/${appName}`,
-        method: 'POST',
-                body: body,        secure: true,        type: ContentType.Json,        format: "json",        ...params,
-    }),
-  
+*/
+export namespace CreateUserExternalApp {
+  export type RequestParams = {
+  /** External App's name */
+    appName: string,
   /**
+   * the user's UUID
+   * @format uuid
+   */
+    userUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = UserExternalApp;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = UserExternalApp;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.{user_uuid}.external.apps.{app_name}.update`
- *
  * @tags external_apps, users
  * @name UpdateUserExternalApp
  * @summary Update user external app
  * @request PUT:/users/{user_uuid}/external/apps/{app_name}
  * @secure
- */
-updateUserExternalApp: (userUuid: string, appName: string, body: UserExternalApp, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/users/${userUuid}/external/apps/${appName}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-  
+*/
+export namespace UpdateUserExternalApp {
+  export type RequestParams = {
+  /** External App's name */
+    appName: string,
   /**
+   * the user's UUID
+   * @format uuid
+   */
+    userUuid: string,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = UserExternalApp;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.{user_uuid}.lines.main.associated.endpoints.sip.read`
- *
  * @tags endpoints, lines, users
  * @name GetUserLineMainAssociatedEndpointsSip
  * @summary Get SIP endpoint of main line for a user
  * @request GET:/users/{user_uuid}/lines/main/associated/endpoints/sip
  * @secure
- */
-getUserLineMainAssociatedEndpointsSip: (userUuid: string, query?: {
+*/
+export namespace GetUserLineMainAssociatedEndpointsSip {
+  export type RequestParams = {
+  /**
+   * the user's UUID
+   * @format uuid
+   */
+    userUuid: string,
+
+};
+  export type RequestQuery = {
   /**
    * Different view of the SIP endpoint
    * 
@@ -11419,23 +14469,31 @@ getUserLineMainAssociatedEndpointsSip: (userUuid: string, query?: {
    */
     view?: "merged",
 
-}, params: RequestParams = {}) =>
-    this.request<EndpointSIP, void>({
-        path: `/users/${userUuid}/lines/main/associated/endpoints/sip`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = EndpointSIP;
+}
+        
+/**
  * @description **Required ACL:** `confd.users.{user_uuid}.lines.{line_id}.associated.endpoints.sip.read`
- *
  * @tags endpoints, lines, users
  * @name GetUserLineAssociatedEndpointsSip
  * @summary Get SIP endpoint of a line for a user
  * @request GET:/users/{user_uuid}/lines/{line_id}/associated/endpoints/sip
  * @secure
- */
-getUserLineAssociatedEndpointsSip: (userUuid: string, lineId: number, query?: {
+*/
+export namespace GetUserLineAssociatedEndpointsSip {
+  export type RequestParams = {
+    lineId: number,
+  /**
+   * the user's UUID
+   * @format uuid
+   */
+    userUuid: string,
+
+};
+  export type RequestQuery = {
   /**
    * Different view of the SIP endpoint
    * 
@@ -11446,160 +14504,187 @@ getUserLineAssociatedEndpointsSip: (userUuid: string, lineId: number, query?: {
    */
     view?: "merged",
 
-}, params: RequestParams = {}) =>
-    this.request<EndpointSIP, void>({
-        path: `/users/${userUuid}/lines/${lineId}/associated/endpoints/sip`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-    }
-    voicemails = {
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = EndpointSIP;
+}
+      }
+
+    export namespace Voicemails {
+        
+/**
  * @description **Required ACL:** `confd.voicemails.read`
- *
  * @tags voicemails
  * @name ListVoicemails
  * @summary List voicemails
  * @request GET:/voicemails
  * @secure
- */
-listVoicemails: (query?: {
-  /**
-   * Should the query include sub-tenants
-   * @default false
-   */
-    recurse?: boolean,
-  /** Name of the field to use for sorting the list of items returned. */
-    order?: string,
+*/
+export namespace ListVoicemails {
+  export type RequestParams = {};
+  export type RequestQuery = {
   /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
     direction?: "asc" | "desc",
   /** Maximum number of items to return in the list */
     limit?: number,
   /** Number of items to skip over in the list. Useful for pagination. */
     offset?: number,
+  /** Name of the field to use for sorting the list of items returned. */
+    order?: string,
+  /**
+   * Should the query include sub-tenants
+   * @default false
+   */
+    recurse?: boolean,
   /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
     search?: string,
 
-}, params: RequestParams = {}) =>
-    this.request<VoicemailItems, any>({
-        path: `/voicemails`,
-        method: 'GET',
-        query: query,                secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = VoicemailItems;
+}
+        
+/**
  * @description **Required ACL:** `confd.voicemails.create`
- *
  * @tags voicemails
  * @name CreateVoicemail
  * @summary Create voicemail
  * @request POST:/voicemails
  * @secure
- */
-createVoicemail: (body: Voicemail, params: RequestParams = {}) =>
-    this.request<Voicemail, Error>({
-        path: `/voicemails`,
-        method: 'POST',
-                body: body,        secure: true,        type: ContentType.Json,        format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace CreateVoicemail {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = Voicemail;
+  export type RequestHeaders = {};
+  export type ResponseBody = Voicemail;
+}
+        
+/**
  * @description **Required ACL:** `confd.voicemails.{voicemail_id}.delete` A voicemail can not be deleted if it is still attached to a user. The user must be dissociated first. Any extension that redirects to the voicemail (e.g. an Incoming call) will be disabled after deletion.
- *
  * @tags voicemails
  * @name DeleteVoicemail
  * @summary Delete voicemail
  * @request DELETE:/voicemails/{voicemail_id}
  * @secure
- */
-deleteVoicemail: (voicemailId: number, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/voicemails/${voicemailId}`,
-        method: 'DELETE',
-                        secure: true,                        ...params,
-    }),
-  
-  /**
+*/
+export namespace DeleteVoicemail {
+  export type RequestParams = {
+    voicemailId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+        
+/**
  * @description **Required ACL:** `confd.voicemails.{voicemail_id}.read`
- *
  * @tags voicemails
  * @name GetVoicemail
  * @summary Get voicemail
  * @request GET:/voicemails/{voicemail_id}
  * @secure
- */
-getVoicemail: (voicemailId: number, params: RequestParams = {}) =>
-    this.request<Voicemail, Error>({
-        path: `/voicemails/${voicemailId}`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetVoicemail {
+  export type RequestParams = {
+    voicemailId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = Voicemail;
+}
+        
+/**
  * @description **Required ACL:** `confd.voicemails.{voicemail_id}.update`
- *
  * @tags voicemails
  * @name UpdateVoicemail
  * @summary Update voicemail
  * @request PUT:/voicemails/{voicemail_id}
  * @secure
- */
-updateVoicemail: (voicemailId: number, body: Voicemail, params: RequestParams = {}) =>
-    this.request<any, Error>({
-        path: `/voicemails/${voicemailId}`,
-        method: 'PUT',
-                body: body,        secure: true,        type: ContentType.Json,                ...params,
-    }),
-    }
-    wizard = {
-  
-  /**
+*/
+export namespace UpdateVoicemail {
+  export type RequestParams = {
+    voicemailId: number,
+
+};
+  export type RequestQuery = {};
+  export type RequestBody = Voicemail;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = any;
+}
+      }
+
+    export namespace Wizard {
+        
+/**
  * @description **Required ACL:** none
- *
  * @tags wizard
  * @name GetWizardStatus
  * @summary Get wizard status
  * @request GET:/wizard
  * @secure
- */
-getWizardStatus: (params: RequestParams = {}) =>
-    this.request<WizardConfigured, any>({
-        path: `/wizard`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace GetWizardStatus {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = WizardConfigured;
+}
+        
+/**
  * @description **Required ACL:** none This API can only be used before wizard configuration.
- *
  * @tags wizard
  * @name PassWizard
  * @summary Pass the wizard
  * @request POST:/wizard
  * @secure
- */
-passWizard: (body: Wizard, params: RequestParams = {}) =>
-    this.request<Wizard, Error>({
-        path: `/wizard`,
-        method: 'POST',
-                body: body,        secure: true,        type: ContentType.Json,        format: "json",        ...params,
-    }),
-  
-  /**
+*/
+export namespace PassWizard {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = Wizard;
+  export type RequestHeaders = {};
+  export type ResponseBody = Wizard;
+}
+        
+/**
  * @description **Required ACL:** none This API can only be used before wizard configuration.
- *
  * @tags wizard
  * @name GetWizardDiscover
  * @summary Get wizard discover
  * @request GET:/wizard/discover
  * @secure
- */
-getWizardDiscover: (params: RequestParams = {}) =>
-    this.request<WizardDiscover, Error>({
-        path: `/wizard/discover`,
-        method: 'GET',
-                        secure: true,                format: "json",        ...params,
-    }),
-    }
-  }
+*/
+export namespace GetWizardDiscover {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {};
+  export type ResponseBody = WizardDiscover;
+}
+      }
+
+ 

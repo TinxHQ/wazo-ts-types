@@ -146,6 +146,53 @@ export interface Error {
   timestamp?: string[];
 }
 
+export interface GetSubscriptionSummaryParams {
+  /** Whether to recurse for subtenants */
+  recurse?: boolean;
+}
+
+export interface ListAuthorizationsParams {
+  /** The uuid of the main authorization authorizations are linked to */
+  main_authorization_uuid?: string;
+  /** The status of the authorization. Possible values are: OPEN, REVOKED */
+  status?: string;
+}
+
+export interface ListCustomerSubscriptionSummariesParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+  direction?: "asc" | "desc";
+  /** Maximum number of items to return in the list */
+  limit?: number;
+  /** Number of items to skip over in the list. Useful for pagination. */
+  offset?: number;
+  /** Name of the field to use for sorting the list of items returned. */
+  order?: string;
+  /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+  search?: string;
+}
+
+export interface ListSubscriptionAuthorizationsParams {
+  /** The status of the authorization. Possible values are: OPEN, REVOKED */
+  status?: string;
+  /** The UUID of the subscription */
+  subscriptionUuid: string;
+}
+
+export interface ListSubscriptionsParams {
+  /** Whether the subscription auto renew itself */
+  cancel_at_end_of_period?: boolean;
+  /** The creation date of the subscription */
+  created_at?: string;
+  /** The partnership level of the subscription */
+  partnership?: string;
+  /** Whether to recurse for subtenants */
+  recurse?: boolean;
+  /** The status of the subscription. Possible values are : ACTIVE, EXPIRED */
+  status?: string;
+  /** The term (in months) of the subscription */
+  term?: number;
+}
+
 export type MainAuthorization = AuthorizationBase & {
   /** The UUID of the related subscription */
   subscription_uuid?: string;
@@ -289,878 +336,604 @@ export interface Token {
   jwt?: string;
 }
 
-export type QueryParamsType = Record<string | number, any>;
-export type ResponseFormat = keyof Omit<Body, "body" | "bodyUsed">;
-
-export interface FullRequestParams extends Omit<RequestInit, "body"> {
-  /** set parameter to `true` for call `securityWorker` for this request */
-  secure?: boolean;
-  /** request path */
-  path: string;
-  /** content type of request body */
-  type?: ContentType;
-  /** query params */
-  query?: QueryParamsType;
-  /** format of response (i.e. response.json() -> format: "json") */
-  format?: ResponseFormat;
-  /** request body */
-  body?: unknown;
-  /** base url */
-  baseUrl?: string;
-  /** request cancellation token */
-  cancelToken?: CancelToken;
-}
-
-export type RequestParams = Omit<
-  FullRequestParams,
-  "body" | "method" | "query" | "path"
->;
-
-export interface ApiConfig<SecurityDataType = unknown> {
-  baseUrl?: string;
-  baseApiParams?: Omit<RequestParams, "baseUrl" | "cancelToken" | "signal">;
-  securityWorker?: (
-    securityData: SecurityDataType | null,
-  ) => Promise<RequestParams | void> | RequestParams | void;
-  customFetch?: typeof fetch;
-}
-
-export interface HttpResponse<D extends unknown, E extends unknown = unknown>
-  extends Response {
-  data: D;
-  error: E;
-}
-
-type CancelToken = Symbol | string | number;
-
-export enum ContentType {
-  Json = "application/json",
-  FormData = "multipart/form-data",
-  UrlEncoded = "application/x-www-form-urlencoded",
-  Text = "text/plain",
-}
-
-export class HttpClient<SecurityDataType = unknown> {
-  public baseUrl: string = "/1.0";
-  private securityData: SecurityDataType | null = null;
-  private securityWorker?: ApiConfig<SecurityDataType>["securityWorker"];
-  private abortControllers = new Map<CancelToken, AbortController>();
-  private customFetch = (...fetchParams: Parameters<typeof fetch>) =>
-    fetch(...fetchParams);
-
-  private baseApiParams: RequestParams = {
-    credentials: "same-origin",
-    headers: {},
-    redirect: "follow",
-    referrerPolicy: "no-referrer",
-  };
-
-  constructor(apiConfig: ApiConfig<SecurityDataType> = {}) {
-    Object.assign(this, apiConfig);
-  }
-
-  public setSecurityData = (data: SecurityDataType | null) => {
-    this.securityData = data;
-  };
-
-  protected encodeQueryParam(key: string, value: any) {
-    const encodedKey = encodeURIComponent(key);
-    return `${encodedKey}=${encodeURIComponent(typeof value === "number" ? value : `${value}`)}`;
-  }
-
-  protected addQueryParam(query: QueryParamsType, key: string) {
-    return this.encodeQueryParam(key, query[key]);
-  }
-
-  protected addArrayQueryParam(query: QueryParamsType, key: string) {
-    const value = query[key];
-    return value.map((v: any) => this.encodeQueryParam(key, v)).join("&");
-  }
-
-  protected toQueryString(rawQuery?: QueryParamsType): string {
-    const query = rawQuery || {};
-    const keys = Object.keys(query).filter(
-      (key) => "undefined" !== typeof query[key],
-    );
-    return keys
-      .map((key) =>
-        Array.isArray(query[key])
-          ? this.addArrayQueryParam(query, key)
-          : this.addQueryParam(query, key),
-      )
-      .join("&");
-  }
-
-  protected addQueryParams(rawQuery?: QueryParamsType): string {
-    const queryString = this.toQueryString(rawQuery);
-    return queryString ? `?${queryString}` : "";
-  }
-
-  private contentFormatters: Record<ContentType, (input: any) => any> = {
-    [ContentType.Json]: (input: any) =>
-      input !== null && (typeof input === "object" || typeof input === "string")
-        ? JSON.stringify(input)
-        : input,
-    [ContentType.Text]: (input: any) =>
-      input !== null && typeof input !== "string"
-        ? JSON.stringify(input)
-        : input,
-    [ContentType.FormData]: (input: any) =>
-      Object.keys(input || {}).reduce((formData, key) => {
-        const property = input[key];
-        formData.append(
-          key,
-          property instanceof Blob
-            ? property
-            : typeof property === "object" && property !== null
-              ? JSON.stringify(property)
-              : `${property}`,
-        );
-        return formData;
-      }, new FormData()),
-    [ContentType.UrlEncoded]: (input: any) => this.toQueryString(input),
-  };
-
-  protected mergeRequestParams(
-    params1: RequestParams,
-    params2?: RequestParams,
-  ): RequestParams {
-    return {
-      ...this.baseApiParams,
-      ...params1,
-      ...(params2 || {}),
-      headers: {
-        ...(this.baseApiParams.headers || {}),
-        ...(params1.headers || {}),
-        ...((params2 && params2.headers) || {}),
-      },
+export namespace Authorizations {
+  /**
+   * @description **Required ACL:** `accessd.authorizations.read`
+   * @tags authorizations
+   * @name ListAuthorizations
+   * @summary List authorizations
+   * @request GET:/authorizations
+   * @secure
+   */
+  export namespace ListAuthorizations {
+    export type RequestParams = {};
+    export type RequestQuery = {
+      /** The uuid of the main authorization authorizations are linked to */
+      main_authorization_uuid?: string;
+      /** The status of the authorization. Possible values are: OPEN, REVOKED */
+      status?: string;
     };
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = SubAuthorizationList;
   }
 
-  protected createAbortSignal = (
-    cancelToken: CancelToken,
-  ): AbortSignal | undefined => {
-    if (this.abortControllers.has(cancelToken)) {
-      const abortController = this.abortControllers.get(cancelToken);
-      if (abortController) {
-        return abortController.signal;
-      }
-      return void 0;
-    }
+  /**
+   * @description **Required ACL:** `accessd.authorizations.create`
+   * @tags authorizations
+   * @name CreateAuthorization
+   * @summary Create authorization
+   * @request POST:/authorizations
+   * @secure
+   */
+  export namespace CreateAuthorization {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = SubAuthorization;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = SubAuthorization;
+  }
 
-    const abortController = new AbortController();
-    this.abortControllers.set(cancelToken, abortController);
-    return abortController.signal;
-  };
+  /**
+   * @description **Required ACL:** `accessd.authorizations.seats.read`
+   * @tags authorizations
+   * @name ListAuthorizationsSeats
+   * @summary List authorizations seats
+   * @request GET:/authorizations/seats
+   * @secure
+   */
+  export namespace ListAuthorizationsSeats {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = Seats;
+  }
 
-  public abortRequest = (cancelToken: CancelToken) => {
-    const abortController = this.abortControllers.get(cancelToken);
+  /**
+   * @description **Required ACL:** `accessd.authorizations.token.create`
+   * @tags authorizations
+   * @name CreateAuthorizationsToken
+   * @summary Create a token for several authorizations
+   * @request POST:/authorizations/token
+   * @secure
+   */
+  export namespace CreateAuthorizationsToken {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = AuthorizationsUUIDs;
+    export type RequestHeaders = {};
+    export type ResponseBody = Token;
+  }
 
-    if (abortController) {
-      abortController.abort();
-      this.abortControllers.delete(cancelToken);
-    }
-  };
+  /**
+   * @description **Required ACL:** `accessd.authorizations.{authorization_uuid}.delete`
+   * @tags authorizations
+   * @name DeleteAuthorization
+   * @summary Delete an authorization
+   * @request DELETE:/authorizations/{authorization_uuid}
+   * @secure
+   */
+  export namespace DeleteAuthorization {
+    export type RequestParams = {
+      /** The UUID of the authorization */
+      authorizationUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = void;
+  }
 
-  public request = async <T = any, E = any>({
-    body,
-    secure,
-    path,
-    type,
-    query,
-    format,
-    baseUrl,
-    cancelToken,
-    ...params
-  }: FullRequestParams): Promise<HttpResponse<T, E>> => {
-    const secureParams =
-      ((typeof secure === "boolean" ? secure : this.baseApiParams.secure) &&
-        this.securityWorker &&
-        (await this.securityWorker(this.securityData))) ||
-      {};
-    const requestParams = this.mergeRequestParams(params, secureParams);
-    const queryString = query && this.toQueryString(query);
-    const payloadFormatter = this.contentFormatters[type || ContentType.Json];
-    const responseFormat = format || requestParams.format;
+  /**
+   * @description **Required ACL:** `accessd.authorizations.{authorization_uuid}.read`
+   * @tags authorizations
+   * @name GetAuthorization
+   * @summary Get authorization
+   * @request GET:/authorizations/{authorization_uuid}
+   * @secure
+   */
+  export namespace GetAuthorization {
+    export type RequestParams = {
+      /** The UUID of the authorization */
+      authorizationUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = SubAuthorization;
+  }
 
-    return this.customFetch(
-      `${baseUrl || this.baseUrl || ""}${path}${queryString ? `?${queryString}` : ""}`,
-      {
-        ...requestParams,
-        headers: {
-          ...(requestParams.headers || {}),
-          ...(type && type !== ContentType.FormData
-            ? { "Content-Type": type }
-            : {}),
-        },
-        signal:
-          (cancelToken
-            ? this.createAbortSignal(cancelToken)
-            : requestParams.signal) || null,
-        body:
-          typeof body === "undefined" || body === null
-            ? null
-            : payloadFormatter(body),
-      },
-    ).then(async (response) => {
-      const r = response.clone() as HttpResponse<T, E>;
-      r.data = null as unknown as T;
-      r.error = null as unknown as E;
-
-      const data = !responseFormat
-        ? r
-        : await response[responseFormat]()
-            .then((data) => {
-              if (r.ok) {
-                r.data = data;
-              } else {
-                r.error = data;
-              }
-              return r;
-            })
-            .catch((e) => {
-              r.error = e;
-              return r;
-            });
-
-      if (cancelToken) {
-        this.abortControllers.delete(cancelToken);
-      }
-
-      if (!response.ok) throw data;
-      return data;
-    });
-  };
+  /**
+   * @description **Required ACL:** `accessd.authorizations.{authorization_uuid}.update`
+   * @tags authorizations
+   * @name UpdateAuthorization
+   * @summary Update an authorization
+   * @request PUT:/authorizations/{authorization_uuid}
+   * @secure
+   */
+  export namespace UpdateAuthorization {
+    export type RequestParams = {
+      /** The UUID of the authorization */
+      authorizationUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = SubAuthorization;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = SubAuthorization;
+  }
 }
 
-/**
- * @title swarm-accessd
- * @version 1.0
- * @license GPL v3 (http://www.gnu.org/licenses/gpl.txt)
- * @baseUrl /1.0
- * @contact Dev Team <dev@wazo.io> (http://wazo.io)
- *
- * Swarm accessd exposes an API for managing subscriptions and querying related access rights.
- */
-export class Api<
-  SecurityDataType extends unknown,
-> extends HttpClient<SecurityDataType> {
-  authorizations = {
-    /**
-     * @description **Required ACL:** `accessd.authorizations.read`
-     *
-     * @tags authorizations
-     * @name ListAuthorizations
-     * @summary List authorizations
-     * @request GET:/authorizations
-     * @secure
-     */
-    listAuthorizations: (
-      query?: {
-        /** The status of the authorization. Possible values are: OPEN, REVOKED */
-        status?: string;
-        /** The uuid of the main authorization authorizations are linked to */
-        main_authorization_uuid?: string;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<SubAuthorizationList, any>({
-        path: `/authorizations`,
-        method: "GET",
-        query: query,
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+export namespace Config {
+  /**
+   * @description **Required ACL:** `accessd.config.read`
+   * @tags config
+   * @name GetConfig
+   * @summary Show the current configuration
+   * @request GET:/config
+   * @secure
+   */
+  export namespace GetConfig {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+}
 
-    /**
-     * @description **Required ACL:** `accessd.authorizations.create`
-     *
-     * @tags authorizations
-     * @name CreateAuthorization
-     * @summary Create authorization
-     * @request POST:/authorizations
-     * @secure
-     */
-    createAuthorization: (body: SubAuthorization, params: RequestParams = {}) =>
-      this.request<SubAuthorization, APIError | Error>({
-        path: `/authorizations`,
-        method: "POST",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
+export namespace Customers {
+  /**
+   * @description **Required ACL:** `accessd.customers.subscriptions.default.summary.read`
+   * @tags customers, subscriptions
+   * @name ListCustomerSubscriptionSummaries
+   * @summary List customer subscription summaries
+   * @request GET:/customers/subscriptions/default/summary
+   * @secure
+   */
+  export namespace ListCustomerSubscriptionSummaries {
+    export type RequestParams = {};
+    export type RequestQuery = {
+      /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+      direction?: "asc" | "desc";
+      /** Maximum number of items to return in the list */
+      limit?: number;
+      /** Number of items to skip over in the list. Useful for pagination. */
+      offset?: number;
+      /** Name of the field to use for sorting the list of items returned. */
+      order?: string;
+      /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
+      search?: string;
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = CustomerSubscriptionSummaryList;
+  }
 
-    /**
-     * @description **Required ACL:** `accessd.authorizations.seats.read`
-     *
-     * @tags authorizations
-     * @name ListAuthorizationsSeats
-     * @summary List authorizations seats
-     * @request GET:/authorizations/seats
-     * @secure
-     */
-    listAuthorizationsSeats: (params: RequestParams = {}) =>
-      this.request<Seats, any>({
-        path: `/authorizations/seats`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `accessd.customers.{customer_uuid}.subscriptions.default.read` The `default` resource always exists
+   * @tags customers, subscriptions
+   * @name GetCustomerSubscription
+   * @summary Get customer's subscription
+   * @request GET:/customers/{customer_uuid}/subscriptions/default
+   * @secure
+   */
+  export namespace GetCustomerSubscription {
+    export type RequestParams = {
+      /** The UUID of the customer */
+      customerUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = CustomerSubscription;
+  }
 
-    /**
-     * @description **Required ACL:** `accessd.authorizations.token.create`
-     *
-     * @tags authorizations
-     * @name CreateAuthorizationsToken
-     * @summary Create a token for several authorizations
-     * @request POST:/authorizations/token
-     * @secure
-     */
-    createAuthorizationsToken: (
-      body: AuthorizationsUUIDs,
-      params: RequestParams = {},
-    ) =>
-      this.request<Token, APIError | Error>({
-        path: `/authorizations/token`,
-        method: "POST",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `accessd.customers.{customer_uuid}.subscriptions.default.update` - The `default` resource always exists - When expired, the subscription cannot be updated - Only Wazo can update the `current_period_started_at` field - Only Wazo can update the `term` field after a started period - Only Wazo can update the `nfr` field after a started period
+   * @tags customers, subscriptions
+   * @name UpdateCustomerSubscription
+   * @summary Update customer's subscription
+   * @request PUT:/customers/{customer_uuid}/subscriptions/default
+   * @secure
+   */
+  export namespace UpdateCustomerSubscription {
+    export type RequestParams = {
+      /** The UUID of the customer */
+      customerUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = CustomerSubscription;
+    export type RequestHeaders = {};
+    export type ResponseBody = CustomerSubscription;
+  }
 
-    /**
-     * @description **Required ACL:** `accessd.authorizations.{authorization_uuid}.delete`
-     *
-     * @tags authorizations
-     * @name DeleteAuthorization
-     * @summary Delete an authorization
-     * @request DELETE:/authorizations/{authorization_uuid}
-     * @secure
-     */
-    deleteAuthorization: (
-      authorizationUuid: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/authorizations/${authorizationUuid}`,
-        method: "DELETE",
-        secure: true,
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `accessd.customers.{customer_uuid}.subscriptions.default.activate.update` - All revoked authorizations will be re-opened - `cancel_at_end_of_period` will be forced to `false` - `current_period_started_at` will be set to today
+   * @tags customers, subscriptions
+   * @name ActivateCustomerSubscriptionDefault
+   * @summary Activate default customer subscription
+   * @request PUT:/customers/{customer_uuid}/subscriptions/default/activate
+   * @secure
+   */
+  export namespace ActivateCustomerSubscriptionDefault {
+    export type RequestParams = {
+      /** The UUID of the customer */
+      customerUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
 
-    /**
-     * @description **Required ACL:** `accessd.authorizations.{authorization_uuid}.read`
-     *
-     * @tags authorizations
-     * @name GetAuthorization
-     * @summary Get authorization
-     * @request GET:/authorizations/{authorization_uuid}
-     * @secure
-     */
-    getAuthorization: (authorizationUuid: string, params: RequestParams = {}) =>
-      this.request<SubAuthorization, Error>({
-        path: `/authorizations/${authorizationUuid}`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `accessd.customers.{customer_uuid}.subscriptions.default.expire.update` - All open authorizations will be revoked
+   * @tags customers, subscriptions
+   * @name ExpireCustomerSubscriptionDefault
+   * @summary Activate default customer subscription
+   * @request PUT:/customers/{customer_uuid}/subscriptions/default/expire
+   * @secure
+   */
+  export namespace ExpireCustomerSubscriptionDefault {
+    export type RequestParams = {
+      /** The UUID of the customer */
+      customerUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+}
 
-    /**
-     * @description **Required ACL:** `accessd.authorizations.{authorization_uuid}.update`
-     *
-     * @tags authorizations
-     * @name UpdateAuthorization
-     * @summary Update an authorization
-     * @request PUT:/authorizations/{authorization_uuid}
-     * @secure
-     */
-    updateAuthorization: (
-      authorizationUuid: string,
-      body: SubAuthorization,
-      params: RequestParams = {},
-    ) =>
-      this.request<SubAuthorization, APIError | Error>({
-        path: `/authorizations/${authorizationUuid}`,
-        method: "PUT",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-  };
-  config = {
-    /**
-     * @description **Required ACL:** `accessd.config.read`
-     *
-     * @tags config
-     * @name GetConfig
-     * @summary Show the current configuration
-     * @request GET:/config
-     * @secure
-     */
-    getConfig: (params: RequestParams = {}) =>
-      this.request<void, any>({
-        path: `/config`,
-        method: "GET",
-        secure: true,
-        ...params,
-      }),
-  };
-  customers = {
-    /**
-     * @description **Required ACL:** `accessd.customers.subscriptions.default.summary.read`
-     *
-     * @tags customers, subscriptions
-     * @name ListCustomerSubscriptionSummaries
-     * @summary List customer subscription summaries
-     * @request GET:/customers/subscriptions/default/summary
-     * @secure
-     */
-    listCustomerSubscriptionSummaries: (
-      query?: {
-        /** Search term for filtering a list of items. Only items with a field containing the search term will be returned. */
-        search?: string;
-        /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
-        direction?: "asc" | "desc";
-        /** Maximum number of items to return in the list */
-        limit?: number;
-        /** Name of the field to use for sorting the list of items returned. */
-        order?: string;
-        /** Number of items to skip over in the list. Useful for pagination. */
-        offset?: number;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<CustomerSubscriptionSummaryList, Error>({
-        path: `/customers/subscriptions/default/summary`,
-        method: "GET",
-        query: query,
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+export namespace Status {
+  /**
+   * @description This endpoint is not authenticated
+   * @tags status
+   * @name HeadStatus
+   * @summary Check if swarm-accessd is OK
+   * @request HEAD:/status
+   * @secure
+   */
+  export namespace HeadStatus {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+}
 
-    /**
-     * @description **Required ACL:** `accessd.customers.{customer_uuid}.subscriptions.default.read` The `default` resource always exists
-     *
-     * @tags customers, subscriptions
-     * @name GetCustomerSubscription
-     * @summary Get customer's subscription
-     * @request GET:/customers/{customer_uuid}/subscriptions/default
-     * @secure
-     */
-    getCustomerSubscription: (
-      customerUuid: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<CustomerSubscription, any>({
-        path: `/customers/${customerUuid}/subscriptions/default`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+export namespace Subscriptions {
+  /**
+   * @description **Required ACL:** `accessd.subscriptions.read`
+   * @tags subscriptions
+   * @name ListSubscriptions
+   * @summary List subscriptions
+   * @request GET:/subscriptions
+   * @secure
+   */
+  export namespace ListSubscriptions {
+    export type RequestParams = {};
+    export type RequestQuery = {
+      /** Whether the subscription auto renew itself */
+      cancel_at_end_of_period?: boolean;
+      /** The creation date of the subscription */
+      created_at?: string;
+      /** The partnership level of the subscription */
+      partnership?: string;
+      /** Whether to recurse for subtenants */
+      recurse?: boolean;
+      /** The status of the subscription. Possible values are : ACTIVE, EXPIRED */
+      status?: string;
+      /** The term (in months) of the subscription */
+      term?: number;
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = SubscriptionList;
+  }
 
-    /**
-     * @description **Required ACL:** `accessd.customers.{customer_uuid}.subscriptions.default.update` - The `default` resource always exists - When expired, the subscription cannot be updated - Only Wazo can update the `current_period_started_at` field - Only Wazo can update the `term` field after a started period - Only Wazo can update the `nfr` field after a started period
-     *
-     * @tags customers, subscriptions
-     * @name UpdateCustomerSubscription
-     * @summary Update customer's subscription
-     * @request PUT:/customers/{customer_uuid}/subscriptions/default
-     * @secure
-     */
-    updateCustomerSubscription: (
-      customerUuid: string,
-      body: CustomerSubscription,
-      params: RequestParams = {},
-    ) =>
-      this.request<CustomerSubscription, APIError>({
-        path: `/customers/${customerUuid}/subscriptions/default`,
-        method: "PUT",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `accessd.subscriptions.default.read` The `default` resource always exists
+   * @tags subscriptions
+   * @name GetSubscriptionDefault
+   * @summary Get default subscription
+   * @request GET:/subscriptions/default
+   * @secure
+   */
+  export namespace GetSubscriptionDefault {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = Subscription;
+  }
 
-    /**
-     * @description **Required ACL:** `accessd.customers.{customer_uuid}.subscriptions.default.activate.update` - All revoked authorizations will be re-opened - `cancel_at_end_of_period` will be forced to `false` - `current_period_started_at` will be set to today
-     *
-     * @tags customers, subscriptions
-     * @name ActivateCustomerSubscriptionDefault
-     * @summary Activate default customer subscription
-     * @request PUT:/customers/{customer_uuid}/subscriptions/default/activate
-     * @secure
-     */
-    activateCustomerSubscriptionDefault: (
-      customerUuid: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, APIError>({
-        path: `/customers/${customerUuid}/subscriptions/default/activate`,
-        method: "PUT",
-        secure: true,
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `accessd.subscriptions.default.update` The `default` resource always exists
+   * @tags subscriptions
+   * @name UpdateSubscriptionDefault
+   * @summary Update default subscription
+   * @request PUT:/subscriptions/default
+   * @secure
+   */
+  export namespace UpdateSubscriptionDefault {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = Subscription;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = Subscription;
+  }
 
-    /**
-     * @description **Required ACL:** `accessd.customers.{customer_uuid}.subscriptions.default.expire.update` - All open authorizations will be revoked
-     *
-     * @tags customers, subscriptions
-     * @name ExpireCustomerSubscriptionDefault
-     * @summary Activate default customer subscription
-     * @request PUT:/customers/{customer_uuid}/subscriptions/default/expire
-     * @secure
-     */
-    expireCustomerSubscriptionDefault: (
-      customerUuid: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, APIError>({
-        path: `/customers/${customerUuid}/subscriptions/default/expire`,
-        method: "PUT",
-        secure: true,
-        ...params,
-      }),
-  };
-  status = {
-    /**
-     * @description This endpoint is not authenticated
-     *
-     * @tags status
-     * @name HeadStatus
-     * @summary Check if swarm-accessd is OK
-     * @request HEAD:/status
-     * @secure
-     */
-    headStatus: (params: RequestParams = {}) =>
-      this.request<void, void>({
-        path: `/status`,
-        method: "HEAD",
-        secure: true,
-        ...params,
-      }),
-  };
-  subscriptions = {
-    /**
-     * @description **Required ACL:** `accessd.subscriptions.read`
-     *
-     * @tags subscriptions
-     * @name ListSubscriptions
-     * @summary List subscriptions
-     * @request GET:/subscriptions
-     * @secure
-     */
-    listSubscriptions: (
-      query?: {
-        /** The term (in months) of the subscription */
-        term?: number;
-        /** The creation date of the subscription */
-        created_at?: string;
-        /** Whether the subscription auto renew itself */
-        cancel_at_end_of_period?: boolean;
-        /** The partnership level of the subscription */
-        partnership?: string;
-        /** The status of the subscription. Possible values are : ACTIVE, EXPIRED */
-        status?: string;
-        /** Whether to recurse for subtenants */
-        recurse?: boolean;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<SubscriptionList, any>({
-        path: `/subscriptions`,
-        method: "GET",
-        query: query,
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `accessd.subscriptions.default.activate.update` - All revoked authorizations will be re-opened - `cancel_at_end_of_period` will be forced to `false` - `current_period_started_at` will be set to today
+   * @tags subscriptions
+   * @name ActivateSubscriptionDefault
+   * @summary Activate default subscription
+   * @request PUT:/subscriptions/default/activate
+   * @secure
+   */
+  export namespace ActivateSubscriptionDefault {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = void;
+  }
 
-    /**
-     * @description **Required ACL:** `accessd.subscriptions.default.read` The `default` resource always exists
-     *
-     * @tags subscriptions
-     * @name GetSubscriptionDefault
-     * @summary Get default subscription
-     * @request GET:/subscriptions/default
-     * @secure
-     */
-    getSubscriptionDefault: (params: RequestParams = {}) =>
-      this.request<Subscription, any>({
-        path: `/subscriptions/default`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `accessd.subscriptions.default.expire.update` - All opened authorizations will be revoked
+   * @tags subscriptions
+   * @name ExpireSubscriptionDefault
+   * @summary Expire default subscription
+   * @request PUT:/subscriptions/default/expire
+   * @secure
+   */
+  export namespace ExpireSubscriptionDefault {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = void;
+  }
 
-    /**
-     * @description **Required ACL:** `accessd.subscriptions.default.update` The `default` resource always exists
-     *
-     * @tags subscriptions
-     * @name UpdateSubscriptionDefault
-     * @summary Update default subscription
-     * @request PUT:/subscriptions/default
-     * @secure
-     */
-    updateSubscriptionDefault: (
-      body: Subscription,
-      params: RequestParams = {},
-    ) =>
-      this.request<Subscription, APIError>({
-        path: `/subscriptions/default`,
-        method: "PUT",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `accessd.subscriptions.default.summary.read` Using `recurse=true` will sum seats from all customers from sub-resellers. Using `recurse=false` will only sum seats from *direct* customers. NFR subscriptions are ignored.
+   * @tags subscriptions
+   * @name GetSubscriptionSummary
+   * @summary Get subscription summary
+   * @request GET:/subscriptions/default/summary
+   * @secure
+   */
+  export namespace GetSubscriptionSummary {
+    export type RequestParams = {};
+    export type RequestQuery = {
+      /** Whether to recurse for subtenants */
+      recurse?: boolean;
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = SubscriptionSummary;
+  }
 
-    /**
-     * @description **Required ACL:** `accessd.subscriptions.default.activate.update` - All revoked authorizations will be re-opened - `cancel_at_end_of_period` will be forced to `false` - `current_period_started_at` will be set to today
-     *
-     * @tags subscriptions
-     * @name ActivateSubscriptionDefault
-     * @summary Activate default subscription
-     * @request PUT:/subscriptions/default/activate
-     * @secure
-     */
-    activateSubscriptionDefault: (params: RequestParams = {}) =>
-      this.request<void, APIError>({
-        path: `/subscriptions/default/activate`,
-        method: "PUT",
-        secure: true,
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `accessd.subscriptions.token.create`
+   * @tags authorizations, subscriptions
+   * @name CreateSubscriptionAuthorizationsToken
+   * @summary Create a token for main authorizations belonging to a tenant subscriptions
+   * @request POST:/subscriptions/token
+   * @secure
+   */
+  export namespace CreateSubscriptionAuthorizationsToken {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = Token;
+  }
 
-    /**
-     * @description **Required ACL:** `accessd.subscriptions.default.expire.update` - All opened authorizations will be revoked
-     *
-     * @tags subscriptions
-     * @name ExpireSubscriptionDefault
-     * @summary Expire default subscription
-     * @request PUT:/subscriptions/default/expire
-     * @secure
-     */
-    expireSubscriptionDefault: (params: RequestParams = {}) =>
-      this.request<void, APIError>({
-        path: `/subscriptions/default/expire`,
-        method: "PUT",
-        secure: true,
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `accessd.subscriptions.{subscription_uuid}.delete`
+   * @tags subscriptions
+   * @name DeleteSubscription
+   * @summary Delete a subscription
+   * @request DELETE:/subscriptions/{subscription_uuid}
+   * @secure
+   */
+  export namespace DeleteSubscription {
+    export type RequestParams = {
+      /** The UUID of the subscription */
+      subscriptionUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = void;
+  }
 
-    /**
-     * @description **Required ACL:** `accessd.subscriptions.default.summary.read` Using `recurse=true` will sum seats from all customers from sub-resellers. Using `recurse=false` will only sum seats from *direct* customers. NFR subscriptions are ignored.
-     *
-     * @tags subscriptions
-     * @name GetSubscriptionSummary
-     * @summary Get subscription summary
-     * @request GET:/subscriptions/default/summary
-     * @secure
-     */
-    getSubscriptionSummary: (
-      query?: {
-        /** Whether to recurse for subtenants */
-        recurse?: boolean;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<SubscriptionSummary, Error>({
-        path: `/subscriptions/default/summary`,
-        method: "GET",
-        query: query,
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `accessd.subscriptions.{subscription_uuid}.read`
+   * @tags subscriptions
+   * @name GetSubscription
+   * @summary Get subscription
+   * @request GET:/subscriptions/{subscription_uuid}
+   * @secure
+   */
+  export namespace GetSubscription {
+    export type RequestParams = {
+      /** The UUID of the subscription */
+      subscriptionUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = Subscription;
+  }
 
-    /**
-     * @description **Required ACL:** `accessd.subscriptions.token.create`
-     *
-     * @tags authorizations, subscriptions
-     * @name CreateSubscriptionAuthorizationsToken
-     * @summary Create a token for main authorizations belonging to a tenant subscriptions
-     * @request POST:/subscriptions/token
-     * @secure
-     */
-    createSubscriptionAuthorizationsToken: (params: RequestParams = {}) =>
-      this.request<Token, APIError>({
-        path: `/subscriptions/token`,
-        method: "POST",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `accessd.subscriptions.{subscription_uuid}.update`
+   * @tags subscriptions
+   * @name UpdateSubscription
+   * @summary Update subscription
+   * @request PUT:/subscriptions/{subscription_uuid}
+   * @secure
+   */
+  export namespace UpdateSubscription {
+    export type RequestParams = {
+      /** The UUID of the subscription */
+      subscriptionUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = Subscription;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = Subscription;
+  }
 
-    /**
-     * @description **Required ACL:** `accessd.subscriptions.{subscription_uuid}.delete`
-     *
-     * @tags subscriptions
-     * @name DeleteSubscription
-     * @summary Delete a subscription
-     * @request DELETE:/subscriptions/{subscription_uuid}
-     * @secure
-     */
-    deleteSubscription: (
-      subscriptionUuid: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/subscriptions/${subscriptionUuid}`,
-        method: "DELETE",
-        secure: true,
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `accessd.authorizations.read`
+   * @tags authorizations, subscriptions
+   * @name ListSubscriptionAuthorizations
+   * @summary List authorizations
+   * @request GET:/subscriptions/{subscription_uuid}/authorizations
+   * @secure
+   */
+  export namespace ListSubscriptionAuthorizations {
+    export type RequestParams = {
+      /** The UUID of the subscription */
+      subscriptionUuid: string;
+    };
+    export type RequestQuery = {
+      /** The status of the authorization. Possible values are: OPEN, REVOKED */
+      status?: string;
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = MainAuthorizationList;
+  }
 
-    /**
-     * @description **Required ACL:** `accessd.subscriptions.{subscription_uuid}.read`
-     *
-     * @tags subscriptions
-     * @name GetSubscription
-     * @summary Get subscription
-     * @request GET:/subscriptions/{subscription_uuid}
-     * @secure
-     */
-    getSubscription: (subscriptionUuid: string, params: RequestParams = {}) =>
-      this.request<Subscription, Error>({
-        path: `/subscriptions/${subscriptionUuid}`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `accessd.subscriptions.{subscription_uuid}.authorizations.create`
+   * @tags authorizations, subscriptions
+   * @name CreateSubscriptionAuthorization
+   * @summary Create authorization for a subscription
+   * @request POST:/subscriptions/{subscription_uuid}/authorizations
+   * @secure
+   */
+  export namespace CreateSubscriptionAuthorization {
+    export type RequestParams = {
+      /** The UUID of the subscription */
+      subscriptionUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = MainAuthorization;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = MainAuthorization;
+  }
 
-    /**
-     * @description **Required ACL:** `accessd.subscriptions.{subscription_uuid}.update`
-     *
-     * @tags subscriptions
-     * @name UpdateSubscription
-     * @summary Update subscription
-     * @request PUT:/subscriptions/{subscription_uuid}
-     * @secure
-     */
-    updateSubscription: (
-      subscriptionUuid: string,
-      body: Subscription,
-      params: RequestParams = {},
-    ) =>
-      this.request<Subscription, APIError | Error>({
-        path: `/subscriptions/${subscriptionUuid}`,
-        method: "PUT",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
+  /**
+   * @description **Required ACL:** `accessd.subscriptions.{subscription_uuid}.authorizations.{authorization_uuid}.delete`
+   * @tags authorizations, subscriptions
+   * @name DeleteSubscriptionAuthorization
+   * @summary Delete an authorization for a subscription
+   * @request DELETE:/subscriptions/{subscription_uuid}/authorizations/{authorization_uuid}
+   * @secure
+   */
+  export namespace DeleteSubscriptionAuthorization {
+    export type RequestParams = {
+      /** The UUID of the authorization */
+      authorizationUuid: string;
+      /** The UUID of the subscription */
+      subscriptionUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = void;
+  }
 
-    /**
-     * @description **Required ACL:** `accessd.authorizations.read`
-     *
-     * @tags authorizations, subscriptions
-     * @name ListSubscriptionAuthorizations
-     * @summary List authorizations
-     * @request GET:/subscriptions/{subscription_uuid}/authorizations
-     * @secure
-     */
-    listSubscriptionAuthorizations: (
-      subscriptionUuid: string,
-      query?: {
-        /** The status of the authorization. Possible values are: OPEN, REVOKED */
-        status?: string;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<MainAuthorizationList, Error>({
-        path: `/subscriptions/${subscriptionUuid}/authorizations`,
-        method: "GET",
-        query: query,
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `accessd.subscriptions.{subscription_uuid}.authorizations.create`
-     *
-     * @tags authorizations, subscriptions
-     * @name CreateSubscriptionAuthorization
-     * @summary Create authorization for a subscription
-     * @request POST:/subscriptions/{subscription_uuid}/authorizations
-     * @secure
-     */
-    createSubscriptionAuthorization: (
-      subscriptionUuid: string,
-      body: MainAuthorization,
-      params: RequestParams = {},
-    ) =>
-      this.request<MainAuthorization, APIError | Error>({
-        path: `/subscriptions/${subscriptionUuid}/authorizations`,
-        method: "POST",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `accessd.subscriptions.{subscription_uuid}.authorizations.{authorization_uuid}.delete`
-     *
-     * @tags authorizations, subscriptions
-     * @name DeleteSubscriptionAuthorization
-     * @summary Delete an authorization for a subscription
-     * @request DELETE:/subscriptions/{subscription_uuid}/authorizations/{authorization_uuid}
-     * @secure
-     */
-    deleteSubscriptionAuthorization: (
-      subscriptionUuid: string,
-      authorizationUuid: string,
-      params: RequestParams = {},
-    ) =>
-      this.request<void, Error>({
-        path: `/subscriptions/${subscriptionUuid}/authorizations/${authorizationUuid}`,
-        method: "DELETE",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description **Required ACL:** `accessd.subscriptions.{subscription_uuid}.authorizations.{authorization_uuid}.update`
-     *
-     * @tags authorizations, subscriptions
-     * @name UpdateSubscriptionAuthorization
-     * @summary Update an authorization for a subscription
-     * @request PUT:/subscriptions/{subscription_uuid}/authorizations/{authorization_uuid}
-     * @secure
-     */
-    updateSubscriptionAuthorization: (
-      subscriptionUuid: string,
-      authorizationUuid: string,
-      body: MainAuthorization,
-      params: RequestParams = {},
-    ) =>
-      this.request<MainAuthorization, APIError | Error>({
-        path: `/subscriptions/${subscriptionUuid}/authorizations/${authorizationUuid}`,
-        method: "PUT",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-  };
+  /**
+   * @description **Required ACL:** `accessd.subscriptions.{subscription_uuid}.authorizations.{authorization_uuid}.update`
+   * @tags authorizations, subscriptions
+   * @name UpdateSubscriptionAuthorization
+   * @summary Update an authorization for a subscription
+   * @request PUT:/subscriptions/{subscription_uuid}/authorizations/{authorization_uuid}
+   * @secure
+   */
+  export namespace UpdateSubscriptionAuthorization {
+    export type RequestParams = {
+      /** The UUID of the authorization */
+      authorizationUuid: string;
+      /** The UUID of the subscription */
+      subscriptionUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = MainAuthorization;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = MainAuthorization;
+  }
 }
