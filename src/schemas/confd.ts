@@ -176,7 +176,7 @@
    * @default false
    */
     call_transfer_enabled?: boolean,
-  /** Name that appears on the phone when calling. Formatted as "Firstname Lastname" < number > */
+  /** Name that appears on the phone when calling. Formatted as 'Firstname Lastname' < number > */
     caller_id?: string,
   /** User country, for localization purposes */
     country?: string,
@@ -208,7 +208,7 @@
    */
     online_call_record_enabled?: boolean,
   /** Name that appears on the phone when calling */
-    outgoing_caller_id?: "default" | "anonymous" | "\"Firstname Lastname\" < number >",
+    outgoing_caller_id?: "default" | "anonymous" | "'Firstname Lastname' < number >",
   /**
    * Password for connecting to the CTI (deprecated)
    * @minLength 4
@@ -3210,7 +3210,7 @@
    * @default false
    */
     call_transfer_enabled?: boolean,
-  /** Name that appears on the phone when calling. Formatted as "Firstname Lastname" < number > */
+  /** Name that appears on the phone when calling. Formatted as 'Firstname Lastname' < number > */
     caller_id?: string,
   /** Additional information about the user */
     description?: string,
@@ -3254,7 +3254,7 @@
    */
     online_call_record_enabled?: boolean,
   /** Name that appears on the phone when calling */
-    outgoing_caller_id?: "default" | "anonymous" | "\"Firstname Lastname\" < number >",
+    outgoing_caller_id?: "default" | "anonymous" | "'Firstname Lastname' < number >",
   /**
    * Password for connecting to the CTI (deprecated)
    * @minLength 4
