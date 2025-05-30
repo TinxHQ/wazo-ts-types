@@ -5,6 +5,9 @@
   "main": "index.js",
   "author": "Wazo (http://wazo.io)",
   "license": "GPL-3.0-only",
+  "files": [
+    "dist"
+  ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts"
