@@ -1,6 +1,6 @@
-import * as path from "node:path";
-import * as process from "node:process";
-import { execFile } from 'node:child_process';
+import * as path from 'node:path';
+import * as process from 'node:process';
+import { exec } from 'node:child_process';
 import { generateApi } from 'swagger-typescript-api';
 
 const schemas = {
@@ -46,15 +46,18 @@ Promise.all(
     }
   }),
 ).then(() => {
-  execFile(path.resolve(process.cwd(), 'scripts', 'fix-types.sh'), (error, _stdout, stderr) => {
-    if (error) {
-      console.error(`❌ Error while running 'fix-types.sh': ${error.message}`);
-      return;
-    }
-    if (stderr) {
-      console.error(`❌ Standard error output from fix-types.sh script: ${stderr}`);
-      return;
-    }
-    console.log('✅ Successfully fixed broken types');
-  });
+  exec(
+    'docker run --rm -v $(pwd):/app -w /app node:22-slim bash scripts/fix-types.sh',
+    (error, _stdout, stderr) => {
+      if (error) {
+        console.error(`❌ Error while running 'fix-types.sh': ${error.message}`);
+        return;
+      }
+      if (stderr) {
+        console.error(`❌ Standard error output from fix-types.sh script: ${stderr}`);
+        return;
+      }
+      console.log('✅ Successfully fixed broken types');
+    },
+  );
 });
