@@ -280,6 +280,12 @@
    */
     simultaneous_calls?: number,
   /**
+   * The subscription type of the user (0-10)
+   * @min 0
+   * @max 10
+   */
+    subscription_type?: number,
+  /**
    * Activate presence sharing in the xivo client
    * @default true
    */
@@ -1905,6 +1911,11 @@
    * @default true
    */
     enabled?: boolean,
+  /**
+   * Ignore forward when the group is in use
+   * @default false
+   */
+    ignore_forward?: boolean,
   /**
    * Mark all calls as "answered elsewhere" when cancelled
    * @default false
@@ -4917,6 +4928,12 @@
    * @default 5
    */
     simultaneous_calls?: number,
+  /**
+   * The subscription type of the user (0-10)
+   * @min 0
+   * @max 10
+   */
+    subscription_type?: number,
   /**
    * Activate presence sharing in the xivo client
    * @default true

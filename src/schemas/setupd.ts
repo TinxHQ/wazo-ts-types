@@ -75,6 +75,11 @@ export interface SetupRequest {
   /** Name of the engine in Nestbox */
   nestbox_instance_name?: string;
   /**
+   * Preferred connection method to contact the engine
+   * @default "public"
+   */
+  nestbox_instance_preferred_connection?: "private" | "public";
+  /**
    * Port of the Nestbox where the engine will register
    * @default 443
    */
