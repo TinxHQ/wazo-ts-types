@@ -23,11 +23,13 @@ export interface ConfigPatchItem {
   value?: object;
 }
 
-export type CreateData = any;
+export type CreateSubscriptionData = any;
 
-export type DeleteData = any;
+export type CreateUserSubscriptionData = any;
 
-export type EditData = Subscription;
+export type DeleteSubscriptionData = any;
+
+export type DeleteUserSubscriptionData = any;
 
 /**
  * Error
@@ -49,9 +51,9 @@ export interface Error {
 
 export type GetConfigData = any;
 
-export type GetData = Subscription;
+export type GetSubscriptionData = Subscription;
 
-export type GetLogsData = SubscriptionLog;
+export type GetSubscriptionLogsData = SubscriptionLog;
 
 export type GetSubscriptionsServicesData = Services;
 
@@ -83,14 +85,21 @@ export interface HTTPServiceLog {
   response_url?: string;
 }
 
-export type ListData = SubscriptionList;
+export type ListSubscriptionsData = SubscriptionList;
 
-export interface ListParams {
+export interface ListSubscriptionsParams {
   /**
    * Should the query include sub-tenants
    * @default false
    */
   recurse?: boolean;
+  /** A search term formatted like "key:value" that will only match subscriptions having a metadata entry "key=value". May be given multiple times to filter more precisely on different metadata keys. */
+  search_metadata?: string;
+}
+
+export type ListUserSubscriptionsData = SubscriptionList;
+
+export interface ListUserSubscriptionsParams {
   /** A search term formatted like "key:value" that will only match subscriptions having a metadata entry "key=value". May be given multiple times to filter more precisely on different metadata keys. */
   search_metadata?: string;
 }
@@ -192,16 +201,9 @@ export interface SubscriptionRequest {
   tags?: object;
 }
 
-export type UserCreateData = any;
+export type UpdateSubscriptionData = Subscription;
 
-export type UserDeleteData = any;
-
-export type UserListData = SubscriptionList;
-
-export interface UserListParams {
-  /** A search term formatted like "key:value" that will only match subscriptions having a metadata entry "key=value". May be given multiple times to filter more precisely on different metadata keys. */
-  search_metadata?: string;
-}
+export type UpdateUserSubscriptionData = Subscription;
 
 export interface UserSubscriptionRequest {
   config: HTTPServiceConfig;
@@ -290,12 +292,12 @@ export namespace Subscriptions {
   /**
    * @description **Required ACL:** `webhookd.subscriptions.read`
    * @tags subscriptions
-   * @name List
+   * @name ListSubscriptions
    * @summary List subscriptions to HTTP callbacks
    * @request GET:/subscriptions
    * @secure
    */
-  export namespace List {
+  export namespace ListSubscriptions {
     export type RequestParams = {};
     export type RequestQuery = {
       /**
@@ -311,23 +313,23 @@ export namespace Subscriptions {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
-    export type ResponseBody = ListData;
+    export type ResponseBody = ListSubscriptionsData;
   }
 
   /**
    * @description **Required ACL:** `webhookd.subscriptions.create` For more information: https://wazo-platform.org/documentation/api/webhook.html
    * @tags subscriptions
-   * @name Create
+   * @name CreateSubscription
    * @summary Subscribe to a HTTP callback (webhook)
    * @request POST:/subscriptions
    * @secure
    */
-  export namespace Create {
+  export namespace CreateSubscription {
     export type RequestParams = {};
     export type RequestQuery = {};
     export type RequestBody = SubscriptionRequest;
     export type RequestHeaders = {};
-    export type ResponseBody = CreateData;
+    export type ResponseBody = CreateSubscriptionData;
   }
 
   /**
@@ -349,12 +351,12 @@ export namespace Subscriptions {
   /**
    * @description **Required ACL:** `webhookd.subscriptions.{subscription_uuid}.delete`
    * @tags subscriptions
-   * @name Delete
+   * @name DeleteSubscription
    * @summary Delete a subscription
    * @request DELETE:/subscriptions/{subscription_uuid}
    * @secure
    */
-  export namespace Delete {
+  export namespace DeleteSubscription {
     export type RequestParams = {
       /** The UUID of the subscription */
       subscriptionUuid: string;
@@ -362,18 +364,18 @@ export namespace Subscriptions {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = DeleteData;
+    export type ResponseBody = DeleteSubscriptionData;
   }
 
   /**
    * @description **Required ACL:** `webhookd.subscriptions.{subscription_uuid}.read`
    * @tags subscriptions
-   * @name Get
+   * @name GetSubscription
    * @summary Get a subscription
    * @request GET:/subscriptions/{subscription_uuid}
    * @secure
    */
-  export namespace Get {
+  export namespace GetSubscription {
     export type RequestParams = {
       /** The UUID of the subscription */
       subscriptionUuid: string;
@@ -381,18 +383,18 @@ export namespace Subscriptions {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = GetData;
+    export type ResponseBody = GetSubscriptionData;
   }
 
   /**
    * @description **Required ACL:** `webhookd.subscriptions.{subscription_uuid}.update`
    * @tags subscriptions
-   * @name Edit
+   * @name UpdateSubscription
    * @summary Edit a subscription
    * @request PUT:/subscriptions/{subscription_uuid}
    * @secure
    */
-  export namespace Edit {
+  export namespace UpdateSubscription {
     export type RequestParams = {
       /** The UUID of the subscription */
       subscriptionUuid: string;
@@ -400,18 +402,18 @@ export namespace Subscriptions {
     export type RequestQuery = {};
     export type RequestBody = SubscriptionRequest;
     export type RequestHeaders = {};
-    export type ResponseBody = EditData;
+    export type ResponseBody = UpdateSubscriptionData;
   }
 
   /**
    * @description **Required ACL:** `webhookd.subscriptions.{subscription_uuid}.logs.read`
    * @tags subscriptions
-   * @name GetLogs
+   * @name GetSubscriptionLogs
    * @summary Get hook logs
    * @request GET:/subscriptions/{subscription_uuid}/logs
    * @secure
    */
-  export namespace GetLogs {
+  export namespace GetSubscriptionLogs {
     export type RequestParams = {
       /** The UUID of the subscription */
       subscriptionUuid: string;
@@ -419,7 +421,7 @@ export namespace Subscriptions {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = GetLogsData;
+    export type ResponseBody = GetSubscriptionLogsData;
   }
 }
 
@@ -427,12 +429,12 @@ export namespace Users {
   /**
    * @description **Required ACL:** `webhookd.users.me.subscriptions.read`
    * @tags subscriptions, users
-   * @name UserList
+   * @name ListUserSubscriptions
    * @summary List subscriptions of a user to HTTP callbacks
    * @request GET:/users/me/subscriptions
    * @secure
    */
-  export namespace UserList {
+  export namespace ListUserSubscriptions {
     export type RequestParams = {};
     export type RequestQuery = {
       /** A search term formatted like "key:value" that will only match subscriptions having a metadata entry "key=value". May be given multiple times to filter more precisely on different metadata keys. */
@@ -440,34 +442,34 @@ export namespace Users {
     };
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = UserListData;
+    export type ResponseBody = ListUserSubscriptionsData;
   }
 
   /**
    * @description **Required ACL:** `webhookd.users.me.subscriptions.create` For more information: https://wazo-platform.org/documentation/api/webhook.html
    * @tags subscriptions, users
-   * @name UserCreate
+   * @name CreateUserSubscription
    * @summary Subscribe to a HTTP callback (webhook) as a user
    * @request POST:/users/me/subscriptions
    * @secure
    */
-  export namespace UserCreate {
+  export namespace CreateUserSubscription {
     export type RequestParams = {};
     export type RequestQuery = {};
     export type RequestBody = UserSubscriptionRequest;
     export type RequestHeaders = {};
-    export type ResponseBody = UserCreateData;
+    export type ResponseBody = CreateUserSubscriptionData;
   }
 
   /**
    * @description **Required ACL:** `webhookd.users.me.subscriptions.{subscription_uuid}.delete`
    * @tags subscriptions, users
-   * @name UserDelete
+   * @name DeleteUserSubscription
    * @summary Delete a user subscription
    * @request DELETE:/users/me/subscriptions/{subscription_uuid}
    * @secure
    */
-  export namespace UserDelete {
+  export namespace DeleteUserSubscription {
     export type RequestParams = {
       /** The UUID of the subscription */
       subscriptionUuid: string;
@@ -475,7 +477,7 @@ export namespace Users {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = UserDeleteData;
+    export type ResponseBody = DeleteUserSubscriptionData;
   }
 
   /**
@@ -495,5 +497,24 @@ export namespace Users {
     export type RequestBody = never;
     export type RequestHeaders = {};
     export type ResponseBody = GetUserSubscriptionData;
+  }
+
+  /**
+   * @description **Required ACL:** `webhookd.users.me.subscriptions.{subscription_uuid}.update`
+   * @tags subscriptions, users
+   * @name UpdateUserSubscription
+   * @summary Update a user subscription
+   * @request PUT:/users/me/subscriptions/{subscription_uuid}
+   * @secure
+   */
+  export namespace UpdateUserSubscription {
+    export type RequestParams = {
+      /** The UUID of the subscription */
+      subscriptionUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = SubscriptionRequest;
+    export type RequestHeaders = {};
+    export type ResponseBody = UpdateUserSubscriptionData;
   }
 }

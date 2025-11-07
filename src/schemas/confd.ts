@@ -1119,10 +1119,14 @@
   /** Serial number */
     sn?: string,
   /**
-   * Device status. autoprov: Device can be provisionned using a provisioning code, configured: Device is configured and ready to be used, not_configured : Device has not been completely configured
+   * Device status.
+   * - autoprov: Device can be provisionned using a provisioning code
+   * - configured: Device is configured and ready to be used
+   * - not_configured: Device has not been completely configured
+   * - corrupted: Device configuration is corrupted and need repair
    * @default "not_configured"
    */
-    status?: "autoprov" | "configured" | "not_configured",
+    status?: "autoprov" | "configured" | "not_configured" | "corrupted",
   /** ID of the device template. All device using a device template will have a certain number of common parameters preconfigured for the device */
     template_id?: string,
   /** The UUID of the tenant */
@@ -1912,10 +1916,21 @@
    */
     enabled?: boolean,
   /**
-   * Ignore forward when the group is in use
+   * Ignore forwarding from member endpoints;
+   * 
+   * this only affects forwarding configured directly on member endpoint devices;
+   * this _does not_ affect the forwardings configured through user profiles,
+   * nor the fallback redirections configured on the group itself.
+   * 
+   * When set to `true`, redirections from member endpoints are ignored and skipped,
+   * and other members are rung according to the ring strategy;
+   * when `false`, redirections from members' endpoints are followed,
+   * which effectively answers the call to the group.
    * @default false
    */
     ignore_forward?: boolean,
+  /** human-readable identifier for the group */
+    label?: string,
   /**
    * Mark all calls as "answered elsewhere" when cancelled
    * @default false
@@ -1930,7 +1945,7 @@
     music_on_hold?: string,
     preprocess_subroutine?: string,
   /**
-   * Number of seconds before the member of group will ring again
+   * Number of seconds after each `user_timeout` before the member of the group will ring again
    * @default 5
    */
     retry_delay?: number,
@@ -1939,14 +1954,28 @@
    * @default true
    */
     ring_in_use?: boolean,
-  /** @default "all" */
+  /**
+   * The strategy to use when ringing group members.
+   * - `all`: ring all members concurrently, first to answer wins
+   * - `least_recent`: ring the member which has handled a call the least recently
+   * - `linear`: ring each member one after the other based on a the priority ordering of all members
+   * - `fewest_calls`: ring the member with the fewest completed calls
+   * - `memorized_round_robin`: ring members in a round-robin fashion, starting with the member following
+   *   the one who answered last
+   * - `random`: ring a random member
+   * - `weight_random`: ring a random member, weighed by a per-member penalty factor
+   * @default "all"
+   */
     ring_strategy?: "all" | "random" | "least_recent" | "linear" | "fewest_calls" | "memorized_round_robin" | "weight_random",
   /** The UUID of the tenant */
     tenant_uuid?: string,
-  /** Number of seconds the group will ring before falling back */
+  /**
+   * Number of seconds the group will ring before falling back;
+   * if not set, the group will ring indefinitely.
+   */
     timeout?: number,
   /**
-   * Number of seconds the member of group will ring
+   * Number of seconds each member of the group will ring
    * @default 15
    */
     user_timeout?: number,
@@ -1957,7 +1986,7 @@
   export interface GroupFallbacks {
   /** The destination to redirect the caller to when the group has exceeded max_calls */
     congestion_destination?: DestinationType,
-  /** The destination to redirect the caller to when there are no answer */
+  /** The destination to redirect the caller to when there are no answers */
     noanswer_destination?: DestinationType,
 }
 
@@ -2001,30 +2030,61 @@
     uuid?: string,
 }
 
-    export interface GroupRelationCallPermissions {
+  /** call permissions configured for this group */
+  export interface GroupRelationCallPermissions {
     call_permissions?: (CallPermissionRelationBase)[],
 }
 
-    export interface GroupRelationExtensions {
+  /** extensions configured for this group */
+  export interface GroupRelationExtensions {
     extensions?: (ExtensionRelationBase)[],
 }
 
-    export interface GroupRelationFallbacks {
+  /** fallback options for calls to the group */
+  export interface GroupRelationFallbacks {
     fallbacks?: GroupFallbacks,
 }
 
-    export type GroupRelationIncall = (IncallRelationBase & IncallRelationExtensions)
+  /** an incall configured with this group as destination */
+  export type GroupRelationIncall = (IncallRelationBase & IncallRelationExtensions)
 
-    export interface GroupRelationIncalls {
+  /** incalls configured for this group */
+  export interface GroupRelationIncalls {
     incalls?: (GroupRelationIncall)[],
 }
 
-    export interface GroupRelationMemberUsers {
-    users?: (UserRelationBase)[],
+  /** an extension configured as a member of this group */
+  export interface GroupRelationMemberExtension {
+  /** The context of the member */
+    context?: string,
+  /** The extension number of the member */
+    exten?: string,
+  /**
+   * The priority of the extension member in the group.
+   * Only used for linear ring strategy.
+   */
+    priority?: number,
 }
 
-    export interface GroupRelationMembers {
-    members?: GroupRelationMemberUsers,
+  /** a user configured as a member of this group */
+  export type GroupRelationMemberUser = (UserRelationBase & {
+  /**
+   * The priority of the user member in the group.
+   * Only used for linear ring strategy.
+   */
+    priority?: number,
+
+})
+
+  /** members configured in this group */
+  export interface GroupRelationMembers {
+    members?: {
+  /** extensions configured as members of this group */
+    extensions?: (GroupRelationMemberExtension)[],
+  /** users configured as members of this group */
+    users?: (GroupRelationMemberUser)[],
+
+},
 }
 
     export interface GroupRelationSchedules {
@@ -9153,10 +9213,10 @@ export namespace UpdateGroupFallback {
 }
         
 /**
- * @description **Required ACL:** `confd.groups.{group_uuid}.members.extensions.update` **WARNING** This endpoint remove all members which are not defined.
+ * @description **Required ACL:** `confd.groups.{group_uuid}.members.extensions.update` a call to an extension member directly invokes the complete dialplan logic of that extension, as if the extension was called directly; **WARNING** This endpoint remove all members which are not defined.
  * @tags groups
  * @name UpdateGroupMemberExtensions
- * @summary Update group and extensions
+ * @summary update group's extension members
  * @request PUT:/groups/{group_uuid}/members/extensions
  * @secure
 */
@@ -9173,10 +9233,10 @@ export namespace UpdateGroupMemberExtensions {
 }
         
 /**
- * @description **Required ACL:** `confd.groups.{group_uuid}.members.users.update` **WARNING** This endpoint remove all members which are not defined.
+ * @description **Required ACL:** `confd.groups.{group_uuid}.members.users.update` user members are called by ringing all of the user's configured lines simultaneously; user redirections are not used; **WARNING** This endpoint remove all members which are not defined.
  * @tags groups, users
  * @name UpdateGroupMemberUsers
- * @summary Update group and users
+ * @summary Update group's user members
  * @request PUT:/groups/{group_uuid}/members/users
  * @secure
 */
