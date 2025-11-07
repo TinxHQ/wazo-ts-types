@@ -8,11 +8,6 @@ import { generateApi } from 'swagger-typescript-api';
 // Load environment variables from .env file
 config();
 
-// Warn if .env file exists
-if (fs.existsSync(path.resolve(process.cwd(), '.env'))) {
-  console.warn('⚠️  WARNING: .env file detected. Building types based on custom/unstable environment variables.');
-}
-
 const schemas = {
   agentd: process.env.AGENTD || 'https://openapi.wazo.community/wazo-platform/wazo-agentd.yml',
   amid: process.env.AMID || 'https://openapi.wazo.community/wazo-platform/wazo-amid.yml',
@@ -68,6 +63,11 @@ Promise.all(
         return;
       }
       console.log('✅ Successfully fixed broken types');
+
+      // Warn if .env file exists
+      if (fs.existsSync(path.resolve(process.cwd(), '.env'))) {
+        console.warn('⚠️  WARNING: .env file detected. Building types based on custom/unstable environment variables.');
+      }
     },
   );
 });
