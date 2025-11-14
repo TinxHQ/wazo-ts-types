@@ -191,6 +191,10 @@ export interface GetCdrParams {
    * @default false
    */
   recurse?: boolean;
+  /** Filter by requested_internal_context */
+  requested_internal_context?: string;
+  /** Filter by requested_internal_extension */
+  requested_internal_extension?: string;
   /** Filter list of items */
   search?: string;
   /** Filter by tags. Each tag MUST be separated by a coma (,). Many tag will perform a logical AND. */
@@ -244,6 +248,10 @@ export interface GetUsersParams {
   order?: string;
   /** Filter by recorded status. */
   recorded?: boolean;
+  /** Filter by requested_internal_context */
+  requested_internal_context?: string;
+  /** Filter by requested_internal_extension */
+  requested_internal_extension?: string;
   /** Filter list of items */
   search?: string;
   /**
@@ -293,6 +301,10 @@ export interface MeCdrListParams {
   order?: string;
   /** Filter by recorded status. */
   recorded?: boolean;
+  /** Filter by requested_internal_context */
+  requested_internal_context?: string;
+  /** Filter by requested_internal_extension */
+  requested_internal_extension?: string;
   /** Filter list of items */
   search?: string;
   /**
@@ -863,6 +875,10 @@ export namespace Cdr {
        * @default false
        */
       recurse?: boolean;
+      /** Filter by requested_internal_context */
+      requested_internal_context?: string;
+      /** Filter by requested_internal_extension */
+      requested_internal_extension?: string;
       /** Filter list of items */
       search?: string;
       /** Filter by tags. Each tag MUST be separated by a coma (,). Many tag will perform a logical AND. */
@@ -1381,6 +1397,10 @@ export namespace Users {
       order?: string;
       /** Filter by recorded status. */
       recorded?: boolean;
+      /** Filter by requested_internal_context */
+      requested_internal_context?: string;
+      /** Filter by requested_internal_extension */
+      requested_internal_extension?: string;
       /** Filter list of items */
       search?: string;
       /**
@@ -1466,6 +1486,10 @@ export namespace Users {
       order?: string;
       /** Filter by recorded status. */
       recorded?: boolean;
+      /** Filter by requested_internal_context */
+      requested_internal_context?: string;
+      /** Filter by requested_internal_extension */
+      requested_internal_extension?: string;
       /** Filter list of items */
       search?: string;
       /**

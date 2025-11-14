@@ -20,6 +20,21 @@ export interface AgentPauseReason {
   reason?: string;
 }
 
+export interface AgentQueueStatus {
+  /** Queue's display name */
+  display_name?: string;
+  /** Queue's ID */
+  id?: number;
+  /** True if the agent is logged on this queue, else false */
+  logged?: boolean;
+  /** Queue's name */
+  name?: string;
+  /** True if the agent is paused on this queue, else false */
+  paused?: boolean;
+  /** The reason of the agent pause */
+  paused_reason?: string;
+}
+
 /** Agent status */
 export interface AgentStatus {
   /** The context on which the agent is logged, or null if the agent is not logged */
@@ -44,6 +59,8 @@ export interface AgentStatus {
   paused?: boolean;
   /** The reason of the agent pause */
   paused_reason?: string;
+  /** The agent status for each queue */
+  queues?: AgentQueueStatus[];
   /** The interface (e.g. SIP/alice) to determine if the agent is in use or not */
   state_interface?: string;
   /**

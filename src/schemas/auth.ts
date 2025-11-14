@@ -728,6 +728,8 @@ export interface RefreshToken {
   client_id?: string;
   /** The time at which this token was created */
   created_at?: string;
+  /** the persistent metadata tied to this refresh token */
+  metadata?: object;
   /** Indicate if that refresh token was created with a mobile session type */
   mobile?: boolean;
   /** The tenant UUID of the user which created this refresh token */
@@ -1268,7 +1270,7 @@ export namespace Admin {
 
 export namespace Backends {
   /**
-   * @description Retrieves the list of activated backends
+   * @description Retrieves the list of activated wazo_auth.backends plugins
    * @tags backends
    * @name BackendsList
    * @request GET:/backends
