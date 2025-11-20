@@ -1178,6 +1178,8 @@ export interface VoicemailMessageBase {
   caller_id_num?: string;
   /** The message's duration in seconds */
   duration?: number;
+  /** True if the message is empty (duration is 0) */
+  empty?: boolean;
   /** The message's ID */
   id?: string;
   /** The time the message was left as a Unix time value */
@@ -1193,12 +1195,12 @@ export interface VoicemailMessages {
   /** List of voicemail messages */
   items?: (VoicemailMessage & {
     voicemail?: {
+      /** The containing voicemail's type (either global or personal) */
+      accesstype?: "global" | "personal";
       /** The containing voicemail's ID */
       id?: number;
       /** The containing voicemail's name */
       name?: string;
-      /** The containing voicemail's type (either global or personal) */
-      type?: "global" | "personal";
     };
   })[];
   total?: number;
