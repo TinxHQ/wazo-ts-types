@@ -160,30 +160,27 @@ export interface GetCdrParams {
   call_status?: "answered" | "blocked";
   /** Filter by conversation identifier */
   conversation_id?: string;
-  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+  /** Sort order direction */
   direction?: "asc" | "desc";
   /** Will only return one result for the selected field */
   distinct?: "peer_exten";
   /** Overrides the Content-Type header. This is used to be able to have a downloadable link. Allowed values are "csv" and "json" */
   format?: "csv" | "json";
   /**
-   * Ignore calls before the given date. Format is
-   * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be
-   * converted according to the `timezone` parameter. If missing, the statistics
-   * will start at the oldest available call with timezone UTC.
+   * Filter transcriptions created after this date
    * @format date-time
    */
   from?: string;
   /** Ignore CDR created before the given CDR ID. */
   from_id?: number;
-  /** Maximum number of items to return in the list. Default to 1000 if not specified. */
+  /** Maximum number of items to return */
   limit?: number;
   /** Filter by source_extension and destination_extension. A wildcard (underscore) can be used at the start and/or the end of the number. */
   number?: string;
-  /** Number of items to skip over in the list. Useful for pagination. */
+  /** Number of items to skip */
   offset?: number;
-  /** Name of the field to use for sorting the list of items returned. Unsupported values: ``end``. */
-  order?: string;
+  /** Name of the field to order by */
+  order?: "created_at" | "message_id";
   /** Filter by recorded status. */
   recorded?: boolean;
   /**
@@ -200,10 +197,7 @@ export interface GetCdrParams {
   /** Filter by tags. Each tag MUST be separated by a coma (,). Many tag will perform a logical AND. */
   tags?: string[];
   /**
-   * Ignore calls starting at or after the given date. Format is
-   * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be converted
-   * according to the `timezone` parameter. If missing, the statistics will include the current
-   * day.
+   * Filter transcriptions created before this date
    * @format date-time
    */
   until?: string;
@@ -222,30 +216,27 @@ export interface GetUsersParams {
   call_status?: "answered" | "blocked";
   /** Filter by conversation identifier */
   conversation_id?: string;
-  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+  /** Sort order direction */
   direction?: "asc" | "desc";
   /** Will only return one result for the selected field */
   distinct?: "peer_exten";
   /** Overrides the Content-Type header. This is used to be able to have a downloadable link. Allowed values are "csv" and "json" */
   format?: "csv" | "json";
   /**
-   * Ignore calls before the given date. Format is
-   * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be
-   * converted according to the `timezone` parameter. If missing, the statistics
-   * will start at the oldest available call with timezone UTC.
+   * Filter transcriptions created after this date
    * @format date-time
    */
   from?: string;
   /** Ignore CDR created before the given CDR ID. */
   from_id?: number;
-  /** Maximum number of items to return in the list. Default to 1000 if not specified. */
+  /** Maximum number of items to return */
   limit?: number;
   /** Filter by source_extension and destination_extension. A wildcard (underscore) can be used at the start and/or the end of the number. */
   number?: string;
-  /** Number of items to skip over in the list. Useful for pagination. */
+  /** Number of items to skip */
   offset?: number;
-  /** Name of the field to use for sorting the list of items returned. Unsupported values: ``end``. */
-  order?: string;
+  /** Name of the field to order by */
+  order?: "created_at" | "message_id";
   /** Filter by recorded status. */
   recorded?: boolean;
   /** Filter by requested_internal_context */
@@ -255,15 +246,39 @@ export interface GetUsersParams {
   /** Filter list of items */
   search?: string;
   /**
-   * Ignore calls starting at or after the given date. Format is
-   * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be converted
-   * according to the `timezone` parameter. If missing, the statistics will include the current
-   * day.
+   * Filter transcriptions created before this date
    * @format date-time
    */
   until?: string;
   /** UUID of the given user */
   userUuid: string;
+}
+
+export type ListVoicemailTranscriptionsData = TranscriptionList;
+
+export interface ListVoicemailTranscriptionsParams {
+  /** Sort order direction */
+  direction?: "asc" | "desc";
+  /**
+   * Filter transcriptions created after this date
+   * @format date-time
+   */
+  from?: string;
+  /** Maximum number of items to return */
+  limit?: number;
+  /** Number of items to skip */
+  offset?: number;
+  /** Name of the field to order by */
+  order?: "created_at" | "message_id";
+  /** Full-text search in transcript content */
+  search_text?: string;
+  /**
+   * Filter transcriptions created before this date
+   * @format date-time
+   */
+  until?: string;
+  /** The voicemail ID of the message */
+  voicemail_id?: number[];
 }
 
 export type MeCdrListData = CDRList;
@@ -275,30 +290,27 @@ export interface MeCdrListParams {
   call_status?: "answered" | "blocked";
   /** Filter by conversation identifier */
   conversation_id?: string;
-  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+  /** Sort order direction */
   direction?: "asc" | "desc";
   /** Will only return one result for the selected field */
   distinct?: "peer_exten";
   /** Overrides the Content-Type header. This is used to be able to have a downloadable link. Allowed values are "csv" and "json" */
   format?: "csv" | "json";
   /**
-   * Ignore calls before the given date. Format is
-   * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be
-   * converted according to the `timezone` parameter. If missing, the statistics
-   * will start at the oldest available call with timezone UTC.
+   * Filter transcriptions created after this date
    * @format date-time
    */
   from?: string;
   /** Ignore CDR created before the given CDR ID. */
   from_id?: number;
-  /** Maximum number of items to return in the list. Default to 1000 if not specified. */
+  /** Maximum number of items to return */
   limit?: number;
   /** Filter by source_extension and destination_extension. A wildcard (underscore) can be used at the start and/or the end of the number. */
   number?: string;
-  /** Number of items to skip over in the list. Useful for pagination. */
+  /** Number of items to skip */
   offset?: number;
-  /** Name of the field to use for sorting the list of items returned. Unsupported values: ``end``. */
-  order?: string;
+  /** Name of the field to order by */
+  order?: "created_at" | "message_id";
   /** Filter by recorded status. */
   recorded?: boolean;
   /** Filter by requested_internal_context */
@@ -308,10 +320,7 @@ export interface MeCdrListParams {
   /** Filter list of items */
   search?: string;
   /**
-   * Ignore calls starting at or after the given date. Format is
-   * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be converted
-   * according to the `timezone` parameter. If missing, the statistics will include the current
-   * day.
+   * Filter transcriptions created before this date
    * @format date-time
    */
   until?: string;
@@ -436,10 +445,7 @@ export interface RecordingsMediaExportCreateParams {
   /** E-mail address */
   email?: string;
   /**
-   * Ignore calls before the given date. Format is
-   * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be
-   * converted according to the `timezone` parameter. If missing, the statistics
-   * will start at the oldest available call with timezone UTC.
+   * Filter transcriptions created after this date
    * @format date-time
    */
   from?: string;
@@ -457,10 +463,7 @@ export interface RecordingsMediaExportCreateParams {
   /** Filter by tags. Each tag MUST be separated by a coma (,). Many tag will perform a logical AND. */
   tags?: string[];
   /**
-   * Ignore calls starting at or after the given date. Format is
-   * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be converted
-   * according to the `timezone` parameter. If missing, the statistics will include the current
-   * day.
+   * Filter transcriptions created before this date
    * @format date-time
    */
   until?: string;
@@ -497,10 +500,7 @@ export interface StatisticsList2Params {
   /** The time at which a day starts, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
   day_start_time?: string;
   /**
-   * Ignore calls before the given date. Format is
-   * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be
-   * converted according to the `timezone` parameter. If missing, the statistics
-   * will start at the oldest available call with timezone UTC.
+   * Filter transcriptions created after this date
    * @format date-time
    */
   from?: string;
@@ -514,10 +514,7 @@ export interface StatisticsList2Params {
    */
   timezone?: string;
   /**
-   * Ignore calls starting at or after the given date. Format is
-   * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be converted
-   * according to the `timezone` parameter. If missing, the statistics will include the current
-   * day.
+   * Filter transcriptions created before this date
    * @format date-time
    */
   until?: string;
@@ -535,10 +532,7 @@ export interface StatisticsList2Params2 {
   /** The time at which a day starts, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
   day_start_time?: string;
   /**
-   * Ignore calls before the given date. Format is
-   * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be
-   * converted according to the `timezone` parameter. If missing, the statistics
-   * will start at the oldest available call with timezone UTC.
+   * Filter transcriptions created after this date
    * @format date-time
    */
   from?: string;
@@ -556,10 +550,7 @@ export interface StatisticsList2Params2 {
    */
   timezone?: string;
   /**
-   * Ignore calls starting at or after the given date. Format is
-   * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be converted
-   * according to the `timezone` parameter. If missing, the statistics will include the current
-   * day.
+   * Filter transcriptions created before this date
    * @format date-time
    */
   until?: string;
@@ -581,10 +572,7 @@ export interface StatisticsListParams {
   /** The time at which a day starts, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
   day_start_time?: string;
   /**
-   * Ignore calls before the given date. Format is
-   * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be
-   * converted according to the `timezone` parameter. If missing, the statistics
-   * will start at the oldest available call with timezone UTC.
+   * Filter transcriptions created after this date
    * @format date-time
    */
   from?: string;
@@ -596,10 +584,7 @@ export interface StatisticsListParams {
    */
   timezone?: string;
   /**
-   * Ignore calls starting at or after the given date. Format is
-   * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be converted
-   * according to the `timezone` parameter. If missing, the statistics will include the current
-   * day.
+   * Filter transcriptions created before this date
    * @format date-time
    */
   until?: string;
@@ -617,10 +602,7 @@ export interface StatisticsListParams2 {
   /** The time at which a day starts, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
   day_start_time?: string;
   /**
-   * Ignore calls before the given date. Format is
-   * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be
-   * converted according to the `timezone` parameter. If missing, the statistics
-   * will start at the oldest available call with timezone UTC.
+   * Filter transcriptions created after this date
    * @format date-time
    */
   from?: string;
@@ -634,10 +616,7 @@ export interface StatisticsListParams2 {
    */
   timezone?: string;
   /**
-   * Ignore calls starting at or after the given date. Format is
-   * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be converted
-   * according to the `timezone` parameter. If missing, the statistics will include the current
-   * day.
+   * Filter transcriptions created before this date
    * @format date-time
    */
   until?: string;
@@ -659,10 +638,7 @@ export interface StatisticsQosListParams {
   /** The time at which a day starts, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
   day_start_time?: string;
   /**
-   * Ignore calls before the given date. Format is
-   * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be
-   * converted according to the `timezone` parameter. If missing, the statistics
-   * will start at the oldest available call with timezone UTC.
+   * Filter transcriptions created after this date
    * @format date-time
    */
   from?: string;
@@ -683,10 +659,7 @@ export interface StatisticsQosListParams {
    */
   timezone?: string;
   /**
-   * Ignore calls starting at or after the given date. Format is
-   * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be converted
-   * according to the `timezone` parameter. If missing, the statistics will include the current
-   * day.
+   * Filter transcriptions created before this date
    * @format date-time
    */
   until?: string;
@@ -711,6 +684,34 @@ export enum StatusValue {
   Ok = "ok",
 }
 
+export interface Transcription {
+  /** @format date-time */
+  created_at?: string;
+  /**
+   * Voicemail duration in seconds
+   * @format float
+   */
+  duration?: number;
+  /** Detected language code (ISO 639-1) */
+  language?: string;
+  /** The voicemail message ID */
+  message_id?: string;
+  /** Transcription provider/model identifier */
+  provider_id?: string;
+  /** @format uuid */
+  tenant_uuid?: string;
+  /** The transcription text */
+  transcription_text?: string;
+  /** The voicemail ID (mailbox number) */
+  voicemail_id?: number;
+}
+
+export interface TranscriptionList {
+  filtered?: number;
+  items?: Transcription[];
+  total?: number;
+}
+
 export namespace Agents {
   /**
    * @description **Required ACL:** `call-logd.agents.statistics.read` Statistics are aggregated by agents over the period specified by the `from` and `until` query parameters.
@@ -728,10 +729,7 @@ export namespace Agents {
       /** The time at which a day starts, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
       day_start_time?: string;
       /**
-       * Ignore calls before the given date. Format is
-       * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be
-       * converted according to the `timezone` parameter. If missing, the statistics
-       * will start at the oldest available call with timezone UTC.
+       * Filter transcriptions created after this date
        * @format date-time
        */
       from?: string;
@@ -743,10 +741,7 @@ export namespace Agents {
        */
       timezone?: string;
       /**
-       * Ignore calls starting at or after the given date. Format is
-       * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be converted
-       * according to the `timezone` parameter. If missing, the statistics will include the current
-       * day.
+       * Filter transcriptions created before this date
        * @format date-time
        */
       until?: string;
@@ -786,10 +781,7 @@ export namespace Agents {
       /** The time at which a day starts, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
       day_start_time?: string;
       /**
-       * Ignore calls before the given date. Format is
-       * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be
-       * converted according to the `timezone` parameter. If missing, the statistics
-       * will start at the oldest available call with timezone UTC.
+       * Filter transcriptions created after this date
        * @format date-time
        */
       from?: string;
@@ -803,10 +795,7 @@ export namespace Agents {
        */
       timezone?: string;
       /**
-       * Ignore calls starting at or after the given date. Format is
-       * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be converted
-       * according to the `timezone` parameter. If missing, the statistics will include the current
-       * day.
+       * Filter transcriptions created before this date
        * @format date-time
        */
       until?: string;
@@ -844,30 +833,27 @@ export namespace Cdr {
       call_status?: "answered" | "blocked";
       /** Filter by conversation identifier */
       conversation_id?: string;
-      /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+      /** Sort order direction */
       direction?: "asc" | "desc";
       /** Will only return one result for the selected field */
       distinct?: "peer_exten";
       /** Overrides the Content-Type header. This is used to be able to have a downloadable link. Allowed values are "csv" and "json" */
       format?: "csv" | "json";
       /**
-       * Ignore calls before the given date. Format is
-       * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be
-       * converted according to the `timezone` parameter. If missing, the statistics
-       * will start at the oldest available call with timezone UTC.
+       * Filter transcriptions created after this date
        * @format date-time
        */
       from?: string;
       /** Ignore CDR created before the given CDR ID. */
       from_id?: number;
-      /** Maximum number of items to return in the list. Default to 1000 if not specified. */
+      /** Maximum number of items to return */
       limit?: number;
       /** Filter by source_extension and destination_extension. A wildcard (underscore) can be used at the start and/or the end of the number. */
       number?: string;
-      /** Number of items to skip over in the list. Useful for pagination. */
+      /** Number of items to skip */
       offset?: number;
-      /** Name of the field to use for sorting the list of items returned. Unsupported values: ``end``. */
-      order?: string;
+      /** Name of the field to order by */
+      order?: "created_at" | "message_id";
       /** Filter by recorded status. */
       recorded?: boolean;
       /**
@@ -884,10 +870,7 @@ export namespace Cdr {
       /** Filter by tags. Each tag MUST be separated by a coma (,). Many tag will perform a logical AND. */
       tags?: string[];
       /**
-       * Ignore calls starting at or after the given date. Format is
-       * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be converted
-       * according to the `timezone` parameter. If missing, the statistics will include the current
-       * day.
+       * Filter transcriptions created before this date
        * @format date-time
        */
       until?: string;
@@ -934,10 +917,7 @@ export namespace Cdr {
       /** E-mail address */
       email?: string;
       /**
-       * Ignore calls before the given date. Format is
-       * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be
-       * converted according to the `timezone` parameter. If missing, the statistics
-       * will start at the oldest available call with timezone UTC.
+       * Filter transcriptions created after this date
        * @format date-time
        */
       from?: string;
@@ -955,10 +935,7 @@ export namespace Cdr {
       /** Filter by tags. Each tag MUST be separated by a coma (,). Many tag will perform a logical AND. */
       tags?: string[];
       /**
-       * Ignore calls starting at or after the given date. Format is
-       * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be converted
-       * according to the `timezone` parameter. If missing, the statistics will include the current
-       * day.
+       * Filter transcriptions created before this date
        * @format date-time
        */
       until?: string;
@@ -1034,7 +1011,13 @@ export namespace Cdr {
     };
     export type RequestQuery = {};
     export type RequestBody = never;
-    export type RequestHeaders = {};
+    export type RequestHeaders = {
+      /**
+       * Header requesting a chunk of media to be streamed (e.g: bytes=0-1023 to request the first 1024 bytes)
+       * @pattern ^bytes=[0-9]+-[0-9]*$
+       */
+      Range?: string;
+    };
     export type ResponseBody = RecordingsMediaListData;
   }
 }
@@ -1130,10 +1113,7 @@ export namespace Queues {
       /** The time at which a day starts, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
       day_start_time?: string;
       /**
-       * Ignore calls before the given date. Format is
-       * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be
-       * converted according to the `timezone` parameter. If missing, the statistics
-       * will start at the oldest available call with timezone UTC.
+       * Filter transcriptions created after this date
        * @format date-time
        */
       from?: string;
@@ -1147,10 +1127,7 @@ export namespace Queues {
        */
       timezone?: string;
       /**
-       * Ignore calls starting at or after the given date. Format is
-       * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be converted
-       * according to the `timezone` parameter. If missing, the statistics will include the current
-       * day.
+       * Filter transcriptions created before this date
        * @format date-time
        */
       until?: string;
@@ -1190,10 +1167,7 @@ export namespace Queues {
       /** The time at which a day starts, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
       day_start_time?: string;
       /**
-       * Ignore calls before the given date. Format is
-       * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be
-       * converted according to the `timezone` parameter. If missing, the statistics
-       * will start at the oldest available call with timezone UTC.
+       * Filter transcriptions created after this date
        * @format date-time
        */
       from?: string;
@@ -1209,10 +1183,7 @@ export namespace Queues {
        */
       timezone?: string;
       /**
-       * Ignore calls starting at or after the given date. Format is
-       * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be converted
-       * according to the `timezone` parameter. If missing, the statistics will include the current
-       * day.
+       * Filter transcriptions created before this date
        * @format date-time
        */
       until?: string;
@@ -1250,10 +1221,7 @@ export namespace Queues {
       /** The time at which a day starts, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
       day_start_time?: string;
       /**
-       * Ignore calls before the given date. Format is
-       * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be
-       * converted according to the `timezone` parameter. If missing, the statistics
-       * will start at the oldest available call with timezone UTC.
+       * Filter transcriptions created after this date
        * @format date-time
        */
       from?: string;
@@ -1272,10 +1240,7 @@ export namespace Queues {
        */
       timezone?: string;
       /**
-       * Ignore calls starting at or after the given date. Format is
-       * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be converted
-       * according to the `timezone` parameter. If missing, the statistics will include the current
-       * day.
+       * Filter transcriptions created before this date
        * @format date-time
        */
       until?: string;
@@ -1371,30 +1336,27 @@ export namespace Users {
       call_status?: "answered" | "blocked";
       /** Filter by conversation identifier */
       conversation_id?: string;
-      /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+      /** Sort order direction */
       direction?: "asc" | "desc";
       /** Will only return one result for the selected field */
       distinct?: "peer_exten";
       /** Overrides the Content-Type header. This is used to be able to have a downloadable link. Allowed values are "csv" and "json" */
       format?: "csv" | "json";
       /**
-       * Ignore calls before the given date. Format is
-       * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be
-       * converted according to the `timezone` parameter. If missing, the statistics
-       * will start at the oldest available call with timezone UTC.
+       * Filter transcriptions created after this date
        * @format date-time
        */
       from?: string;
       /** Ignore CDR created before the given CDR ID. */
       from_id?: number;
-      /** Maximum number of items to return in the list. Default to 1000 if not specified. */
+      /** Maximum number of items to return */
       limit?: number;
       /** Filter by source_extension and destination_extension. A wildcard (underscore) can be used at the start and/or the end of the number. */
       number?: string;
-      /** Number of items to skip over in the list. Useful for pagination. */
+      /** Number of items to skip */
       offset?: number;
-      /** Name of the field to use for sorting the list of items returned. Unsupported values: ``end``. */
-      order?: string;
+      /** Name of the field to order by */
+      order?: "created_at" | "message_id";
       /** Filter by recorded status. */
       recorded?: boolean;
       /** Filter by requested_internal_context */
@@ -1404,10 +1366,7 @@ export namespace Users {
       /** Filter list of items */
       search?: string;
       /**
-       * Ignore calls starting at or after the given date. Format is
-       * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be converted
-       * according to the `timezone` parameter. If missing, the statistics will include the current
-       * day.
+       * Filter transcriptions created before this date
        * @format date-time
        */
       until?: string;
@@ -1436,7 +1395,13 @@ export namespace Users {
     };
     export type RequestQuery = {};
     export type RequestBody = never;
-    export type RequestHeaders = {};
+    export type RequestHeaders = {
+      /**
+       * Header requesting a chunk of media to be streamed (e.g: bytes=0-1023 to request the first 1024 bytes)
+       * @pattern ^bytes=[0-9]+-[0-9]*$
+       */
+      Range?: string;
+    };
     export type ResponseBody = MeCdrRecordingsMediaListData;
   }
 
@@ -1460,30 +1425,27 @@ export namespace Users {
       call_status?: "answered" | "blocked";
       /** Filter by conversation identifier */
       conversation_id?: string;
-      /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+      /** Sort order direction */
       direction?: "asc" | "desc";
       /** Will only return one result for the selected field */
       distinct?: "peer_exten";
       /** Overrides the Content-Type header. This is used to be able to have a downloadable link. Allowed values are "csv" and "json" */
       format?: "csv" | "json";
       /**
-       * Ignore calls before the given date. Format is
-       * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be
-       * converted according to the `timezone` parameter. If missing, the statistics
-       * will start at the oldest available call with timezone UTC.
+       * Filter transcriptions created after this date
        * @format date-time
        */
       from?: string;
       /** Ignore CDR created before the given CDR ID. */
       from_id?: number;
-      /** Maximum number of items to return in the list. Default to 1000 if not specified. */
+      /** Maximum number of items to return */
       limit?: number;
       /** Filter by source_extension and destination_extension. A wildcard (underscore) can be used at the start and/or the end of the number. */
       number?: string;
-      /** Number of items to skip over in the list. Useful for pagination. */
+      /** Number of items to skip */
       offset?: number;
-      /** Name of the field to use for sorting the list of items returned. Unsupported values: ``end``. */
-      order?: string;
+      /** Name of the field to order by */
+      order?: "created_at" | "message_id";
       /** Filter by recorded status. */
       recorded?: boolean;
       /** Filter by requested_internal_context */
@@ -1493,10 +1455,7 @@ export namespace Users {
       /** Filter list of items */
       search?: string;
       /**
-       * Ignore calls starting at or after the given date. Format is
-       * <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>. Timezone will be converted
-       * according to the `timezone` parameter. If missing, the statistics will include the current
-       * day.
+       * Filter transcriptions created before this date
        * @format date-time
        */
       until?: string;
@@ -1504,5 +1463,46 @@ export namespace Users {
     export type RequestBody = never;
     export type RequestHeaders = {};
     export type ResponseBody = GetUsersData;
+  }
+}
+
+export namespace Voicemails {
+  /**
+   * @description **Required ACL:** `call-logd.voicemails.transcriptions.read`
+   * @tags voicemail_transcriptions
+   * @name ListVoicemailTranscriptions
+   * @summary List voicemail transcriptions
+   * @request GET:/voicemails/transcriptions
+   * @secure
+   */
+  export namespace ListVoicemailTranscriptions {
+    export type RequestParams = {};
+    export type RequestQuery = {
+      /** Sort order direction */
+      direction?: "asc" | "desc";
+      /**
+       * Filter transcriptions created after this date
+       * @format date-time
+       */
+      from?: string;
+      /** Maximum number of items to return */
+      limit?: number;
+      /** Number of items to skip */
+      offset?: number;
+      /** Name of the field to order by */
+      order?: "created_at" | "message_id";
+      /** Full-text search in transcript content */
+      search_text?: string;
+      /**
+       * Filter transcriptions created before this date
+       * @format date-time
+       */
+      until?: string;
+      /** The voicemail ID of the message */
+      voicemail_id?: number[];
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = ListVoicemailTranscriptionsData;
   }
 }

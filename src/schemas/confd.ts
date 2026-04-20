@@ -249,6 +249,8 @@
     enabled?: boolean,
   /** User ID */
     id?: number,
+  /** (Summary view only) Whether the user's main line is a WebRTC line */
+    is_webrtc?: boolean,
   /** User language (e.g. "en_US") */
     language?: "de_DE" | "en_US" | "es_ES" | "fr_FR" | "fr_CA" | "it_IT" | "nl_NL",
   /** Phone number for the user’s mobile device */
@@ -2311,7 +2313,10 @@
   export interface IvrChoice {
   /** The destination to redirect the caller to when this choice is selected */
     destination: DestinationType,
-  /** The extension the caller has to dial to select this choice. Can be an extension pattern */
+  /**
+   * The extension the caller has to dial to select this choice. Can be an asterisk extension pattern, digits (0-9), * or #
+   * @pattern ^_[*#0-9_XxZzNn\[\].!-]{1,39}$|[*#0-9]{1,40}$
+   */
     exten: string,
 }
 
@@ -2445,6 +2450,8 @@
     device_id?: string,
   /** *Deprecated* Please use `position` */
     device_slot?: number,
+  /** Whether the line is a WebRTC line */
+    is_webrtc?: boolean,
   /** Line's position on the device */
     position?: number,
   /** Line's protocol */
@@ -5669,7 +5676,7 @@ export namespace UpdateSkill {
 */
 export namespace DeleteAgent {
   export type RequestParams = {
-  /** Agent's ID */
+  /** Agent’s ID */
     agentId: number,
 
 };
@@ -5693,7 +5700,7 @@ export namespace DeleteAgent {
 */
 export namespace GetAgent {
   export type RequestParams = {
-  /** Agent's ID */
+  /** Agent’s ID */
     agentId: number,
 
 };
@@ -5717,7 +5724,7 @@ export namespace GetAgent {
 */
 export namespace UpdateAgent {
   export type RequestParams = {
-  /** Agent's ID */
+  /** Agent’s ID */
     agentId: number,
 
 };
@@ -5741,7 +5748,7 @@ export namespace UpdateAgent {
 */
 export namespace DissociateAgentSkill {
   export type RequestParams = {
-  /** Agent's ID */
+  /** Agent’s ID */
     agentId: number,
   /** Skill's ID */
     skillId: number,
@@ -5767,7 +5774,7 @@ export namespace DissociateAgentSkill {
 */
 export namespace AssociateAgentSkill {
   export type RequestParams = {
-  /** Agent's ID */
+  /** Agent’s ID */
     agentId: number,
   /** Skill's ID */
     skillId: number,
@@ -11808,7 +11815,7 @@ export namespace UpdateSkillRule {
 */
 export namespace DeleteQueue {
   export type RequestParams = {
-  /** Queue’s ID */
+  /** queue's ID */
     queueId: number,
 
 };
@@ -11832,7 +11839,7 @@ export namespace DeleteQueue {
 */
 export namespace GetQueue {
   export type RequestParams = {
-  /** Queue’s ID */
+  /** queue's ID */
     queueId: number,
 
 };
@@ -11856,7 +11863,7 @@ export namespace GetQueue {
 */
 export namespace UpdateQueue {
   export type RequestParams = {
-  /** Queue’s ID */
+  /** queue's ID */
     queueId: number,
 
 };
@@ -11881,7 +11888,7 @@ export namespace UpdateQueue {
 export namespace DissociateQueueExtension {
   export type RequestParams = {
     extensionId: number,
-  /** Queue’s ID */
+  /** queue's ID */
     queueId: number,
 
 };
@@ -11906,7 +11913,7 @@ export namespace DissociateQueueExtension {
 export namespace AssociateQueueExtension {
   export type RequestParams = {
     extensionId: number,
-  /** Queue’s ID */
+  /** queue's ID */
     queueId: number,
 
 };
@@ -11930,7 +11937,7 @@ export namespace AssociateQueueExtension {
 */
 export namespace GetQueueFallback {
   export type RequestParams = {
-  /** Queue’s ID */
+  /** queue's ID */
     queueId: number,
 
 };
@@ -11954,7 +11961,7 @@ export namespace GetQueueFallback {
 */
 export namespace UpdateQueueFallback {
   export type RequestParams = {
-  /** Queue’s ID */
+  /** queue's ID */
     queueId: number,
 
 };
@@ -11978,9 +11985,9 @@ export namespace UpdateQueueFallback {
 */
 export namespace DissociateAgentQueue {
   export type RequestParams = {
-  /** Agent's ID */
+  /** Agent’s ID */
     agentId: number,
-  /** Queue’s ID */
+  /** queue's ID */
     queueId: number,
 
 };
@@ -12004,9 +12011,9 @@ export namespace DissociateAgentQueue {
 */
 export namespace UpdateAgentQueueAssociation {
   export type RequestParams = {
-  /** Agent's ID */
+  /** Agent’s ID */
     agentId: number,
-  /** Queue’s ID */
+  /** queue's ID */
     queueId: number,
 
 };
@@ -12030,7 +12037,7 @@ export namespace UpdateAgentQueueAssociation {
 */
 export namespace DissociateUserQueue {
   export type RequestParams = {
-  /** Queue’s ID */
+  /** queue's ID */
     queueId: number,
   /** the user's ID or UUID */
     userId: string,
@@ -12056,7 +12063,7 @@ export namespace DissociateUserQueue {
 */
 export namespace UpdateUserQueueAssociation {
   export type RequestParams = {
-  /** Queue’s ID */
+  /** queue's ID */
     queueId: number,
   /** the user's ID or UUID */
     userId: string,
@@ -12082,7 +12089,7 @@ export namespace UpdateUserQueueAssociation {
 */
 export namespace DissociateQueueSchedule {
   export type RequestParams = {
-  /** Queue’s ID */
+  /** queue's ID */
     queueId: number,
   /** Schedule's ID */
     scheduleId: number,
@@ -12108,7 +12115,7 @@ export namespace DissociateQueueSchedule {
 */
 export namespace AssociateQueueSchedule {
   export type RequestParams = {
-  /** Queue’s ID */
+  /** queue's ID */
     queueId: number,
   /** Schedule's ID */
     scheduleId: number,
@@ -14149,7 +14156,7 @@ export namespace DissociateUserAgent {
 */
 export namespace AssociateUserAgent {
   export type RequestParams = {
-  /** Agent's ID */
+  /** Agent’s ID */
     agentId: number,
   /** the user's ID or UUID */
     userId: string,

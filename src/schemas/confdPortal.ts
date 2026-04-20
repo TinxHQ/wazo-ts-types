@@ -1487,6 +1487,27 @@ export namespace Resellers {
     export type RequestHeaders = {};
     export type ResponseBody = any;
   }
+
+  /**
+   * @description **Required ACL:** `confd.resellers.{reseller_uuid}.parent.{parent_reseller_uuid}.update`
+   * @tags resellers
+   * @name UpdateResellerParent
+   * @summary Update reseller parent
+   * @request PUT:/resellers/{reseller_uuid}/parent/{parent_reseller_uuid}
+   * @secure
+   */
+  export namespace UpdateResellerParent {
+    export type RequestParams = {
+      /** The UUID of the new parent reseller */
+      parentResellerUuid: string;
+      /** The UUID of the reseller */
+      resellerUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = any;
+  }
 }
 
 export namespace Status {

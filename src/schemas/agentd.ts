@@ -116,6 +116,8 @@ export type LoginAgentByNumberError = Error;
 export interface LoginInfo {
   /** Context */
   context?: string;
+  /** Name of the endpoint, in the format `interface/name` e.g `PJSIP/alice`. Must be a valid endpoint for the extension and context. */
+  endpoint?: string;
   /** Extension */
   extension?: string;
 }
@@ -181,6 +183,14 @@ export interface UserAgentLoginInfo {
   /** ID of the line where the agent should be logged */
   line_id?: number;
 }
+
+export type UserAgentLoginToQueueData = any;
+
+export type UserAgentLoginToQueueError = Error;
+
+export type UserAgentLogoffFromQueueData = any;
+
+export type UserAgentLogoffFromQueueError = Error;
 
 export namespace Agents {
   /**
@@ -560,6 +570,50 @@ export namespace Users {
       "Wazo-Tenant"?: string;
     };
     export type ResponseBody = PauseUserAgentData;
+  }
+
+  /**
+   * @description **Required ACL:** `agentd.users.me.agents.queues.{queue_id}.login.update`
+   * @tags agent, user
+   * @name UserAgentLoginToQueue
+   * @summary Login user agent to queue
+   * @request PUT:/users/me/agents/queues/{queue_id}/login
+   * @secure
+   */
+  export namespace UserAgentLoginToQueue {
+    export type RequestParams = {
+      /** Queue's ID */
+      queueId: number;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = UserAgentLoginToQueueData;
+  }
+
+  /**
+   * @description **Required ACL:** `agentd.users.me.agents.queues.{queue_id}.logoff.update`
+   * @tags agent, user
+   * @name UserAgentLogoffFromQueue
+   * @summary Logoff user agent from queue
+   * @request PUT:/users/me/agents/queues/{queue_id}/logoff
+   * @secure
+   */
+  export namespace UserAgentLogoffFromQueue {
+    export type RequestParams = {
+      /** Queue's ID */
+      queueId: number;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = UserAgentLogoffFromQueueData;
   }
 
   /**
