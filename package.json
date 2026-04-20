@@ -5,6 +5,10 @@
   "types": "./dist/index.d.ts",
   "author": "Wazo (http://wazo.io)",
   "license": "GPL-3.0-only",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TinxHQ/wazo-ts-types.git"
+  },
   "files": [
     "dist"
   ],
