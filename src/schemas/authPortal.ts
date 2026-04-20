@@ -1067,6 +1067,10 @@ export type UpdateTenantData = TenantPostResponse;
 
 export type UpdateTenantError = APIError | Error;
 
+export type UpdateTenantParentData = any;
+
+export type UpdateTenantParentError = Error;
+
 export type UpdateUserData = UserPostResponse;
 
 export type UpdateUserError = APIError | Error;
@@ -2447,6 +2451,27 @@ export namespace Tenants {
     export type RequestHeaders = {};
     export type ResponseBody = DomainsListData;
   }
+
+  /**
+   * @description **Required ACL:** `auth.tenants.{tenant_uuid}.parent.{parent_tenant_uuid}.update`
+   * @tags tenants
+   * @name UpdateTenantParent
+   * @summary Update tenant's parent
+   * @request PUT:/tenants/{tenant_uuid}/parent/{parent_tenant_uuid}
+   * @secure
+   */
+  export namespace UpdateTenantParent {
+    export type RequestParams = {
+      /** The UUID of the new parent tenant */
+      parentTenantUuid: string;
+      /** The UUID of the tenant */
+      tenantUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = UpdateTenantParentData;
+  }
 }
 
 export namespace Token {
@@ -2684,7 +2709,7 @@ export namespace Users {
   }
 
   /**
-   * @description **Required ACL**: `auth.users.password.reset.{user_uuid}.create` Set a new password for the user after the user used the GET on the reset URL
+   * @description **Required ACL**: `auth.users.password.reset.{user_uuid}.create` Set a new password for the user after the user used the GET on the reset URL. All active sessions (i.e. tokens) will be immediately revoked and can no longer be used. Existing refresh tokens are not affected and remain valid.
    * @tags users
    * @name ResetPasswordChange
    * @summary Set the user password
@@ -2813,7 +2838,7 @@ export namespace Users {
   }
 
   /**
-   * @description **Required ACL**: `auth.users.{user_uuid}.update`
+   * @description **Required ACL**: `auth.users.{user_uuid}.update` When disabling a user (`enabled: false`), all active sessions (i.e. tokens) will be immediately revoked and can no longer be used.
    * @tags users
    * @name UpdateUser
    * @summary Update an existing user
@@ -2937,7 +2962,7 @@ export namespace Users {
   }
 
   /**
-   * @description **Required ACL**: `auth.users.{user_uuid}.password.update`
+   * @description **Required ACL**: `auth.users.{user_uuid}.password.update` All active sessions (i.e. tokens) will be immediately revoked and can no longer be used. Existing refresh tokens are not affected and remain valid.
    * @tags users
    * @name PasswordUpdate
    * @summary Change the user's password
