@@ -52,7 +52,7 @@ Promise.all(
   }),
 ).then(() => {
   exec(
-    'docker run --rm -v $(pwd):/app -w /app node:22-slim bash scripts/fix-types.sh',
+    'bash scripts/fix-types.sh',
     (error, _stdout, stderr) => {
       if (error) {
         console.error(`❌ Error while running 'fix-types.sh': ${error.message}`);
