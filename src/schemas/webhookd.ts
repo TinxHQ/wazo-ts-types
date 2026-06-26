@@ -145,6 +145,7 @@ export type StatusListData = StatusSummary;
 export interface StatusSummary {
   bus_consumer?: ComponentWithStatus;
   master_tenant?: ComponentWithStatus;
+  [key: string]: any;
 }
 
 export enum StatusValue {

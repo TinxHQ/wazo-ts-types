@@ -28,6 +28,106 @@ export interface ConfigPatchItem {
   value?: object;
 }
 
+/** Connector */
+export interface Connector {
+  /**
+   * Whether the backend is ready to use for this tenant. For backends
+   * that require per-tenant credentials, this is true once wazo-auth has
+   * external credentials stored. Backends with no credential requirement
+   * (auth scope ``none``) are always reported as configured.
+   */
+  configured?: boolean;
+  /**
+   * Transport the backend uses to exchange messages with the provider.
+   * ``webhook`` requires configuring a provider-side callback to wazo;
+   * ``poll`` and ``listen`` need none.
+   */
+  mode?: "webhook" | "poll" | "listen";
+  /** The backend identifier */
+  name?: string;
+  /** Messaging types this backend can handle */
+  supported_types?: string[];
+}
+
+/** ConnectorAuthSchema */
+export interface ConnectorAuthSchema {
+  /** Fields required to collect the credentials. */
+  fields?: ConnectorAuthSchemaField[];
+  /**
+   * Where the credentials are stored. `none` means the backend needs
+   * no credentials; `tenant` means they live in wazo-auth tenant
+   * external config.
+   */
+  scope?: "none" | "tenant";
+}
+
+/** ConnectorAuthSchemaField */
+export interface ConnectorAuthSchemaField {
+  /** Allowed values; only emitted when `type` is `select`. */
+  choices?: string[];
+  default?: string;
+  label?: ConnectorLocalizedLabel[];
+  /** Machine-readable field name (used as the form key). */
+  name?: string;
+  required?: boolean;
+  type?: "string" | "secret" | "select" | "boolean" | "integer" | "url";
+}
+
+/** ConnectorIdentityBinding */
+export interface ConnectorIdentityBinding {
+  /** The UUID of the bound UserIdentity row */
+  identity_uuid?: string;
+  /** The UUID of the user the identity is bound to */
+  user_uuid?: string;
+}
+
+/** ConnectorIdentityItem */
+export interface ConnectorIdentityItem {
+  /** Wazo binding for this identity, or null when unbound */
+  binding?: ConnectorIdentityBinding;
+  /** Messaging capabilities of this identity (e.g. ["sms"], ["sms", "mms"]) */
+  capabilities?: string[];
+  /** The external identity value */
+  identity?: string;
+}
+
+/** ConnectorIdentityList */
+export interface ConnectorIdentityList {
+  items?: ConnectorIdentityItem[];
+  /** The number of results */
+  total?: number;
+}
+
+/** ConnectorList */
+export interface ConnectorList {
+  items?: Connector[];
+  /** The number of results */
+  total?: number;
+}
+
+/** ConnectorLocalizedLabel */
+export interface ConnectorLocalizedLabel {
+  /** Locale tag, e.g. `en_US`. */
+  language?: string;
+  value?: string;
+}
+
+export type ConnectorWebhookData = any;
+
+export type ConnectorWebhookError = APIError;
+
+export type ConnectorWebhookPayload = object;
+
+export type ConnectorWebhookWithHintData = any;
+
+export type ConnectorWebhookWithHintError = APIError;
+
+export type ConnectorWebhookWithHintPayload = object;
+
+export type CreateIdentityData = Identity;
+
+export type CreateIdentityError = APIError;
+
 export type CreateRoomData = Room;
 
 export type CreateRoomMessageData = Message;
@@ -52,6 +152,12 @@ export interface Error {
 
 export type GetConfigData = any;
 
+export type GetConnectorAuthSchemaData = ConnectorAuthSchema;
+
+export type GetConnectorAuthSchemaError = APIError;
+
+export type GetIdentityData = Identity;
+
 export type GetRoomData = Rooms;
 
 export interface GetRoomParams {
@@ -60,6 +166,77 @@ export interface GetRoomParams {
 }
 
 export type GetUserPresenceData = Presence;
+
+/** Identity */
+export type Identity = UserIdentity & {
+  /**
+   * Additional admin-managed metadata. Values must be
+   * scalars (string, integer, float, boolean, null) or
+   * lists of scalars. Keys ≤64 chars, individual values
+   * ≤1024 chars, total serialized size ≤4096 chars.
+   */
+  extra?: object;
+  /** The UUID of the tenant owning the identity */
+  tenant_uuid?: string;
+  /** The UUID of the user owning the identity */
+  user_uuid?: string;
+};
+
+/** IdentityCreateRequest */
+export interface IdentityCreateRequest {
+  /**
+   * The connector backend name
+   * @maxLength 64
+   */
+  backend: string;
+  /**
+   * Additional metadata. Values must be scalars (string,
+   * integer, float, boolean, null) or lists of scalars. Keys
+   * ≤64 chars, individual values ≤1024 chars, total serialized
+   * size ≤4096 chars.
+   */
+  extra?: object;
+  /**
+   * The external identity value
+   * @maxLength 256
+   */
+  identity: string;
+  /**
+   * The messaging type
+   * @maxLength 32
+   */
+  type: string;
+  /** The UUID of the user the identity is bound to */
+  user_uuid: string;
+}
+
+/** IdentityList */
+export interface IdentityList {
+  /** Count after applying filter parameters */
+  filtered?: number;
+  items?: Identity[];
+  /** Unfiltered count in the tenant scope */
+  total?: number;
+}
+
+/**
+ * IdentityUpdateRequest
+ * Partial update — every field is optional.
+ */
+export interface IdentityUpdateRequest {
+  /**
+   * Additional metadata. Values must be scalars (string,
+   * integer, float, boolean, null) or lists of scalars. Keys
+   * ≤64 chars, individual values ≤1024 chars, total serialized
+   * size ≤4096 chars.
+   */
+  extra?: object;
+  /**
+   * The external identity value
+   * @maxLength 256
+   */
+  identity?: string;
+}
 
 export interface Line {
   id?: number;
@@ -71,6 +248,43 @@ export interface Line {
     | "progressing"
     | "talking"
     | "unavailable";
+}
+
+export type ListConnectorIdentitiesData = ConnectorIdentityList;
+
+export type ListConnectorIdentitiesError = APIError;
+
+export type ListConnectorsData = ConnectorList;
+
+export type ListIdentitiesData = IdentityList;
+
+export interface ListIdentitiesParams {
+  /** Filter by exact backend name */
+  backend?: string;
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+  direction?: "asc" | "desc";
+  /** Filter by exact identity value */
+  identity?: string;
+  /** Maximum number of items to return in the list */
+  limit?: number;
+  /** Number of items to skip over in the list. Useful for pagination. */
+  offset?: number;
+  /** Name of the field to use for sorting the list of items returned. */
+  order?: "uuid" | "backend" | "type" | "identity";
+  /**
+   * Filter identities whose ``identity`` value contains this term,
+   * case-insensitive. Matching is a literal substring search; wildcard
+   * characters are escaped and not interpreted. Only the ``identity``
+   * column is searched.
+   */
+  search?: string;
+  /** Filter by exact messaging type */
+  type?: string;
+  /**
+   * Filter by user_uuid. Comma-separated list — a row matches if its
+   * user_uuid is any of the listed values (logical OR).
+   */
+  user_uuid?: string;
 }
 
 export type ListPresencesData = PresenceList;
@@ -124,6 +338,16 @@ export interface ListRoomsMessagesParams {
   search?: string;
 }
 
+export type ListUserMeIdentitiesData = UserIdentityList;
+
+export interface ListUserMeIdentitiesParams {
+  /**
+   * Filter identities by reachability for a specific room
+   * @format uuid
+   */
+  room_uuid?: string;
+}
+
 export interface Message {
   /** Alias/nickname of the sender */
   alias?: string;
@@ -131,6 +355,13 @@ export interface Message {
   content?: string;
   /** The date of the message's creation */
   created_at?: string;
+  /**
+   * Delivery metadata for the message. Always present on the response.
+   * Internal messages report `type=internal`, `backend=null`, and an empty
+   * `recipients` array. External messages carry the channel info and one
+   * recipient per outbound leg.
+   */
+  delivery?: MessageDelivery;
   room?: RoomRelationBase;
   /** tenant uuid of the sender */
   tenant_uuid?: string;
@@ -140,6 +371,33 @@ export interface Message {
   uuid?: string;
   /** wazo uuid of the sender */
   wazo_uuid?: string;
+}
+
+/**
+ * Delivery metadata for the message. Always present on the response.
+ * Internal messages report `type=internal`, `backend=null`, and an empty
+ * `recipients` array. External messages carry the channel info and one
+ * recipient per outbound leg.
+ */
+export interface MessageDelivery {
+  /** The connector backend name (e.g. 'twilio'). Null for internal messages. */
+  backend?: string;
+  /** Per-recipient delivery state. Empty for internal messages. */
+  recipients?: MessageRecipient[];
+  /** The messaging type (e.g. 'internal', 'sms') */
+  type?: string;
+}
+
+export interface MessageRecipient {
+  /** The recipient's external address (e.g. phone number) */
+  identity?: string;
+  /**
+   * Current delivery state for this recipient. One of: pending,
+   * retrying, accepted, sent, delivered, failed, dead_letter.
+   */
+  status?: string;
+  /** Timestamp of the latest status transition for this recipient */
+  updated_at?: string;
 }
 
 /** UserItems */
@@ -212,6 +470,8 @@ export interface RoomRelationBase {
 }
 
 export interface RoomUser {
+  /** The external identity of this participant (e.g. a phone number for SMS). When set, the participant is reachable via the matching connector backend. */
+  identity?: string;
   /** The tenant of the user_uuid. Default to the same tenant as the token owner */
   tenant_uuid?: string;
   uuid: string;
@@ -240,15 +500,52 @@ export enum StatusValue {
   Ok = "ok",
 }
 
+export type UpdateIdentityData = Identity;
+
+export type UpdateIdentityError = APIError;
+
 export type UpdateTeamsPresenceData = ResourceUpdated;
 
 export type UpdateTeamsPresenceError = NotFoundError;
 
+/** UserIdentity */
+export interface UserIdentity {
+  /**
+   * The connector backend name
+   * @maxLength 64
+   */
+  backend?: string;
+  /**
+   * The external identity value
+   * @maxLength 256
+   */
+  identity?: string;
+  /**
+   * The messaging type
+   * @maxLength 32
+   */
+  type?: string;
+  /** The UUID of the identity */
+  uuid?: string;
+}
+
+/** UserIdentityList */
+export interface UserIdentityList {
+  items?: UserIdentity[];
+  /** The number of results */
+  total?: number;
+}
+
 export interface UserMessagePOST {
   /** Alias/nickname of the sender */
-  alias: string;
+  alias?: string;
   /** The content of the message */
   content: string;
+  /**
+   * The UUID of the sender's identity to use for outbound delivery. Required when the room contains external participants.
+   * @format uuid
+   */
+  sender_identity_uuid?: string;
 }
 
 export namespace Config {
@@ -285,6 +582,248 @@ export namespace Config {
   }
 }
 
+export namespace Connectors {
+  /**
+   * @description **Required ACL:** `chatd.connectors.read` Returns supported types and tenant-configured state for each registered backend.
+   * @tags connectors
+   * @name ListConnectors
+   * @summary List capability metadata for every registered backend
+   * @request GET:/connectors
+   * @secure
+   */
+  export namespace ListConnectors {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = ListConnectorsData;
+  }
+
+  /**
+   * @description Dispatches an incoming webhook to the matching connector backend. **Body size**: capped at 4 MB at the nginx layer. Bodies above the cap are rejected with HTTP 413 before reaching chatd.
+   * @tags connectors
+   * @name ConnectorWebhook
+   * @summary Receive incoming webhook from connector
+   * @request POST:/connectors/incoming
+   */
+  export namespace ConnectorWebhook {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = ConnectorWebhookPayload;
+    export type RequestHeaders = {};
+    export type ResponseBody = ConnectorWebhookData;
+  }
+
+  /**
+   * @description Dispatches an incoming webhook, trying the specified backend first.
+   * @tags connectors
+   * @name ConnectorWebhookWithHint
+   * @summary Receive incoming webhook with backend hint
+   * @request POST:/connectors/incoming/{backend}
+   */
+  export namespace ConnectorWebhookWithHint {
+    export type RequestParams = {
+      /** Backend name hint for faster dispatch */
+      backend: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = ConnectorWebhookWithHintPayload;
+    export type RequestHeaders = {};
+    export type ResponseBody = ConnectorWebhookWithHintData;
+  }
+
+  /**
+   * @description **Required ACL:** `chatd.connectors.{backend}.auth-schema.read` Returns the connector's declared credential fields and where the credentials live (`scope`). The body is class-level metadata — identical across tenants.
+   * @tags connectors
+   * @name GetConnectorAuthSchema
+   * @summary Get the credential schema declared by the backend
+   * @request GET:/connectors/{backend}/auth-schema
+   * @secure
+   */
+  export namespace GetConnectorAuthSchema {
+    export type RequestParams = {
+      /** The backend name */
+      backend: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** Quoted ETag of a previously fetched body */
+      "If-None-Match"?: string;
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = GetConnectorAuthSchemaData;
+  }
+
+  /**
+   * @description **Required ACL:** `chatd.connectors.{backend}.identities.read` Each item carries the backend-reported identity and its binding to a Wazo user (``null`` when unbound).
+   * @tags connectors
+   * @name ListConnectorIdentities
+   * @summary List identities the backend reports this tenant owns
+   * @request GET:/connectors/{backend}/identities
+   * @secure
+   */
+  export namespace ListConnectorIdentities {
+    export type RequestParams = {
+      /** The backend name */
+      backend: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = ListConnectorIdentitiesData;
+  }
+}
+
+export namespace Identities {
+  /**
+   * @description **Required ACL:** `chatd.identities.read` Returns every identity bound to a user in the calling tenant. The `Wazo-Tenant` header scopes the result; each item includes its owner (`user_uuid`) and `tenant_uuid`.
+   * @tags identities
+   * @name ListIdentities
+   * @summary List all identities visible to the tenant
+   * @request GET:/identities
+   * @secure
+   */
+  export namespace ListIdentities {
+    export type RequestParams = {};
+    export type RequestQuery = {
+      /** Filter by exact backend name */
+      backend?: string;
+      /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+      direction?: "asc" | "desc";
+      /** Filter by exact identity value */
+      identity?: string;
+      /** Maximum number of items to return in the list */
+      limit?: number;
+      /** Number of items to skip over in the list. Useful for pagination. */
+      offset?: number;
+      /** Name of the field to use for sorting the list of items returned. */
+      order?: "uuid" | "backend" | "type" | "identity";
+      /**
+       * Filter identities whose ``identity`` value contains this term,
+       * case-insensitive. Matching is a literal substring search; wildcard
+       * characters are escaped and not interpreted. Only the ``identity``
+       * column is searched.
+       */
+      search?: string;
+      /** Filter by exact messaging type */
+      type?: string;
+      /**
+       * Filter by user_uuid. Comma-separated list — a row matches if its
+       * user_uuid is any of the listed values (logical OR).
+       */
+      user_uuid?: string;
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = ListIdentitiesData;
+  }
+
+  /**
+   * @description **Required ACL:** `chatd.identities.create` Creates an external identity for the user named in the body on a configured backend.
+   * @tags identities
+   * @name CreateIdentity
+   * @summary Create an identity
+   * @request POST:/identities
+   * @secure
+   */
+  export namespace CreateIdentity {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = IdentityCreateRequest;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = CreateIdentityData;
+  }
+
+  /**
+   * @description **Required ACL:** `chatd.identities.{identity_uuid}.delete`
+   * @tags identities
+   * @name DeleteIdentity
+   * @summary Delete an identity
+   * @request DELETE:/identities/{identity_uuid}
+   * @secure
+   */
+  export namespace DeleteIdentity {
+    export type RequestParams = {
+      /**
+       * The UUID of the identity
+       * @format uuid
+       */
+      identityUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = any;
+  }
+
+  /**
+   * @description **Required ACL:** `chatd.identities.{identity_uuid}.read`
+   * @tags identities
+   * @name GetIdentity
+   * @summary Get an identity by UUID
+   * @request GET:/identities/{identity_uuid}
+   * @secure
+   */
+  export namespace GetIdentity {
+    export type RequestParams = {
+      /**
+       * The UUID of the identity
+       * @format uuid
+       */
+      identityUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = GetIdentityData;
+  }
+
+  /**
+   * @description **Required ACL:** `chatd.identities.{identity_uuid}.update` Updates one or more mutable fields.
+   * @tags identities
+   * @name UpdateIdentity
+   * @summary Update an identity (partial)
+   * @request PUT:/identities/{identity_uuid}
+   * @secure
+   */
+  export namespace UpdateIdentity {
+    export type RequestParams = {
+      /**
+       * The UUID of the identity
+       * @format uuid
+       */
+      identityUuid: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = IdentityUpdateRequest;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = UpdateIdentityData;
+  }
+}
+
 export namespace Status {
   /**
    * @description **Required ACL:** `chatd.status.read`
@@ -304,6 +843,28 @@ export namespace Status {
 }
 
 export namespace Users {
+  /**
+   * @description **Required ACL:** `chatd.users.me.identities.read` Returns all identities of the authenticated user. When a `room_uuid` is provided, returns only identities usable to reach the other participants of that room.
+   * @tags identities
+   * @name ListUserMeIdentities
+   * @summary List identities for the authenticated user
+   * @request GET:/users/me/identities
+   * @secure
+   */
+  export namespace ListUserMeIdentities {
+    export type RequestParams = {};
+    export type RequestQuery = {
+      /**
+       * Filter identities by reachability for a specific room
+       * @format uuid
+       */
+      room_uuid?: string;
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = ListUserMeIdentitiesData;
+  }
+
   /**
    * @description **Required ACL:** `chatd.users.me.rooms.read`
    * @tags rooms

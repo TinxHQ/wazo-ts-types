@@ -274,7 +274,7 @@ export interface ListCustomersParams {
   direction?: "asc" | "desc";
   /** The limit defines the number of individual objects that are returned */
   limit?: number;
-  /** Comma-separated list of names to filter resellers by */
+  /** Comma-separated list of names to filter customers by */
   name?: string;
   /**
    * The offset defines the offsets the start by the number specified
@@ -290,7 +290,7 @@ export interface ListCustomersParams {
   recurse?: boolean;
   /** Search term used to filter the result */
   search?: string;
-  /** Comma-separated list of UUIDs to filter resellers by */
+  /** Comma-separated list of UUIDs to filter customers by */
   uuid?: string;
 }
 
@@ -315,7 +315,7 @@ export interface ListLocationsParams {
   instance_uuid?: string;
   /** The limit defines the number of individual objects that are returned */
   limit?: number;
-  /** Comma-separated list of names to filter resellers by */
+  /** Comma-separated list of names to filter customers by */
   name?: string;
   /**
    * The offset defines the offsets the start by the number specified
@@ -331,7 +331,7 @@ export interface ListLocationsParams {
   recurse?: boolean;
   /** Search term used to filter the result */
   search?: string;
-  /** Comma-separated list of UUIDs to filter resellers by */
+  /** Comma-separated list of UUIDs to filter customers by */
   uuid?: string;
   /** Instance tenant UUID to filter locations by */
   wazo_tenant_uuid?: string;
@@ -344,7 +344,7 @@ export interface ListResellersParams {
   direction?: "asc" | "desc";
   /** The limit defines the number of individual objects that are returned */
   limit?: number;
-  /** Comma-separated list of names to filter resellers by */
+  /** Comma-separated list of names to filter customers by */
   name?: string;
   /**
    * The offset defines the offsets the start by the number specified
@@ -357,7 +357,7 @@ export interface ListResellersParams {
   parent_uuid?: string;
   /** Search term used to filter the result */
   search?: string;
-  /** Comma-separated list of UUIDs to filter resellers by */
+  /** Comma-separated list of UUIDs to filter customers by */
   uuid?: string;
 }
 
@@ -610,7 +610,7 @@ export namespace Accounts {
        * The tenant's UUID, defining the ownership of a given resource.
        * @format uuid
        */
-      "Wazo-Tenant": string;
+      "Wazo-Tenant"?: string;
     };
     export type ResponseBody = ListAccountsData;
   }
@@ -632,7 +632,7 @@ export namespace Accounts {
        * The tenant's UUID, defining the ownership of a given resource.
        * @format uuid
        */
-      "Wazo-Tenant": string;
+      "Wazo-Tenant"?: string;
     };
     export type ResponseBody = GetTenantsSummaryAccountData;
   }
@@ -674,7 +674,7 @@ export namespace Customers {
       direction?: "asc" | "desc";
       /** The limit defines the number of individual objects that are returned */
       limit?: number;
-      /** Comma-separated list of names to filter resellers by */
+      /** Comma-separated list of names to filter customers by */
       name?: string;
       /**
        * The offset defines the offsets the start by the number specified
@@ -690,7 +690,7 @@ export namespace Customers {
       recurse?: boolean;
       /** Search term used to filter the result */
       search?: string;
-      /** Comma-separated list of UUIDs to filter resellers by */
+      /** Comma-separated list of UUIDs to filter customers by */
       uuid?: string;
     };
     export type RequestBody = never;
@@ -876,7 +876,7 @@ export namespace Instances {
        * The tenant's UUID, defining the ownership of a given resource.
        * @format uuid
        */
-      "Wazo-Tenant": string;
+      "Wazo-Tenant"?: string;
     };
     export type ResponseBody = ListInstancesData;
   }
@@ -902,7 +902,7 @@ export namespace Locations {
       instance_uuid?: string;
       /** The limit defines the number of individual objects that are returned */
       limit?: number;
-      /** Comma-separated list of names to filter resellers by */
+      /** Comma-separated list of names to filter customers by */
       name?: string;
       /**
        * The offset defines the offsets the start by the number specified
@@ -918,7 +918,7 @@ export namespace Locations {
       recurse?: boolean;
       /** Search term used to filter the result */
       search?: string;
-      /** Comma-separated list of UUIDs to filter resellers by */
+      /** Comma-separated list of UUIDs to filter customers by */
       uuid?: string;
       /** Instance tenant UUID to filter locations by */
       wazo_tenant_uuid?: string;
@@ -1053,7 +1053,7 @@ export namespace Plugins {
        * The tenant's UUID, defining the ownership of a given resource.
        * @format uuid
        */
-      "Wazo-Tenant": string;
+      "Wazo-Tenant"?: string;
     };
     export type ResponseBody = GetPluginsData;
   }
@@ -1075,7 +1075,7 @@ export namespace Plugins {
        * The tenant's UUID, defining the ownership of a given resource.
        * @format uuid
        */
-      "Wazo-Tenant": string;
+      "Wazo-Tenant"?: string;
     };
     export type ResponseBody = any;
   }
@@ -1103,7 +1103,7 @@ export namespace Plugins {
        * The tenant's UUID, defining the ownership of a given resource.
        * @format uuid
        */
-      "Wazo-Tenant": string;
+      "Wazo-Tenant"?: string;
     };
     export type ResponseBody = any;
   }
@@ -1131,7 +1131,7 @@ export namespace Plugins {
        * The tenant's UUID, defining the ownership of a given resource.
        * @format uuid
        */
-      "Wazo-Tenant": string;
+      "Wazo-Tenant"?: string;
     };
     export type ResponseBody = GetPluginData;
   }
@@ -1159,7 +1159,7 @@ export namespace Plugins {
        * The tenant's UUID, defining the ownership of a given resource.
        * @format uuid
        */
-      "Wazo-Tenant": string;
+      "Wazo-Tenant"?: string;
     };
     export type ResponseBody = any;
   }
@@ -1202,7 +1202,7 @@ export namespace Plugins {
        * The tenant's UUID, defining the ownership of a given resource.
        * @format uuid
        */
-      "Wazo-Tenant": string;
+      "Wazo-Tenant"?: string;
     };
     export type ResponseBody = InstallsCustomersListData;
   }
@@ -1230,7 +1230,7 @@ export namespace Plugins {
        * The tenant's UUID, defining the ownership of a given resource.
        * @format uuid
        */
-      "Wazo-Tenant": string;
+      "Wazo-Tenant"?: string;
     };
     export type ResponseBody = InstallsCustomersCreateData;
   }
@@ -1273,7 +1273,7 @@ export namespace Plugins {
        * The tenant's UUID, defining the ownership of a given resource.
        * @format uuid
        */
-      "Wazo-Tenant": string;
+      "Wazo-Tenant"?: string;
     };
     export type ResponseBody = InstallsLocationsListData;
   }
@@ -1301,7 +1301,7 @@ export namespace Plugins {
        * The tenant's UUID, defining the ownership of a given resource.
        * @format uuid
        */
-      "Wazo-Tenant": string;
+      "Wazo-Tenant"?: string;
     };
     export type ResponseBody = InstallsLocationsCreateData;
   }
@@ -1344,7 +1344,7 @@ export namespace Plugins {
        * The tenant's UUID, defining the ownership of a given resource.
        * @format uuid
        */
-      "Wazo-Tenant": string;
+      "Wazo-Tenant"?: string;
     };
     export type ResponseBody = InstallsResellersListData;
   }
@@ -1372,7 +1372,7 @@ export namespace Plugins {
        * The tenant's UUID, defining the ownership of a given resource.
        * @format uuid
        */
-      "Wazo-Tenant": string;
+      "Wazo-Tenant"?: string;
     };
     export type ResponseBody = InstallsResellersCreateData;
   }
@@ -1394,7 +1394,7 @@ export namespace Resellers {
       direction?: "asc" | "desc";
       /** The limit defines the number of individual objects that are returned */
       limit?: number;
-      /** Comma-separated list of names to filter resellers by */
+      /** Comma-separated list of names to filter customers by */
       name?: string;
       /**
        * The offset defines the offsets the start by the number specified
@@ -1407,7 +1407,7 @@ export namespace Resellers {
       parent_uuid?: string;
       /** Search term used to filter the result */
       search?: string;
-      /** Comma-separated list of UUIDs to filter resellers by */
+      /** Comma-separated list of UUIDs to filter customers by */
       uuid?: string;
     };
     export type RequestBody = never;

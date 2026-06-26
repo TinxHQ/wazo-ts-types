@@ -315,7 +315,7 @@ export interface ExternalServiceConfig {
   timeout?: number;
   /**
    * If the HTTPs certificates should be verified and the path of the certificate if a custom certificate is used.
-   * @default true
+   * @default "true"
    */
   verify_certificate?: string;
 }
@@ -1289,18 +1289,15 @@ export type UpdatePhonebookSourceError = LegacyError;
 export type UpdateWazoSourceError = LegacyError;
 
 /** Auth */
-export type WazoAuthConfig = ExternalServiceConfig & {
-  /** The path the the file containing the credentials */
-  key_file?: string;
-  /** The password to use when not using a key_file */
-  password?: string;
-  /** @default 9497 */
-  port?: number;
-  /** The username to use when not using a key_file */
-  username?: string;
-  /** @default "0.1" */
-  version?: string;
-};
+export type WazoAuthConfig = ExternalServiceConfig &
+  WazoAuthConfigNoAuth & {
+    /** The path the the file containing the credentials */
+    key_file?: string;
+    /** The password to use when not using a key_file */
+    password?: string;
+    /** The username to use when not using a key_file */
+    username?: string;
+  };
 
 /** Auth */
 export type WazoAuthConfigNoAuth = ExternalServiceConfig & {
