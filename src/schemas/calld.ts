@@ -22,6 +22,21 @@ export interface AdhocConferenceCreation {
   participant_call_ids?: string[];
 }
 
+export type AdminVoicemailMessage = VoicemailMessageBase & {
+  /** True if a transcription exists for this message */
+  transcribed?: boolean;
+};
+
+export interface AdminVoicemailMessages {
+  filtered?: number;
+  /** List of voicemail messages */
+  items?: (AdminVoicemailMessage & {
+    folder?: VoicemailFolderBase;
+    voicemail?: VoicemailMessageVoicemail;
+  })[];
+  total?: number;
+}
+
 export type AnswerUpdateData = any;
 
 export type AnswerUpdateError = Error;
@@ -228,7 +243,7 @@ export interface CallsDtmfUpdateParams {
 export type CallsHeldAnswerUpdateData = CallID;
 
 export interface CallsHeldAnswerUpdateParams {
-  /** Call ID */
+  /** ID of the call */
   callId: string;
   /** ID of the line of the user used to make the call. Default is the main line of the user. */
   line_id?: number;
@@ -299,7 +314,7 @@ export type CallsProgressStopUpdateError = Error;
 export type CallsQueuedAnswerUpdateData = CallID;
 
 export interface CallsQueuedAnswerUpdateParams {
-  /** Call ID */
+  /** ID of the call */
   callId: string;
   /** ID of the line of the user used to make the call. Default is the main line of the user. */
   line_id?: number;
@@ -342,7 +357,7 @@ export type DtmfUpdateData = any;
 export type DtmfUpdateError = Error;
 
 export interface DtmfUpdateParams {
-  /** Call ID */
+  /** ID of the call */
   callId: string;
   /** Digits to send via DTMF. Must contain only `0-9*#`. */
   digits: string;
@@ -513,7 +528,7 @@ export type MeCallsDtmfUpdateData = any;
 export type MeCallsDtmfUpdateError = Error;
 
 export interface MeCallsDtmfUpdateParams {
-  /** Call ID */
+  /** ID of the call */
   callId: string;
   /** Digits to send via DTMF. Must contain only `0-9*#`. */
   digits: string;
@@ -688,6 +703,45 @@ export interface MeetingStatus {
 export type MessagesDeleteData = any;
 
 export type MessagesDetailData = VoicemailMessage;
+
+export type MessagesListData = AdminVoicemailMessages;
+
+export interface MessagesListParams {
+  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+  direction?: "asc" | "desc";
+  /**
+   * Filter messages with timestamp >= this value (ISO 8601 datetime)
+   * @format date-time
+   */
+  from?: string;
+  /** Maximum number of items to return in the list */
+  limit?: number;
+  /** Number of items to skip over in the list. Useful for pagination. */
+  offset?: number;
+  /** Name of the field to use for sorting the list of items returned. */
+  order?: string;
+  /**
+   * Include sub-tenants
+   * @default false
+   */
+  recurse?: boolean;
+  /** Filter messages by transcription availability */
+  transcribed?: boolean;
+  /**
+   * Filter messages with timestamp < this value (ISO 8601 datetime)
+   * @format date-time
+   */
+  until?: string;
+  /** Filter messages by user UUID (returns user's personal + global voicemails) */
+  user_uuid?: string;
+  /** Filter messages by voicemail ID */
+  voicemail_id?: number;
+  /**
+   * Filter messages by voicemail accesstype
+   * @default "all"
+   */
+  voicemail_type?: "all" | "personal" | "global";
+}
 
 export type MessagesRecordingListData = any;
 
@@ -1173,7 +1227,7 @@ export interface VoicemailFolderBase {
   type?: "new" | "old" | "urgent" | "other";
 }
 
-export type VoicemailMessage = VoicemailMessageBase & {
+export type VoicemailMessage = VoicemailTranscriptedMessageBase & {
   folder?: VoicemailFolderBase;
 };
 
@@ -1197,19 +1251,30 @@ export interface VoicemailMessageUpdate {
   folder_id: number;
 }
 
+export interface VoicemailMessageVoicemail {
+  /** The containing voicemail's type (either global or personal) */
+  accesstype?: "global" | "personal";
+  /** The containing voicemail's ID */
+  id?: number;
+  /** The containing voicemail's name */
+  name?: string;
+}
+
 export interface VoicemailMessages {
   /** List of voicemail messages */
   items?: (VoicemailMessage & {
-    voicemail?: {
-      /** The containing voicemail's type (either global or personal) */
-      accesstype?: "global" | "personal";
-      /** The containing voicemail's ID */
-      id?: number;
-      /** The containing voicemail's name */
-      name?: string;
-    };
+    voicemail?: VoicemailMessageVoicemail;
   })[];
   total?: number;
+}
+
+export type VoicemailTranscriptedMessageBase = VoicemailMessageBase & {
+  transcription?: VoicemailTranscription;
+};
+
+export interface VoicemailTranscription {
+  /** The transcription text */
+  text?: string;
 }
 
 export type VoicemailsDetailData = Voicemail;
@@ -1885,7 +1950,7 @@ export namespace Calls {
    */
   export namespace CallsDelete {
     export type RequestParams = {
-      /** Call ID */
+      /** ID of the call */
       callId: string;
     };
     export type RequestQuery = {};
@@ -1907,7 +1972,7 @@ export namespace Calls {
    */
   export namespace CallsDetail {
     export type RequestParams = {
-      /** Call ID */
+      /** ID of the call */
       callId: string;
     };
     export type RequestQuery = {};
@@ -1929,7 +1994,7 @@ export namespace Calls {
    */
   export namespace AnswerUpdate {
     export type RequestParams = {
-      /** Call ID */
+      /** ID of the call */
       callId: string;
     };
     export type RequestQuery = {};
@@ -1951,7 +2016,7 @@ export namespace Calls {
    */
   export namespace DtmfUpdate {
     export type RequestParams = {
-      /** Call ID */
+      /** ID of the call */
       callId: string;
     };
     export type RequestQuery = {
@@ -1976,7 +2041,7 @@ export namespace Calls {
    */
   export namespace HoldStartUpdate {
     export type RequestParams = {
-      /** Call ID */
+      /** ID of the call */
       callId: string;
     };
     export type RequestQuery = {};
@@ -1998,7 +2063,7 @@ export namespace Calls {
    */
   export namespace HoldStopUpdate {
     export type RequestParams = {
-      /** Call ID */
+      /** ID of the call */
       callId: string;
     };
     export type RequestQuery = {};
@@ -2020,7 +2085,7 @@ export namespace Calls {
    */
   export namespace MuteStartUpdate {
     export type RequestParams = {
-      /** Call ID */
+      /** ID of the call */
       callId: string;
     };
     export type RequestQuery = {};
@@ -2042,7 +2107,7 @@ export namespace Calls {
    */
   export namespace MuteStopUpdate {
     export type RequestParams = {
-      /** Call ID */
+      /** ID of the call */
       callId: string;
     };
     export type RequestQuery = {};
@@ -2064,7 +2129,7 @@ export namespace Calls {
    */
   export namespace ParkUpdate {
     export type RequestParams = {
-      /** Call ID */
+      /** ID of the call */
       callId: string;
     };
     export type RequestQuery = {};
@@ -2086,7 +2151,7 @@ export namespace Calls {
    */
   export namespace RecordPauseUpdate {
     export type RequestParams = {
-      /** Call ID */
+      /** ID of the call */
       callId: string;
     };
     export type RequestQuery = {};
@@ -2108,7 +2173,7 @@ export namespace Calls {
    */
   export namespace RecordResumeUpdate {
     export type RequestParams = {
-      /** Call ID */
+      /** ID of the call */
       callId: string;
     };
     export type RequestQuery = {};
@@ -2130,7 +2195,7 @@ export namespace Calls {
    */
   export namespace RecordStartUpdate {
     export type RequestParams = {
-      /** Call ID */
+      /** ID of the call */
       callId: string;
     };
     export type RequestQuery = {};
@@ -2152,7 +2217,7 @@ export namespace Calls {
    */
   export namespace RecordStopUpdate {
     export type RequestParams = {
-      /** Call ID */
+      /** ID of the call */
       callId: string;
     };
     export type RequestQuery = {};
@@ -2174,7 +2239,7 @@ export namespace Calls {
    */
   export namespace UserUpdate {
     export type RequestParams = {
-      /** Call ID */
+      /** ID of the call */
       callId: string;
       /** UUID of the user */
       userUuid: string;
@@ -2555,7 +2620,7 @@ export namespace Switchboards {
    */
   export namespace CallsHeldUpdate {
     export type RequestParams = {
-      /** Call ID */
+      /** ID of the call */
       callId: string;
       /** Unique identifier of the switchboard */
       switchboardUuid: string;
@@ -2579,7 +2644,7 @@ export namespace Switchboards {
    */
   export namespace CallsHeldAnswerUpdate {
     export type RequestParams = {
-      /** Call ID */
+      /** ID of the call */
       callId: string;
       /** Unique identifier of the switchboard */
       switchboardUuid: string;
@@ -2628,7 +2693,7 @@ export namespace Switchboards {
    */
   export namespace CallsQueuedAnswerUpdate {
     export type RequestParams = {
-      /** Call ID */
+      /** ID of the call */
       callId: string;
       /** Unique identifier of the switchboard */
       switchboardUuid: string;
@@ -2790,7 +2855,7 @@ export namespace Users {
    */
   export namespace MeCallsDelete {
     export type RequestParams = {
-      /** Call ID */
+      /** ID of the call */
       callId: string;
     };
     export type RequestQuery = {};
@@ -2809,7 +2874,7 @@ export namespace Users {
    */
   export namespace MeCallsAnswerUpdate {
     export type RequestParams = {
-      /** Call ID */
+      /** ID of the call */
       callId: string;
     };
     export type RequestQuery = {};
@@ -2828,7 +2893,7 @@ export namespace Users {
    */
   export namespace MeCallsDtmfUpdate {
     export type RequestParams = {
-      /** Call ID */
+      /** ID of the call */
       callId: string;
     };
     export type RequestQuery = {
@@ -2850,7 +2915,7 @@ export namespace Users {
    */
   export namespace MeCallsHoldStartUpdate {
     export type RequestParams = {
-      /** Call ID */
+      /** ID of the call */
       callId: string;
     };
     export type RequestQuery = {};
@@ -2869,7 +2934,7 @@ export namespace Users {
    */
   export namespace MeCallsHoldStopUpdate {
     export type RequestParams = {
-      /** Call ID */
+      /** ID of the call */
       callId: string;
     };
     export type RequestQuery = {};
@@ -2888,7 +2953,7 @@ export namespace Users {
    */
   export namespace MeCallsMuteStartUpdate {
     export type RequestParams = {
-      /** Call ID */
+      /** ID of the call */
       callId: string;
     };
     export type RequestQuery = {};
@@ -2907,7 +2972,7 @@ export namespace Users {
    */
   export namespace MeCallsMuteStopUpdate {
     export type RequestParams = {
-      /** Call ID */
+      /** ID of the call */
       callId: string;
     };
     export type RequestQuery = {};
@@ -2926,7 +2991,7 @@ export namespace Users {
    */
   export namespace MeCallsParkUpdate {
     export type RequestParams = {
-      /** Call ID */
+      /** ID of the call */
       callId: string;
     };
     export type RequestQuery = {};
@@ -2948,7 +3013,7 @@ export namespace Users {
    */
   export namespace MeCallsRecordPauseUpdate {
     export type RequestParams = {
-      /** Call ID */
+      /** ID of the call */
       callId: string;
     };
     export type RequestQuery = {};
@@ -2967,7 +3032,7 @@ export namespace Users {
    */
   export namespace MeCallsRecordResumeUpdate {
     export type RequestParams = {
-      /** Call ID */
+      /** ID of the call */
       callId: string;
     };
     export type RequestQuery = {};
@@ -2986,7 +3051,7 @@ export namespace Users {
    */
   export namespace MeCallsRecordStartUpdate {
     export type RequestParams = {
-      /** Call ID */
+      /** ID of the call */
       callId: string;
     };
     export type RequestQuery = {};
@@ -3005,7 +3070,7 @@ export namespace Users {
    */
   export namespace MeCallsRecordStopUpdate {
     export type RequestParams = {
-      /** Call ID */
+      /** ID of the call */
       callId: string;
     };
     export type RequestQuery = {};
@@ -3059,7 +3124,7 @@ export namespace Users {
    */
   export namespace MeConferencesAdhocParticipantsDelete {
     export type RequestParams = {
-      /** Call ID */
+      /** ID of the call */
       callId: string;
       /** ID of the adhoc conference */
       conferenceId: string;
@@ -3080,7 +3145,7 @@ export namespace Users {
    */
   export namespace MeConferencesAdhocParticipantsUpdate {
     export type RequestParams = {
-      /** Call ID */
+      /** ID of the call */
       callId: string;
       /** ID of the adhoc conference */
       conferenceId: string;
@@ -3599,6 +3664,60 @@ export namespace Users {
 }
 
 export namespace Voicemails {
+  /**
+   * @description **Required ACL:** `calld.voicemails.messages.read`
+   * @tags voicemails
+   * @name MessagesList
+   * @summary List all voicemail messages in a tenant
+   * @request GET:/voicemails/messages
+   * @secure
+   */
+  export namespace MessagesList {
+    export type RequestParams = {};
+    export type RequestQuery = {
+      /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+      direction?: "asc" | "desc";
+      /**
+       * Filter messages with timestamp >= this value (ISO 8601 datetime)
+       * @format date-time
+       */
+      from?: string;
+      /** Maximum number of items to return in the list */
+      limit?: number;
+      /** Number of items to skip over in the list. Useful for pagination. */
+      offset?: number;
+      /** Name of the field to use for sorting the list of items returned. */
+      order?: string;
+      /**
+       * Include sub-tenants
+       * @default false
+       */
+      recurse?: boolean;
+      /** Filter messages by transcription availability */
+      transcribed?: boolean;
+      /**
+       * Filter messages with timestamp < this value (ISO 8601 datetime)
+       * @format date-time
+       */
+      until?: string;
+      /** Filter messages by user UUID (returns user's personal + global voicemails) */
+      user_uuid?: string;
+      /** Filter messages by voicemail ID */
+      voicemail_id?: number;
+      /**
+       * Filter messages by voicemail accesstype
+       * @default "all"
+       */
+      voicemail_type?: "all" | "personal" | "global";
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = MessagesListData;
+  }
+
   /**
    * @description **Required ACL:** `calld.voicemails.{voicemail_id}.read`
    * @tags voicemails

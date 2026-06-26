@@ -112,6 +112,10 @@ export type LoginAgentByNumberData = any;
 
 export type LoginAgentByNumberError = Error;
 
+export type LoginAgentToQueueData = any;
+
+export type LoginAgentToQueueError = Error;
+
 /** Login information */
 export interface LoginInfo {
   /** Context */
@@ -134,6 +138,10 @@ export type LogoffAgentByNumberData = any;
 
 export type LogoffAgentByNumberError = Error;
 
+export type LogoffAgentFromQueueData = any;
+
+export type LogoffAgentFromQueueError = Error;
+
 export type LogoffAgentsData = any;
 
 export type LogoffUserAgentData = any;
@@ -155,6 +163,14 @@ export interface Queue {
 }
 
 export type RelogAgentsData = any;
+
+export interface RelogAgentsParams {
+  /**
+   * If true, relog each agent into all of its assigned queues, restoring membership for queues from which the agent was previously logged off individually.
+   * @default false
+   */
+  all_queues?: boolean;
+}
 
 export type RemoveAgentByIdData = any;
 
@@ -220,7 +236,7 @@ export namespace Agents {
 
   /**
    * @description **Required ACL:** `agentd.agents.by-id.{agent_id}.read`
-   * @tags agent
+   * @tags agents
    * @name GetAgentById
    * @summary Get agent status.
    * @request GET:/agents/by-id/{agent_id}
@@ -242,7 +258,7 @@ export namespace Agents {
 
   /**
    * @description **Required ACL:** `agentd.agents.by-id.{agent_id}.add.create`
-   * @tags agent
+   * @tags agents
    * @name AddAgentById
    * @summary Add agent to a queue.
    * @request POST:/agents/by-id/{agent_id}/add
@@ -264,7 +280,7 @@ export namespace Agents {
 
   /**
    * @description **Required ACL:** `agentd.agents.by-id.{agent_id}.login.create`
-   * @tags agent
+   * @tags agents
    * @name LoginAgentById
    * @summary Log an agent.
    * @request POST:/agents/by-id/{agent_id}/login
@@ -286,7 +302,7 @@ export namespace Agents {
 
   /**
    * @description **Required ACL:** `agentd.agents.by-id.{agent_id}.logoff.create`
-   * @tags agent
+   * @tags agents
    * @name LogoffAgentById
    * @summary Logoff an agent.
    * @request POST:/agents/by-id/{agent_id}/logoff
@@ -308,7 +324,7 @@ export namespace Agents {
 
   /**
    * @description **Required ACL:** `agentd.agents.by-id.{agent_id}.remove.create`
-   * @tags agent
+   * @tags agents
    * @name RemoveAgentById
    * @summary Remove agent from a queue.
    * @request POST:/agents/by-id/{agent_id}/remove
@@ -330,7 +346,7 @@ export namespace Agents {
 
   /**
    * @description **Required ACL:** `agentd.agents.by-number.{agent_number}.read`
-   * @tags agent
+   * @tags agents
    * @name GetAgentByNumber
    * @summary Get agent status.
    * @request GET:/agents/by-number/{agent_number}
@@ -352,7 +368,7 @@ export namespace Agents {
 
   /**
    * @description **Required ACL:** `agentd.agents.by-number.{agent_number}.login.create`
-   * @tags agent
+   * @tags agents
    * @name LoginAgentByNumber
    * @summary Log an agent.
    * @request POST:/agents/by-number/{agent_number}/login
@@ -374,7 +390,7 @@ export namespace Agents {
 
   /**
    * @description **Required ACL:** `agentd.agents.by-number.{agent_number}.logoff.create`
-   * @tags agent
+   * @tags agents
    * @name LogoffAgentByNumber
    * @summary Logoff an agent.
    * @request POST:/agents/by-number/{agent_number}/logoff
@@ -396,7 +412,7 @@ export namespace Agents {
 
   /**
    * @description **Required ACL:** `agentd.agents.by-number.{agent_number}.pause.create`
-   * @tags agent
+   * @tags agents
    * @name PauseAgentByNumber
    * @summary Pause an agent.
    * @request POST:/agents/by-number/{agent_number}/pause
@@ -418,7 +434,7 @@ export namespace Agents {
 
   /**
    * @description **Required ACL:** `agentd.agents.by-number.{agent_number}.unpause.create`
-   * @tags agent
+   * @tags agents
    * @name UnpauseAgentByNumber
    * @summary Unpause an agent.
    * @request POST:/agents/by-number/{agent_number}/unpause
@@ -467,13 +483,67 @@ export namespace Agents {
    */
   export namespace RelogAgents {
     export type RequestParams = {};
-    export type RequestQuery = {};
+    export type RequestQuery = {
+      /**
+       * If true, relog each agent into all of its assigned queues, restoring membership for queues from which the agent was previously logged off individually.
+       * @default false
+       */
+      all_queues?: boolean;
+    };
     export type RequestBody = never;
     export type RequestHeaders = {
       /** The tenant's UUID, defining the ownership of a given resource. */
       "Wazo-Tenant"?: string;
     };
     export type ResponseBody = RelogAgentsData;
+  }
+
+  /**
+   * @description **Required ACL:** `agentd.agents.{agent_id}.queues.{queue_id}.login.update`
+   * @tags agents
+   * @name LoginAgentToQueue
+   * @summary Login agent to queue
+   * @request PUT:/agents/{agent_id}/queues/{queue_id}/login
+   * @secure
+   */
+  export namespace LoginAgentToQueue {
+    export type RequestParams = {
+      /** Agent's ID */
+      agentId: number;
+      /** Queue's ID */
+      queueId: number;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = LoginAgentToQueueData;
+  }
+
+  /**
+   * @description **Required ACL:** `agentd.agents.{agent_id}.queues.{queue_id}.logoff.update`
+   * @tags agents
+   * @name LogoffAgentFromQueue
+   * @summary Logoff agent from queue
+   * @request PUT:/agents/{agent_id}/queues/{queue_id}/logoff
+   * @secure
+   */
+  export namespace LogoffAgentFromQueue {
+    export type RequestParams = {
+      /** Agent's ID */
+      agentId: number;
+      /** Queue's ID */
+      queueId: number;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource. */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = LogoffAgentFromQueueData;
   }
 }
 
@@ -498,7 +568,7 @@ export namespace Status {
 export namespace Users {
   /**
    * @description **Required ACL:** `agentd.users.me.agents.read`
-   * @tags agent, user
+   * @tags agents, users
    * @name GetUserAgent
    * @summary Get agent status of the user holding the authentication token.
    * @request GET:/users/me/agents
@@ -517,7 +587,7 @@ export namespace Users {
 
   /**
    * @description **Required ACL:** `agentd.users.me.agents.login.create`
-   * @tags agent, user
+   * @tags agents, users
    * @name LoginUserAgent
    * @summary Log the agent of the user holding the authentication token
    * @request POST:/users/me/agents/login
@@ -536,7 +606,7 @@ export namespace Users {
 
   /**
    * @description **Required ACL:** `agentd.users.me.agents.logoff.create`
-   * @tags agent, user
+   * @tags agents, users
    * @name LogoffUserAgent
    * @summary Logoff the agent of the user holding the authentication token
    * @request POST:/users/me/agents/logoff
@@ -555,7 +625,7 @@ export namespace Users {
 
   /**
    * @description **Required ACL:** `agentd.users.me.agents.pause.create`
-   * @tags agent, user
+   * @tags agents, users
    * @name PauseUserAgent
    * @summary Pause the agent of the user holding the authentication token
    * @request POST:/users/me/agents/pause
@@ -574,7 +644,7 @@ export namespace Users {
 
   /**
    * @description **Required ACL:** `agentd.users.me.agents.queues.{queue_id}.login.update`
-   * @tags agent, user
+   * @tags agents, users
    * @name UserAgentLoginToQueue
    * @summary Login user agent to queue
    * @request PUT:/users/me/agents/queues/{queue_id}/login
@@ -596,7 +666,7 @@ export namespace Users {
 
   /**
    * @description **Required ACL:** `agentd.users.me.agents.queues.{queue_id}.logoff.update`
-   * @tags agent, user
+   * @tags agents, users
    * @name UserAgentLogoffFromQueue
    * @summary Logoff user agent from queue
    * @request PUT:/users/me/agents/queues/{queue_id}/logoff
@@ -618,7 +688,7 @@ export namespace Users {
 
   /**
    * @description **Required ACL:** `agentd.users.me.agents.unpause.create`
-   * @tags agent, user
+   * @tags agents, users
    * @name UnpauseUserAgent
    * @summary Unpause the agent of the user holding the authentication token
    * @request POST:/users/me/agents/unpause

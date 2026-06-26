@@ -253,6 +253,11 @@
     is_webrtc?: boolean,
   /** User language (e.g. "en_US") */
     language?: "de_DE" | "en_US" | "es_ES" | "fr_FR" | "fr_CA" | "it_IT" | "nl_NL",
+  /**
+   * Enable PSTN fallback when push notification is not answered in time
+   * @default false
+   */
+    mobile_fallback_enabled?: boolean,
   /** Phone number for the user’s mobile device */
     mobile_phone_number?: string,
   /** Name of the MOH category to use for music on hold */
@@ -1901,6 +1906,8 @@
     export type GetUsersSubscriptionsData = UserSubscriptionItems
 
     export type GetVoicemailData = Voicemail
+
+    export type GetVoicemailTranscriptionConfigData = VoicemailTranscriptionConfig
 
     export type GetWizardDiscoverData = WizardDiscover
 
@@ -4706,6 +4713,8 @@
 
     export type UpdateUsersCsvPayload = string
 
+    export type UpdateVoicemailTranscriptionConfigData = any
+
   /** User */
   export type User = (BaseUser & UserRelationAgent & UserRelationFallbacks & UserRelationForwards & UserRelationGroups & UserRelationIncalls & UserRelationLines & UserRelationServices & UserRelationSwitchboards & UserRelationVoicemail & UserRelationQueues & UserRelationCallPickupTargets)
 
@@ -4741,7 +4750,9 @@
 
   /** UserCallerID */
   export interface UserCallerID {
-  /** Caller ID number. Only valid for `main` `associated` type */
+  /** Caller ID name. Only valid for `main` and `shared` types */
+    caller_id_name?: string,
+  /** Caller ID number. Only valid for `main` `associated` and `shared` types */
     number?: string,
   /**
    * Caller ID type.
@@ -4972,6 +4983,11 @@
   /** User lastname */
     lastname?: string,
     lines?: (UserPostRelationLine)[],
+  /**
+   * Enable PSTN fallback when push notification is not answered in time
+   * @default false
+   */
+    mobile_fallback_enabled?: boolean,
   /** Phone number for the user’s mobile device */
     mobile_phone_number?: string,
   /** Name of the MOH category to use for music on hold */
@@ -5223,6 +5239,15 @@
 
     export interface VoicemailRelationUsers {
     users?: (UserRelationBase)[],
+}
+
+    export interface VoicemailTranscriptionConfig {
+  /**
+   * Enable or disable automatic transcription of voicemails for this tenant.
+   * @default false
+   * @example true
+   */
+    enabled: boolean,
 }
 
   /** VoicemailZoneMessage */
@@ -5676,7 +5701,7 @@ export namespace UpdateSkill {
 */
 export namespace DeleteAgent {
   export type RequestParams = {
-  /** Agent’s ID */
+  /** Agent's ID */
     agentId: number,
 
 };
@@ -5700,7 +5725,7 @@ export namespace DeleteAgent {
 */
 export namespace GetAgent {
   export type RequestParams = {
-  /** Agent’s ID */
+  /** Agent's ID */
     agentId: number,
 
 };
@@ -5724,7 +5749,7 @@ export namespace GetAgent {
 */
 export namespace UpdateAgent {
   export type RequestParams = {
-  /** Agent’s ID */
+  /** Agent's ID */
     agentId: number,
 
 };
@@ -5748,7 +5773,7 @@ export namespace UpdateAgent {
 */
 export namespace DissociateAgentSkill {
   export type RequestParams = {
-  /** Agent’s ID */
+  /** Agent's ID */
     agentId: number,
   /** Skill's ID */
     skillId: number,
@@ -5774,7 +5799,7 @@ export namespace DissociateAgentSkill {
 */
 export namespace AssociateAgentSkill {
   export type RequestParams = {
-  /** Agent’s ID */
+  /** Agent's ID */
     agentId: number,
   /** Skill's ID */
     skillId: number,
@@ -6391,7 +6416,7 @@ export namespace UpdateAsteriskSccpGeneral {
         
 /**
  * @description **Required ACL:** `confd.asterisk.voicemail.general.read`
- * @tags asterisk
+ * @tags asterisk, voicemails
  * @name ListAsteriskVoicemailGeneral
  * @summary List Voicemail general options
  * @request GET:/asterisk/voicemail/general
@@ -6407,7 +6432,7 @@ export namespace ListAsteriskVoicemailGeneral {
         
 /**
  * @description **Required ACL:** `confd.asterisk.voicemail.general.update` **WARNING** This endpoint restore to default value or delete all fields that are not defined.
- * @tags asterisk
+ * @tags asterisk, voicemails
  * @name UpdateAsteriskVoicemailGeneral
  * @summary Update Voicemail general option
  * @request PUT:/asterisk/voicemail/general
@@ -11815,7 +11840,7 @@ export namespace UpdateSkillRule {
 */
 export namespace DeleteQueue {
   export type RequestParams = {
-  /** queue's ID */
+  /** Queue’s ID */
     queueId: number,
 
 };
@@ -11839,7 +11864,7 @@ export namespace DeleteQueue {
 */
 export namespace GetQueue {
   export type RequestParams = {
-  /** queue's ID */
+  /** Queue’s ID */
     queueId: number,
 
 };
@@ -11863,7 +11888,7 @@ export namespace GetQueue {
 */
 export namespace UpdateQueue {
   export type RequestParams = {
-  /** queue's ID */
+  /** Queue’s ID */
     queueId: number,
 
 };
@@ -11888,7 +11913,7 @@ export namespace UpdateQueue {
 export namespace DissociateQueueExtension {
   export type RequestParams = {
     extensionId: number,
-  /** queue's ID */
+  /** Queue’s ID */
     queueId: number,
 
 };
@@ -11913,7 +11938,7 @@ export namespace DissociateQueueExtension {
 export namespace AssociateQueueExtension {
   export type RequestParams = {
     extensionId: number,
-  /** queue's ID */
+  /** Queue’s ID */
     queueId: number,
 
 };
@@ -11937,7 +11962,7 @@ export namespace AssociateQueueExtension {
 */
 export namespace GetQueueFallback {
   export type RequestParams = {
-  /** queue's ID */
+  /** Queue’s ID */
     queueId: number,
 
 };
@@ -11961,7 +11986,7 @@ export namespace GetQueueFallback {
 */
 export namespace UpdateQueueFallback {
   export type RequestParams = {
-  /** queue's ID */
+  /** Queue’s ID */
     queueId: number,
 
 };
@@ -11985,9 +12010,9 @@ export namespace UpdateQueueFallback {
 */
 export namespace DissociateAgentQueue {
   export type RequestParams = {
-  /** Agent’s ID */
+  /** Agent's ID */
     agentId: number,
-  /** queue's ID */
+  /** Queue’s ID */
     queueId: number,
 
 };
@@ -12011,9 +12036,9 @@ export namespace DissociateAgentQueue {
 */
 export namespace UpdateAgentQueueAssociation {
   export type RequestParams = {
-  /** Agent’s ID */
+  /** Agent's ID */
     agentId: number,
-  /** queue's ID */
+  /** Queue’s ID */
     queueId: number,
 
 };
@@ -12037,7 +12062,7 @@ export namespace UpdateAgentQueueAssociation {
 */
 export namespace DissociateUserQueue {
   export type RequestParams = {
-  /** queue's ID */
+  /** Queue’s ID */
     queueId: number,
   /** the user's ID or UUID */
     userId: string,
@@ -12063,7 +12088,7 @@ export namespace DissociateUserQueue {
 */
 export namespace UpdateUserQueueAssociation {
   export type RequestParams = {
-  /** queue's ID */
+  /** Queue’s ID */
     queueId: number,
   /** the user's ID or UUID */
     userId: string,
@@ -12089,7 +12114,7 @@ export namespace UpdateUserQueueAssociation {
 */
 export namespace DissociateQueueSchedule {
   export type RequestParams = {
-  /** queue's ID */
+  /** Queue’s ID */
     queueId: number,
   /** Schedule's ID */
     scheduleId: number,
@@ -12115,7 +12140,7 @@ export namespace DissociateQueueSchedule {
 */
 export namespace AssociateQueueSchedule {
   export type RequestParams = {
-  /** queue's ID */
+  /** Queue’s ID */
     queueId: number,
   /** Schedule's ID */
     scheduleId: number,
@@ -14156,7 +14181,7 @@ export namespace DissociateUserAgent {
 */
 export namespace AssociateUserAgent {
   export type RequestParams = {
-  /** Agent’s ID */
+  /** Agent's ID */
     agentId: number,
   /** the user's ID or UUID */
     userId: string,
@@ -15257,6 +15282,46 @@ export namespace CreateVoicemail {
   export type RequestBody = Voicemail;
   export type RequestHeaders = {};
   export type ResponseBody = CreateVoicemailData;
+}
+        
+/**
+ * @description Returns the current transcription settings, including whether automatic transcription is enabled for the tenant's voicemails. **required_acl**: `confd.voicemails.transcription.read`
+ * @tags voicemails, transcription
+ * @name GetVoicemailTranscriptionConfig
+ * @summary Retrieve the voicemail transcription configuration for the tenant
+ * @request GET:/voicemails/transcription
+ * @secure
+*/
+export namespace GetVoicemailTranscriptionConfig {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = never;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = GetVoicemailTranscriptionConfigData;
+}
+        
+/**
+ * @description **required_acl**: `confd.voicemails.transcription.update`
+ * @tags voicemails, transcription
+ * @name UpdateVoicemailTranscriptionConfig
+ * @summary Update the voicemail transcription configuration for the tenant.
+ * @request PUT:/voicemails/transcription
+ * @secure
+*/
+export namespace UpdateVoicemailTranscriptionConfig {
+  export type RequestParams = {};
+  export type RequestQuery = {};
+  export type RequestBody = VoicemailTranscriptionConfig;
+  export type RequestHeaders = {
+  /** The tenant's UUID, defining the ownership of a given resource. */
+    "Wazo-Tenant"?: string,
+
+};
+  export type ResponseBody = UpdateVoicemailTranscriptionConfigData;
 }
         
 /**

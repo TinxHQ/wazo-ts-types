@@ -20,7 +20,7 @@ export interface ComponentWithStatus {
 
 /**
  * A complete configuration
- * @example {"deletable":true,"id":"abcdef123456890","parent_ids":["base"],"raw_config":{"sip_lines":{"1":{"auth_username":"100","display_name":"Foo","password":"100","username":"100"}}}}
+ * @example {"id":"abcdef123456890","deletable":true,"parent_ids":["base"],"raw_config":{"sip_lines":{"1":{"auth_username":"100","display_name":"Foo","password":"100","username":"100"}}}}
  */
 export interface Config {
   deletable?: boolean;
@@ -377,175 +377,6 @@ export type SynchronizeCreateData = any;
 
 export type SynchronizeDetailData = OperationInProgressObject;
 
-export namespace CfgMgr {
-  /**
-   * @description **Required ACL:** `provd.cfg_mgr.read` The configuration manager resource represents the entry point to the wazo-provd configuration REST API
-   * @tags configs
-   * @name CfgMgrList
-   * @summary Get the Config Manager resource
-   * @request GET:/cfg_mgr
-   * @secure
-   */
-  export namespace CfgMgrList {
-    export type RequestParams = {};
-    export type RequestQuery = {};
-    export type RequestBody = never;
-    export type RequestHeaders = {};
-    export type ResponseBody = CfgMgrListData;
-  }
-
-  /**
-   * @description **Required ACL:** `provd.cfg_mgr.autocreate.create` Create a new config based on the config that has the autocreate role
-   * @tags configs
-   * @name AutocreateCreate
-   * @summary Create an autocreate configuration
-   * @request POST:/cfg_mgr/autocreate
-   * @secure
-   */
-  export namespace AutocreateCreate {
-    export type RequestParams = {};
-    export type RequestQuery = {};
-    export type RequestBody = EmptyObject;
-    export type RequestHeaders = {};
-    export type ResponseBody = IdObject;
-  }
-
-  /**
-   * @description **Required ACL:** `provd.cfg_mgr.configs.read`
-   * @tags configs
-   * @name ConfigsList
-   * @summary List and find configurations
-   * @request GET:/cfg_mgr/configs
-   * @secure
-   */
-  export namespace ConfigsList {
-    export type RequestParams = {};
-    export type RequestQuery = {
-      /**
-       * A list of fields, separated by comma.
-       *
-       * Example: `mac,ip`
-       */
-      fields?: string;
-      /**
-       * A selector, encoded in JSON, describing which entries should be returned. All entries are returned if not specified.
-       *
-       * Example: `{"ip":"10.34.1.110"}`
-       */
-      q?: string;
-      /**
-       * An integer specifing the number of entries to skip.
-       *
-       * Example: 10
-       */
-      skip?: number;
-      /**
-       * The key on which to sort the results.
-       *
-       * Example: `id`
-       */
-      sort?: string;
-      /** The order of sort */
-      sort_ord?: "ASC" | "DESC";
-    };
-    export type RequestBody = never;
-    export type RequestHeaders = {};
-    export type ResponseBody = ConfigsObject;
-  }
-
-  /**
-   * @description **Required ACL:** `provd.cfg_mgr.configs.create`
-   * @tags configs
-   * @name ConfigsCreate
-   * @summary Create a configuration
-   * @request POST:/cfg_mgr/configs
-   * @secure
-   */
-  export namespace ConfigsCreate {
-    export type RequestParams = {};
-    export type RequestQuery = {};
-    export type RequestBody = ConfigObject;
-    export type RequestHeaders = {};
-    export type ResponseBody = IdObject;
-  }
-
-  /**
-   * @description **Required ACL:** `provd.cfg_mgr.configs.{config_id}.delete`
-   * @tags configs
-   * @name ConfigsDelete
-   * @summary Delete a configuration
-   * @request DELETE:/cfg_mgr/configs/{config_id}
-   * @secure
-   */
-  export namespace ConfigsDelete {
-    export type RequestParams = {
-      /** Configuration ID */
-      configId: string;
-    };
-    export type RequestQuery = {};
-    export type RequestBody = never;
-    export type RequestHeaders = {};
-    export type ResponseBody = any;
-  }
-
-  /**
-   * @description **Required ACL:** `provd.cfg_mgr.configs.{config_id}.read`
-   * @tags configs
-   * @name ConfigsDetail
-   * @summary Get a configuration
-   * @request GET:/cfg_mgr/configs/{config_id}
-   * @secure
-   */
-  export namespace ConfigsDetail {
-    export type RequestParams = {
-      /** Configuration ID */
-      configId: string;
-    };
-    export type RequestQuery = {};
-    export type RequestBody = never;
-    export type RequestHeaders = {};
-    export type ResponseBody = ConfigObject;
-  }
-
-  /**
-   * @description **Required ACL:** `provd.cfg_mgr.configs.{config_id}.update`
-   * @tags configs
-   * @name ConfigsUpdate
-   * @summary Update a configuration
-   * @request PUT:/cfg_mgr/configs/{config_id}
-   * @secure
-   */
-  export namespace ConfigsUpdate {
-    export type RequestParams = {
-      /** Configuration ID */
-      configId: string;
-    };
-    export type RequestQuery = {};
-    export type RequestBody = ConfigObject;
-    export type RequestHeaders = {};
-    export type ResponseBody = any;
-  }
-
-  /**
-   * @description **Required ACL:** `provd.cfg_mgr.configs.{config_id}.raw.read`
-   * @tags configs
-   * @name ConfigsRawList
-   * @summary Get a raw configuration
-   * @request GET:/cfg_mgr/configs/{config_id}/raw
-   * @secure
-   */
-  export namespace ConfigsRawList {
-    export type RequestParams = {
-      /** Configuration ID */
-      configId: string;
-    };
-    export type RequestQuery = {};
-    export type RequestBody = never;
-    export type RequestHeaders = {};
-    export type ResponseBody = ConfigsRawListData;
-  }
-}
-
 export namespace Configure {
   /**
    * @description **Required ACL:** `provd.configure.read`
@@ -561,121 +392,6 @@ export namespace Configure {
     export type RequestBody = never;
     export type RequestHeaders = {};
     export type ResponseBody = ConfigureListData;
-  }
-
-  /**
-   * @description **Required ACL:** `provd.configure.nat.update`
-   * @tags provd
-   * @name PutConfigure
-   * @summary Update the configuration's NAT
-   * @request PUT:/configure/NAT
-   * @secure
-   */
-  export namespace PutConfigure {
-    export type RequestParams = {};
-    export type RequestQuery = {};
-    export type RequestBody = Nat;
-    export type RequestHeaders = {};
-    export type ResponseBody = any;
-  }
-
-  /**
-   * @description **Required ACL:** `provd.configure.ftp_proxy.update`
-   * @tags provd
-   * @name FtpProxyUpdate
-   * @summary Update the configuration's ftp_proxy
-   * @request PUT:/configure/ftp_proxy
-   * @secure
-   */
-  export namespace FtpProxyUpdate {
-    export type RequestParams = {};
-    export type RequestQuery = {};
-    export type RequestBody = FtpProxy;
-    export type RequestHeaders = {};
-    export type ResponseBody = any;
-  }
-
-  /**
-   * @description **Required ACL:** `provd.configure.http_proxy.update`
-   * @tags provd
-   * @name HttpProxyUpdate
-   * @summary Update the configuration's http_proxy
-   * @request PUT:/configure/http_proxy
-   * @secure
-   */
-  export namespace HttpProxyUpdate {
-    export type RequestParams = {};
-    export type RequestQuery = {};
-    export type RequestBody = HttpProxy;
-    export type RequestHeaders = {};
-    export type ResponseBody = any;
-  }
-
-  /**
-   * @description **Required ACL:** `provd.configure.https_proxy.update`
-   * @tags provd
-   * @name HttpsProxyUpdate
-   * @summary Update the configuration's https_proxy
-   * @request PUT:/configure/https_proxy
-   * @secure
-   */
-  export namespace HttpsProxyUpdate {
-    export type RequestParams = {};
-    export type RequestQuery = {};
-    export type RequestBody = HttpsProxy;
-    export type RequestHeaders = {};
-    export type ResponseBody = any;
-  }
-
-  /**
-   * @description **Required ACL:** `provd.configure.locale.update`
-   * @tags provd
-   * @name LocaleUpdate
-   * @summary Update the configuration's locale
-   * @request PUT:/configure/locale
-   * @secure
-   */
-  export namespace LocaleUpdate {
-    export type RequestParams = {};
-    export type RequestQuery = {};
-    export type RequestBody = Locale;
-    export type RequestHeaders = {};
-    export type ResponseBody = any;
-  }
-
-  /**
-   * @description **Required ACL:** `provd.configure.plugin_server.update`
-   * @tags provd
-   * @name PluginServerUpdate
-   * @summary Update the configuration's plugin_server
-   * @request PUT:/configure/plugin_server
-   * @secure
-   */
-  export namespace PluginServerUpdate {
-    export type RequestParams = {};
-    export type RequestQuery = {};
-    export type RequestBody = PluginServer;
-    export type RequestHeaders = {};
-    export type ResponseBody = any;
-  }
-
-  /**
-   * @description **Required ACL:** `provd.configure.{tenant_uuid}.provisioning_key.update`
-   * @tags provd
-   * @name ProvisioningKeyUpdate
-   * @summary Update the tenant provisioning key
-   * @request PUT:/configure/provisioning_key
-   * @secure
-   */
-  export namespace ProvisioningKeyUpdate {
-    export type RequestParams = {};
-    export type RequestQuery = {};
-    export type RequestBody = ProvisioningKey;
-    export type RequestHeaders = {
-      /** The tenant's UUID, defining the ownership of a given resource */
-      "Wazo-Tenant"?: string;
-    };
-    export type ResponseBody = any;
   }
 
   /**
@@ -716,6 +432,121 @@ export namespace Configure {
     export type RequestQuery = {};
     export type RequestBody = Param;
     export type RequestHeaders = {};
+    export type ResponseBody = any;
+  }
+
+  /**
+   * @description **Required ACL:** `provd.configure.plugin_server.update`
+   * @tags provd
+   * @name PluginServerUpdate
+   * @summary Update the configuration's plugin_server
+   * @request PUT:/configure/plugin_server
+   * @secure
+   */
+  export namespace PluginServerUpdate {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = PluginServer;
+    export type RequestHeaders = {};
+    export type ResponseBody = any;
+  }
+
+  /**
+   * @description **Required ACL:** `provd.configure.http_proxy.update`
+   * @tags provd
+   * @name HttpProxyUpdate
+   * @summary Update the configuration's http_proxy
+   * @request PUT:/configure/http_proxy
+   * @secure
+   */
+  export namespace HttpProxyUpdate {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = HttpProxy;
+    export type RequestHeaders = {};
+    export type ResponseBody = any;
+  }
+
+  /**
+   * @description **Required ACL:** `provd.configure.https_proxy.update`
+   * @tags provd
+   * @name HttpsProxyUpdate
+   * @summary Update the configuration's https_proxy
+   * @request PUT:/configure/https_proxy
+   * @secure
+   */
+  export namespace HttpsProxyUpdate {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = HttpsProxy;
+    export type RequestHeaders = {};
+    export type ResponseBody = any;
+  }
+
+  /**
+   * @description **Required ACL:** `provd.configure.ftp_proxy.update`
+   * @tags provd
+   * @name FtpProxyUpdate
+   * @summary Update the configuration's ftp_proxy
+   * @request PUT:/configure/ftp_proxy
+   * @secure
+   */
+  export namespace FtpProxyUpdate {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = FtpProxy;
+    export type RequestHeaders = {};
+    export type ResponseBody = any;
+  }
+
+  /**
+   * @description **Required ACL:** `provd.configure.locale.update`
+   * @tags provd
+   * @name LocaleUpdate
+   * @summary Update the configuration's locale
+   * @request PUT:/configure/locale
+   * @secure
+   */
+  export namespace LocaleUpdate {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = Locale;
+    export type RequestHeaders = {};
+    export type ResponseBody = any;
+  }
+
+  /**
+   * @description **Required ACL:** `provd.configure.nat.update`
+   * @tags provd
+   * @name PutConfigure
+   * @summary Update the configuration's NAT
+   * @request PUT:/configure/NAT
+   * @secure
+   */
+  export namespace PutConfigure {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = Nat;
+    export type RequestHeaders = {};
+    export type ResponseBody = any;
+  }
+
+  /**
+   * @description **Required ACL:** `provd.configure.{tenant_uuid}.provisioning_key.update`
+   * @tags provd
+   * @name ProvisioningKeyUpdate
+   * @summary Update the tenant provisioning key
+   * @request PUT:/configure/provisioning_key
+   * @secure
+   */
+  export namespace ProvisioningKeyUpdate {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = ProvisioningKey;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource */
+      "Wazo-Tenant"?: string;
+    };
     export type ResponseBody = any;
   }
 }
@@ -808,28 +639,6 @@ export namespace DevMgr {
   }
 
   /**
-   * @description **Required ACL:** `provd.dev_mgr.devices.{device_id}.delete`
-   * @tags devices
-   * @name DevicesDelete
-   * @summary Delete a device
-   * @request DELETE:/dev_mgr/devices/{device_id}
-   * @secure
-   */
-  export namespace DevicesDelete {
-    export type RequestParams = {
-      /** Device ID */
-      deviceId: string;
-    };
-    export type RequestQuery = {};
-    export type RequestBody = never;
-    export type RequestHeaders = {
-      /** The tenant's UUID, defining the ownership of a given resource */
-      "Wazo-Tenant"?: string;
-    };
-    export type ResponseBody = any;
-  }
-
-  /**
    * @description **Required ACL:** `provd.dev_mgr.devices.{device_id}.read` Get a device using its ID
    * @tags devices
    * @name DevicesDetail
@@ -874,36 +683,20 @@ export namespace DevMgr {
   }
 
   /**
-   * @description **Required ACL:** `provd.dev_mgr.dhcpinfo.create` The provisioning server either creates a new device or changes the information of the device with the same MAC address
+   * @description **Required ACL:** `provd.dev_mgr.devices.{device_id}.delete`
    * @tags devices
-   * @name DhcpinfoCreate
-   * @summary Push DHCP request information
-   * @request POST:/dev_mgr/dhcpinfo
+   * @name DevicesDelete
+   * @summary Delete a device
+   * @request DELETE:/dev_mgr/devices/{device_id}
    * @secure
    */
-  export namespace DhcpinfoCreate {
-    export type RequestParams = {};
-    export type RequestQuery = {};
-    export type RequestBody = DHCPInfoObject;
-    export type RequestHeaders = {
-      /** The tenant's UUID, defining the ownership of a given resource */
-      "Wazo-Tenant"?: string;
+  export namespace DevicesDelete {
+    export type RequestParams = {
+      /** Device ID */
+      deviceId: string;
     };
-    export type ResponseBody = any;
-  }
-
-  /**
-   * @description **Required ACL:** `provd.dev_mgr.reconfigure.create` Regenerate the configuration file for the specified device
-   * @tags devices
-   * @name ReconfigureCreate
-   * @summary Reconfigure a device
-   * @request POST:/dev_mgr/reconfigure
-   * @secure
-   */
-  export namespace ReconfigureCreate {
-    export type RequestParams = {};
     export type RequestQuery = {};
-    export type RequestBody = IdObject;
+    export type RequestBody = never;
     export type RequestHeaders = {
       /** The tenant's UUID, defining the ownership of a given resource */
       "Wazo-Tenant"?: string;
@@ -931,6 +724,25 @@ export namespace DevMgr {
   }
 
   /**
+   * @description **Required ACL:** `provd.operation.read`
+   * @tags devices
+   * @name SynchronizeDetail
+   * @summary Get the status of a synchronize Operation In Progress
+   * @request GET:/dev_mgr/synchronize/{operation_id}
+   * @secure
+   */
+  export namespace SynchronizeDetail {
+    export type RequestParams = {
+      /** Operation In Progress ID */
+      operationId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = SynchronizeDetailData;
+  }
+
+  /**
    * @description **Required ACL:** `provd.operation.delete` This does not cancel the underlying operation; it only deletes the monitor Every monitor that is created should be deleted, else they won't be freed by the process and they will accumulate, taking memory
    * @tags devices
    * @name SynchronizeDelete
@@ -950,22 +762,210 @@ export namespace DevMgr {
   }
 
   /**
-   * @description **Required ACL:** `provd.operation.read`
+   * @description **Required ACL:** `provd.dev_mgr.reconfigure.create` Regenerate the configuration file for the specified device
    * @tags devices
-   * @name SynchronizeDetail
-   * @summary Get the status of a synchronize Operation In Progress
-   * @request GET:/dev_mgr/synchronize/{operation_id}
+   * @name ReconfigureCreate
+   * @summary Reconfigure a device
+   * @request POST:/dev_mgr/reconfigure
    * @secure
    */
-  export namespace SynchronizeDetail {
+  export namespace ReconfigureCreate {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = IdObject;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = any;
+  }
+
+  /**
+   * @description **Required ACL:** `provd.dev_mgr.dhcpinfo.create` The provisioning server either creates a new device or changes the information of the device with the same MAC address
+   * @tags devices
+   * @name DhcpinfoCreate
+   * @summary Push DHCP request information
+   * @request POST:/dev_mgr/dhcpinfo
+   * @secure
+   */
+  export namespace DhcpinfoCreate {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = DHCPInfoObject;
+    export type RequestHeaders = {
+      /** The tenant's UUID, defining the ownership of a given resource */
+      "Wazo-Tenant"?: string;
+    };
+    export type ResponseBody = any;
+  }
+}
+
+export namespace CfgMgr {
+  /**
+   * @description **Required ACL:** `provd.cfg_mgr.read` The configuration manager resource represents the entry point to the wazo-provd configuration REST API
+   * @tags configs
+   * @name CfgMgrList
+   * @summary Get the Config Manager resource
+   * @request GET:/cfg_mgr
+   * @secure
+   */
+  export namespace CfgMgrList {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = CfgMgrListData;
+  }
+
+  /**
+   * @description **Required ACL:** `provd.cfg_mgr.configs.read`
+   * @tags configs
+   * @name ConfigsList
+   * @summary List and find configurations
+   * @request GET:/cfg_mgr/configs
+   * @secure
+   */
+  export namespace ConfigsList {
+    export type RequestParams = {};
+    export type RequestQuery = {
+      /**
+       * A list of fields, separated by comma.
+       *
+       * Example: `mac,ip`
+       */
+      fields?: string;
+      /**
+       * A selector, encoded in JSON, describing which entries should be returned. All entries are returned if not specified.
+       *
+       * Example: `{"ip":"10.34.1.110"}`
+       */
+      q?: string;
+      /**
+       * An integer specifing the number of entries to skip.
+       *
+       * Example: 10
+       */
+      skip?: number;
+      /**
+       * The key on which to sort the results.
+       *
+       * Example: `id`
+       */
+      sort?: string;
+      /** The order of sort */
+      sort_ord?: "ASC" | "DESC";
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = ConfigsObject;
+  }
+
+  /**
+   * @description **Required ACL:** `provd.cfg_mgr.configs.create`
+   * @tags configs
+   * @name ConfigsCreate
+   * @summary Create a configuration
+   * @request POST:/cfg_mgr/configs
+   * @secure
+   */
+  export namespace ConfigsCreate {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = ConfigObject;
+    export type RequestHeaders = {};
+    export type ResponseBody = IdObject;
+  }
+
+  /**
+   * @description **Required ACL:** `provd.cfg_mgr.configs.{config_id}.read`
+   * @tags configs
+   * @name ConfigsDetail
+   * @summary Get a configuration
+   * @request GET:/cfg_mgr/configs/{config_id}
+   * @secure
+   */
+  export namespace ConfigsDetail {
     export type RequestParams = {
-      /** Operation In Progress ID */
-      operationId: string;
+      /** Configuration ID */
+      configId: string;
     };
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = SynchronizeDetailData;
+    export type ResponseBody = ConfigObject;
+  }
+
+  /**
+   * @description **Required ACL:** `provd.cfg_mgr.configs.{config_id}.update`
+   * @tags configs
+   * @name ConfigsUpdate
+   * @summary Update a configuration
+   * @request PUT:/cfg_mgr/configs/{config_id}
+   * @secure
+   */
+  export namespace ConfigsUpdate {
+    export type RequestParams = {
+      /** Configuration ID */
+      configId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = ConfigObject;
+    export type RequestHeaders = {};
+    export type ResponseBody = any;
+  }
+
+  /**
+   * @description **Required ACL:** `provd.cfg_mgr.configs.{config_id}.delete`
+   * @tags configs
+   * @name ConfigsDelete
+   * @summary Delete a configuration
+   * @request DELETE:/cfg_mgr/configs/{config_id}
+   * @secure
+   */
+  export namespace ConfigsDelete {
+    export type RequestParams = {
+      /** Configuration ID */
+      configId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = any;
+  }
+
+  /**
+   * @description **Required ACL:** `provd.cfg_mgr.configs.{config_id}.raw.read`
+   * @tags configs
+   * @name ConfigsRawList
+   * @summary Get a raw configuration
+   * @request GET:/cfg_mgr/configs/{config_id}/raw
+   * @secure
+   */
+  export namespace ConfigsRawList {
+    export type RequestParams = {
+      /** Configuration ID */
+      configId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = ConfigsRawListData;
+  }
+
+  /**
+   * @description **Required ACL:** `provd.cfg_mgr.autocreate.create` Create a new config based on the config that has the autocreate role
+   * @tags configs
+   * @name AutocreateCreate
+   * @summary Create an autocreate configuration
+   * @request POST:/cfg_mgr/autocreate
+   * @secure
+   */
+  export namespace AutocreateCreate {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = EmptyObject;
+    export type RequestHeaders = {};
+    export type ResponseBody = IdObject;
   }
 }
 
@@ -984,232 +984,6 @@ export namespace PgMgr {
     export type RequestBody = never;
     export type RequestHeaders = {};
     export type ResponseBody = PgMgrListData;
-  }
-
-  /**
-   * @description **Required ACL:** `provd.pg_mgr.install.read`
-   * @tags plugins
-   * @name InstallList
-   * @summary Get the installation service resources
-   * @request GET:/pg_mgr/install
-   * @secure
-   */
-  export namespace InstallList {
-    export type RequestParams = {};
-    export type RequestQuery = {};
-    export type RequestBody = never;
-    export type RequestHeaders = {};
-    export type ResponseBody = InstallListData;
-  }
-
-  /**
-   * @description **Required ACL:** `provd.pg_mgr.install.install.create`
-   * @tags plugins
-   * @name InstallInstallCreate
-   * @summary Install a plugin
-   * @request POST:/pg_mgr/install/install
-   * @secure
-   */
-  export namespace InstallInstallCreate {
-    export type RequestParams = {};
-    export type RequestQuery = {};
-    export type RequestBody = IdObject;
-    export type RequestHeaders = {};
-    export type ResponseBody = any;
-  }
-
-  /**
-   * @description **Required ACL:** `provd.operation.delete` This does not cancel the underlying operation; it only deletes the monitor Every monitor that is created should be deleted, else they won't be freed by the process and they will accumulate, taking memory
-   * @tags plugins
-   * @name InstallInstallDelete
-   * @summary Delete the Operation In Progress
-   * @request DELETE:/pg_mgr/install/install/{operation_id}
-   * @secure
-   */
-  export namespace InstallInstallDelete {
-    export type RequestParams = {
-      /** Operation In Progress ID */
-      operationId: string;
-    };
-    export type RequestQuery = {};
-    export type RequestBody = never;
-    export type RequestHeaders = {};
-    export type ResponseBody = any;
-  }
-
-  /**
-   * @description **Required ACL:** `provd.operation.read`
-   * @tags plugins
-   * @name InstallInstallDetail
-   * @summary Get the status of a plugin installation Operation In Progress
-   * @request GET:/pg_mgr/install/install/{operation_id}
-   * @secure
-   */
-  export namespace InstallInstallDetail {
-    export type RequestParams = {
-      /** Operation In Progress ID */
-      operationId: string;
-    };
-    export type RequestQuery = {};
-    export type RequestBody = never;
-    export type RequestHeaders = {};
-    export type ResponseBody = InstallInstallDetailData;
-  }
-
-  /**
-   * @description **Required ACL:** `provd.pg_mgr.install.installable.read`
-   * @tags plugins
-   * @name InstallInstallableList
-   * @summary Get the installable plugins list
-   * @request GET:/pg_mgr/install/installable
-   * @secure
-   */
-  export namespace InstallInstallableList {
-    export type RequestParams = {};
-    export type RequestQuery = {};
-    export type RequestBody = never;
-    export type RequestHeaders = {};
-    export type ResponseBody = InstallInstallableListData;
-  }
-
-  /**
-   * @description **Required ACL:** `provd.pg_mgr.install.installed.read`
-   * @tags plugins
-   * @name InstallInstalledList
-   * @summary Get the installed plugins list
-   * @request GET:/pg_mgr/install/installed
-   * @secure
-   */
-  export namespace InstallInstalledList {
-    export type RequestParams = {};
-    export type RequestQuery = {};
-    export type RequestBody = never;
-    export type RequestHeaders = {};
-    export type ResponseBody = InstallInstalledListData;
-  }
-
-  /**
-   * @description **Required ACL:** `provd.pg_mgr.install.uninstall.create`
-   * @tags plugins
-   * @name InstallUninstallCreate
-   * @summary Uninstall a plugin
-   * @request POST:/pg_mgr/install/uninstall
-   * @secure
-   */
-  export namespace InstallUninstallCreate {
-    export type RequestParams = {};
-    export type RequestQuery = {};
-    export type RequestBody = IdObject;
-    export type RequestHeaders = {};
-    export type ResponseBody = any;
-  }
-
-  /**
-   * @description **Required ACL:** `provd.pg_mgr.install.update.create`
-   * @tags plugins
-   * @name InstallUpdateCreate
-   * @summary Update the List of installable plugins
-   * @request POST:/pg_mgr/install/update
-   * @secure
-   */
-  export namespace InstallUpdateCreate {
-    export type RequestParams = {};
-    export type RequestQuery = {};
-    export type RequestBody = EmptyObject;
-    export type RequestHeaders = {};
-    export type ResponseBody = any;
-  }
-
-  /**
-   * @description **Required ACL:** `provd.operation.delete` This does not cancel the underlying operation; it only deletes the monitor Every monitor that is created should be deleted, else they won't be freed by the process and they will accumulate, taking memory
-   * @tags plugins
-   * @name InstallUpdateDelete
-   * @summary Delete the Operation In Progress
-   * @request DELETE:/pg_mgr/install/update/{operation_id}
-   * @secure
-   */
-  export namespace InstallUpdateDelete {
-    export type RequestParams = {
-      /** Operation In Progress ID */
-      operationId: string;
-    };
-    export type RequestQuery = {};
-    export type RequestBody = never;
-    export type RequestHeaders = {};
-    export type ResponseBody = any;
-  }
-
-  /**
-   * @description **Required ACL:** `provd.operation.read`
-   * @tags plugins
-   * @name InstallUpdateDetail
-   * @summary Get the status of a plugin database update Operation In Progress
-   * @request GET:/pg_mgr/install/update/{operation_id}
-   * @secure
-   */
-  export namespace InstallUpdateDetail {
-    export type RequestParams = {
-      /** Operation In Progress ID */
-      operationId: string;
-    };
-    export type RequestQuery = {};
-    export type RequestBody = never;
-    export type RequestHeaders = {};
-    export type ResponseBody = InstallUpdateDetailData;
-  }
-
-  /**
-   * @description **Required ACL:** `provd.pg_mgr.install.upgrade.create`
-   * @tags plugins
-   * @name InstallUpgradeCreate
-   * @summary Upgrade a plugin
-   * @request POST:/pg_mgr/install/upgrade
-   * @secure
-   */
-  export namespace InstallUpgradeCreate {
-    export type RequestParams = {};
-    export type RequestQuery = {};
-    export type RequestBody = IdObject;
-    export type RequestHeaders = {};
-    export type ResponseBody = any;
-  }
-
-  /**
-   * @description **Required ACL:** `provd.operation.delete` This does not cancel the underlying operation; it only deletes the monitor Every monitor that is created should be deleted, else they won't be freed by the process and they will accumulate, taking memory
-   * @tags plugins
-   * @name InstallUpgradeDelete
-   * @summary Delete the Operation In Progress
-   * @request DELETE:/pg_mgr/install/upgrade/{operation_id}
-   * @secure
-   */
-  export namespace InstallUpgradeDelete {
-    export type RequestParams = {
-      /** Operation In Progress ID */
-      operationId: string;
-    };
-    export type RequestQuery = {};
-    export type RequestBody = never;
-    export type RequestHeaders = {};
-    export type ResponseBody = any;
-  }
-
-  /**
-   * @description **Required ACL:** `provd.operation.read`
-   * @tags plugins
-   * @name InstallUpgradeDetail
-   * @summary Get the status of a plugin upgrade Operation In Progress
-   * @request GET:/pg_mgr/install/upgrade/{operation_id}
-   * @secure
-   */
-  export namespace InstallUpgradeDetail {
-    export type RequestParams = {
-      /** Operation In Progress ID */
-      operationId: string;
-    };
-    export type RequestQuery = {};
-    export type RequestBody = never;
-    export type RequestHeaders = {};
-    export type ResponseBody = InstallUpgradeDetailData;
   }
 
   /**
@@ -1305,6 +1079,27 @@ export namespace PgMgr {
   }
 
   /**
+   * @description **Required ACL:** `provd.operation.read`
+   * @tags plugins
+   * @name PluginsInstallInstallDetail
+   * @summary Get the status of a package installation Operation In Progress
+   * @request GET:/pg_mgr/plugins/{plugin_id}/install/install/{operation_id}
+   * @secure
+   */
+  export namespace PluginsInstallInstallDetail {
+    export type RequestParams = {
+      /** Operation In Progress ID */
+      operationId: string;
+      /** Plugin ID */
+      pluginId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = PluginsInstallInstallDetailData;
+  }
+
+  /**
    * @description **Required ACL:** `provd.operation.delete` This does not cancel the underlying operation; it only deletes the monitor Every monitor that is created should be deleted, else they won't be freed by the process and they will accumulate, taking memory
    * @tags plugins
    * @name PluginsInstallInstallDelete
@@ -1326,14 +1121,33 @@ export namespace PgMgr {
   }
 
   /**
-   * @description **Required ACL:** `provd.operation.read`
+   * @description **Required ACL:** `provd.pg_mgr.plugins.{plugin_id}.install.uninstall.create`
    * @tags plugins
-   * @name PluginsInstallInstallDetail
-   * @summary Get the status of a package installation Operation In Progress
-   * @request GET:/pg_mgr/plugins/{plugin_id}/install/install/{operation_id}
+   * @name PluginsInstallUninstallCreate
+   * @summary Uninstall a package
+   * @request POST:/pg_mgr/plugins/{plugin_id}/install/uninstall
    * @secure
    */
-  export namespace PluginsInstallInstallDetail {
+  export namespace PluginsInstallUninstallCreate {
+    export type RequestParams = {
+      /** Plugin ID */
+      pluginId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = IdObject;
+    export type RequestHeaders = {};
+    export type ResponseBody = any;
+  }
+
+  /**
+   * @description **Required ACL:** `provd.operation.read`
+   * @tags plugins
+   * @name PluginsInstallUpgradeDetail
+   * @summary Get the status of a package upgrade Operation In Progress
+   * @request GET:/pg_mgr/plugins/{plugin_id}/install/upgrade/{operation_id}
+   * @secure
+   */
+  export namespace PluginsInstallUpgradeDetail {
     export type RequestParams = {
       /** Operation In Progress ID */
       operationId: string;
@@ -1343,7 +1157,28 @@ export namespace PgMgr {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = PluginsInstallInstallDetailData;
+    export type ResponseBody = PluginsInstallUpgradeDetailData;
+  }
+
+  /**
+   * @description **Required ACL:** `provd.operation.delete` This does not cancel the underlying operation; it only deletes the monitor Every monitor that is created should be deleted, else they won't be freed by the process and they will accumulate, taking memory
+   * @tags plugins
+   * @name PluginsInstallUpgradeDelete
+   * @summary Delete the Operation In Progress
+   * @request DELETE:/pg_mgr/plugins/{plugin_id}/install/upgrade/{operation_id}
+   * @secure
+   */
+  export namespace PluginsInstallUpgradeDelete {
+    export type RequestParams = {
+      /** Operation In Progress ID */
+      operationId: string;
+      /** Plugin ID */
+      pluginId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = any;
   }
 
   /**
@@ -1385,18 +1220,31 @@ export namespace PgMgr {
   }
 
   /**
-   * @description **Required ACL:** `provd.pg_mgr.plugins.{plugin_id}.install.uninstall.create`
+   * @description **Required ACL:** `provd.pg_mgr.install.read`
    * @tags plugins
-   * @name PluginsInstallUninstallCreate
-   * @summary Uninstall a package
-   * @request POST:/pg_mgr/plugins/{plugin_id}/install/uninstall
+   * @name InstallList
+   * @summary Get the installation service resources
+   * @request GET:/pg_mgr/install
    * @secure
    */
-  export namespace PluginsInstallUninstallCreate {
-    export type RequestParams = {
-      /** Plugin ID */
-      pluginId: string;
-    };
+  export namespace InstallList {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = InstallListData;
+  }
+
+  /**
+   * @description **Required ACL:** `provd.pg_mgr.install.install.create`
+   * @tags plugins
+   * @name InstallInstallCreate
+   * @summary Install a plugin
+   * @request POST:/pg_mgr/install/install
+   * @secure
+   */
+  export namespace InstallInstallCreate {
+    export type RequestParams = {};
     export type RequestQuery = {};
     export type RequestBody = IdObject;
     export type RequestHeaders = {};
@@ -1404,19 +1252,36 @@ export namespace PgMgr {
   }
 
   /**
-   * @description **Required ACL:** `provd.operation.delete` This does not cancel the underlying operation; it only deletes the monitor Every monitor that is created should be deleted, else they won't be freed by the process and they will accumulate, taking memory
+   * @description **Required ACL:** `provd.operation.read`
    * @tags plugins
-   * @name PluginsInstallUpgradeDelete
-   * @summary Delete the Operation In Progress
-   * @request DELETE:/pg_mgr/plugins/{plugin_id}/install/upgrade/{operation_id}
+   * @name InstallInstallDetail
+   * @summary Get the status of a plugin installation Operation In Progress
+   * @request GET:/pg_mgr/install/install/{operation_id}
    * @secure
    */
-  export namespace PluginsInstallUpgradeDelete {
+  export namespace InstallInstallDetail {
     export type RequestParams = {
       /** Operation In Progress ID */
       operationId: string;
-      /** Plugin ID */
-      pluginId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = InstallInstallDetailData;
+  }
+
+  /**
+   * @description **Required ACL:** `provd.operation.delete` This does not cancel the underlying operation; it only deletes the monitor Every monitor that is created should be deleted, else they won't be freed by the process and they will accumulate, taking memory
+   * @tags plugins
+   * @name InstallInstallDelete
+   * @summary Delete the Operation In Progress
+   * @request DELETE:/pg_mgr/install/install/{operation_id}
+   * @secure
+   */
+  export namespace InstallInstallDelete {
+    export type RequestParams = {
+      /** Operation In Progress ID */
+      operationId: string;
     };
     export type RequestQuery = {};
     export type RequestBody = never;
@@ -1425,24 +1290,159 @@ export namespace PgMgr {
   }
 
   /**
-   * @description **Required ACL:** `provd.operation.read`
+   * @description **Required ACL:** `provd.pg_mgr.install.uninstall.create`
    * @tags plugins
-   * @name PluginsInstallUpgradeDetail
-   * @summary Get the status of a package upgrade Operation In Progress
-   * @request GET:/pg_mgr/plugins/{plugin_id}/install/upgrade/{operation_id}
+   * @name InstallUninstallCreate
+   * @summary Uninstall a plugin
+   * @request POST:/pg_mgr/install/uninstall
    * @secure
    */
-  export namespace PluginsInstallUpgradeDetail {
+  export namespace InstallUninstallCreate {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = IdObject;
+    export type RequestHeaders = {};
+    export type ResponseBody = any;
+  }
+
+  /**
+   * @description **Required ACL:** `provd.pg_mgr.install.upgrade.create`
+   * @tags plugins
+   * @name InstallUpgradeCreate
+   * @summary Upgrade a plugin
+   * @request POST:/pg_mgr/install/upgrade
+   * @secure
+   */
+  export namespace InstallUpgradeCreate {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = IdObject;
+    export type RequestHeaders = {};
+    export type ResponseBody = any;
+  }
+
+  /**
+   * @description **Required ACL:** `provd.operation.read`
+   * @tags plugins
+   * @name InstallUpgradeDetail
+   * @summary Get the status of a plugin upgrade Operation In Progress
+   * @request GET:/pg_mgr/install/upgrade/{operation_id}
+   * @secure
+   */
+  export namespace InstallUpgradeDetail {
     export type RequestParams = {
       /** Operation In Progress ID */
       operationId: string;
-      /** Plugin ID */
-      pluginId: string;
     };
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = PluginsInstallUpgradeDetailData;
+    export type ResponseBody = InstallUpgradeDetailData;
+  }
+
+  /**
+   * @description **Required ACL:** `provd.operation.delete` This does not cancel the underlying operation; it only deletes the monitor Every monitor that is created should be deleted, else they won't be freed by the process and they will accumulate, taking memory
+   * @tags plugins
+   * @name InstallUpgradeDelete
+   * @summary Delete the Operation In Progress
+   * @request DELETE:/pg_mgr/install/upgrade/{operation_id}
+   * @secure
+   */
+  export namespace InstallUpgradeDelete {
+    export type RequestParams = {
+      /** Operation In Progress ID */
+      operationId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = any;
+  }
+
+  /**
+   * @description **Required ACL:** `provd.pg_mgr.install.update.create`
+   * @tags plugins
+   * @name InstallUpdateCreate
+   * @summary Update the List of installable plugins
+   * @request POST:/pg_mgr/install/update
+   * @secure
+   */
+  export namespace InstallUpdateCreate {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = EmptyObject;
+    export type RequestHeaders = {};
+    export type ResponseBody = any;
+  }
+
+  /**
+   * @description **Required ACL:** `provd.operation.read`
+   * @tags plugins
+   * @name InstallUpdateDetail
+   * @summary Get the status of a plugin database update Operation In Progress
+   * @request GET:/pg_mgr/install/update/{operation_id}
+   * @secure
+   */
+  export namespace InstallUpdateDetail {
+    export type RequestParams = {
+      /** Operation In Progress ID */
+      operationId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = InstallUpdateDetailData;
+  }
+
+  /**
+   * @description **Required ACL:** `provd.operation.delete` This does not cancel the underlying operation; it only deletes the monitor Every monitor that is created should be deleted, else they won't be freed by the process and they will accumulate, taking memory
+   * @tags plugins
+   * @name InstallUpdateDelete
+   * @summary Delete the Operation In Progress
+   * @request DELETE:/pg_mgr/install/update/{operation_id}
+   * @secure
+   */
+  export namespace InstallUpdateDelete {
+    export type RequestParams = {
+      /** Operation In Progress ID */
+      operationId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = any;
+  }
+
+  /**
+   * @description **Required ACL:** `provd.pg_mgr.install.installable.read`
+   * @tags plugins
+   * @name InstallInstallableList
+   * @summary Get the installable plugins list
+   * @request GET:/pg_mgr/install/installable
+   * @secure
+   */
+  export namespace InstallInstallableList {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = InstallInstallableListData;
+  }
+
+  /**
+   * @description **Required ACL:** `provd.pg_mgr.install.installed.read`
+   * @tags plugins
+   * @name InstallInstalledList
+   * @summary Get the installed plugins list
+   * @request GET:/pg_mgr/install/installed
+   * @secure
+   */
+  export namespace InstallInstalledList {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = InstallInstalledListData;
   }
 
   /**
