@@ -48,24 +48,23 @@ export const extractAcls = (text: string): string[] => {
 };
 
 // Merge per-service ACL maps (`{ serviceKey: string[] }`) for the stack and portal layers into one
-// grouped catalog. Community = union of all stack ACLs; enterprise extends community, so a portal
-// row lists only the ACLs not already present in the community baseline. This dedupe is deliberately
-// cross-layer (against the whole community union, not just the same key): an ACL string reachable
-// on the community stack is community, whoever else annotates it, so it is not re-listed as an
-// enterprise addition. A portal row is therefore "enterprise-only additions", not the service's
-// full ACL set — the complete union lives in `allAcls`. See the note on `AclService.acls` in types.ts.
+// grouped catalog.
+//
+// Dedupe is strictly per-service (same canonical key), never cross-service. A portal spec that shares
+// a stack service's canonical key (currently just `wazo-auth`) is the *same* service extending its
+// community counterpart, so its row keeps only the ACLs the matching stack spec doesn't already
+// declare — its "enterprise-only additions", not the service's full ACL set (the complete union lives
+// in `allAcls`). A portal-only service (e.g. `nestbox-confd`, `swarm-accessd`, `wazo-deployd`) has no
+// matching stack key — `nestbox-confd` is NOT `wazo-confd` — so all of its ACLs are kept verbatim.
+//
+// Deduping against the whole community union instead would silently drop a portal service's real ACL
+// whenever an unrelated stack service happened to annotate the same flat-namespace string. See the
+// note on `AclService.acls` in types.ts.
 export const buildCatalog = (
   stackMap: Record<string, string[]>,
   portalMap: Record<string, string[]>,
   apiVersion: string,
 ): AclCatalog => {
-  const community = new Set<string>();
-  for (const acls of Object.values(stackMap)) {
-    for (const acl of acls) {
-      community.add(acl);
-    }
-  }
-
   // Accumulate ACLs per service key so that a portal spec sharing a stack service's canonical key
   // (e.g. `authPortal` and stack `auth` both key on `wazo-auth`) merges into the same row instead
   // of producing a duplicate service entry that hides the portal-only ACLs from key lookups.
@@ -87,8 +86,10 @@ export const buildCatalog = (
   }
 
   for (const key of Object.keys(portalMap).sort()) {
-    // Enterprise extends community: keep only portal ACLs absent from the community baseline.
-    const extra = (portalMap[key] ?? []).filter(acl => !community.has(acl));
+    // Dedupe against the SAME service's stack ACLs only (empty for a portal-only service, so all of
+    // its ACLs are kept). A shared-key service (`wazo-auth`) keeps just its enterprise-only additions.
+    const stackAcls = new Set(stackMap[key] ?? []);
+    const extra = (portalMap[key] ?? []).filter(acl => !stackAcls.has(acl));
     if (extra.length) {
       const acls = aclsFor(key);
       for (const acl of extra) {

@@ -30,14 +30,13 @@ describe('extractAcls', () => {
 });
 
 describe('buildCatalog', () => {
-  it('merges stack + portal into service groups, dedupes enterprise against community, sorts', () => {
+  it('merges stack + portal into service groups with human labels and sorts', () => {
     const stack = {
       'wazo-auth': ['auth.users.read', 'auth.users.create'],
       'wazo-confd': ['confd.lines.read'],
     };
     const portal = {
-      // one ACL already in the community set (deduped away), one genuinely new
-      'nestbox-confd': ['confd.customers.read', 'auth.users.read'],
+      'nestbox-confd': ['confd.customers.read', 'confd.customers.create'],
     };
 
     const catalog = buildCatalog(stack, portal, '26.06');
@@ -49,14 +48,16 @@ describe('buildCatalog', () => {
     expect(auth?.label).toBe('Authentication');
     expect(auth?.acls).toEqual(['auth.users.create', 'auth.users.read']);
 
-    // Enterprise service keeps only ACLs not already in community.
+    // A portal-only service keeps all its ACLs (it is a distinct service, not an extension).
     const nestbox = catalog.services.find(s => s.key === 'nestbox-confd');
-    expect(nestbox?.acls).toEqual(['confd.customers.read']);
+    expect(nestbox?.label).toBe('Reseller configuration');
+    expect(nestbox?.acls).toEqual(['confd.customers.create', 'confd.customers.read']);
 
     // Flat list is the sorted union of every service's ACLs.
     expect(catalog.allAcls).toEqual([
       'auth.users.create',
       'auth.users.read',
+      'confd.customers.create',
       'confd.customers.read',
       'confd.lines.read',
     ]);
@@ -75,21 +76,33 @@ describe('buildCatalog', () => {
     expect(authRows[0].acls).toEqual(['auth.tenants.admin', 'auth.users.read']);
   });
 
-  it('excludes a portal ACL that collides with an unrelated stack service (enterprise extends community)', () => {
-    // `confd.lines.read` is a community ACL (stack `wazo-confd`). Even though the portal
-    // `nestbox-confd` spec also annotates it, it is part of the community baseline, so the enterprise
-    // row lists only its genuine additions. The community ACL is never dropped from the catalog — it
-    // stays on its community service row and in `allAcls`.
+  it('dedupes a shared-key portal service against its OWN stack ACLs only, not the whole community', () => {
+    // `wazo-auth` exists on both layers, so its portal row keeps only what the stack `wazo-auth` spec
+    // does not already declare. A portal-auth ACL that collides with an UNRELATED stack service
+    // (`wazo-confd`) is still a real auth ACL and must survive — dedupe is per-service, not community-wide.
+    const stack = { 'wazo-auth': ['auth.users.read'], 'wazo-confd': ['auth.shared.read'] };
+    const portal = { 'wazo-auth': ['auth.users.read', 'auth.shared.read', 'auth.tenants.admin'] };
+
+    const catalog = buildCatalog(stack, portal, '26.06');
+
+    const auth = catalog.services.find(s => s.key === 'wazo-auth');
+    // `auth.users.read` deduped (same service); `auth.shared.read` kept despite the confd collision.
+    expect(auth?.acls).toEqual(['auth.shared.read', 'auth.tenants.admin', 'auth.users.read']);
+  });
+
+  it('keeps a portal-only service ACL even when its string collides with an unrelated stack service', () => {
+    // `nestbox-confd` is a distinct service from the stack `wazo-confd` — a shared ACL string is a
+    // coincidence, not evidence they are the same service. Cross-service dedupe must NOT drop the
+    // portal service's real ACL: it stays on the `nestbox-confd` row and in `allAcls`.
     const stack = { 'wazo-confd': ['confd.lines.read'] };
     const portal = { 'nestbox-confd': ['confd.lines.read', 'confd.customers.read'] };
 
     const catalog = buildCatalog(stack, portal, '26.06');
 
     const nestbox = catalog.services.find(s => s.key === 'nestbox-confd');
-    expect(nestbox?.acls).toEqual(['confd.customers.read']);
-    expect(nestbox?.acls).not.toContain('confd.lines.read');
+    expect(nestbox?.acls).toEqual(['confd.customers.read', 'confd.lines.read']);
 
-    // The colliding ACL survives on its community row and in the flat union.
+    // The stack service keeps it too; both distinct services list it.
     expect(catalog.services.find(s => s.key === 'wazo-confd')?.acls).toContain('confd.lines.read');
     expect(catalog.allAcls).toContain('confd.lines.read');
   });

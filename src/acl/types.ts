@@ -3,10 +3,11 @@
 export type AclService = {
   key: string;
   label: string;
-  // For community/stack services these are the service's ACLs. For portal/enterprise-only services
-  // (e.g. `nestbox-confd`) these are the enterprise ACLs that *extend* the community baseline — i.e.
-  // the ACLs not already present in any community ACL — and are therefore not necessarily the
-  // service's complete ACL set. Use `AclCatalog.allAcls` for the full sorted union across services.
+  // For community/stack services, and for portal-only services (e.g. `nestbox-confd`), these are the
+  // service's own ACLs. The one exception is a portal service that shares a stack service's key and
+  // thus *extends* it (currently `wazo-auth`): its row lists only the enterprise ACLs not already
+  // declared by that same stack service, so it is not the service's complete ACL set. Use
+  // `AclCatalog.allAcls` for the full sorted union across services.
   acls: string[];
 };
 

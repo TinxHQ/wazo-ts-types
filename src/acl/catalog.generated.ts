@@ -46,6 +46,9 @@ export const WAZO_ACL_CATALOG: AclCatalog = {
         "confd.resellers.{reseller_uuid}.parent.{parent_reseller_uuid}.update",
         "confd.resellers.{reseller_uuid}.read",
         "confd.resellers.{reseller_uuid}.update",
+        "confd.tenants.{tenant_uuid}.read",
+        "confd.users.create",
+        "confd.users.read",
         "confd.users.{user_uuid}.delete",
         "confd.users.{user_uuid}.read",
         "confd.users.{user_uuid}.update"
