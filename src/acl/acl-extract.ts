@@ -48,8 +48,12 @@ export const extractAcls = (text: string): string[] => {
 };
 
 // Merge per-service ACL maps (`{ serviceKey: string[] }`) for the stack and portal layers into one
-// grouped catalog. Community = union of all stack ACLs; enterprise = portal ACLs not already
-// present in community (deduplicated).
+// grouped catalog. Community = union of all stack ACLs; enterprise extends community, so a portal
+// row lists only the ACLs not already present in the community baseline. This dedupe is deliberately
+// cross-layer (against the whole community union, not just the same key): an ACL string reachable
+// on the community stack is community, whoever else annotates it, so it is not re-listed as an
+// enterprise addition. A portal row is therefore "enterprise-only additions", not the service's
+// full ACL set — the complete union lives in `allAcls`. See the note on `AclService.acls` in types.ts.
 export const buildCatalog = (
   stackMap: Record<string, string[]>,
   portalMap: Record<string, string[]>,
@@ -83,6 +87,7 @@ export const buildCatalog = (
   }
 
   for (const key of Object.keys(portalMap).sort()) {
+    // Enterprise extends community: keep only portal ACLs absent from the community baseline.
     const extra = (portalMap[key] ?? []).filter(acl => !community.has(acl));
     if (extra.length) {
       const acls = aclsFor(key);

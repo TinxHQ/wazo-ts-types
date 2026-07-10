@@ -9,12 +9,12 @@ import { config } from 'dotenv';
 // Load .env overrides before reading process.env below.
 config();
 
-type SpecLayer = 'stack' | 'portal';
+export type SpecLayer = 'stack' | 'portal';
 
 // A spec descriptor keeps the canonical service identity independent of the URL, so environment
 // overrides (dev/edge specs whose paths look nothing like `.../wazo-auth.yml`) never change how a
 // service is keyed or labelled — only where its spec is fetched from.
-type Spec = {
+export type Spec = {
   // camelCase name used for the generated schema file / namespace (build.ts).
   name: string;
   // Canonical spec stem used to key ACLs and resolve human labels (see acl/acl-extract SERVICE_META).
@@ -52,3 +52,21 @@ export const schemas: Record<string, string> = Object.fromEntries(
 export const portalSchemas: Record<string, string> = Object.fromEntries(
   SPECS.filter(spec => spec.layer === 'portal').map(spec => [spec.name, spec.url]),
 );
+
+// One spec's raw text alongside its descriptor, so the type generator and the ACL extractor can
+// share a single download instead of each fetching the same URL.
+export type FetchedSpec = { spec: Spec; text: string };
+
+export const fetchText = async (url: string): Promise<string> => {
+  const res = await fetch(url);
+  if (!res.ok) {
+    throw new Error(`${url} → HTTP ${res.status}`);
+  }
+  return res.text();
+};
+
+// Fetch every spec's raw text exactly once. Both `npm run generate` consumers (types + ACL catalog)
+// read from the returned array, so they are guaranteed to come from the same spec revision even if a
+// mirror updates mid-build.
+export const fetchAllSpecs = async (): Promise<FetchedSpec[]> =>
+  Promise.all(SPECS.map(async spec => ({ spec, text: await fetchText(spec.url) })));

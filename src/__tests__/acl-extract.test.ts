@@ -75,6 +75,25 @@ describe('buildCatalog', () => {
     expect(authRows[0].acls).toEqual(['auth.tenants.admin', 'auth.users.read']);
   });
 
+  it('excludes a portal ACL that collides with an unrelated stack service (enterprise extends community)', () => {
+    // `confd.lines.read` is a community ACL (stack `wazo-confd`). Even though the portal
+    // `nestbox-confd` spec also annotates it, it is part of the community baseline, so the enterprise
+    // row lists only its genuine additions. The community ACL is never dropped from the catalog — it
+    // stays on its community service row and in `allAcls`.
+    const stack = { 'wazo-confd': ['confd.lines.read'] };
+    const portal = { 'nestbox-confd': ['confd.lines.read', 'confd.customers.read'] };
+
+    const catalog = buildCatalog(stack, portal, '26.06');
+
+    const nestbox = catalog.services.find(s => s.key === 'nestbox-confd');
+    expect(nestbox?.acls).toEqual(['confd.customers.read']);
+    expect(nestbox?.acls).not.toContain('confd.lines.read');
+
+    // The colliding ACL survives on its community row and in the flat union.
+    expect(catalog.services.find(s => s.key === 'wazo-confd')?.acls).toContain('confd.lines.read');
+    expect(catalog.allAcls).toContain('confd.lines.read');
+  });
+
   it('falls back to the raw key as label for unknown services', () => {
     const catalog = buildCatalog({ 'mystery-svc': ['mystery.read'] }, {}, '26.06');
     expect(catalog.services.find(s => s.key === 'mystery-svc')?.label).toBe('mystery-svc');

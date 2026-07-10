@@ -27,7 +27,7 @@
   "scripts": {
     "build": "npm run generate && npm run compile",
     "compile": "rm -rf ./dist && tsc --project tsconfig.json && tsc --project tsconfig.acl.json",
-    "generate": "rm -rf ./src/schemas && node --experimental-strip-types ./src/build.ts && node --experimental-strip-types ./src/acl/generate.ts",
+    "generate": "rm -rf ./src/schemas && node --experimental-strip-types ./src/build.ts",
     "test": "jest"
   },
   "devDependencies": {

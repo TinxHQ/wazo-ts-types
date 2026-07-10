@@ -1,46 +1,48 @@
-// Regenerate the Wazo ACL catalog shipped at `@wazo/types/acl`.
+// Build the Wazo ACL catalog shipped at `@wazo/types/acl`.
 //
-// Fetches every Wazo OpenAPI spec at build time, reads the `**Required ACL:** `<acl>`` annotations,
-// groups them by service, and writes the committed runtime module src/acl/catalog.generated.ts.
+// Reads the `**Required ACL:** `<acl>`` annotations from each Wazo OpenAPI spec, groups them by
+// service, and writes the committed runtime module src/acl/catalog.generated.ts.
+//
+// The helpers below are also called by the single-fetch orchestrator (src/build.ts) with specs it
+// already downloaded, so the combined `npm run generate` fetches each spec only once.
 //
 // Run standalone with:  node --experimental-strip-types ./src/acl/generate.ts
-// (also runs as part of `npm run generate`).
+// (this path fetches the specs itself).
 
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import * as process from 'node:process';
+import { pathToFileURL } from 'node:url';
 
 import { buildCatalog, extractAcls } from './acl-extract.ts';
-import { SPECS } from '../specs.ts';
+import { fetchAllSpecs, fetchText, type FetchedSpec } from '../specs.ts';
 
 const OUTPUT = path.resolve(process.cwd(), 'src', 'acl', 'catalog.generated.ts');
 const VERSION_URL = 'https://mirror.wazo.community/version/stable';
 
-const fetchText = async (url: string): Promise<string> => {
-  const res = await fetch(url);
-  if (!res.ok) {
-    throw new Error(`${url} → HTTP ${res.status}`);
+// `{ canonicalServiceKey: string[] }` of ACLs per layer, built from already-fetched spec texts.
+// Keyed by the spec's canonical stem (from SPECS), never the URL — so dev/edge overrides can't
+// collapse services.
+export const collectAclLayers = (
+  specs: FetchedSpec[],
+): { stack: Record<string, string[]>; portal: Record<string, string[]> } => {
+  const layers = {
+    stack: {} as Record<string, string[]>,
+    portal: {} as Record<string, string[]>,
+  };
+  for (const { spec, text } of specs) {
+    const acls = extractAcls(text);
+    if (!acls.length) {
+      continue;
+    }
+    const map = layers[spec.layer];
+    // Merge rather than overwrite in case two specs share a canonical key within a layer.
+    map[spec.key] = Array.from(new Set([...(map[spec.key] ?? []), ...acls]));
   }
-  return res.text();
+  return layers;
 };
 
-// `{ canonicalServiceKey: string[] }` of ACLs for every spec in a layer. Keyed by the spec's
-// canonical stem (from SPECS), never the URL — so dev/edge overrides can't collapse services.
-const collectLayer = async (layer: 'stack' | 'portal'): Promise<Record<string, string[]>> => {
-  const out: Record<string, string[]> = {};
-  await Promise.all(
-    SPECS.filter(spec => spec.layer === layer).map(async spec => {
-      const acls = extractAcls(await fetchText(spec.url));
-      if (acls.length) {
-        // Merge rather than overwrite in case two specs share a canonical key within a layer.
-        out[spec.key] = Array.from(new Set([...(out[spec.key] ?? []), ...acls]));
-      }
-    }),
-  );
-  return out;
-};
-
-const resolveApiVersion = async (): Promise<string> => {
+export const resolveApiVersion = async (): Promise<string> => {
   try {
     return (await fetchText(VERSION_URL)).trim();
   } catch {
@@ -64,19 +66,12 @@ export const ALL_ACLS: readonly string[] = WAZO_ACL_CATALOG.allAcls;
 `;
 };
 
-const main = async (): Promise<void> => {
-  // Mirror build.ts: a .env means specs are fetched from a custom/unstable environment, so the
-  // catalog is not the stable one that should be committed/published.
-  if (fs.existsSync(path.resolve(process.cwd(), '.env'))) {
-    console.warn('⚠️  .env detected: generating the ACL catalog from custom/unstable specs — do not commit this output.');
-  }
-
-  const [apiVersion, stack, portal] = await Promise.all([
-    resolveApiVersion(),
-    collectLayer('stack'),
-    collectLayer('portal'),
-  ]);
-
+// Build the catalog from grouped ACL layers and write the committed runtime module.
+export const writeCatalog = (
+  stack: Record<string, string[]>,
+  portal: Record<string, string[]>,
+  apiVersion: string,
+): void => {
   const catalog = buildCatalog(stack, portal, apiVersion);
 
   fs.mkdirSync(path.dirname(OUTPUT), { recursive: true });
@@ -86,7 +81,23 @@ const main = async (): Promise<void> => {
   console.log(`   wrote ${path.relative(process.cwd(), OUTPUT)}`);
 };
 
-main().catch(error => {
-  console.error(`❌ Failed to generate ACL catalog: ${error instanceof Error ? error.message : error}`);
-  process.exit(1);
-});
+// Standalone entry: fetch specs, then build + write. `build.ts` calls the helpers above directly
+// with specs it already fetched, so the combined `npm run generate` downloads each spec only once.
+const main = async (): Promise<void> => {
+  // Mirror build.ts: a .env means specs are fetched from a custom/unstable environment, so the
+  // catalog is not the stable one that should be committed/published.
+  if (fs.existsSync(path.resolve(process.cwd(), '.env'))) {
+    console.warn('⚠️  .env detected: generating the ACL catalog from custom/unstable specs — do not commit this output.');
+  }
+
+  const [apiVersion, specs] = await Promise.all([resolveApiVersion(), fetchAllSpecs()]);
+  const { stack, portal } = collectAclLayers(specs);
+  writeCatalog(stack, portal, apiVersion);
+};
+
+if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
+  main().catch(error => {
+    console.error(`❌ Failed to generate ACL catalog: ${error instanceof Error ? error.message : error}`);
+    process.exit(1);
+  });
+}
