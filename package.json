@@ -15,6 +15,10 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts"
+    },
+    "./acl": {
+      "types": "./dist/acl/index.d.ts",
+      "default": "./dist/acl/index.js"
     }
   },
   "engines": {
@@ -22,7 +26,7 @@
   },
   "scripts": {
     "build": "npm run generate && npm run compile",
-    "compile": "rm -rf ./dist && tsc --project tsconfig.json",
+    "compile": "rm -rf ./dist && tsc --project tsconfig.json && tsc --project tsconfig.acl.json",
     "generate": "rm -rf ./src/schemas && node --experimental-strip-types ./src/build.ts",
     "test": "jest"
   },

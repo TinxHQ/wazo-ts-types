@@ -1,73 +1,83 @@
-import { config } from 'dotenv';
+// Single orchestrator for `npm run generate`: fetches every Wazo OpenAPI spec exactly once, then
+// feeds the same in-memory text to both the swagger type generator and the ACL catalog builder — so
+// the generated types and the ACL catalog always come from the same spec revision.
+
 import { exec } from 'node:child_process';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import * as process from 'node:process';
 import { generateApi } from 'swagger-typescript-api';
 
-// Load environment variables from .env file
-config();
+import { fetchAllSpecs } from './specs.ts';
+import { collectAclLayers, resolveApiVersion, writeCatalog } from './acl/generate.ts';
 
-const schemas = {
-  agentd: process.env.AGENTD || 'https://openapi.wazo.community/wazo-platform/wazo-agentd.yml',
-  amid: process.env.AMID || 'https://openapi.wazo.community/wazo-platform/wazo-amid.yml',
-  auth: process.env.AUTH || 'https://openapi.wazo.community/wazo-platform/wazo-auth.yml',
-  callLogd: process.env.CALL_LOGD || 'https://openapi.wazo.community/wazo-platform/wazo-call-logd.yml',
-  calld: process.env.CALLD || 'https://openapi.wazo.community/wazo-platform/wazo-calld.yml',
-  chatd: process.env.CHATD || 'https://openapi.wazo.community/wazo-platform/wazo-chatd.yml',
-  confd: process.env.CONFD || 'https://openapi.wazo.community/wazo-platform/wazo-confd.yml',
-  dird: process.env.DIRD || 'https://openapi.wazo.community/wazo-platform/wazo-dird.yml',
-  plugind: process.env.PLUGIND || 'https://openapi.wazo.community/wazo-platform/wazo-plugind.yml',
-  provd: process.env.PROVD || 'https://openapi.wazo.community/wazo-platform/wazo-provd.yml',
-  setupd: process.env.SETUPD || 'https://openapi.wazo.community/wazo-platform/wazo-setupd.yml',
-  webhookd: process.env.WEBHOOKD || 'https://openapi.wazo.community/wazo-platform/wazo-webhookd.yml',
-};
+const SCHEMAS_DIR = path.resolve(process.cwd(), 'src', 'schemas');
+// swagger-typescript-api reads from a URL or a local file; we stage the already-fetched spec text
+// here (gitignored, removed at the end) so it never re-downloads.
+const RAW_DIR = path.resolve(process.cwd(), 'src', 'schemas-raw');
 
-const portalSchemas = {
-  accessdPortal: process.env.ACCESSD_PORTAL || 'https://openapi.wazo.community/nestbox/swarm-accessd.yml',
-  authPortal: process.env.AUTH_PORTAL || 'https://openapi.wazo.community/nestbox/wazo-auth.yml',
-  confdPortal: process.env.CONFD_PORTAL || 'https://openapi.wazo.community/nestbox/nestbox-confd.yml',
-  deploydPortal: process.env.DEPLOYD_PORTAL || 'https://openapi.wazo.community/nestbox/wazo-deployd.yml',
-};
-
-Promise.all(
-  Object.entries({ ...schemas, ...portalSchemas }).map(async ([schemaName, url]) => {
-    try {
-      // https://github.com/acacode/swagger-typescript-api/blob/main/types/index.ts
-      await generateApi({
-        url,
-        output: path.resolve(process.cwd(), 'src', 'schemas'),
-        fileName: `${schemaName}.ts`,
-        generateClient: false,
-        generateRouteTypes: true,
-        extractRequestParams: true,
-        extractRequestBody: true,
-        extractResponseBody: true,
-        extractResponseError: true,
-        sortTypes: true,
-      });
-    } catch (error) {
-      console.error(`Error generating types for ${schemaName}:`, error);
-    }
-  }),
-).then(() => {
-  exec(
-    'bash scripts/fix-types.sh',
-    (error, _stdout, stderr) => {
+const runFixTypes = (): Promise<void> =>
+  new Promise((resolve, reject) => {
+    exec('bash scripts/fix-types.sh', (error, _stdout, stderr) => {
       if (error) {
-        console.error(`❌ Error while running 'fix-types.sh': ${error.message}`);
+        reject(new Error(`Error while running 'fix-types.sh': ${error.message}`));
         return;
       }
       if (stderr) {
-        console.error(`❌ Standard error output from fix-types.sh script: ${stderr}`);
+        reject(new Error(`Standard error output from fix-types.sh script: ${stderr}`));
         return;
       }
       console.log('✅ Successfully fixed broken types');
+      resolve();
+    });
+  });
 
-      // Warn if .env file exists
-      if (fs.existsSync(path.resolve(process.cwd(), '.env'))) {
-        console.warn('⚠️  WARNING: .env file detected. Building types based on custom/unstable environment variables.');
+const main = async (): Promise<void> => {
+  // Fetch every spec once; both consumers below read the same revision.
+  const specs = await fetchAllSpecs();
+
+  fs.rmSync(RAW_DIR, { recursive: true, force: true });
+  fs.mkdirSync(RAW_DIR, { recursive: true });
+
+  await Promise.all(
+    specs.map(async ({ spec, text }) => {
+      const rawPath = path.join(RAW_DIR, `${spec.name}.yml`);
+      fs.writeFileSync(rawPath, text, 'utf8');
+      try {
+        // https://github.com/acacode/swagger-typescript-api/blob/main/types/index.ts
+        await generateApi({
+          input: rawPath,
+          output: SCHEMAS_DIR,
+          fileName: `${spec.name}.ts`,
+          generateClient: false,
+          generateRouteTypes: true,
+          extractRequestParams: true,
+          extractRequestBody: true,
+          extractResponseBody: true,
+          extractResponseError: true,
+          sortTypes: true,
+        });
+      } catch (error) {
+        console.error(`Error generating types for ${spec.name}:`, error);
       }
-    },
+    }),
   );
+
+  fs.rmSync(RAW_DIR, { recursive: true, force: true });
+
+  // Build the ACL catalog from the same fetched specs.
+  const apiVersion = await resolveApiVersion();
+  const { stack, portal } = collectAclLayers(specs);
+  writeCatalog(stack, portal, apiVersion);
+
+  await runFixTypes();
+
+  if (fs.existsSync(path.resolve(process.cwd(), '.env'))) {
+    console.warn('⚠️  WARNING: .env file detected. Generated types and ACL catalog are built from custom/unstable specs — do not commit this output.');
+  }
+};
+
+main().catch(error => {
+  console.error(`❌ Build failed: ${error instanceof Error ? error.message : error}`);
+  process.exit(1);
 });

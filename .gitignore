@@ -139,3 +139,6 @@ dist
 .pnp.*
 
 .env
+
+# Raw OpenAPI specs staged by src/build.ts for the type generator (removed after each run).
+src/schemas-raw/

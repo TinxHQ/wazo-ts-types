@@ -186,26 +186,26 @@ export interface GetCdrParams {
   call_status?: "answered" | "blocked";
   /** Filter by conversation identifier */
   conversation_id?: string;
-  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+  /** Sort order direction */
   direction?: "asc" | "desc";
   /** Will only return one result for the selected field */
   distinct?: "peer_exten";
   /** Overrides the Content-Type header. This is used to be able to have a downloadable link. Allowed values are "csv" and "json" */
   format?: "csv" | "json";
   /**
-   * Ignore CDR starting before the given date. Format is <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>.
+   * Filter transcriptions created after this date
    * @format date-time
    */
   from?: string;
   /** Ignore CDR created before the given CDR ID. */
   from_id?: number;
-  /** Maximum number of items to return in the list. Default to 1000 if not specified. */
+  /** Maximum number of items to return */
   limit?: number;
   /** Filter by source_extension and destination_extension. A wildcard (underscore) can be used at the start and/or the end of the number. */
   number?: string;
-  /** Number of items to skip over in the list. Useful for pagination. */
+  /** Number of items to skip */
   offset?: number;
-  /** Name of the field to use for sorting the list of items returned. Unsupported values: ``end``. */
+  /** Name of the field to order by */
   order?: "created_at" | "message_id";
   /** Filter by recorded status. */
   recorded?: boolean;
@@ -223,7 +223,7 @@ export interface GetCdrParams {
   /** Filter by tags. Each tag MUST be separated by a coma (,). Many tag will perform a logical AND. */
   tags?: string[];
   /**
-   * Ignore CDR starting at or after the given date. Format is <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>.
+   * Filter transcriptions created before this date
    * @format date-time
    */
   until?: string;
@@ -242,26 +242,26 @@ export interface GetUsersParams {
   call_status?: "answered" | "blocked";
   /** Filter by conversation identifier */
   conversation_id?: string;
-  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+  /** Sort order direction */
   direction?: "asc" | "desc";
   /** Will only return one result for the selected field */
   distinct?: "peer_exten";
   /** Overrides the Content-Type header. This is used to be able to have a downloadable link. Allowed values are "csv" and "json" */
   format?: "csv" | "json";
   /**
-   * Ignore CDR starting before the given date. Format is <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>.
+   * Filter transcriptions created after this date
    * @format date-time
    */
   from?: string;
   /** Ignore CDR created before the given CDR ID. */
   from_id?: number;
-  /** Maximum number of items to return in the list. Default to 1000 if not specified. */
+  /** Maximum number of items to return */
   limit?: number;
   /** Filter by source_extension and destination_extension. A wildcard (underscore) can be used at the start and/or the end of the number. */
   number?: string;
-  /** Number of items to skip over in the list. Useful for pagination. */
+  /** Number of items to skip */
   offset?: number;
-  /** Name of the field to use for sorting the list of items returned. Unsupported values: ``end``. */
+  /** Name of the field to order by */
   order?: "created_at" | "message_id";
   /** Filter by recorded status. */
   recorded?: boolean;
@@ -272,7 +272,7 @@ export interface GetUsersParams {
   /** Filter list of items */
   search?: string;
   /**
-   * Ignore CDR starting at or after the given date. Format is <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>.
+   * Filter transcriptions created before this date
    * @format date-time
    */
   until?: string;
@@ -283,23 +283,23 @@ export interface GetUsersParams {
 export type ListVoicemailTranscriptionsData = TranscriptionList;
 
 export interface ListVoicemailTranscriptionsParams {
-  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+  /** Sort order direction */
   direction?: "asc" | "desc";
   /**
-   * Ignore CDR starting before the given date. Format is <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>.
+   * Filter transcriptions created after this date
    * @format date-time
    */
   from?: string;
-  /** Maximum number of items to return in the list. Default to 1000 if not specified. */
+  /** Maximum number of items to return */
   limit?: number;
-  /** Number of items to skip over in the list. Useful for pagination. */
+  /** Number of items to skip */
   offset?: number;
-  /** Name of the field to use for sorting the list of items returned. Unsupported values: ``end``. */
+  /** Name of the field to order by */
   order?: "created_at" | "message_id";
   /** Full-text search in transcript content */
   search_text?: string;
   /**
-   * Ignore CDR starting at or after the given date. Format is <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>.
+   * Filter transcriptions created before this date
    * @format date-time
    */
   until?: string;
@@ -316,26 +316,26 @@ export interface MeCdrListParams {
   call_status?: "answered" | "blocked";
   /** Filter by conversation identifier */
   conversation_id?: string;
-  /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+  /** Sort order direction */
   direction?: "asc" | "desc";
   /** Will only return one result for the selected field */
   distinct?: "peer_exten";
   /** Overrides the Content-Type header. This is used to be able to have a downloadable link. Allowed values are "csv" and "json" */
   format?: "csv" | "json";
   /**
-   * Ignore CDR starting before the given date. Format is <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>.
+   * Filter transcriptions created after this date
    * @format date-time
    */
   from?: string;
   /** Ignore CDR created before the given CDR ID. */
   from_id?: number;
-  /** Maximum number of items to return in the list. Default to 1000 if not specified. */
+  /** Maximum number of items to return */
   limit?: number;
   /** Filter by source_extension and destination_extension. A wildcard (underscore) can be used at the start and/or the end of the number. */
   number?: string;
-  /** Number of items to skip over in the list. Useful for pagination. */
+  /** Number of items to skip */
   offset?: number;
-  /** Name of the field to use for sorting the list of items returned. Unsupported values: ``end``. */
+  /** Name of the field to order by */
   order?: "created_at" | "message_id";
   /** Filter by recorded status. */
   recorded?: boolean;
@@ -346,7 +346,7 @@ export interface MeCdrListParams {
   /** Filter list of items */
   search?: string;
   /**
-   * Ignore CDR starting at or after the given date. Format is <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>.
+   * Filter transcriptions created before this date
    * @format date-time
    */
   until?: string;
@@ -471,7 +471,7 @@ export interface RecordingsMediaExportCreateParams {
   /** E-mail address */
   email?: string;
   /**
-   * Ignore CDR starting before the given date. Format is <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>.
+   * Filter transcriptions created after this date
    * @format date-time
    */
   from?: string;
@@ -489,7 +489,7 @@ export interface RecordingsMediaExportCreateParams {
   /** Filter by tags. Each tag MUST be separated by a coma (,). Many tag will perform a logical AND. */
   tags?: string[];
   /**
-   * Ignore CDR starting at or after the given date. Format is <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>.
+   * Filter transcriptions created before this date
    * @format date-time
    */
   until?: string;
@@ -526,7 +526,7 @@ export interface StatisticsList2Params {
   /** The time at which a day starts, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
   day_start_time?: string;
   /**
-   * Ignore CDR starting before the given date. Format is <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>.
+   * Filter transcriptions created after this date
    * @format date-time
    */
   from?: string;
@@ -540,7 +540,7 @@ export interface StatisticsList2Params {
    */
   timezone?: string;
   /**
-   * Ignore CDR starting at or after the given date. Format is <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>.
+   * Filter transcriptions created before this date
    * @format date-time
    */
   until?: string;
@@ -558,7 +558,7 @@ export interface StatisticsList2Params2 {
   /** The time at which a day starts, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
   day_start_time?: string;
   /**
-   * Ignore CDR starting before the given date. Format is <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>.
+   * Filter transcriptions created after this date
    * @format date-time
    */
   from?: string;
@@ -576,7 +576,7 @@ export interface StatisticsList2Params2 {
    */
   timezone?: string;
   /**
-   * Ignore CDR starting at or after the given date. Format is <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>.
+   * Filter transcriptions created before this date
    * @format date-time
    */
   until?: string;
@@ -598,7 +598,7 @@ export interface StatisticsListParams {
   /** The time at which a day starts, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
   day_start_time?: string;
   /**
-   * Ignore CDR starting before the given date. Format is <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>.
+   * Filter transcriptions created after this date
    * @format date-time
    */
   from?: string;
@@ -610,7 +610,7 @@ export interface StatisticsListParams {
    */
   timezone?: string;
   /**
-   * Ignore CDR starting at or after the given date. Format is <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>.
+   * Filter transcriptions created before this date
    * @format date-time
    */
   until?: string;
@@ -628,7 +628,7 @@ export interface StatisticsListParams2 {
   /** The time at which a day starts, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
   day_start_time?: string;
   /**
-   * Ignore CDR starting before the given date. Format is <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>.
+   * Filter transcriptions created after this date
    * @format date-time
    */
   from?: string;
@@ -642,7 +642,7 @@ export interface StatisticsListParams2 {
    */
   timezone?: string;
   /**
-   * Ignore CDR starting at or after the given date. Format is <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>.
+   * Filter transcriptions created before this date
    * @format date-time
    */
   until?: string;
@@ -664,7 +664,7 @@ export interface StatisticsQosListParams {
   /** The time at which a day starts, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
   day_start_time?: string;
   /**
-   * Ignore CDR starting before the given date. Format is <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>.
+   * Filter transcriptions created after this date
    * @format date-time
    */
   from?: string;
@@ -685,7 +685,7 @@ export interface StatisticsQosListParams {
    */
   timezone?: string;
   /**
-   * Ignore CDR starting at or after the given date. Format is <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>.
+   * Filter transcriptions created before this date
    * @format date-time
    */
   until?: string;
@@ -755,7 +755,7 @@ export namespace Agents {
       /** The time at which a day starts, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
       day_start_time?: string;
       /**
-       * Ignore CDR starting before the given date. Format is <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>.
+       * Filter transcriptions created after this date
        * @format date-time
        */
       from?: string;
@@ -767,7 +767,7 @@ export namespace Agents {
        */
       timezone?: string;
       /**
-       * Ignore CDR starting at or after the given date. Format is <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>.
+       * Filter transcriptions created before this date
        * @format date-time
        */
       until?: string;
@@ -807,7 +807,7 @@ export namespace Agents {
       /** The time at which a day starts, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
       day_start_time?: string;
       /**
-       * Ignore CDR starting before the given date. Format is <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>.
+       * Filter transcriptions created after this date
        * @format date-time
        */
       from?: string;
@@ -821,7 +821,7 @@ export namespace Agents {
        */
       timezone?: string;
       /**
-       * Ignore CDR starting at or after the given date. Format is <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>.
+       * Filter transcriptions created before this date
        * @format date-time
        */
       until?: string;
@@ -859,26 +859,26 @@ export namespace Cdr {
       call_status?: "answered" | "blocked";
       /** Filter by conversation identifier */
       conversation_id?: string;
-      /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+      /** Sort order direction */
       direction?: "asc" | "desc";
       /** Will only return one result for the selected field */
       distinct?: "peer_exten";
       /** Overrides the Content-Type header. This is used to be able to have a downloadable link. Allowed values are "csv" and "json" */
       format?: "csv" | "json";
       /**
-       * Ignore CDR starting before the given date. Format is <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>.
+       * Filter transcriptions created after this date
        * @format date-time
        */
       from?: string;
       /** Ignore CDR created before the given CDR ID. */
       from_id?: number;
-      /** Maximum number of items to return in the list. Default to 1000 if not specified. */
+      /** Maximum number of items to return */
       limit?: number;
       /** Filter by source_extension and destination_extension. A wildcard (underscore) can be used at the start and/or the end of the number. */
       number?: string;
-      /** Number of items to skip over in the list. Useful for pagination. */
+      /** Number of items to skip */
       offset?: number;
-      /** Name of the field to use for sorting the list of items returned. Unsupported values: ``end``. */
+      /** Name of the field to order by */
       order?: "created_at" | "message_id";
       /** Filter by recorded status. */
       recorded?: boolean;
@@ -896,7 +896,7 @@ export namespace Cdr {
       /** Filter by tags. Each tag MUST be separated by a coma (,). Many tag will perform a logical AND. */
       tags?: string[];
       /**
-       * Ignore CDR starting at or after the given date. Format is <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>.
+       * Filter transcriptions created before this date
        * @format date-time
        */
       until?: string;
@@ -943,7 +943,7 @@ export namespace Cdr {
       /** E-mail address */
       email?: string;
       /**
-       * Ignore CDR starting before the given date. Format is <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>.
+       * Filter transcriptions created after this date
        * @format date-time
        */
       from?: string;
@@ -961,7 +961,7 @@ export namespace Cdr {
       /** Filter by tags. Each tag MUST be separated by a coma (,). Many tag will perform a logical AND. */
       tags?: string[];
       /**
-       * Ignore CDR starting at or after the given date. Format is <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>.
+       * Filter transcriptions created before this date
        * @format date-time
        */
       until?: string;
@@ -1139,7 +1139,7 @@ export namespace Queues {
       /** The time at which a day starts, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
       day_start_time?: string;
       /**
-       * Ignore CDR starting before the given date. Format is <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>.
+       * Filter transcriptions created after this date
        * @format date-time
        */
       from?: string;
@@ -1153,7 +1153,7 @@ export namespace Queues {
        */
       timezone?: string;
       /**
-       * Ignore CDR starting at or after the given date. Format is <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>.
+       * Filter transcriptions created before this date
        * @format date-time
        */
       until?: string;
@@ -1193,7 +1193,7 @@ export namespace Queues {
       /** The time at which a day starts, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
       day_start_time?: string;
       /**
-       * Ignore CDR starting before the given date. Format is <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>.
+       * Filter transcriptions created after this date
        * @format date-time
        */
       from?: string;
@@ -1209,7 +1209,7 @@ export namespace Queues {
        */
       timezone?: string;
       /**
-       * Ignore CDR starting at or after the given date. Format is <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>.
+       * Filter transcriptions created before this date
        * @format date-time
        */
       until?: string;
@@ -1247,7 +1247,7 @@ export namespace Queues {
       /** The time at which a day starts, inclusively. Accepted format is `HH:MM`, minutes are ignored. */
       day_start_time?: string;
       /**
-       * Ignore CDR starting before the given date. Format is <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>.
+       * Filter transcriptions created after this date
        * @format date-time
        */
       from?: string;
@@ -1266,7 +1266,7 @@ export namespace Queues {
        */
       timezone?: string;
       /**
-       * Ignore CDR starting at or after the given date. Format is <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>.
+       * Filter transcriptions created before this date
        * @format date-time
        */
       until?: string;
@@ -1362,26 +1362,26 @@ export namespace Users {
       call_status?: "answered" | "blocked";
       /** Filter by conversation identifier */
       conversation_id?: string;
-      /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+      /** Sort order direction */
       direction?: "asc" | "desc";
       /** Will only return one result for the selected field */
       distinct?: "peer_exten";
       /** Overrides the Content-Type header. This is used to be able to have a downloadable link. Allowed values are "csv" and "json" */
       format?: "csv" | "json";
       /**
-       * Ignore CDR starting before the given date. Format is <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>.
+       * Filter transcriptions created after this date
        * @format date-time
        */
       from?: string;
       /** Ignore CDR created before the given CDR ID. */
       from_id?: number;
-      /** Maximum number of items to return in the list. Default to 1000 if not specified. */
+      /** Maximum number of items to return */
       limit?: number;
       /** Filter by source_extension and destination_extension. A wildcard (underscore) can be used at the start and/or the end of the number. */
       number?: string;
-      /** Number of items to skip over in the list. Useful for pagination. */
+      /** Number of items to skip */
       offset?: number;
-      /** Name of the field to use for sorting the list of items returned. Unsupported values: ``end``. */
+      /** Name of the field to order by */
       order?: "created_at" | "message_id";
       /** Filter by recorded status. */
       recorded?: boolean;
@@ -1392,7 +1392,7 @@ export namespace Users {
       /** Filter list of items */
       search?: string;
       /**
-       * Ignore CDR starting at or after the given date. Format is <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>.
+       * Filter transcriptions created before this date
        * @format date-time
        */
       until?: string;
@@ -1451,26 +1451,26 @@ export namespace Users {
       call_status?: "answered" | "blocked";
       /** Filter by conversation identifier */
       conversation_id?: string;
-      /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+      /** Sort order direction */
       direction?: "asc" | "desc";
       /** Will only return one result for the selected field */
       distinct?: "peer_exten";
       /** Overrides the Content-Type header. This is used to be able to have a downloadable link. Allowed values are "csv" and "json" */
       format?: "csv" | "json";
       /**
-       * Ignore CDR starting before the given date. Format is <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>.
+       * Filter transcriptions created after this date
        * @format date-time
        */
       from?: string;
       /** Ignore CDR created before the given CDR ID. */
       from_id?: number;
-      /** Maximum number of items to return in the list. Default to 1000 if not specified. */
+      /** Maximum number of items to return */
       limit?: number;
       /** Filter by source_extension and destination_extension. A wildcard (underscore) can be used at the start and/or the end of the number. */
       number?: string;
-      /** Number of items to skip over in the list. Useful for pagination. */
+      /** Number of items to skip */
       offset?: number;
-      /** Name of the field to use for sorting the list of items returned. Unsupported values: ``end``. */
+      /** Name of the field to order by */
       order?: "created_at" | "message_id";
       /** Filter by recorded status. */
       recorded?: boolean;
@@ -1481,7 +1481,7 @@ export namespace Users {
       /** Filter list of items */
       search?: string;
       /**
-       * Ignore CDR starting at or after the given date. Format is <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>.
+       * Filter transcriptions created before this date
        * @format date-time
        */
       until?: string;
@@ -1504,23 +1504,23 @@ export namespace Voicemails {
   export namespace ListVoicemailTranscriptions {
     export type RequestParams = {};
     export type RequestQuery = {
-      /** Sort list of items in 'asc' (ascending) or 'desc' (descending) order */
+      /** Sort order direction */
       direction?: "asc" | "desc";
       /**
-       * Ignore CDR starting before the given date. Format is <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>.
+       * Filter transcriptions created after this date
        * @format date-time
        */
       from?: string;
-      /** Maximum number of items to return in the list. Default to 1000 if not specified. */
+      /** Maximum number of items to return */
       limit?: number;
-      /** Number of items to skip over in the list. Useful for pagination. */
+      /** Number of items to skip */
       offset?: number;
-      /** Name of the field to use for sorting the list of items returned. Unsupported values: ``end``. */
+      /** Name of the field to order by */
       order?: "created_at" | "message_id";
       /** Full-text search in transcript content */
       search_text?: string;
       /**
-       * Ignore CDR starting at or after the given date. Format is <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>.
+       * Filter transcriptions created before this date
        * @format date-time
        */
       until?: string;

@@ -243,7 +243,7 @@ export interface CallsDtmfUpdateParams {
 export type CallsHeldAnswerUpdateData = CallID;
 
 export interface CallsHeldAnswerUpdateParams {
-  /** ID of the call */
+  /** Call ID */
   callId: string;
   /** ID of the line of the user used to make the call. Default is the main line of the user. */
   line_id?: number;
@@ -314,7 +314,7 @@ export type CallsProgressStopUpdateError = Error;
 export type CallsQueuedAnswerUpdateData = CallID;
 
 export interface CallsQueuedAnswerUpdateParams {
-  /** ID of the call */
+  /** Call ID */
   callId: string;
   /** ID of the line of the user used to make the call. Default is the main line of the user. */
   line_id?: number;
@@ -357,7 +357,7 @@ export type DtmfUpdateData = any;
 export type DtmfUpdateError = Error;
 
 export interface DtmfUpdateParams {
-  /** ID of the call */
+  /** Call ID */
   callId: string;
   /** Digits to send via DTMF. Must contain only `0-9*#`. */
   digits: string;
@@ -528,7 +528,7 @@ export type MeCallsDtmfUpdateData = any;
 export type MeCallsDtmfUpdateError = Error;
 
 export interface MeCallsDtmfUpdateParams {
-  /** ID of the call */
+  /** Call ID */
   callId: string;
   /** Digits to send via DTMF. Must contain only `0-9*#`. */
   digits: string;
@@ -1950,7 +1950,7 @@ export namespace Calls {
    */
   export namespace CallsDelete {
     export type RequestParams = {
-      /** ID of the call */
+      /** Call ID */
       callId: string;
     };
     export type RequestQuery = {};
@@ -1972,7 +1972,7 @@ export namespace Calls {
    */
   export namespace CallsDetail {
     export type RequestParams = {
-      /** ID of the call */
+      /** Call ID */
       callId: string;
     };
     export type RequestQuery = {};
@@ -1994,7 +1994,7 @@ export namespace Calls {
    */
   export namespace AnswerUpdate {
     export type RequestParams = {
-      /** ID of the call */
+      /** Call ID */
       callId: string;
     };
     export type RequestQuery = {};
@@ -2016,7 +2016,7 @@ export namespace Calls {
    */
   export namespace DtmfUpdate {
     export type RequestParams = {
-      /** ID of the call */
+      /** Call ID */
       callId: string;
     };
     export type RequestQuery = {
@@ -2041,7 +2041,7 @@ export namespace Calls {
    */
   export namespace HoldStartUpdate {
     export type RequestParams = {
-      /** ID of the call */
+      /** Call ID */
       callId: string;
     };
     export type RequestQuery = {};
@@ -2063,7 +2063,7 @@ export namespace Calls {
    */
   export namespace HoldStopUpdate {
     export type RequestParams = {
-      /** ID of the call */
+      /** Call ID */
       callId: string;
     };
     export type RequestQuery = {};
@@ -2085,7 +2085,7 @@ export namespace Calls {
    */
   export namespace MuteStartUpdate {
     export type RequestParams = {
-      /** ID of the call */
+      /** Call ID */
       callId: string;
     };
     export type RequestQuery = {};
@@ -2107,7 +2107,7 @@ export namespace Calls {
    */
   export namespace MuteStopUpdate {
     export type RequestParams = {
-      /** ID of the call */
+      /** Call ID */
       callId: string;
     };
     export type RequestQuery = {};
@@ -2129,7 +2129,7 @@ export namespace Calls {
    */
   export namespace ParkUpdate {
     export type RequestParams = {
-      /** ID of the call */
+      /** Call ID */
       callId: string;
     };
     export type RequestQuery = {};
@@ -2151,7 +2151,7 @@ export namespace Calls {
    */
   export namespace RecordPauseUpdate {
     export type RequestParams = {
-      /** ID of the call */
+      /** Call ID */
       callId: string;
     };
     export type RequestQuery = {};
@@ -2173,7 +2173,7 @@ export namespace Calls {
    */
   export namespace RecordResumeUpdate {
     export type RequestParams = {
-      /** ID of the call */
+      /** Call ID */
       callId: string;
     };
     export type RequestQuery = {};
@@ -2195,7 +2195,7 @@ export namespace Calls {
    */
   export namespace RecordStartUpdate {
     export type RequestParams = {
-      /** ID of the call */
+      /** Call ID */
       callId: string;
     };
     export type RequestQuery = {};
@@ -2217,7 +2217,7 @@ export namespace Calls {
    */
   export namespace RecordStopUpdate {
     export type RequestParams = {
-      /** ID of the call */
+      /** Call ID */
       callId: string;
     };
     export type RequestQuery = {};
@@ -2239,7 +2239,7 @@ export namespace Calls {
    */
   export namespace UserUpdate {
     export type RequestParams = {
-      /** ID of the call */
+      /** Call ID */
       callId: string;
       /** UUID of the user */
       userUuid: string;
@@ -2620,7 +2620,7 @@ export namespace Switchboards {
    */
   export namespace CallsHeldUpdate {
     export type RequestParams = {
-      /** ID of the call */
+      /** Call ID */
       callId: string;
       /** Unique identifier of the switchboard */
       switchboardUuid: string;
@@ -2644,7 +2644,7 @@ export namespace Switchboards {
    */
   export namespace CallsHeldAnswerUpdate {
     export type RequestParams = {
-      /** ID of the call */
+      /** Call ID */
       callId: string;
       /** Unique identifier of the switchboard */
       switchboardUuid: string;
@@ -2693,7 +2693,7 @@ export namespace Switchboards {
    */
   export namespace CallsQueuedAnswerUpdate {
     export type RequestParams = {
-      /** ID of the call */
+      /** Call ID */
       callId: string;
       /** Unique identifier of the switchboard */
       switchboardUuid: string;
@@ -2855,7 +2855,7 @@ export namespace Users {
    */
   export namespace MeCallsDelete {
     export type RequestParams = {
-      /** ID of the call */
+      /** Call ID */
       callId: string;
     };
     export type RequestQuery = {};
@@ -2874,7 +2874,7 @@ export namespace Users {
    */
   export namespace MeCallsAnswerUpdate {
     export type RequestParams = {
-      /** ID of the call */
+      /** Call ID */
       callId: string;
     };
     export type RequestQuery = {};
@@ -2893,7 +2893,7 @@ export namespace Users {
    */
   export namespace MeCallsDtmfUpdate {
     export type RequestParams = {
-      /** ID of the call */
+      /** Call ID */
       callId: string;
     };
     export type RequestQuery = {
@@ -2915,7 +2915,7 @@ export namespace Users {
    */
   export namespace MeCallsHoldStartUpdate {
     export type RequestParams = {
-      /** ID of the call */
+      /** Call ID */
       callId: string;
     };
     export type RequestQuery = {};
@@ -2934,7 +2934,7 @@ export namespace Users {
    */
   export namespace MeCallsHoldStopUpdate {
     export type RequestParams = {
-      /** ID of the call */
+      /** Call ID */
       callId: string;
     };
     export type RequestQuery = {};
@@ -2953,7 +2953,7 @@ export namespace Users {
    */
   export namespace MeCallsMuteStartUpdate {
     export type RequestParams = {
-      /** ID of the call */
+      /** Call ID */
       callId: string;
     };
     export type RequestQuery = {};
@@ -2972,7 +2972,7 @@ export namespace Users {
    */
   export namespace MeCallsMuteStopUpdate {
     export type RequestParams = {
-      /** ID of the call */
+      /** Call ID */
       callId: string;
     };
     export type RequestQuery = {};
@@ -2991,7 +2991,7 @@ export namespace Users {
    */
   export namespace MeCallsParkUpdate {
     export type RequestParams = {
-      /** ID of the call */
+      /** Call ID */
       callId: string;
     };
     export type RequestQuery = {};
@@ -3013,7 +3013,7 @@ export namespace Users {
    */
   export namespace MeCallsRecordPauseUpdate {
     export type RequestParams = {
-      /** ID of the call */
+      /** Call ID */
       callId: string;
     };
     export type RequestQuery = {};
@@ -3032,7 +3032,7 @@ export namespace Users {
    */
   export namespace MeCallsRecordResumeUpdate {
     export type RequestParams = {
-      /** ID of the call */
+      /** Call ID */
       callId: string;
     };
     export type RequestQuery = {};
@@ -3051,7 +3051,7 @@ export namespace Users {
    */
   export namespace MeCallsRecordStartUpdate {
     export type RequestParams = {
-      /** ID of the call */
+      /** Call ID */
       callId: string;
     };
     export type RequestQuery = {};
@@ -3070,7 +3070,7 @@ export namespace Users {
    */
   export namespace MeCallsRecordStopUpdate {
     export type RequestParams = {
-      /** ID of the call */
+      /** Call ID */
       callId: string;
     };
     export type RequestQuery = {};
@@ -3124,7 +3124,7 @@ export namespace Users {
    */
   export namespace MeConferencesAdhocParticipantsDelete {
     export type RequestParams = {
-      /** ID of the call */
+      /** Call ID */
       callId: string;
       /** ID of the adhoc conference */
       conferenceId: string;
@@ -3145,7 +3145,7 @@ export namespace Users {
    */
   export namespace MeConferencesAdhocParticipantsUpdate {
     export type RequestParams = {
-      /** ID of the call */
+      /** Call ID */
       callId: string;
       /** ID of the adhoc conference */
       conferenceId: string;
