@@ -302,18 +302,6 @@ export interface ExternalConfig {
   use_sandbox?: boolean;
 }
 
-export type ExternalGoogleCreateData = GooglePostResult;
-
-export type ExternalGoogleCreateError = APIError;
-
-export type ExternalGoogleDeleteData = any;
-
-export type ExternalGoogleDeleteError = APIError;
-
-export type ExternalGoogleListData = GoogleGetResult;
-
-export type ExternalGoogleListError = APIError;
-
 export type ExternalListData = ExternalAuthList;
 
 export interface ExternalListParams {
@@ -333,39 +321,6 @@ export interface ExternalListParams {
   /** The UUID of the user */
   userUuid: string;
 }
-
-export type ExternalMicrosoftCreateData = MicrosoftPostResult;
-
-export type ExternalMicrosoftCreateError = APIError;
-
-export type ExternalMicrosoftDeleteData = any;
-
-export type ExternalMicrosoftDeleteError = APIError;
-
-export type ExternalMicrosoftListData = MicrosoftGetResult;
-
-export type ExternalMicrosoftListError = APIError;
-
-export type ExternalMobileCreateData = MobileData;
-
-export type ExternalMobileCreateError = APIError;
-
-export type ExternalMobileDeleteData = any;
-
-export type ExternalMobileListData = MobileData;
-
-export type ExternalMobileListError = APIError;
-
-export interface ExternalMobileSenderIdListData {
-  /** The sender id */
-  sender_id?: string | null;
-}
-
-export type ExternalMobileSenderIdListError = APIError;
-
-export type ExternalMobileUpdateData = MobileData;
-
-export type ExternalMobileUpdateError = APIError;
 
 export type GetConfigData = any;
 
@@ -402,28 +357,6 @@ export interface GetSessionsResult {
   items: SessionResult[];
   /** The number of sessions. */
   total: number;
-}
-
-export interface GoogleGetResult {
-  /** Google token */
-  access_token: string;
-  /** Scope permissions given to the `access token` */
-  scope: string;
-  /** Token expiration */
-  token_expiration: number;
-}
-
-export interface GooglePost {
-  /**
-   * Scope permissions requested
-   * @default ["https://www.googleapis.com/auth/userinfo.profile","https://www.googleapis.com/auth/contacts"]
-   */
-  scope?: string[];
-}
-
-export interface GooglePostResult {
-  /** The URL to confirm the authorization */
-  verification_url: string;
 }
 
 export interface Group {
@@ -587,9 +520,9 @@ export interface ListGroupsParams {
   offset?: number;
   /** Name of the field to use for sorting the list of items returned. */
   order?: string;
-  /** The slug of the policy that the group must have. */
+  /** The slug of the policy that the user must have. This does not include indirect associations (user in group has policy). */
   policy_slug?: string;
-  /** The UUID of the policy that the group must have. */
+  /** The UUID of the policy that the user must have. This does not include indirect associations (user in group has policy). */
   policy_uuid?: string;
   /** Is the group managed by the system? */
   read_only?: string;
@@ -695,43 +628,6 @@ export interface ListUserRefreshTokensParams {
   search?: string;
   /** The UUID of the user or `me` to refer to the user doing the query */
   userUuidOrMe: string;
-}
-
-export interface MicrosoftGetResult {
-  /** Microsoft token */
-  access_token: string;
-  /** Scope permissions given to the `access token` */
-  scope: string;
-  /** Token expiration */
-  token_expiration: number;
-}
-
-export interface MicrosoftPost {
-  /**
-   * Scope permissions requested
-   * @default ["offline_access","Contacts.Read"]
-   */
-  scope?: string[];
-}
-
-export interface MicrosoftPostResult {
-  /** The URL to confirm the authorization */
-  verification_url: string;
-}
-
-export interface MobileData {
-  /** APNs topic for VoIP call notifications (e.g. com.example.app.voip). When set, overrides the server-wide mobile_apns_call_topic configuration. */
-  apns_call_topic?: string;
-  /** APNs topic for non-call notifications such as messages, voicemails, and missed calls (e.g. com.example.app). When set, overrides the server-wide mobile_apns_default_topic configuration. */
-  apns_default_topic?: string;
-  /** APNs text alert notification device token. */
-  apns_notification_token?: string;
-  /** APNs VoIP device token. This field is deprecated and will be removed in a later version. */
-  apns_token?: string;
-  /** APNs VoIP device token. */
-  apns_voip_token?: string;
-  /** FCM token */
-  token?: string;
 }
 
 export interface PasswordChange {
@@ -1340,9 +1236,9 @@ export interface UsersListParams4 {
   offset?: number;
   /** Name of the field to use for sorting the list of items returned. */
   order?: string;
-  /** The slug of the policy that the group must have. */
+  /** The slug of the policy that the user must have. This does not include indirect associations (user in group has policy). */
   policy_slug?: string;
-  /** The UUID of the policy that the group must have. */
+  /** The UUID of the policy that the user must have. This does not include indirect associations (user in group has policy). */
   policy_uuid?: string;
   /**
    * Should the query include sub-tenants
@@ -1780,9 +1676,9 @@ export namespace Groups {
       offset?: number;
       /** Name of the field to use for sorting the list of items returned. */
       order?: string;
-      /** The slug of the policy that the group must have. */
+      /** The slug of the policy that the user must have. This does not include indirect associations (user in group has policy). */
       policy_slug?: string;
-      /** The UUID of the policy that the group must have. */
+      /** The UUID of the policy that the user must have. This does not include indirect associations (user in group has policy). */
       policy_uuid?: string;
       /** Is the group managed by the system? */
       read_only?: string;
@@ -2757,9 +2653,9 @@ export namespace Users {
       offset?: number;
       /** Name of the field to use for sorting the list of items returned. */
       order?: string;
-      /** The slug of the policy that the group must have. */
+      /** The slug of the policy that the user must have. This does not include indirect associations (user in group has policy). */
       policy_slug?: string;
-      /** The UUID of the policy that the group must have. */
+      /** The UUID of the policy that the user must have. This does not include indirect associations (user in group has policy). */
       policy_uuid?: string;
       /**
        * Should the query include sub-tenants
@@ -3035,204 +2931,6 @@ export namespace Users {
     export type RequestBody = never;
     export type RequestHeaders = {};
     export type ResponseBody = ExternalListData;
-  }
-
-  /**
-   * @description **Required ACL**: `auth.users.{user_uuid}.external.google.delete`
-   * @tags users, google
-   * @name ExternalGoogleDelete
-   * @summary Delete a Google token
-   * @request DELETE:/users/{user_uuid}/external/google
-   */
-  export namespace ExternalGoogleDelete {
-    export type RequestParams = {
-      /** The UUID of the user */
-      userUuid: string;
-    };
-    export type RequestQuery = {};
-    export type RequestBody = never;
-    export type RequestHeaders = {};
-    export type ResponseBody = ExternalGoogleDeleteData;
-  }
-
-  /**
-   * @description **Required ACL**: `auth.users.{user_uuid}.external.google.read`
-   * @tags users, google
-   * @name ExternalGoogleList
-   * @summary Get a Google token
-   * @request GET:/users/{user_uuid}/external/google
-   */
-  export namespace ExternalGoogleList {
-    export type RequestParams = {
-      /** The UUID of the user */
-      userUuid: string;
-    };
-    export type RequestQuery = {};
-    export type RequestBody = never;
-    export type RequestHeaders = {};
-    export type ResponseBody = ExternalGoogleListData;
-  }
-
-  /**
-   * @description **Required ACL**: `auth.users.{user_uuid}.external.google.create`. More info on Google permissions: https://developers.google.com/identity/protocols/googlescopes"
-   * @tags users, google
-   * @name ExternalGoogleCreate
-   * @summary Ask for a verification URL and store code to get token
-   * @request POST:/users/{user_uuid}/external/google
-   */
-  export namespace ExternalGoogleCreate {
-    export type RequestParams = {
-      /** The UUID of the user */
-      userUuid: string;
-    };
-    export type RequestQuery = {};
-    export type RequestBody = GooglePost;
-    export type RequestHeaders = {};
-    export type ResponseBody = ExternalGoogleCreateData;
-  }
-
-  /**
-   * @description **Required ACL**: `auth.users.{user_uuid}.external.microsoft.delete`
-   * @tags users, microsoft
-   * @name ExternalMicrosoftDelete
-   * @summary Delete a Microsoft token
-   * @request DELETE:/users/{user_uuid}/external/microsoft
-   */
-  export namespace ExternalMicrosoftDelete {
-    export type RequestParams = {
-      /** The UUID of the user */
-      userUuid: string;
-    };
-    export type RequestQuery = {};
-    export type RequestBody = never;
-    export type RequestHeaders = {};
-    export type ResponseBody = ExternalMicrosoftDeleteData;
-  }
-
-  /**
-   * @description **Required ACL**: `auth.users.{user_uuid}.external.microsoft.read`
-   * @tags users, microsoft
-   * @name ExternalMicrosoftList
-   * @summary Get a Microsoft token
-   * @request GET:/users/{user_uuid}/external/microsoft
-   */
-  export namespace ExternalMicrosoftList {
-    export type RequestParams = {
-      /** The UUID of the user */
-      userUuid: string;
-    };
-    export type RequestQuery = {};
-    export type RequestBody = never;
-    export type RequestHeaders = {};
-    export type ResponseBody = ExternalMicrosoftListData;
-  }
-
-  /**
-   * @description **Required ACL**: `auth.users.{user_uuid}.external.microsoft.create`. More info on Microsoft permissions: https://docs.microsoft.com/en-us/graph/permissions-reference
-   * @tags users, microsoft
-   * @name ExternalMicrosoftCreate
-   * @summary Ask for a verification URL and store code to get token
-   * @request POST:/users/{user_uuid}/external/microsoft
-   */
-  export namespace ExternalMicrosoftCreate {
-    export type RequestParams = {
-      /** The UUID of the user */
-      userUuid: string;
-    };
-    export type RequestQuery = {};
-    export type RequestBody = MicrosoftPost;
-    export type RequestHeaders = {};
-    export type ResponseBody = ExternalMicrosoftCreateData;
-  }
-
-  /**
-   * @description **Required ACL**: `auth.users.{user_uuid}.external.mobile.delete`
-   * @tags users, mobile
-   * @name ExternalMobileDelete
-   * @summary Delete device tokens for push notifications
-   * @request DELETE:/users/{user_uuid}/external/mobile
-   */
-  export namespace ExternalMobileDelete {
-    export type RequestParams = {
-      /** The UUID of the user */
-      userUuid: string;
-    };
-    export type RequestQuery = {};
-    export type RequestBody = never;
-    export type RequestHeaders = {};
-    export type ResponseBody = ExternalMobileDeleteData;
-  }
-
-  /**
-   * @description **Required ACL**: `auth.users.{user_uuid}.external.mobile.read`
-   * @tags users, mobile
-   * @name ExternalMobileList
-   * @summary Get device tokens for push notifications
-   * @request GET:/users/{user_uuid}/external/mobile
-   */
-  export namespace ExternalMobileList {
-    export type RequestParams = {
-      /** The UUID of the user */
-      userUuid: string;
-    };
-    export type RequestQuery = {};
-    export type RequestBody = never;
-    export type RequestHeaders = {};
-    export type ResponseBody = ExternalMobileListData;
-  }
-
-  /**
-   * @description **Required ACL**: `auth.users.{user_uuid}.external.mobile.create`
-   * @tags users, mobile
-   * @name ExternalMobileCreate
-   * @summary Configure device tokens for push notifications
-   * @request POST:/users/{user_uuid}/external/mobile
-   */
-  export namespace ExternalMobileCreate {
-    export type RequestParams = {
-      /** The UUID of the user */
-      userUuid: string;
-    };
-    export type RequestQuery = {};
-    export type RequestBody = MobileData;
-    export type RequestHeaders = {};
-    export type ResponseBody = ExternalMobileCreateData;
-  }
-
-  /**
-   * @description **Required ACL**: `auth.users.{user_uuid}.external.mobile.update`
-   * @tags users, mobile
-   * @name ExternalMobileUpdate
-   * @summary Update device tokens for push notifications
-   * @request PUT:/users/{user_uuid}/external/mobile
-   */
-  export namespace ExternalMobileUpdate {
-    export type RequestParams = {
-      /** The UUID of the user */
-      userUuid: string;
-    };
-    export type RequestQuery = {};
-    export type RequestBody = MobileData;
-    export type RequestHeaders = {};
-    export type ResponseBody = ExternalMobileUpdateData;
-  }
-
-  /**
-   * @description **Required ACL**: `auth.users.{user_uuid}.external.mobile.sender_id.read`
-   * @tags users, mobile
-   * @name ExternalMobileSenderIdList
-   * @summary Get your Mobile sender_id
-   * @request GET:/users/{user_uuid}/external/mobile/sender_id
-   */
-  export namespace ExternalMobileSenderIdList {
-    export type RequestParams = {
-      /** The UUID of the user */
-      userUuid: string;
-    };
-    export type RequestQuery = {};
-    export type RequestBody = never;
-    export type RequestHeaders = {};
-    export type ResponseBody = ExternalMobileSenderIdListData;
   }
 
   /**

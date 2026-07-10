@@ -219,7 +219,7 @@ export type ListSubscriptionAuthorizationsData = MainAuthorizationList;
 export interface ListSubscriptionAuthorizationsParams {
   /** The status of the authorization. Possible values are: OPEN, REVOKED */
   status?: string;
-  /** The UUID of the subscription. */
+  /** The UUID of the subscription */
   subscriptionUuid: string;
 }
 
@@ -843,7 +843,7 @@ export namespace Subscriptions {
    */
   export namespace DeleteSubscription {
     export type RequestParams = {
-      /** The UUID of the subscription. */
+      /** The UUID of the subscription */
       subscriptionUuid: string;
     };
     export type RequestQuery = {};
@@ -865,7 +865,7 @@ export namespace Subscriptions {
    */
   export namespace GetSubscription {
     export type RequestParams = {
-      /** The UUID of the subscription. */
+      /** The UUID of the subscription */
       subscriptionUuid: string;
     };
     export type RequestQuery = {};
@@ -887,7 +887,7 @@ export namespace Subscriptions {
    */
   export namespace UpdateSubscription {
     export type RequestParams = {
-      /** The UUID of the subscription. */
+      /** The UUID of the subscription */
       subscriptionUuid: string;
     };
     export type RequestQuery = {};
@@ -909,7 +909,7 @@ export namespace Subscriptions {
    */
   export namespace ListSubscriptionAuthorizations {
     export type RequestParams = {
-      /** The UUID of the subscription. */
+      /** The UUID of the subscription */
       subscriptionUuid: string;
     };
     export type RequestQuery = {
@@ -934,7 +934,7 @@ export namespace Subscriptions {
    */
   export namespace CreateSubscriptionAuthorization {
     export type RequestParams = {
-      /** The UUID of the subscription. */
+      /** The UUID of the subscription */
       subscriptionUuid: string;
     };
     export type RequestQuery = {};
@@ -958,7 +958,7 @@ export namespace Subscriptions {
     export type RequestParams = {
       /** The UUID of the authorization */
       authorizationUuid: string;
-      /** The UUID of the subscription. */
+      /** The UUID of the subscription */
       subscriptionUuid: string;
     };
     export type RequestQuery = {};
@@ -982,7 +982,7 @@ export namespace Subscriptions {
     export type RequestParams = {
       /** The UUID of the authorization */
       authorizationUuid: string;
-      /** The UUID of the subscription. */
+      /** The UUID of the subscription */
       subscriptionUuid: string;
     };
     export type RequestQuery = {};
