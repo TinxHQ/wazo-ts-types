@@ -62,6 +62,19 @@ describe('buildCatalog', () => {
     ]);
   });
 
+  it('merges a portal spec into the existing stack row when they share a canonical key', () => {
+    // `authPortal` and the stack `auth` spec both key on `wazo-auth`; the portal-only ACL must land
+    // in the single `wazo-auth` row rather than a duplicate service entry.
+    const stack = { 'wazo-auth': ['auth.users.read'] };
+    const portal = { 'wazo-auth': ['auth.tenants.admin', 'auth.users.read'] };
+
+    const catalog = buildCatalog(stack, portal, '26.06');
+
+    const authRows = catalog.services.filter(s => s.key === 'wazo-auth');
+    expect(authRows).toHaveLength(1);
+    expect(authRows[0].acls).toEqual(['auth.tenants.admin', 'auth.users.read']);
+  });
+
   it('falls back to the raw key as label for unknown services', () => {
     const catalog = buildCatalog({ 'mystery-svc': ['mystery.read'] }, {}, '26.06');
     expect(catalog.services.find(s => s.key === 'mystery-svc')?.label).toBe('mystery-svc');

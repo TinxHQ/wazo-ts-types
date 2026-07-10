@@ -62,24 +62,43 @@ export const buildCatalog = (
     }
   }
 
-  const toService = (key: string, acls: string[]): AclService => ({
-    key,
-    label: labelFor(key),
-    acls: Array.from(new Set(acls)).sort(),
-  });
-
-  const services: AclService[] = [];
+  // Accumulate ACLs per service key so that a portal spec sharing a stack service's canonical key
+  // (e.g. `authPortal` and stack `auth` both key on `wazo-auth`) merges into the same row instead
+  // of producing a duplicate service entry that hides the portal-only ACLs from key lookups.
+  const byKey = new Map<string, Set<string>>();
+  const aclsFor = (key: string): Set<string> => {
+    let acls = byKey.get(key);
+    if (!acls) {
+      acls = new Set<string>();
+      byKey.set(key, acls);
+    }
+    return acls;
+  };
 
   for (const key of Object.keys(stackMap).sort()) {
-    services.push(toService(key, stackMap[key] ?? []));
+    const acls = aclsFor(key);
+    for (const acl of stackMap[key] ?? []) {
+      acls.add(acl);
+    }
   }
 
   for (const key of Object.keys(portalMap).sort()) {
     const extra = (portalMap[key] ?? []).filter(acl => !community.has(acl));
     if (extra.length) {
-      services.push(toService(key, extra));
+      const acls = aclsFor(key);
+      for (const acl of extra) {
+        acls.add(acl);
+      }
     }
   }
+
+  const services: AclService[] = Array.from(byKey.keys())
+    .sort()
+    .map(key => ({
+      key,
+      label: labelFor(key),
+      acls: Array.from(byKey.get(key) ?? []).sort(),
+    }));
 
   const allAcls = Array.from(new Set(services.flatMap(service => service.acls))).sort();
 
