@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "emitDeclarationOnly": false,
+    "declaration": true,
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "rootDir": "src/acl",
+    "outDir": "dist/acl"
+  },
+  "include": ["src/acl/index.ts", "src/acl/types.ts", "src/acl/catalog.generated.ts"],
+  "exclude": []
+}
